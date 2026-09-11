@@ -9,10 +9,12 @@ ENV PYTHONUNBUFFERED=1 \
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ca-certificates curl unzip python3 python3-pip python3-venv \
+       libasound2t64 libx11-6 libxext6 libxi6 libxrender1 libxtst6 xdg-utils \
     && curl -fL --retry 4 --retry-delay 3 \
        -o /tmp/audiveris.deb \
        "https://github.com/Audiveris/audiveris/releases/download/${AUDIVERIS_VERSION}/Audiveris-${AUDIVERIS_VERSION}-ubuntu24.04-x86_64.deb" \
-    && apt-get install -y --no-install-recommends /tmp/audiveris.deb \
+    && dpkg-deb -x /tmp/audiveris.deb / \
+    && test -x /opt/audiveris/bin/Audiveris \
     && rm -f /tmp/audiveris.deb \
     && rm -rf /var/lib/apt/lists/*
 
