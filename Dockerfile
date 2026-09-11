@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-       ca-certificates curl python3 python3-pip python3-venv \
+       ca-certificates curl unzip python3 python3-pip python3-venv \
     && curl -fL --retry 4 --retry-delay 3 \
        -o /tmp/audiveris.deb \
        "https://github.com/Audiveris/audiveris/releases/download/${AUDIVERIS_VERSION}/Audiveris-${AUDIVERIS_VERSION}-ubuntu24.04-x86_64.deb" \
@@ -17,10 +17,11 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY requirements.txt /app/requirements.txt
+COPY tone_metric_runtime_source.zip /tmp/tone_metric_runtime_source.zip
+RUN unzip -q /tmp/tone_metric_runtime_source.zip -d /app \
+    && rm -f /tmp/tone_metric_runtime_source.zip \
+    && mkdir -p /app/.tone_metric_cache
 RUN python3 -m pip install --no-cache-dir --break-system-packages -r /app/requirements.txt
-COPY . /app
-RUN mkdir -p /app/.tone_metric_cache
 
 EXPOSE 8080
 CMD ["sh", "-c", "python3 -m uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
