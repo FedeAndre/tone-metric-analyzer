@@ -1,0 +1,416 @@
+{
+  "version": "0.16.1",
+  "chapter1_example_1_5": {
+    "max_level": 5,
+    "stages": [
+      {
+        "stage_index": 0,
+        "subdivision_arity": 2,
+        "denomination_quarter": "1",
+        "denomination_name": "quarter note",
+        "sequence": [
+          1,
+          2,
+          3,
+          5,
+          9,
+          17
+        ],
+        "structural_point_count": 13,
+        "level1_is_attack_independent": true
+      },
+      {
+        "stage_index": 1,
+        "subdivision_arity": 2,
+        "denomination_quarter": "1/2",
+        "denomination_name": "eighth note",
+        "input_span_count": 12,
+        "processed_span_count": 12,
+        "next_active_span_count": 24,
+        "placement_cases": {
+          "equal-limits": 8,
+          "left-lower-than-right": 3,
+          "right-lower-than-left": 1
+        },
+        "boundary_snapshot_only": true
+      },
+      {
+        "stage_index": 2,
+        "subdivision_arity": 2,
+        "denomination_quarter": "1/4",
+        "denomination_name": "sixteenth note",
+        "input_span_count": 24,
+        "processed_span_count": 24,
+        "next_active_span_count": 0,
+        "placement_cases": {
+          "equal-limits": 20,
+          "left-lower-than-right": 3,
+          "right-lower-than-left": 1
+        },
+        "boundary_snapshot_only": true
+      }
+    ],
+    "first_20_events": [
+      {
+        "onset_quarter": "0",
+        "tone_metric_levels": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "onset_quarter": "1/4",
+        "tone_metric_levels": [
+          3
+        ]
+      },
+      {
+        "onset_quarter": "1/2",
+        "tone_metric_levels": [
+          2,
+          3
+        ]
+      },
+      {
+        "onset_quarter": "3/4",
+        "tone_metric_levels": [
+          3
+        ]
+      },
+      {
+        "onset_quarter": "1",
+        "tone_metric_levels": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "onset_quarter": "5/4",
+        "tone_metric_levels": [
+          3
+        ]
+      },
+      {
+        "onset_quarter": "3/2",
+        "tone_metric_levels": [
+          2,
+          3
+        ]
+      },
+      {
+        "onset_quarter": "7/4",
+        "tone_metric_levels": [
+          3
+        ]
+      },
+      {
+        "onset_quarter": "2",
+        "tone_metric_levels": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "onset_quarter": "9/4",
+        "tone_metric_levels": [
+          4
+        ]
+      },
+      {
+        "onset_quarter": "5/2",
+        "tone_metric_levels": [
+          3,
+          4
+        ]
+      },
+      {
+        "onset_quarter": "11/4",
+        "tone_metric_levels": [
+          4
+        ]
+      },
+      {
+        "onset_quarter": "3",
+        "tone_metric_levels": [
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "onset_quarter": "13/4",
+        "tone_metric_levels": [
+          4
+        ]
+      },
+      {
+        "onset_quarter": "7/2",
+        "tone_metric_levels": [
+          3,
+          4
+        ]
+      },
+      {
+        "onset_quarter": "15/4",
+        "tone_metric_levels": [
+          4
+        ]
+      },
+      {
+        "onset_quarter": "4",
+        "tone_metric_levels": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "onset_quarter": "17/4",
+        "tone_metric_levels": [
+          4
+        ]
+      },
+      {
+        "onset_quarter": "9/2",
+        "tone_metric_levels": [
+          3,
+          4
+        ]
+      },
+      {
+        "onset_quarter": "19/4",
+        "tone_metric_levels": [
+          4
+        ]
+      }
+    ]
+  },
+  "chapter4_example_4_9_meter_rule": {
+    "meter": "12/8",
+    "arity_policy": {
+      "source": "explicit-meter-profile",
+      "top_recursive_arity": 2,
+      "within_tactus_initial_arity": 3,
+      "finer_continuation_arity": 2,
+      "spacing_inference_enabled": false,
+      "generic_4_4_triplet_extension_enabled": false
+    },
+    "stages": [
+      {
+        "stage_index": 0,
+        "subdivision_arity": 2,
+        "denomination_quarter": "3/2",
+        "denomination_name": "dotted quarter note",
+        "sequence": [
+          1,
+          2,
+          3,
+          5
+        ],
+        "structural_point_count": 5,
+        "level1_is_attack_independent": true
+      },
+      {
+        "stage_index": 1,
+        "subdivision_arity": 3,
+        "denomination_quarter": "1/2",
+        "denomination_name": "eighth note",
+        "input_span_count": 4,
+        "processed_span_count": 4,
+        "next_active_span_count": 0,
+        "placement_cases": {
+          "equal-limits": 3,
+          "left-lower-than-right": 1,
+          "right-lower-than-left": 0
+        },
+        "boundary_snapshot_only": true
+      }
+    ],
+    "events": [
+      {
+        "onset_quarter": "0",
+        "tone_metric_levels": [
+          1,
+          2
+        ]
+      },
+      {
+        "onset_quarter": "1/2",
+        "tone_metric_levels": [
+          2,
+          3
+        ]
+      },
+      {
+        "onset_quarter": "1",
+        "tone_metric_levels": [
+          3
+        ]
+      },
+      {
+        "onset_quarter": "3/2",
+        "tone_metric_levels": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "onset_quarter": "2",
+        "tone_metric_levels": [
+          2,
+          3
+        ]
+      },
+      {
+        "onset_quarter": "5/2",
+        "tone_metric_levels": [
+          3
+        ]
+      },
+      {
+        "onset_quarter": "3",
+        "tone_metric_levels": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "onset_quarter": "7/2",
+        "tone_metric_levels": [
+          3,
+          4
+        ]
+      },
+      {
+        "onset_quarter": "4",
+        "tone_metric_levels": [
+          4
+        ]
+      },
+      {
+        "onset_quarter": "9/2",
+        "tone_metric_levels": [
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "onset_quarter": "5",
+        "tone_metric_levels": [
+          3,
+          4
+        ]
+      },
+      {
+        "onset_quarter": "11/2",
+        "tone_metric_levels": [
+          4
+        ]
+      }
+    ]
+  },
+  "berg_example_6_6_opening_fixture": {
+    "events": [
+      {
+        "onset_quarter": "1",
+        "tone_metric_levels": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "onset_quarter": "3/2",
+        "tone_metric_levels": [
+          3
+        ]
+      },
+      {
+        "onset_quarter": "2",
+        "tone_metric_levels": [
+          2,
+          3
+        ]
+      }
+    ],
+    "structural_points": [
+      {
+        "time_quarter": "0",
+        "levels": [
+          1
+        ],
+        "height": 1,
+        "density": 1,
+        "lowest_level": 1,
+        "attack": false,
+        "structural_level_point": true,
+        "attack_level_point": false,
+        "parenthetical": true
+      },
+      {
+        "time_quarter": "1",
+        "levels": [
+          1,
+          2,
+          3
+        ],
+        "height": 3,
+        "density": 3,
+        "lowest_level": 1,
+        "attack": true,
+        "structural_level_point": true,
+        "attack_level_point": true,
+        "parenthetical": false
+      },
+      {
+        "time_quarter": "3/2",
+        "levels": [
+          3
+        ],
+        "height": 3,
+        "density": 1,
+        "lowest_level": 3,
+        "attack": true,
+        "structural_level_point": true,
+        "attack_level_point": true,
+        "parenthetical": false
+      },
+      {
+        "time_quarter": "2",
+        "levels": [
+          2,
+          3
+        ],
+        "height": 3,
+        "density": 2,
+        "lowest_level": 2,
+        "attack": true,
+        "structural_level_point": true,
+        "attack_level_point": true,
+        "parenthetical": false
+      },
+      {
+        "time_quarter": "3",
+        "levels": [
+          1,
+          2
+        ],
+        "height": 2,
+        "density": 2,
+        "lowest_level": 1,
+        "attack": false,
+        "structural_level_point": true,
+        "attack_level_point": false,
+        "parenthetical": true
+      }
+    ]
+  }
+}
