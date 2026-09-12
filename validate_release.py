@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "0.16.1"
+VERSION = "0.16.3"
 
 
 def fail(message: str) -> None:
@@ -64,6 +64,27 @@ def source_audit() -> None:
         or "symbolic MusicXML hits were used" in app
     ):
         fail("old symbolic fallback path remains")
+
+    if "pdf_to_musicxml" in app or "reconcile_measure_framework_from_omr" in app:
+        fail("export-dependent PDF path remains in app")
+    if "pdf_to_omr" not in app or "build_measure_framework_from_omr" not in app:
+        fail("OMR-only PDF path is not wired into app")
+
+    omr = (ROOT / "tone_metric" / "omr.py").read_text(encoding="utf-8")
+    if "def pdf_to_musicxml" in omr or '"-export"' in omr:
+        fail("MusicXML export remains in the required Audiveris PDF driver")
+    if '"-step",' not in omr or '"PAGE",' not in omr or '"-save",' not in omr:
+        fail("required Audiveris driver is not explicitly step PAGE + save")
+    if 'args = ["-batch", "-transcribe"' in omr:
+        fail("required PDF pass still invokes transcribe")
+    if "def pdf_to_annotations" in omr:
+        fail("old PDF retranscription annotation path remains")
+    if "def omr_to_annotations" not in omr:
+        fail("saved-OMR annotation path missing")
+
+    canonical = (ROOT / "tone_metric" / "canonical_score.py").read_text(encoding="utf-8")
+    if "def reconcile_measure_framework_from_omr" in canonical:
+        fail("superseded MusicXML/OMR reconciliation path remains")
 
 
 def main() -> None:

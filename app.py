@@ -13,19 +13,19 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from tone_metric.musicxml import parse_musicxml, extract_visual_groups
+from tone_metric.musicxml import parse_musicxml
 from tone_metric.engine import analyze
 from tone_metric.preprocessing import prepare_hits_for_dissertation_core
-from tone_metric.omr import pdf_to_musicxml, pdf_to_annotations, find_audiveris
+from tone_metric.omr import pdf_to_omr, omr_to_annotations, find_audiveris
 from tone_metric.pdfview import render_pdf_pages
 from tone_metric.physical import build_normalized_overlay
 from tone_metric.omr_project import read_omr_slots, omr_slots_debug_rows
-from tone_metric.canonical_score import build_hits_from_canonical_score, reconcile_measure_framework_from_omr
+from tone_metric.canonical_score import build_hits_from_canonical_score, build_measure_framework_from_omr
 
 ROOT = Path(__file__).resolve().parent
 CACHE = ROOT / ".tone_metric_cache"
 CACHE.mkdir(exist_ok=True)
-app = FastAPI(title="Tone-Metric Analyzer", version="0.16.1")
+app = FastAPI(title="Tone-Metric Analyzer", version="0.16.3")
 app.mount("/static", StaticFiles(directory=ROOT / "static"), name="static")
 
 # Hosted PDF recognition can exceed a reverse-proxy request timeout. Run long
@@ -122,7 +122,7 @@ def index():
 
 @app.get("/api/status")
 def status():
-    return {"ok": True, "audiveris_found": bool(find_audiveris()), "audiveris_command": find_audiveris()}
+    return {"ok": True, "version": app.version, "omr_driver": "step-page-save", "audiveris_found": bool(find_audiveris()), "audiveris_command": find_audiveris()}
 
 
 @app.post("/api/analyze/start")
@@ -173,7 +173,7 @@ def debug_bundle(session_id: str):
     """Download all Audiveris intermediates for one analysis session.
 
     The archive is intentionally kept for debugging alignment: input PDF, saved
-    .omr project, MusicXML/MXL export, annotation archive, logs and a compact
+    .omr project, native OMR project, optional annotation archive, logs and a compact
     mapping summary. Sessions are retained by the normal 24-hour cache policy.
     """
     if not session_id.replace('-', '').isalnum():
@@ -210,60 +210,70 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
         omr_path = None
         annotation_archive = None
         annotation_warning = ""
+        meter_override_tuple = _meter_override_tuple(meter_override)
+        canonical_score_meta = {}
+        audiveris_core_meta = {}
+
         if suffix == ".pdf":
             page_info = render_pdf_pages(inp, session / "pages")
-            symbolic, omr_path = pdf_to_musicxml(inp, session / "omr")
-            # Separate optional pass: physical notehead boxes are much more reliable for
-            # overlays than MusicXML layout coordinates. Failure here must not kill analysis.
-            annotation_archive, annotation_warning = pdf_to_annotations(inp, session / "annotations")
-        else:
-            symbolic = inp
-
-        meter_override_tuple = _meter_override_tuple(meter_override)
-        symbolic_hits, measures, parse_warnings = parse_musicxml(symbolic, initial_meter_override=meter_override_tuple)
-        raw_analysis_hits = symbolic_hits
-        analysis_hit_source = "musicxml-symbolic-explicit"
-        canonical_score_meta = {}
-        measure_framework_meta = {
-            "source": "musicxml",
-            "omr_stack_count": None,
-            "musicxml_measure_count": len(measures),
-            "expanded_measure_count": len(measures),
-            "synthesized_missing_measure_count": 0,
-            "synthesized_missing_measure_numbers": [],
-            "alignment": "not-applicable",
-        }
-
-        if suffix == ".pdf":
-            if omr_path is None:
-                raise ValueError(
-                    "Strict v0.16 PDF analysis requires the saved Audiveris .omr project; "
-                    "symbolic MusicXML is not used as a silent fallback."
-                )
+            # Required PDF pass: explicitly drive Audiveris only through PAGE and
+            # save its native project.  No -transcribe and no MusicXML export are
+            # requested by the Tone-Metric core path.
+            omr_result = pdf_to_omr(inp, session / "omr")
+            omr_path = omr_result.path
+            audiveris_core_meta = {
+                "driver": "step-page-save",
+                "returncode": omr_result.returncode,
+                "salvaged_after_nonzero": omr_result.salvaged_after_nonzero,
+                "command_args": list(omr_result.command_args),
+            }
             try:
-                analysis_measures, aligned_symbolic_hits, framework_warnings, measure_framework_meta = (
-                    reconcile_measure_framework_from_omr(
-                        omr_path, measures, symbolic_hits=symbolic_hits, initial_meter_override=meter_override_tuple
-                    )
+                measures, framework_warnings, measure_framework_meta = build_measure_framework_from_omr(
+                    omr_path, initial_meter_override=meter_override_tuple
                 )
-                parse_warnings = list(parse_warnings) + list(framework_warnings)
                 recovered_hits, canonical_warnings, canonical_score_meta = build_hits_from_canonical_score(
-                    omr_path, analysis_measures, symbolic_hits=aligned_symbolic_hits
+                    omr_path, measures, symbolic_hits=[]
                 )
             except Exception as exc:
                 raise ValueError(
-                    "Canonical OMR score-time recovery failed. v0.16 stopped rather than substituting "
+                    "Canonical OMR score-time recovery failed. v0.16.3 stopped rather than substituting "
                     f"a different event pipeline: {exc}"
                 ) from exc
             if not recovered_hits:
                 raise ValueError(
-                    "Canonical OMR score-time recovery produced no attacks. v0.16 stopped rather than "
-                    "falling back to symbolic MusicXML events."
+                    "Canonical OMR score-time recovery produced no attacks. v0.16.3 stopped rather than "
+                    "falling back to a different event source."
                 )
+            symbolic = None
+            symbolic_hits = []
             raw_analysis_hits = recovered_hits
-            measures = analysis_measures
-            parse_warnings = list(parse_warnings) + list(canonical_warnings)
-            analysis_hit_source = "canonical-omr-score-time-strict"
+            parse_warnings = list(framework_warnings) + list(canonical_warnings)
+            if omr_result.salvaged_after_nonzero:
+                parse_warnings.append(
+                    "Audiveris returned a non-zero code after saving a structurally valid native .omr project; "
+                    "Tone-Metric continued only with that native project. No alternate event source was used."
+                )
+            analysis_hit_source = "canonical-omr-score-time-step-page-save-strict"
+
+            # Optional display-only pass. Failure does not alter score time or Levels.
+            annotation_archive, annotation_warning = omr_to_annotations(omr_path, session / "annotations")
+        else:
+            symbolic = inp
+            symbolic_hits, measures, parse_warnings = parse_musicxml(
+                symbolic, initial_meter_override=meter_override_tuple
+            )
+            raw_analysis_hits = symbolic_hits
+            analysis_hit_source = "musicxml-symbolic-explicit"
+            measure_framework_meta = {
+                "source": "musicxml",
+                "omr_stack_count": None,
+                "musicxml_measure_count": len(measures),
+                "expanded_measure_count": len(measures),
+                "synthesized_missing_measure_count": 0,
+                "synthesized_missing_measure_numbers": [],
+                "alignment": "not-applicable",
+                "musicxml_required_for_pdf": False,
+            }
 
         analysis_hits, preprocessing_audit = prepare_hits_for_dissertation_core(raw_analysis_hits)
         result = analyze(analysis_hits, measures)
@@ -272,6 +282,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
         result["raw_analysis_hit_count"] = len(raw_analysis_hits)
         result["preprocessing_audit"] = preprocessing_audit
         result["canonical_score_meta"] = canonical_score_meta
+        result["audiveris_core_meta"] = audiveris_core_meta
         result["measure_framework_meta"] = measure_framework_meta
         result["canonical_hit_count"] = int(canonical_score_meta.get("canonical_hit_count", 0) or 0)
         result["silent_event_fallback_enabled"] = False
@@ -285,7 +296,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
         for seg in result.get("segments", []):
             seg["level1_anchor_labels"] = _level1_anchor_labels(seg, result.get("measures", []))
         result["source_filename"] = file.filename
-        result["symbolic_source"] = symbolic.name
+        result["symbolic_source"] = symbolic.name if symbolic is not None else None
         result["parse_warnings"] = parse_warnings
         result["session_id"] = session_id
         result["debug_bundle_url"] = f"/api/session/{session_id}/debug"
@@ -311,9 +322,8 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
 
         if suffix == ".pdf" and annotation_archive is not None:
             try:
-                visual_groups, layout_known = extract_visual_groups(symbolic, initial_meter_override=meter_override_tuple)
                 result["physical_overlay"] = build_normalized_overlay(
-                    annotation_archive, visual_groups, layout_known, result, session / "physical", omr_path=omr_path
+                    annotation_archive, [], False, result, session / "physical", omr_path=omr_path
                 )
             except Exception as exc:
                 result["physical_overlay"] = {
@@ -323,7 +333,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
         elif suffix == ".pdf" and annotation_warning:
             result["physical_overlay"]["warnings"].append(annotation_warning)
 
-        # v0.16 keeps notation/OMR preprocessing separate from the dissertation
+        # v0.16.3 keeps notation/OMR preprocessing separate from the dissertation
         # Levels mathematics. Tuplet-voice attacks are excluded from the strict core;
         # ordinary simultaneous attacks remain. No event source or meter arity is
         # silently substituted or inferred from spacing. Visual centering is display-only.
@@ -337,6 +347,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
                 "meter_override": result.get("meter_override"),
                 "analysis_hit_source": result.get("analysis_hit_source"),
                 "preprocessing_audit": result.get("preprocessing_audit", {}),
+                "audiveris_core_meta": result.get("audiveris_core_meta", {}),
                 "silent_event_fallback_enabled": result.get("silent_event_fallback_enabled"),
                 "measure_framework_meta": result.get("measure_framework_meta", {}),
                 "measures": result.get("measures", []),

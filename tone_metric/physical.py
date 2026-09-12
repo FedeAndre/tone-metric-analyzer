@@ -42,6 +42,7 @@ from .score_registration import build_layer_anchors_from_canonical_score
 from .waves import build_wave_profile, register_wave_profile
 from .pivots import build_pivot_profile, register_pivot_profile
 from .trees import build_tree_profile, register_tree_profile
+from .omr_project import read_omr_slots
 
 
 try:
@@ -580,6 +581,16 @@ def build_normalized_overlay(annotation_zip: str | Path, visual_groups: list[dic
         annotation_zip, pages, Path(out_dir) / "annotation_pages"
     )
     expected_counts = _expected_system_counts(visual_groups, layout_known)
+    if not expected_counts and omr_path is not None:
+        try:
+            _slots, omr_layout_meta = read_omr_slots(omr_path)
+            expected_counts = {
+                int(row["page_index"]): int(row["systems"])
+                for row in omr_layout_meta.get("pages", [])
+                if row.get("systems") is not None
+            }
+        except Exception as exc:
+            warnings.append(f"Could not recover OMR system counts for overlay layout: {exc}")
     physical_groups = build_physical_groups(page_outputs, expected_counts)
 
     dims = {

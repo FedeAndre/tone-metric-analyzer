@@ -481,82 +481,22 @@ def _read_omr_measure_stacks(omr_path: str | Path) -> tuple[list[dict], list[str
     return rows, warnings
 
 
-def _numeric_measure_alignment(measures: list[MeasureInfo], stack_count: int) -> tuple[dict[int, int], int | None]:
-    """Conservatively align exported measure numbers to physical OMR stacks.
 
-    Audiveris preserves original printed measure numbers even when PartwiseBuilder
-    omits individual measures.  We exploit that only when the numeric span exactly
-    equals the physical stack count; otherwise no guess is made.
-    """
-    parsed: list[int] = []
-    for m in measures:
-        text = str(m.number).strip()
-        if not re.fullmatch(r"-?\d+", text):
-            return {}, None
-        parsed.append(int(text))
-    if not parsed or len(set(parsed)) != len(parsed) or parsed != sorted(parsed):
-        return {}, None
-    lo, hi = parsed[0], parsed[-1]
-    if hi - lo + 1 != stack_count:
-        return {}, None
-    mapping = {old_i: number - lo for old_i, number in enumerate(parsed)}
-    if any(idx < 0 or idx >= stack_count for idx in mapping.values()):
-        return {}, None
-    return mapping, lo
-
-
-def reconcile_measure_framework_from_omr(
+def build_measure_framework_from_omr(
     omr_path: str | Path,
-    measures: list[MeasureInfo],
-    symbolic_hits: list[Hit] | None = None,
     initial_meter_override=None,
-) -> tuple[list[MeasureInfo], list[Hit], list[str], dict]:
-    """Rebuild the PDF measure/time framework from the complete saved OMR project.
+) -> tuple[list[MeasureInfo], list[str], dict]:
+    """Build the complete PDF measure framework directly from Audiveris' saved .omr.
 
-    This fixes an Audiveris export failure mode in which the .omr contains all
-    physical measure stacks but PartwiseBuilder silently omits some measures from
-    MusicXML.  The function never invents omitted *attacks*: it restores the full
-    measure sequence, after which :func:`recover_canonical_columns` reads attacks
-    directly from those OMR stacks.
-
-    Existing exported measures keep their validated meter/pickup metadata. Missing
-    measures inherit the active meter (or an explicit OMR time signature) and are
-    assigned ordinary full-measure timing.  The mapping is applied only when it is
-    unambiguous; otherwise the original MusicXML framework is returned unchanged.
+    This is the strict PDF path. It does not require MusicXML export and therefore
+    cannot be aborted by Audiveris PartwiseBuilder/export-only failures. Meter comes
+    only from an explicit user override or explicit OMR time-signature semantics;
+    measure duration is never used to guess meter or arity.
     """
     stacks, warnings = _read_omr_measure_stacks(omr_path)
-    symbolic_hits = list(symbolic_hits or [])
-    meta = {
-        "source": "musicxml",
-        "omr_stack_count": len(stacks),
-        "musicxml_measure_count": len(measures),
-        "expanded_measure_count": len(measures),
-        "synthesized_missing_measure_count": 0,
-        "synthesized_missing_measure_numbers": [],
-        "alignment": "unchanged",
-    }
-    if not stacks or not measures:
-        return list(measures), symbolic_hits, warnings, meta
-    if len(stacks) == len(measures):
-        meta.update({"source": "omr-cardinality+musicxml-metadata", "alignment": "direct-index"})
-        return list(measures), symbolic_hits, warnings, meta
-    if len(stacks) < len(measures):
-        warnings.append(
-            f"OMR has {len(stacks)} physical measure stacks but MusicXML has {len(measures)} measures; "
-            "the MusicXML framework was retained because expansion would be unsafe."
-        )
-        return list(measures), symbolic_hits, warnings, meta
+    if not stacks:
+        raise ValueError("The saved Audiveris .omr project contains no readable measure stacks.")
 
-    old_to_new, numeric_start = _numeric_measure_alignment(measures, len(stacks))
-    if not old_to_new:
-        warnings.append(
-            f"OMR has {len(stacks)} physical measure stacks but MusicXML has {len(measures)} measures. "
-            "Their numbering could not be aligned unambiguously, so the MusicXML framework was retained."
-        )
-        return list(measures), symbolic_hits, warnings, meta
-
-    known_by_new = {new_i: measures[old_i] for old_i, new_i in old_to_new.items()}
-    old_index_by_new = {new_i: old_i for old_i, new_i in old_to_new.items()}
     meter_override = None
     if initial_meter_override:
         try:
@@ -567,70 +507,66 @@ def reconcile_measure_framework_from_omr(
             meter_override = None
 
     current_meter: tuple[int, int] | None = meter_override
-    if current_meter is None and 0 in known_by_new:
-        km = known_by_new[0]
-        current_meter = (int(km.numerator), int(km.denominator))
-    if current_meter is None and stacks[0].get("explicit_meter"):
+    if current_meter is None and stacks[0].get("explicit_meter") is not None:
         current_meter = tuple(stacks[0]["explicit_meter"])
     if current_meter is None:
         raise ValueError(
-            "No explicit initial meter could be recovered from MusicXML, the OMR time-signature semantics, "
-            "or the user override. Strict v0.16 will not infer meter/arity from measure duration and will not assume 4/4."
+            "No explicit initial meter could be recovered from the OMR time-signature semantics "
+            "or the user override. Strict v0.16.3 will not infer meter/arity from measure duration "
+            "and will not assume 4/4."
         )
 
-    expanded: list[MeasureInfo] = []
-    synthesized_numbers: list[str] = []
+    measures: list[MeasureInfo] = []
     cumulative = Fraction(0)
+    pickup_detected = False
+    meter_changes: list[dict] = []
+    active_before = None
+
     for i, stack in enumerate(stacks):
-        known = known_by_new.get(i)
         explicit = stack.get("explicit_meter")
         if i == 0 and meter_override is not None:
             current_meter = meter_override
-        elif known is not None:
-            known_meter = (int(known.numerator), int(known.denominator))
-            if explicit is not None and tuple(explicit) != known_meter:
+            if explicit is not None and tuple(explicit) != current_meter:
                 warnings.append(
-                    f"Measure {known.number}: OMR time signature {explicit[0]}/{explicit[1]} disagrees with "
-                    f"MusicXML {known_meter[0]}/{known_meter[1]}; MusicXML was retained for this exported measure."
+                    f"Physical measure 1: user meter override {current_meter[0]}/{current_meter[1]} "
+                    f"overrides OMR time signature {explicit[0]}/{explicit[1]}."
                 )
-            current_meter = known_meter
         elif explicit is not None:
             current_meter = tuple(explicit)
 
+        if current_meter is None:
+            raise ValueError(f"No active explicit meter was available at physical measure {i + 1}.")
         num, den = current_meter
+        if active_before != current_meter:
+            meter_changes.append({"measure_index": i, "measure_number": str(i + 1), "meter": f"{num}/{den}"})
+            active_before = current_meter
+
         full = Fraction(num * 4, den)
         expected = stack.get("expected_whole")
         expected_q = expected * 4 if expected is not None else None
         if expected_q is not None and expected_q > 0 and expected_q != full:
             warnings.append(
-                f"Physical measure {i + 1}: OMR expected duration {expected_q} quarter-notes disagrees with "
-                f"active meter {num}/{den} ({full}); the explicit/validated meter was retained."
+                f"Physical measure {i + 1}: OMR expected duration {expected_q} quarter-notes disagrees "
+                f"with explicit meter {num}/{den} ({full}); the explicit meter was retained."
             )
 
-        if known is not None:
-            number = str(known.number)
-            actual = known.actual_duration
-            shift = known.pickup_shift
-            implicit = bool(known.implicit)
-        else:
-            number = str((numeric_start if numeric_start is not None else 1) + i)
-            synthesized_numbers.append(number)
-            actual = full
-            shift = Fraction(0)
-            implicit = False
-            # Only the opening physical measure can be a pickup without creating a
-            # discontinuity in later score time.  Use OMR abnormal+short duration as
-            # evidence; do not interpret under/overfull interior OMR durations as meter.
-            if i == 0 and stack.get("abnormal") and stack.get("duration_whole"):
-                aq = stack["duration_whole"] * 4
-                if Fraction(0) < aq < full:
-                    actual = aq
-                    shift = full - aq
-                    implicit = True
+        actual = full
+        shift = Fraction(0)
+        implicit = False
+        # Pickup inference is limited to the first physical measure and requires
+        # Audiveris to mark it abnormal and shorter than the explicit full measure.
+        # Interior under/overfull measures never redefine score time or meter.
+        if i == 0 and stack.get("abnormal") and stack.get("duration_whole"):
+            aq = stack["duration_whole"] * 4
+            if Fraction(0) < aq < full:
+                actual = aq
+                shift = full - aq
+                implicit = True
+                pickup_detected = True
 
-        expanded.append(MeasureInfo(
+        measures.append(MeasureInfo(
             index=i,
-            number=number,
+            number=str(i + 1),
             start=cumulative,
             full_duration=full,
             actual_duration=actual,
@@ -641,51 +577,19 @@ def reconcile_measure_framework_from_omr(
         ))
         cumulative += full
 
-    remapped_hits: list[Hit] = []
-    for h in symbolic_hits:
-        new_i = old_to_new.get(int(h.measure_index))
-        if new_i is None or new_i >= len(expanded):
-            continue
-        m = expanded[new_i]
-        old_measure_start = h.onset - h.offset_in_measure
-        timeline_delta = m.start - old_measure_start
-        new_sources: list[NoteAttack] = []
-        for src in h.sources:
-            src_offset = src.offset_in_measure
-            new_sources.append(replace(
-                src,
-                onset=m.start + src_offset,
-                measure_index=new_i,
-                measure_number=m.number,
-                tuplet_span_start=(src.tuplet_span_start + timeline_delta if src.tuplet_span_start is not None else None),
-                tuplet_span_end=(src.tuplet_span_end + timeline_delta if src.tuplet_span_end is not None else None),
-            ))
-        remapped_hits.append(replace(
-            h,
-            onset=m.start + h.offset_in_measure,
-            measure_index=new_i,
-            measure_number=m.number,
-            sources=new_sources,
-            tuplet_span_start=(h.tuplet_span_start + timeline_delta if h.tuplet_span_start is not None else None),
-            tuplet_span_end=(h.tuplet_span_end + timeline_delta if h.tuplet_span_end is not None else None),
-        ))
-
-    meta.update({
-        "source": "omr-complete-measure-framework",
-        "alignment": "numeric-measure-number-span",
-        "numeric_measure_start": numeric_start,
-        "expanded_measure_count": len(expanded),
-        "synthesized_missing_measure_count": len(synthesized_numbers),
-        "synthesized_missing_measure_numbers": synthesized_numbers,
-        "remapped_symbolic_hit_count": len(remapped_hits),
-    })
-    if synthesized_numbers:
-        warnings.append(
-            f"Restored {len(synthesized_numbers)} measure(s) omitted from Audiveris MusicXML export "
-            f"using the complete OMR stack sequence: {', '.join(synthesized_numbers[:20])}"
-            + (" ..." if len(synthesized_numbers) > 20 else "")
-        )
-    return expanded, remapped_hits, warnings, meta
+    meta = {
+        "source": "omr-only-explicit-meter-framework",
+        "omr_stack_count": len(stacks),
+        "musicxml_measure_count": 0,
+        "expanded_measure_count": len(measures),
+        "synthesized_missing_measure_count": 0,
+        "synthesized_missing_measure_numbers": [],
+        "alignment": "direct-omr-stack-order",
+        "pickup_detected": pickup_detected,
+        "meter_changes": meter_changes,
+        "musicxml_required_for_pdf": False,
+    }
+    return measures, warnings, meta
 
 def _single_valid_begin_time(group: list[dict], full: Fraction) -> Fraction | None:
     """Return one corroborating OMR BEGIN value when a group has exactly one.
