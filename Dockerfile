@@ -10,7 +10,7 @@ RUN apt-get update \
        ca-certificates coreutils curl unzip python3 python3-pip python3-venv \
        fontconfig fonts-dejavu-core fonts-liberation \
        tesseract-ocr tesseract-ocr-eng \
-       libasound2t64 libx11-6 libxext6 libxi6 libxrender1 libxtst6 xdg-utils \
+       libasound2t64 libgtk-3-0t64 libx11-6 libxext6 libxi6 libxrender1 libxtst6 xdg-utils \
     && curl -fL --retry 4 --retry-delay 3 \
        -o /tmp/audiveris.deb \
        "https://github.com/Audiveris/audiveris/releases/download/${AUDIVERIS_VERSION}/Audiveris-${AUDIVERIS_VERSION}-ubuntu24.04-x86_64.deb" \
