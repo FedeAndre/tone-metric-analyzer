@@ -7,6 +7,8 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     AUDIVERIS_CMD=/opt/audiveris/bin/Audiveris
 
+# Headless Audiveris still requires a real fontconfig database and at least one
+# installed font. English tessdata is copied into Audiveris' own OCR directory.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ca-certificates curl git python3 python3-pip python3-venv \
