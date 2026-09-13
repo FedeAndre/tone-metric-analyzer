@@ -1,53 +1,34 @@
-# Tone-Metric Analyzer v0.16.0
+# Tone-Metric Analyzer v0.16.4 — development
 
-This bundle contains the dissertation-first reconstruction of the Tone-Metric Levels engine.
+This `development` branch is an isolated deployment carrier for the dissertation-first v0.16.4 runtime. The stable `main` branch is not modified.
 
-## What changed in v0.16.0
+## Why this branch contains transport chunks
 
-- The Levels engine is a substantive rewrite based on the dissertation procedure rather than on v0.15.4 behavior.
-- Binary sequence is fixed to `1, 2, 3, 5, 9, 17, 33, ...`; ternary is `1, 2, 4, 10, 28, ...`.
-- Level 1 is a structural tactus layer independent of attacks.
-- Each rhythmic denomination is completed before the next finer denomination.
-- Chapter-4 placement uses the preceding-stage boundary snapshot. The worked-figure rule is one above the lower boundary height; same-stage labels cannot contaminate neighboring spans.
-- Structural no-attack Level points are first-class data and render parenthetically.
-- Meter arity is explicit. Unsupported meters fail instead of falling back to binary or assuming 4/4.
-- 12/8 is binary at dotted-quarter level and ternary at eighth level; 4/4 has no generic triplet rule in the dissertation core.
-- Tuplet interpretation is separated from the Levels mathematics; tuplet-voice attacks are excluded from the strict core while simultaneous ordinary voices remain.
-- PDF analysis no longer silently substitutes symbolic MusicXML events when canonical OMR score-time recovery fails.
-- Old v0.15.4 recursive refinement/tuplet entry points are removed from the active source.
+To prevent an older Python source tree, cached bytecode, or an obsolete runtime ZIP from overriding the current implementation, the branch contains **no directly executable Tone-Metric Python source**. Instead, it carries one authoritative v0.16.4 runtime archive encoded as 28 ordered Base64 chunks (`runtime.part00.b64` through `runtime.part27.b64`).
 
-See `VALIDATION_REPORT.md` inside `tone_metric_runtime_source.zip` for the exact conformance tests and current release gate.
+During the Railway Docker build the chunks are concatenated, decoded, and checked against this required SHA-256:
 
-## Windows PowerShell start commands
+`88fc9e687de8a2d576021d3202224a2166975538870cf0ce0be861a358e360a2`
 
-Unzip `tone_metric_runtime_source.zip`, open PowerShell in that unzipped runtime folder, and run:
+Only after that exact archive is verified is it extracted into `/app`. The build then installs the runtime dependencies and runs `validate_release.py`. A checksum mismatch, missing/extra chunk, failed test, wrong app version, or missing Audiveris executable stops the build.
 
-```powershell
-py -m venv .venv
-.\.venv\Scripts\python.exe -m pip install --upgrade pip
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8000
-```
+## v0.16.4 change
 
-Then open `http://127.0.0.1:8000` in the browser.
+v0.16.4 corrects the **OMR pickup-measure phase handling** exposed by the Berg Op. 1 regression. It does not change the dissertation Levels mathematics. A legal short first measure can be right-aligned inside its explicit metric frame even when Audiveris does not mark it `abnormal`; a short interior measure cannot trigger this pickup rule.
 
-For PDF analysis, Audiveris must be installed and either available on `PATH` or identified explicitly before starting the server, for example:
+For the Berg opening, the required theoretical phase is therefore a structural `(1)` before the first sounding event, followed by Levels `1+2+3` on the first sounding event.
 
-```powershell
-$env:AUDIVERIS_CMD = "C:\path\to\Audiveris.exe"
-.\.venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8000
-```
+## Validation gate
 
-Use the actual Audiveris executable path on your machine. MusicXML/MXL validation does not require Audiveris.
+The authoritative v0.16.4 runtime currently passes **40 tests**, including:
 
-## Local validation
+- dissertation sequence and recursive-level conformance checks;
+- structural-versus-sounding Level-point behavior;
+- Berg-opening pickup-phase regression;
+- short-interior-measure non-pickup regression;
+- OMR/PDF driver contract checks;
+- legacy-path and duplicate-source audits.
 
-From the unzipped runtime folder:
+The required PDF pass remains `Audiveris -batch -step PAGE -save ...`; the required path does not request `-transcribe` or `-export`.
 
-```powershell
-.\.venv\Scripts\python.exe validate_release.py
-```
-
-## Railway
-
-Railway continues to use `Dockerfile`. The image installs Audiveris, unpacks `tone_metric_runtime_source.zip`, installs Python requirements, and starts Uvicorn on `${PORT:-8080}`.
+v0.16.4 remains a development build until the exact real Berg PDF is re-run and compared event-by-event with the dissertation reference. No new BWV 661 PDF regression is claimed without the exact test score.
