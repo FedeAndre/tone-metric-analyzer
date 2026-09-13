@@ -2,6 +2,7 @@ FROM ubuntu:24.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG AUDIVERIS_VERSION=5.10.2
+ARG RAILWAY_GIT_COMMIT_SHA
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     AUDIVERIS_CMD=/opt/audiveris/bin/Audiveris
@@ -18,11 +19,19 @@ RUN apt-get update \
     && rm -f /tmp/audiveris.deb \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone --depth 1 --branch main https://github.com/FedeAndre/tone-metric-analyzer.git /app
+RUN git clone https://github.com/FedeAndre/tone-metric-analyzer.git /app \
+    && if [ -n "${RAILWAY_GIT_COMMIT_SHA}" ]; then \
+         git -C /app checkout --detach "${RAILWAY_GIT_COMMIT_SHA}"; \
+       else \
+         git -C /app checkout main; \
+       fi \
+    && echo "Building repository revision $(git -C /app rev-parse HEAD)"
+
 WORKDIR /app
 RUN python3 -m pip install --no-cache-dir --break-system-packages -r requirements.txt
 RUN python3 validate_dissertation_build.py
-RUN python3 -c "import dissertation_app; print(dissertation_app.APP_VERSION)"
+RUN test -f /app/dissertation_logged_app.py
+RUN python3 -c "import dissertation_logged_app; print(dissertation_logged_app.APP_VERSION)"
 
 EXPOSE 8080
-CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "dissertation_app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "dissertation_logged_app:app", "--host", "0.0.0.0", "--port", "8080"]
