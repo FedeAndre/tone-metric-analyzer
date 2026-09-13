@@ -21,6 +21,7 @@ RUN apt-get update \
 WORKDIR /app
 COPY . /app
 RUN python3 -m pip install --no-cache-dir --break-system-packages -r /app/requirements.txt
+RUN python3 /app/validate_dissertation_build.py
 
 EXPOSE 8080
 CMD ["sh", "-c", "python3 -m uvicorn dissertation_app:app --host 0.0.0.0 --port ${PORT:-8080}"]
