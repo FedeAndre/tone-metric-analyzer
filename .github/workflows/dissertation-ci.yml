@@ -1,0 +1,29 @@
+name: Dissertation analyzer CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dissertation_app.py'
+      - 'tone_metric/dissertation_full.py'
+      - 'tone_metric/engine.py'
+      - 'tone_metric/musicxml.py'
+      - 'tone_metric/waves.py'
+      - 'tone_metric/pivots.py'
+      - 'tone_metric/trees.py'
+      - 'tests/test_dissertation_full.py'
+      - 'validate_dissertation_build.py'
+      - '.github/workflows/dissertation-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt pytest
+      - run: python validate_dissertation_build.py
+      - run: python -m pytest -q tests/test_dissertation_full.py
