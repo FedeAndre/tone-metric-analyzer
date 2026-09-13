@@ -11,6 +11,13 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ca-certificates curl git python3 python3-pip python3-venv \
        libasound2t64 libx11-6 libxext6 libxi6 libxrender1 libxtst6 xdg-utils \
+       fontconfig fonts-dejavu-core fonts-liberation \
+       tesseract-ocr tesseract-ocr-eng \
+    && fc-cache -f \
+    && fc-match "DejaVu Sans" | grep -q "DejaVuSans" \
+    && mkdir -p /root/.config/AudiverisLtd/audiveris/tessdata \
+    && cp -f /usr/share/tesseract-ocr/5/tessdata/*.traineddata /root/.config/AudiverisLtd/audiveris/tessdata/ \
+    && test -s /root/.config/AudiverisLtd/audiveris/tessdata/eng.traineddata \
     && curl -fL --retry 4 --retry-delay 3 \
        -o /tmp/audiveris.deb \
        "https://github.com/Audiveris/audiveris/releases/download/${AUDIVERIS_VERSION}/Audiveris-${AUDIVERIS_VERSION}-ubuntu24.04-x86_64.deb" \
