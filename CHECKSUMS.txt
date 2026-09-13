@@ -1,9 +1,0 @@
-Tone-Metric Analyzer v0.16.4 development deployment integrity
-
-Authoritative runtime ZIP SHA-256:
-88fc9e687de8a2d576021d3202224a2166975538870cf0ce0be861a358e360a2
-
-User-ready ZIP SHA-256:
-1397a756ee72f2f45dff02c3500a6cd3073cf040922243a9063ab78c8f6144f7
-
-The Docker build reconstructs the authoritative runtime from runtime.part00.b64 through runtime.part27.b64 and refuses to continue unless the runtime ZIP matches the authoritative SHA-256 exactly and validate_release.py passes all tests.

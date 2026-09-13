@@ -1,1 +1,0 @@
-Do not add source files, cached bytecode, old runtime ZIPs, or partial transport files directly to this branch. The only executable source is reconstructed from the SHA-256-verified v0.16.4 runtime archive during the Docker build.

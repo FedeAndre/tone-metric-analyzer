@@ -1,12 +1,10 @@
 FROM ubuntu:24.04
-
 ARG DEBIAN_FRONTEND=noninteractive
-ARG AUDIVERIS_VERSION=5.10.2
+ARG AUDIVERIS_VERSION=5.11.0
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     AUDIVERIS_CMD=/opt/audiveris/bin/Audiveris \
     TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
-
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ca-certificates coreutils curl unzip python3 python3-pip python3-venv \
@@ -25,23 +23,12 @@ RUN apt-get update \
     && fc-cache -f \
     && rm -f /tmp/audiveris.deb \
     && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /transport
-COPY runtime.part*.b64 /transport/
-RUN test "$(find /transport -maxdepth 1 -type f -name 'runtime.part*.b64' | wc -l)" -eq 28 \
-    && cat /transport/runtime.part*.b64 | base64 -d > /tmp/tone_metric_runtime_source.zip \
-    && echo "88fc9e687de8a2d576021d3202224a2166975538870cf0ce0be861a358e360a2  /tmp/tone_metric_runtime_source.zip" | sha256sum -c -
-
 WORKDIR /app
-RUN unzip -q /tmp/tone_metric_runtime_source.zip -d /app \
-    && rm -f /tmp/tone_metric_runtime_source.zip \
-    && rm -rf /transport \
+COPY tone_metric_v0_17_0_runtime.zip /tmp/tone_metric_v0_17_0_runtime.zip
+RUN echo "6e2ce25ac7181d62ff3acd9db6b0da958d0c1732580f5ecd20caa811e94c9ed0  /tmp/tone_metric_v0_17_0_runtime.zip" | sha256sum -c - \
+    && unzip -q /tmp/tone_metric_v0_17_0_runtime.zip -d /app \
+    && rm -f /tmp/tone_metric_v0_17_0_runtime.zip \
     && python3 -m pip install --no-cache-dir --break-system-packages -r /app/requirements.txt \
     && PYTHONDONTWRITEBYTECODE=1 python3 -B /app/validate_release.py
-
-# Audiveris executability is already asserted immediately after installation above.
-# validate_release.py independently imports the app and requires version 0.16.4,
-# so no redundant silent post-validation shell tests can mask a successful audit.
-
 EXPOSE 8080
 CMD ["sh", "-c", "python3 -B -m uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
