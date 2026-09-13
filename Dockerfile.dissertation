@@ -22,6 +22,7 @@ WORKDIR /app
 COPY . /app
 RUN python3 -m pip install --no-cache-dir --break-system-packages -r /app/requirements.txt
 RUN python3 /app/validate_dissertation_build.py
+RUN python3 -c "import dissertation_app; print(dissertation_app.APP_VERSION)"
 
 EXPOSE 8080
-CMD ["python3", "-m", "uvicorn", "dissertation_app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "dissertation_app:app", "--host", "0.0.0.0", "--port", "8080"]
