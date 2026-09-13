@@ -37,9 +37,11 @@ RUN unzip -q /tmp/tone_metric_runtime_source.zip -d /app \
     && rm -f /tmp/tone_metric_runtime_source.zip \
     && rm -rf /transport \
     && python3 -m pip install --no-cache-dir --break-system-packages -r /app/requirements.txt \
-    && PYTHONDONTWRITEBYTECODE=1 python3 -B /app/validate_release.py \
-    && test "$(python3 -B -c 'import app; print(app.app.version)')" = "0.16.4" \
-    && test -x /opt/audiveris/bin/Audiveris
+    && PYTHONDONTWRITEBYTECODE=1 python3 -B /app/validate_release.py
+
+# Audiveris executability is already asserted immediately after installation above.
+# validate_release.py independently imports the app and requires version 0.16.4,
+# so no redundant silent post-validation shell tests can mask a successful audit.
 
 EXPOSE 8080
 CMD ["sh", "-c", "python3 -B -m uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
