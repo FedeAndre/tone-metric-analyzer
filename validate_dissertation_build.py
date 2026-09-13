@@ -1,3 +1,4 @@
+# Railway dissertation build validation; this file is watched by the dedicated deployment.
 from fractions import Fraction
 
 from tone_metric.dissertation_full import analyze_full
