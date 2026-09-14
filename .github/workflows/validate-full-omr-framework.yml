@@ -1,0 +1,382 @@
+name: Validate full OMR framework integration
+on:
+  push:
+    branches:
+      - full-omr-framework-fix-20260914
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Integrate framework reconciliation into authoritative path
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p=Path('tone_metric/canonical_score.py')
+          s=p.read_text()
+          old='from .models import Hit\n'
+          new='from .models import Hit, MeasureInfo\n'
+          assert old in s
+          s=s.replace(old,new,1)
+
+          marker='\ndef recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_px: float = 12.0) -> tuple[list[CanonicalColumn], dict]:\n'
+          assert marker in s
+          helper=r'''
+
+class CanonicalFrameworkError(RuntimeError):
+    """Raised when OMR and MusicXML cannot be reconciled without guessing."""
+
+
+def _omr_measure_stack_count(omr_path: str | Path) -> int:
+    path = Path(omr_path)
+    count = 0
+    with ZipFile(path, "r") as zf:
+        members = sorted(
+            [n for n in zf.namelist() if re.search(r"sheet#\d+/sheet#\d+\.xml$", n, re.I)],
+            key=_sheet_no,
+        )
+        for member in members:
+            root = etree.fromstring(zf.read(member))
+            for system in [e for e in root.iter() if _local(e.tag) == "system"]:
+                count += sum(1 for child in system if _local(child.tag) == "stack")
+    return count
+
+
+def _numeric_measure_number(value) -> int | None:
+    m = re.fullmatch(r"\s*(-?\d+)\s*", str(value or ""))
+    return int(m.group(1)) if m else None
+
+
+def _reconcile_measure_framework_with_omr(omr_path, measures, symbolic_hits=None) -> tuple[dict, list[str]]:
+    """Expand a sparse Audiveris MusicXML framework to the finalized OMR stack order.
+
+    Some multi-page Audiveris exports omit individual measures from MusicXML while
+    retaining every physical measure stack in the finalized OMR project.  When the
+    surviving MusicXML measure numbers form an unambiguous ordinal map spanning the
+    complete OMR score, restore only the missing measure shells and keep every known
+    MusicXML measure at its true physical ordinal.  Meter is inherited across a gap
+    only when the known measures on both sides agree; otherwise analysis stops rather
+    than inventing a meter change.
+    """
+    original = list(measures)
+    symbolic_hits = list(symbolic_hits or [])
+    omr_count = _omr_measure_stack_count(omr_path)
+    info = {
+        "musicxml_measure_count": len(original),
+        "omr_measure_stack_count": omr_count,
+        "framework_measure_count": len(original),
+        "framework_reconciled": False,
+        "synthesized_measure_count": 0,
+        "synthesized_measure_numbers": [],
+        "framework_alignment": "musicxml-sequential",
+    }
+    warnings: list[str] = []
+    if omr_count <= len(original):
+        if omr_count < len(original):
+            warnings.append(
+                f"Finalized OMR contains {omr_count} measure stacks but MusicXML contains {len(original)} measures; no OMR expansion was required."
+            )
+        return info, warnings
+
+    numbers = [_numeric_measure_number(m.number) for m in original]
+    if not original or any(n is None for n in numbers):
+        raise CanonicalFrameworkError(
+            f"Finalized OMR contains {omr_count} measure stacks but MusicXML contains only {len(original)} measures, and the MusicXML measure numbers are not a complete numeric ordinal map."
+        )
+    nums = [int(n) for n in numbers]
+    if any(b <= a for a, b in zip(nums, nums[1:])):
+        raise CanonicalFrameworkError(
+            "Sparse MusicXML measure numbers are not strictly increasing, so omitted OMR measures cannot be restored without guessing."
+        )
+    base_number = nums[0]
+    target_indices = [n - base_number for n in nums]
+    if target_indices[0] != 0 or target_indices[-1] != omr_count - 1:
+        raise CanonicalFrameworkError(
+            f"MusicXML measure numbering spans {nums[0]}–{nums[-1]}, which does not unambiguously cover all {omr_count} finalized OMR measure stacks."
+        )
+    if len(set(target_indices)) != len(target_indices) or any(i < 0 or i >= omr_count for i in target_indices):
+        raise CanonicalFrameworkError("MusicXML measure numbers cannot be mapped one-to-one onto the finalized OMR measure stacks.")
+
+    expanded: list[MeasureInfo | None] = [None] * omr_count
+    old_to_new: dict[int, int] = {}
+    for old_index, (measure, target_index) in enumerate(zip(original, target_indices)):
+        expanded[target_index] = measure
+        old_to_new[old_index] = target_index
+
+    missing_indices = [i for i, measure in enumerate(expanded) if measure is None]
+    for i in missing_indices:
+        prev = next((expanded[j] for j in range(i - 1, -1, -1) if expanded[j] is not None), None)
+        nxt = next((expanded[j] for j in range(i + 1, omr_count) if expanded[j] is not None), None)
+        if prev is None or nxt is None:
+            raise CanonicalFrameworkError(
+                f"OMR measure {base_number + i} is missing from MusicXML at an unbounded score edge; its meter cannot be restored safely."
+            )
+        prev_meter = (int(prev.numerator), int(prev.denominator))
+        next_meter = (int(nxt.numerator), int(nxt.denominator))
+        if prev_meter != next_meter:
+            raise CanonicalFrameworkError(
+                f"OMR measure {base_number + i} is missing from MusicXML between conflicting meters {prev_meter[0]}/{prev_meter[1]} and {next_meter[0]}/{next_meter[1]}; analysis will not guess the meter change."
+            )
+        numerator, denominator = prev_meter
+        full = Fraction(numerator * 4, denominator)
+        expanded[i] = MeasureInfo(
+            index=i,
+            number=str(base_number + i),
+            start=Fraction(0),
+            full_duration=full,
+            actual_duration=full,
+            pickup_shift=Fraction(0),
+            numerator=numerator,
+            denominator=denominator,
+            implicit=False,
+        )
+
+    restored = [m for m in expanded if m is not None]
+    if len(restored) != omr_count:
+        raise CanonicalFrameworkError("Internal framework reconciliation failed to restore every finalized OMR measure stack.")
+
+    start = Fraction(0)
+    for i, measure in enumerate(restored):
+        measure.index = i
+        measure.start = start
+        start += measure.full_duration
+
+    for hit in symbolic_hits:
+        old_index = int(hit.measure_index)
+        if old_index not in old_to_new:
+            raise CanonicalFrameworkError(f"Symbolic hit references unknown MusicXML measure index {old_index} during OMR reconciliation.")
+        new_index = old_to_new[old_index]
+        measure = restored[new_index]
+        hit.measure_index = new_index
+        hit.onset = measure.start + hit.offset_in_measure
+        for src in hit.sources:
+            src.measure_index = new_index
+            src.onset = measure.start + src.offset_in_measure
+
+    measures[:] = restored
+    synthesized_numbers = [str(base_number + i) for i in missing_indices]
+    info.update({
+        "framework_measure_count": len(restored),
+        "framework_reconciled": True,
+        "synthesized_measure_count": len(missing_indices),
+        "synthesized_measure_numbers": synthesized_numbers,
+        "framework_alignment": "finalized-omr-stack-order+musicxml-number-anchors",
+    })
+    warnings.append(
+        f"Restored {len(missing_indices)} MusicXML-omitted measure shells from the finalized OMR stack order; no meter was guessed across a conflicting change."
+    )
+    return info, warnings
+'''
+          s=s.replace(marker, helper+marker,1)
+
+          old='''def build_hits_from_canonical_score(omr_path, measures, symbolic_hits=None):\n    """Return global sonic attacks on the canonical score-time grid.\n\n    Symbolic MusicXML note details are attached only when they agree exactly with the\n    recovered measure/time.  They are never allowed to move a visual attack.\n    """\n    columns, meta = recover_canonical_columns(omr_path, measures)\n    symbolic_hits = list(symbolic_hits or [])\n'''
+          new='''def build_hits_from_canonical_score(omr_path, measures, symbolic_hits=None):\n    """Return global sonic attacks on the canonical score-time grid.\n\n    Symbolic MusicXML note details are attached only when they agree exactly with the\n    recovered measure/time.  They are never allowed to move a visual attack.\n    """\n    symbolic_hits = list(symbolic_hits or [])\n    framework_meta, framework_warnings = _reconcile_measure_framework_with_omr(\n        omr_path, measures, symbolic_hits=symbolic_hits\n    )\n    columns, meta = recover_canonical_columns(omr_path, measures)\n'''
+          assert old in s
+          s=s.replace(old,new,1)
+
+          old='''    meta = dict(meta)\n    meta["canonical_hit_count"] = len(hits)\n    meta["symbolic_hit_count"] = len(symbolic_hits)\n    meta["canonical_attack_keys"] = [f"{h.measure_index}:{h.offset_in_measure}" for h in hits]\n    warnings = []\n    if not hits:\n        warnings.append("Canonical score-time recovery produced no usable attacks; symbolic MusicXML hits were retained.")\n    return hits, warnings, meta\n'''
+          new='''    meta = dict(meta)\n    meta.update(framework_meta)\n    meta["measure_count"] = len(meta.get("measures", []))\n    meta["canonical_hit_count"] = len(hits)\n    meta["symbolic_hit_count"] = len(symbolic_hits)\n    meta["canonical_attack_keys"] = [f"{h.measure_index}:{h.offset_in_measure}" for h in hits]\n    warnings = list(framework_warnings)\n    if not hits:\n        warnings.append("Canonical score-time recovery produced no usable attacks.")\n    return hits, warnings, meta\n'''
+          assert old in s
+          s=s.replace(old,new,1)
+          p.write_text(s)
+
+          p=Path('app.py')
+          s=p.read_text()
+          old='from tone_metric.canonical_score import build_hits_from_canonical_score\n'
+          new='from tone_metric.canonical_score import build_hits_from_canonical_score, CanonicalFrameworkError\n'
+          assert old in s
+          s=s.replace(old,new,1)
+          old='''        if suffix == ".pdf" and omr_path is not None:\n            try:\n                recovered_hits, canonical_warnings, canonical_score_meta = build_hits_from_canonical_score(\n                    omr_path, measures, symbolic_hits=hits\n                )\n                if recovered_hits:\n                    analysis_hits = recovered_hits\n                    parse_warnings = list(parse_warnings) + list(canonical_warnings)\n            except Exception as exc:\n                parse_warnings = list(parse_warnings) + [\n                    f"Canonical score-time recovery failed; symbolic MusicXML hits were used: {exc}"\n                ]\n'''
+          new='''        if suffix == ".pdf" and omr_path is not None:\n            try:\n                recovered_hits, canonical_warnings, canonical_score_meta = build_hits_from_canonical_score(\n                    omr_path, measures, symbolic_hits=hits\n                )\n            except CanonicalFrameworkError as exc:\n                raise HTTPException(422, f"Canonical score framework could not be reconciled safely: {exc}")\n            except Exception as exc:\n                raise HTTPException(422, f"Canonical score-time recovery failed: {exc}")\n            if not recovered_hits:\n                raise HTTPException(422, "Canonical score-time recovery produced no usable attacks.")\n            analysis_hits = recovered_hits\n            parse_warnings = list(parse_warnings) + list(canonical_warnings)\n'''
+          assert old in s
+          s=s.replace(old,new,1)
+          p.write_text(s)
+          PY
+
+      - name: Targeted framework unit checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from fractions import Fraction
+          from pathlib import Path
+          from tempfile import TemporaryDirectory
+          from zipfile import ZipFile
+          from tone_metric.models import MeasureInfo, Hit
+          from tone_metric.canonical_score import _reconcile_measure_framework_with_omr, CanonicalFrameworkError
+
+          def m(i,n,num=3,den=4):
+              return MeasureInfo(i,str(n),Fraction(i*3),Fraction(num*4,den),Fraction(num*4,den),Fraction(0),num,den,False)
+          with TemporaryDirectory() as td:
+              omr=Path(td)/'x.omr'
+              xml='<sheet><system>'+''.join(f'<stack id="{i}" left="0" right="10"/>' for i in range(1,5))+'</system></sheet>'
+              with ZipFile(omr,'w') as z: z.writestr('sheet#1/sheet#1.xml',xml)
+              measures=[m(0,1),m(1,3),m(2,4)]
+              h=Hit(Fraction(7),Fraction(1),1,'3',Fraction(1),[])
+              meta,warns=_reconcile_measure_framework_with_omr(omr,measures,[h])
+              assert [x.number for x in measures]==['1','2','3','4']
+              assert [x.index for x in measures]==[0,1,2,3]
+              assert [x.start for x in measures]==[Fraction(0),Fraction(3),Fraction(6),Fraction(9)]
+              assert h.measure_index==2 and h.onset==Fraction(7)
+              assert meta['framework_reconciled'] and meta['synthesized_measure_numbers']==['2']
+              assert meta['framework_measure_count']==4
+
+              bad=[m(0,1,3,4),m(1,3,4,4),m(2,4,4,4)]
+              try:
+                  _reconcile_measure_framework_with_omr(omr,bad,[])
+              except CanonicalFrameworkError as exc:
+                  assert 'conflicting meters' in str(exc)
+              else:
+                  raise AssertionError('conflicting-meter gap must fail closed')
+          print('TARGETED FRAMEWORK CHECKS: PASS')
+          PY
+
+      - name: Refresh checksum manifest and clean generated caches
+        shell: bash
+        run: |
+          set -euo pipefail
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          python3 - <<'PY'
+          from hashlib import sha256
+          from pathlib import Path
+          p=Path('v0152_sha256.txt')
+          out=[]
+          for line in p.read_text().splitlines():
+              if not line.strip(): continue
+              _old,path=line.split(None,1)
+              out.append(f'{sha256(Path(path).read_bytes()).hexdigest()}  {path}')
+          p.write_text('\n'.join(out)+'\n')
+          PY
+          sha256sum -c v0152_sha256.txt
+          python3 -m py_compile app.py tone_metric/*.py
+
+      - name: Clean override and legacy audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import ast, pathlib, re
+          files=[pathlib.Path('app.py'),*sorted(pathlib.Path('tone_metric').glob('*.py'))]
+          for p in files:
+              tree=ast.parse(p.read_text(), filename=str(p))
+              names={}
+              for node in tree.body:
+                  if isinstance(node,(ast.FunctionDef,ast.AsyncFunctionDef,ast.ClassDef)):
+                      names.setdefault(node.name,0); names[node.name]+=1
+              dup=[n for n,c in names.items() if c>1]
+              assert not dup, f'{p}: duplicate top-level definitions {dup}'
+          app=pathlib.Path('app.py').read_text()
+          assert app.count('@app.post("/api/analyze")')==1
+          assert 'symbolic MusicXML hits were used' not in app
+          can=pathlib.Path('tone_metric/canonical_score.py').read_text()
+          assert can.count('def build_hits_from_canonical_score(')==1
+          assert can.count('def _reconcile_measure_framework_with_omr(')==1
+          assert can.count('class CanonicalFrameworkError')==1
+          omr=pathlib.Path('tone_metric/omr.py').read_text()
+          assert omr.count('def pdf_to_musicxml(')==1
+          assert '"-save"' not in omr
+          forbidden=['validate_release.py','tone_metric/omr_exact.py','tone_metric/omr_visual_rhythm.py','tone_metric/layer_registration.py','tone_metric/render.py']
+          assert not [f for f in forbidden if pathlib.Path(f).exists()]
+          assert not list(pathlib.Path('.').rglob('*.pyc'))
+          assert not list(pathlib.Path('.').rglob('__pycache__'))
+          print('CLEAN OVERRIDE/LEGACY AUDIT: PASS')
+          PY
+
+      - name: Build candidate Docker image
+        run: docker build -t tma-full-framework .
+
+      - name: Download exact Berg and BWV fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -A 'Mozilla/5.0' -fL --retry 4 --retry-delay 2 -o berg.pdf 'https://s9.imslp.org/files/imglnks/usimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
+          test "$(stat -c%s berg.pdf)" = "579006"
+          echo '815d95242d6e2076866594174617361c87373bce7e1642b66812240a3aef400c  berg.pdf' | sha256sum -c -
+          curl -fL --retry 4 --retry-delay 2 -o bwv661.pdf 'https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf'
+          test "$(stat -c%s bwv661.pdf)" = "101270"
+          echo 'd50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661.pdf' | sha256sum -c -
+
+      - name: Exact Berg and BWV API regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run -d --name tma-framework -p 18080:8080 tma-full-framework
+          trap 'docker logs tma-framework || true; docker rm -f tma-framework >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 90); do curl -fsS http://127.0.0.1:18080/api/status >/dev/null && break; sleep 1; done
+          timeout 900 curl --fail-with-body --silent --show-error -F file=@berg.pdf -F meter_override=auto http://127.0.0.1:18080/api/analyze -o berg.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('berg.json'))
+          meta=d.get('canonical_score_meta') or {}
+          events=[e for s in d.get('segments',[]) for e in s.get('events',[])]
+          pages=(d.get('physical_overlay') or {}).get('pages') or []
+          by_page={int(p.get('page_index')):p for p in pages}
+          missing=[e for e in events if not e.get('tone_metric_levels')]
+          print(json.dumps({
+            'measures':len(d.get('measures',[])), 'symbolic':d.get('symbolic_hit_count'),
+            'canonical':d.get('canonical_hit_count'), 'events':len(events),
+            'missing_levels':len(missing), 'max_level':d.get('max_level'),
+            'framework':{k:meta.get(k) for k in ('musicxml_measure_count','omr_measure_stack_count','framework_measure_count','framework_reconciled','synthesized_measure_count','synthesized_measure_numbers','measure_count')},
+            'page8_layers':len(by_page.get(7,{}).get('layer_anchors',[])),
+            'page9_layers':len(by_page.get(8,{}).get('layer_anchors',[])),
+            'page9_trees':len(by_page.get(8,{}).get('tree_nodes',[])),
+          },indent=2))
+          assert d.get('analysis_hit_source')=='canonical-score-time'
+          assert len(d.get('measures',[]))==175
+          assert d['measures'][0]['number']=='1' and d['measures'][-1]['number']=='175'
+          assert meta.get('musicxml_measure_count')==136
+          assert meta.get('omr_measure_stack_count')==175
+          assert meta.get('framework_measure_count')==175
+          assert meta.get('framework_reconciled') is True
+          assert meta.get('synthesized_measure_count')==39
+          assert meta.get('measure_count')==175
+          assert not any('more measure stacks than the canonical MusicXML framework' in str(w) for w in meta.get('warnings',[]))
+          assert len(events)>1329
+          assert len(missing)==0
+          assert (d.get('physical_overlay') or {}).get('available') is True
+          assert len(by_page.get(7,{}).get('layer_anchors',[]))>16
+          assert len(by_page.get(8,{}).get('layer_anchors',[]))>0
+          assert len(by_page.get(8,{}).get('tree_nodes',[]))>0
+          assert (d.get('physical_overlay') or {}).get('matching',{}).get('structural_parenthetical_labels_missing')==0
+          print('EXACT FULL-SCORE BERG: PASS')
+          PY
+          timeout 900 curl --fail-with-body --silent --show-error -F file=@bwv661.pdf -F meter_override=auto http://127.0.0.1:18080/api/analyze -o bwv.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('bwv.json'))
+          events=[e for s in d.get('segments',[]) for e in s.get('events',[])]
+          po=d.get('physical_overlay') or {}; m=po.get('matching') or {}; meta=d.get('canonical_score_meta') or {}
+          print(json.dumps({'measures':len(d.get('measures',[])),'symbolic':d.get('symbolic_hit_count'),'canonical':d.get('canonical_hit_count'),'events':len(events),'max':d.get('max_level'),'framework':meta.get('framework_reconciled')},indent=2))
+          assert d.get('symbolic_hit_count')==549
+          assert d.get('canonical_hit_count')==733
+          assert len(events)==733 and all(e.get('tone_metric_levels') for e in events)
+          assert d.get('levels_enabled')==list(range(1,10)) and d.get('max_level')==9
+          assert len(d.get('measures',[]))==92
+          assert meta.get('omr_measure_stack_count')==92
+          assert meta.get('framework_reconciled') is False
+          assert po.get('available') is True
+          assert m.get('wave_profile_points_mapped')==735
+          assert m.get('pivot_profile_mapped')==27
+          assert m.get('tree_event_nodes_mapped')==733
+          assert m.get('tree_branches_mapped')==732
+          print('EXACT BWV 661: PASS')
+          PY
+
+      - name: Commit only validated runtime changes to candidate branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'FedeAndre'
+          git config user.email 'federico.andreoni@gmail.com'
+          git add app.py tone_metric/canonical_score.py v0152_sha256.txt
+          git diff --cached --name-only
+          test "$(git diff --cached --name-only | wc -l)" -eq 3
+          git commit -m 'Integrate full OMR measure framework and fail-closed PDF recovery [skip ci]'
+          git push origin HEAD:full-omr-framework-fix-20260914
