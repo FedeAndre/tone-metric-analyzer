@@ -1,0 +1,45 @@
+name: Apply exact v0.15.2 transport correction
+
+on:
+  push:
+    branches:
+      - inspect-v0152-runtime
+    paths:
+      - 'transport/fix.*'
+      - '.github/workflows/apply-v0152-fixpack.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reconstruct exact correction package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat transport/fix.00 transport/fix.01 transport/fix.02 transport/fix.03 transport/fix.04 transport/fix.05 > /tmp/fix.tar.gz
+          echo '9833c35e581ef4750824f74142741fa55cbced33c21ab67e83f06bf369cb8134  /tmp/fix.tar.gz' | sha256sum -c -
+          rm -rf /tmp/v0152fix && mkdir -p /tmp/v0152fix
+          tar -xzf /tmp/fix.tar.gz -C /tmp/v0152fix
+          echo '66837f774f3ab948ea2c7d0a3b4addf5ca1dbd5dd65b76d6ed4e579070938caf  /tmp/v0152fix/engine.py' | sha256sum -c -
+          echo 'c254eda249225fac50ca24c7343bb71671eecac293db9e53fdfcf172b5633619  /tmp/v0152fix/static.00' | sha256sum -c -
+          echo '2b201e406eb5615938cff6d262906c73e010dbb8d1633a54482fb662e6ee6cb0  /tmp/v0152fix/static.04' | sha256sum -c -
+          cp /tmp/v0152fix/engine.py transport/engine.py
+          cp /tmp/v0152fix/static.00 transport/static.00
+          cp /tmp/v0152fix/static.04 transport/static.04
+      - name: Commit corrected transport files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add transport/engine.py transport/static.00 transport/static.04
+          if git diff --cached --quiet; then
+            echo 'transport already corrected'
+          else
+            git commit -m 'Correct exact v0.15.2 transport blobs'
+            git push origin HEAD:inspect-v0152-runtime
+          fi
