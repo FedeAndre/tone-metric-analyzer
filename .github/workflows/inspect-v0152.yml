@@ -1,4 +1,4 @@
-name: Inspect v0.15.2 runtime archive
+name: Locate exact v0.15.2 blobs
 
 on:
   push:
@@ -14,45 +14,43 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Decode nonstandard historical transfer blobs
+      - name: Locate exact SHA-256 source blobs in Git history
         shell: bash
         run: |
           python3 - <<'PY'
-          import base64, hashlib, io, subprocess, zipfile
-
-          cases=[
-            ('ac8bcec8645e74b0c2f95f1d3946cacd2816a15e',['runtime_source.b64']),
-            ('50b9b8009ab06e1ad84be6fe93bc6b45c734d96e',['runtime.b64']),
-            ('b080bd45167c04870c2ef80f3852dc5822408d60',['v17c00.b64','v17c01.b64','v17c02.b64','v17c03.b64']),
-            ('b080bd45167c04870c2ef80f3852dc5822408d60',['runtime.b64']),
-            ('18215ca3160087a78d4918bbde117d46f643578a',['runtime_v0_16_4.part00.b64']),
-          ]
-          for commit,paths in cases:
-              print('CASE_BEGIN',commit,','.join(paths))
+          import hashlib, subprocess
+          targets = {
+            '221eb5c4e85982b410476dde629278f0bdad908abd277ff8655e525ca60c9772': 'app.py',
+            '9e0c440574269ecbf1b813b8a2d20e341cfe8c59c28bd5700a80900229b55eb3': 'static/index.html',
+            '1c53a620ac83e638c05bf08a08ab914ab1dc4b22b9cdb950e58dc87d73df865c': 'tone_metric/musicxml.py',
+            'cb59c48bc9943b03eb2f769f693075cf7299c64e5a6c5be5fb64785dc023cb8c': 'tone_metric/models.py',
+            '66837f774f3ab948ea2c7d0a3b4addf5ca1dbd5dd65b76d6ed4e579070938caf': 'tone_metric/engine.py',
+            'c78828c867e30c3818b23b11fc4435af2adb28bef7dd59d7fd6b2cc728655ca2': 'tone_metric/canonical_score.py',
+            '04e0b925415bce48421bdea1aceb47ee41035c5dda34e838919f7b3b31b3aee2': 'tone_metric/__init__.py',
+          }
+          found = {k: [] for k in targets}
+          commits = subprocess.check_output(['git','rev-list','--all'], text=True).splitlines()
+          seen = set()
+          for commit in commits:
+            for row in subprocess.check_output(['git','ls-tree','-r',commit], text=True, errors='replace').splitlines():
               try:
-                  enc=b''.join(subprocess.check_output(['git','show',f'{commit}:{p}']) for p in paths)
-              except subprocess.CalledProcessError as e:
-                  print('MISSING'); print('CASE_END'); continue
-              for mode in ('direct','strip_ws'):
-                  raw=enc if mode=='direct' else b''.join(enc.split())
-                  try:
-                      data=base64.b64decode(raw,validate=False)
-                  except Exception as e:
-                      print('DECODE_FAIL',mode,type(e).__name__,str(e)); continue
-                  print('DECODED',mode,'SIZE',len(data),'SHA256',hashlib.sha256(data).hexdigest(),'HEAD',data[:16].hex())
-                  try:
-                      with zipfile.ZipFile(io.BytesIO(data)) as z:
-                          files=[i for i in z.infolist() if not i.is_dir()]
-                          print('ZIP_FILES',len(files))
-                          for i in files:
-                              b=z.read(i.filename)
-                              print(hashlib.sha256(b).hexdigest(),i.filename)
-                  except zipfile.BadZipFile:
-                      try:
-                          txt=data.decode('utf-8')
-                          print('TEXT_HEAD',repr(txt[:500]))
-                      except Exception:
-                          print('NOT_ZIP_NOT_TEXT')
-                  break
-              print('CASE_END')
+                meta, path = row.split('\t',1)
+                _, typ, blob = meta.split()
+              except ValueError:
+                continue
+              if typ != 'blob' or blob in seen:
+                continue
+              seen.add(blob)
+              data = subprocess.check_output(['git','cat-file','blob',blob])
+              h = hashlib.sha256(data).hexdigest()
+              if h in targets:
+                found[h].append((commit,path,blob))
+          for h, expected in targets.items():
+            print('TARGET', h, expected, 'MATCHES', len(found[h]))
+            for commit,path,blob in found[h]:
+              print('MATCH', h, commit, blob, path)
+          missing=[targets[h] for h,v in found.items() if not v]
+          print('MISSING', missing)
+          if missing:
+            raise SystemExit(2)
           PY
