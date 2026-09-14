@@ -39,7 +39,7 @@ def pdf_to_musicxml(pdf_path: str | Path, output_dir: str | Path) -> tuple[Path,
     cmd = find_audiveris()
     if not cmd:
         raise RuntimeError("Audiveris was not found. PDF upload requires Audiveris. Set AUDIVERIS_CMD or add it to PATH.")
-    proc = _run(cmd, ["-batch", "-transcribe", "-save", "-export", "-annotate", "-output", str(output_dir), "--", str(pdf_path)])
+    proc = _run(cmd, ["-batch", "-transcribe", "-export", "-annotate", "-output", str(output_dir), "--", str(pdf_path)])
     try:
         (output_dir / "audiveris-transcribe.log").write_text(proc.stdout or "", encoding="utf-8", errors="replace")
     except Exception:
