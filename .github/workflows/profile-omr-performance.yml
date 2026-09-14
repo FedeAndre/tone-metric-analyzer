@@ -1,0 +1,71 @@
+name: Profile OMR performance
+on:
+  push:
+    branches:
+      - profile-omr-performance-20260914
+permissions:
+  contents: read
+jobs:
+  profile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download exact Berg and BWV fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -A 'Mozilla/5.0' -fL --retry 4 --retry-delay 2 -o berg.pdf 'https://s9.imslp.org/files/imglnks/usimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
+          test "$(stat -c%s berg.pdf)" = "579006"
+          echo '815d95242d6e2076866594174617361c87373bce7e1642b66812240a3aef400c  berg.pdf' | sha256sum -c -
+          curl -fL --retry 4 --retry-delay 2 -o bwv661.pdf 'https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf'
+          test "$(stat -c%s bwv661.pdf)" = "101270"
+          echo 'd50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661.pdf' | sha256sum -c -
+      - name: Clean runtime audit before profiling
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum -c v0152_sha256.txt
+          test ! -e validate_release.py
+          test ! -e tone_metric/omr_exact.py
+          test ! -e tone_metric/omr_visual_rhythm.py
+          test ! -e tone_metric/layer_registration.py
+          test ! -e tone_metric/render.py
+          test "$(grep -R '^def pdf_to_musicxml' -n tone_metric | wc -l)" -eq 1
+          test "$(grep -R '@app.post("/api/analyze")' -n app.py | wc -l)" -eq 1
+      - name: Build unchanged runtime image
+        run: docker build -t tma-profile .
+      - name: Profile exact Berg pipeline stage by stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p profile-berg
+          docker run --rm \
+            -v "$PWD/berg.pdf:/input.pdf:ro" \
+            -v "$PWD/.github/scripts/profile_omr_pipeline.py:/profile.py:ro" \
+            -v "$PWD/profile-berg:/profile-out" \
+            tma-profile python3 /profile.py /input.pdf /profile-out | tee berg-profile.log
+          cat profile-berg/profile-summary.json
+      - name: Profile exact BWV pipeline stage by stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p profile-bwv
+          docker run --rm \
+            -v "$PWD/bwv661.pdf:/input.pdf:ro" \
+            -v "$PWD/.github/scripts/profile_omr_pipeline.py:/profile.py:ro" \
+            -v "$PWD/profile-bwv:/profile-out" \
+            tma-profile python3 /profile.py /input.pdf /profile-out | tee bwv-profile.log
+          cat profile-bwv/profile-summary.json
+      - name: Show bottleneck ratios
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          for name in ('berg','bwv'):
+              d=json.load(open(f'profile-{name}/profile-summary.json'))
+              t=d['timings_seconds']; total=d['total_seconds']
+              print(f'\n{name.upper()} total={total:.3f}s')
+              for k,v in sorted(t.items(), key=lambda kv: kv[1], reverse=True):
+                  print(f'{k:35s} {v:9.3f}s {100*v/total:6.1f}%')
+          PY
