@@ -19,11 +19,13 @@ from tone_metric.score_registration import build_layer_anchors_from_canonical_sc
 from tone_metric.trees import build_tree_profile, register_tree_profile
 from tone_metric.waves import build_wave_profile, register_wave_profile
 
-# Presentation-only wrapper. The validated analytical implementation in
-# dissertation_app.py is not changed. PDF OMR is executed once, then the exact
-# same exported symbolic score is passed through the existing analyzer and its
-# saved OMR geometry is reused for the visual layer.
-APP_VERSION = "1.2.0-dissertation-exact-pdf-single-pass"
+# PDF integration wrapper. The validated dissertation Levels / waves / pivots / trees
+# implementation remains unchanged. Audiveris is executed once. The saved OMR
+# project supplies the canonical physical attack times used by the analysis and the
+# exact same canonical geometry is then reused to register that result to the
+# uploaded PDF. MusicXML supplies notation metadata and measures, but it is not
+# allowed to move or replace a physical PDF attack.
+APP_VERSION = "1.2.1-dissertation-canonical-score-time"
 app = old.app
 app.version = APP_VERSION
 
@@ -197,11 +199,11 @@ def _registration_report(canonical_meta: dict, pdf_pages: list[dict]) -> list[di
 def _build_visual_job(
     session_id: str,
     pdf_path: Path,
-    symbolic_path: Path,
-    omr_path: Path,
-    initial_meter: str,
+    canonical_meta: dict,
+    canonical_warnings: list[str],
     analysis_payload: dict,
 ) -> None:
+    """Build only the visual product from the already-authoritative analysis state."""
     session = CACHE / session_id
     try:
         old._set_job(session_id, status="processing", stage="Rendering the exact uploaded PDF")
@@ -212,13 +214,6 @@ def _build_visual_job(
         ]
         old._set_job(session_id, pages=public_pages, stage="Registering analysis to the original PDF")
 
-        override = base._meter_override(initial_meter)
-        hits, measures, _parser_warnings = old.parse_musicxml(
-            symbolic_path, initial_meter_override=override
-        )
-        _unused_hits, canonical_warnings, canonical_meta = build_hits_from_canonical_score(
-            omr_path, measures, symbolic_hits=hits
-        )
         overlay = _canonical_overlay(analysis_payload.get("levels") or {}, canonical_meta)
         registration = _registration_report(canonical_meta, pages)
         warnings = list(overlay.get("warnings", []) or [])
@@ -235,6 +230,8 @@ def _build_visual_job(
             "page_registration": registration,
             "warnings": list(dict.fromkeys(warnings)),
             "analysis_unchanged": True,
+            "analysis_engine_unchanged": True,
+            "analysis_hit_source": "canonical-score-time",
             "exact_pdf_background": True,
             "background_source": "uploaded-pdf",
             "geometry_source": "saved-audiveris-omr",
@@ -254,6 +251,7 @@ def _build_visual_job(
             stage="Original-PDF score overlay stopped",
             detail=str(exc),
             analysis_unchanged=True,
+            analysis_engine_unchanged=True,
         )
 
 
@@ -277,14 +275,19 @@ async def analyze_with_single_omr_pass(
     if len(payload) > 80 * 1024 * 1024:
         raise HTTPException(413, "Upload is larger than the 80 MB online limit.")
 
+    try:
+        override = base._meter_override(initial_meter)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+
     session_id = uuid.uuid4().hex
     session = CACHE / session_id
     session.mkdir(parents=True, exist_ok=True)
     saved_pdf = session / filename
     saved_pdf.write_bytes(payload)
 
-    # One and only one PDF->Audiveris transcription pass. Its MusicXML drives the
-    # unchanged analyzer; its saved .omr project drives the PDF overlay.
+    # One and only one PDF->Audiveris pass. MusicXML establishes measure/notation
+    # metadata; the saved OMR project establishes canonical physical attack times.
     try:
         symbolic_path, omr_path = old.pdf_to_musicxml(saved_pdf, session / "audiveris")
     except Exception as exc:
@@ -292,34 +295,43 @@ async def analyze_with_single_omr_pass(
         raise HTTPException(422, f"PDF optical-music recognition failed: {exc}") from exc
 
     try:
-        with Path(symbolic_path).open("rb") as handle:
-            symbolic_upload = UploadFile(filename=Path(symbolic_path).name, file=handle)
-            response = await base.analyze_endpoint(
-                file=symbolic_upload,
-                initial_meter=initial_meter,
+        symbolic_hits, measures, parser_warnings = old.parse_musicxml(
+            symbolic_path, initial_meter_override=override
+        )
+        if not measures:
+            raise ValueError("No measures were recovered from the score.")
+
+        canonical_hits, canonical_warnings, canonical_meta = build_hits_from_canonical_score(
+            omr_path, measures, symbolic_hits=symbolic_hits
+        )
+        if not canonical_hits:
+            raise ValueError(
+                "Audiveris did not provide canonical physical attack columns; "
+                "the dissertation PDF pipeline will not silently substitute MusicXML timing."
             )
-    except Exception:
-        shutil.rmtree(session, ignore_errors=True)
-        raise
 
-    try:
-        analysis_payload = json.loads(response.body.decode("utf-8"))
-    except Exception:
+        # The analytical algorithm itself is unchanged. The difference from the
+        # previous PDF wrapper is that it now receives the physical attack sequence
+        # recovered from the score rather than lossy MusicXML-only attack timing.
+        analysis_payload = base.analyze_full(canonical_hits, measures)
+    except Exception as exc:
         shutil.rmtree(session, ignore_errors=True)
-        return response
+        raise HTTPException(422, f"Tone-metric analysis failed: {exc}") from exc
 
-    # Restore exactly the source metadata the unchanged analyzer would return for
-    # the original PDF upload. No analytical values are modified.
-    try:
-        override = base._meter_override(initial_meter)
-        meter_value = "auto" if override is None else f"{override[0]}/{override[1]}"
-    except Exception:
-        meter_value = initial_meter
+    meter_value = "auto" if override is None else f"{override[0]}/{override[1]}"
     analysis_payload["source"] = {
         "filename": filename,
         "input_type": "pdf",
         "meter_override": meter_value,
+        "attack_timing_source": "canonical-score-time",
     }
+    analysis_payload["analysis_hit_source"] = "canonical-score-time"
+    analysis_payload["symbolic_hit_count"] = len(symbolic_hits)
+    analysis_payload["canonical_hit_count"] = len(canonical_hits)
+    analysis_payload["warnings"] = base._warnings(
+        analysis_payload,
+        list(parser_warnings) + list(canonical_warnings),
+    )
     response = JSONResponse(analysis_payload)
 
     old._set_job(
@@ -329,15 +341,16 @@ async def analyze_with_single_omr_pass(
         created_at=time.time(),
         pages=[],
         analysis_unchanged=True,
+        analysis_engine_unchanged=True,
+        analysis_hit_source="canonical-score-time",
     )
     threading.Thread(
         target=_build_visual_job,
         args=(
             session_id,
             saved_pdf,
-            Path(symbolic_path),
-            Path(omr_path),
-            initial_meter,
+            canonical_meta,
+            list(canonical_warnings),
             analysis_payload,
         ),
         daemon=True,
