@@ -37,10 +37,10 @@ RUN git clone https://github.com/FedeAndre/tone-metric-analyzer.git /app \
 WORKDIR /app
 RUN python3 -m pip install --no-cache-dir --break-system-packages -r requirements.txt
 
-# Standalone clean runtime only. No previous analyzer/version is imported,
-# executed, validated, or started in this image.
-RUN python3 validate_recursive_levels_clean_v8.py
-RUN python3 -c "import recursive_levels_clean_v8 as appmod; assert appmod.APP_VERSION.startswith('0.8.0-'); print(appmod.APP_VERSION)"
+# Canonical OMR v9 only. No prior analyzer runtime is imported, executed,
+# validated, or started in this image.
+RUN python3 validate_recursive_levels_clean_v9.py
+RUN python3 -c "import recursive_levels_clean_v9 as appmod; assert appmod.APP_VERSION.startswith('0.9.0-'); print(appmod.APP_VERSION)"
 
 EXPOSE 8080
-CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "recursive_levels_clean_v8:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "recursive_levels_clean_v9:app", "--host", "0.0.0.0", "--port", "8080"]
