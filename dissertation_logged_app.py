@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse, Response
 
 # Import only the current system-aligned exact-PDF presentation wrapper. Older
 # visualization wrappers remain in the repository for history but are not
-# imported as active application entry points.
+# imported as active application entry points. This is the single active score view.
 from dissertation_system_aligned_app import APP_VERSION, app
 
 logger = logging.getLogger("tone_metric.dissertation")
