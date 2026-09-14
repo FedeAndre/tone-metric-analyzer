@@ -1,0 +1,45 @@
+name: Find Musopen Berg Muzyka PDF
+on:
+  push:
+    branches:
+      - diagnose-berg-audiveris-20260914
+permissions:
+  contents: read
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Musopen Berg page and inspect score links
+        shell: bash
+        run: |
+          set -euo pipefail
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/153 Safari/537.36'
+          for URL in \
+            'https://musopen.org/music/9780-piano-sonata-op-1/' \
+            'https://musopen.org/sheetmusic/9780/alban-berg/piano-sonata-op-1/'; do
+            echo "FETCH $URL"
+            if curl --compressed -fL -A "$UA" -o /tmp/musopen.html "$URL"; then
+              echo "bytes=$(stat -c%s /tmp/musopen.html)"
+              break
+            fi
+          done
+          python - <<'PY'
+          from pathlib import Path
+          import re, html
+          t=Path('/tmp/musopen.html').read_text(errors='replace')
+          print('Moscow occurrences:', t.lower().count('moscow'))
+          for m in re.finditer(r'(?i)moscow', t):
+              print('\n--- CONTEXT ---\n', html.unescape(t[max(0,m.start()-1000):m.start()+1600]))
+          print('\n--- candidate href/src URLs ---')
+          urls=[]
+          for pat in [r'href=["\']([^"\']+)["\']', r'src=["\']([^"\']+)["\']']:
+              urls += re.findall(pat,t,re.I)
+          for u in dict.fromkeys(urls):
+              lu=u.lower()
+              if any(k in lu for k in ['pdf','sheet','download','score','file','media']): print(html.unescape(u))
+          print('\n--- JSON-ish score fragments ---')
+          for line in t.splitlines():
+              ll=line.lower()
+              if 'muzyka' in ll or ('score' in ll and ('download' in ll or 'pdf' in ll)):
+                  print(html.unescape(line[:5000]))
+          PY
