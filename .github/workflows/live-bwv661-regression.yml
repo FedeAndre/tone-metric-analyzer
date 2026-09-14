@@ -1,3 +1,4 @@
+# rerun target: exact v0.15.2 on Railway with Audiveris 5.11.0
 name: Live BWV661 Railway regression
 
 on:
