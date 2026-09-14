@@ -12,4 +12,4 @@
 <body><main>
 <h1>Tone-Metric Analyzer <small class="muted">v0.15.2</small></h1>
 <p><strong>Paper-aligned recursive Levels + H(t) wave height + D(t) Level density + pivots + trees.</strong> v0.15.2 preserves the paper-aligned event descriptors H(t), D(t), and λ(t), and treats each Definition-8 pivot as a single structural-turning moment at the rightmost crest point before descent.</p>
-<p>Attack timing is never inferred from PDF geometry. Parenthetical positions are placed only after score time is fixed. Waves reuse validated attack/structural positions, pivots reuse only validated wave anchors, and trees reuse only actual-attack wave anchors. No tree can create or move musical events, Levels
+<p>Attack timing is never inferred from PDF geometry. Parenthetical positions are placed only after score time is fixed. Waves reuse validated attack/structural positions, pivots reuse only validated wave anchors, and trees reuse only actual-attack wave anchors. No tree can create or move musical events, Leve

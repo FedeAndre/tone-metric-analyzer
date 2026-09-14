@@ -175,7 +175,7 @@ def _add_local_structure(
     local_intervals: Dict[int, int] = {}
     recursive_integer_structure(1, factor + 1, factor, 1, local_points, local_intervals)
 
-    for pos, levels in local_ints.items():
+    for pos, levels in local_points.items():
         t = a + Fraction(pos - 1, factor) * (b - a)
         shifted = {parent_level + local_level for local_level in levels}
         structural.setdefault(t, set()).update(shifted)
@@ -222,7 +222,7 @@ def _refine_span(
         while scale < ratio:
             scale *= 2
             needed += 1
-        max_depth = needed + 6 # margin for recursive sequence articulation
+        max_depth = needed + 6  # margin for recursive sequence articulation
     if depth >= max_depth:
         if warnings is not None:
             warnings.append(
@@ -230,8 +230,7 @@ def _refine_span(
             )
         return
 
-    child_spans = _add_local_structure(a, b, parent_level, factor: int,
-    stacks, structural)
+    child_spans = _add_local_structure(a, b, parent_level, factor, stacks, structural)
     for x, y, child_parent_level in child_spans:
         if _contains_interior_hit(hit_times, x, y):
             _refine_span(
