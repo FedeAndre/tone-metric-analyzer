@@ -29,9 +29,15 @@ VISUAL_JOBS: dict[str, dict] = {}
 VISUAL_LOCK = threading.Lock()
 
 
-def _set_job(session_id: str, **values) -> None:
+def _set_job(job_key: str, **values) -> None:
+    """Update visualization job state without reserving any payload field name.
+
+    ``session_id`` is intentionally allowed inside ``values`` because the final
+    manifest contains it.  Keeping the dictionary key parameter named ``job_key``
+    prevents Python from treating that manifest field as a second function argument.
+    """
     with VISUAL_LOCK:
-        row = VISUAL_JOBS.setdefault(session_id, {})
+        row = VISUAL_JOBS.setdefault(job_key, {})
         row.update(values)
 
 
