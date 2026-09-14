@@ -14,30 +14,45 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Enumerate all historical transfer and chunk files
+      - name: Decode nonstandard historical transfer blobs
         shell: bash
         run: |
           python3 - <<'PY'
-          import re, subprocess
-          commits=subprocess.check_output(['git','rev-list','--all'], text=True).splitlines()
-          seen=set()
-          pats=('chunk','part','b64','base64','transport','v0152','v0_15_2','0_15_2','0152','transfer')
-          print('TRANSFER_PATHS_BEGIN')
-          for commit in commits:
-              rows=subprocess.check_output(['git','ls-tree','-r',commit],text=True,errors='replace').splitlines()
-              for row in rows:
+          import base64, hashlib, io, subprocess, zipfile
+
+          cases=[
+            ('ac8bcec8645e74b0c2f95f1d3946cacd2816a15e',['runtime_source.b64']),
+            ('50b9b8009ab06e1ad84be6fe93bc6b45c734d96e',['runtime.b64']),
+            ('b080bd45167c04870c2ef80f3852dc5822408d60',['v17c00.b64','v17c01.b64','v17c02.b64','v17c03.b64']),
+            ('b080bd45167c04870c2ef80f3852dc5822408d60',['runtime.b64']),
+            ('18215ca3160087a78d4918bbde117d46f643578a',['runtime_v0_16_4.part00.b64']),
+          ]
+          for commit,paths in cases:
+              print('CASE_BEGIN',commit,','.join(paths))
+              try:
+                  enc=b''.join(subprocess.check_output(['git','show',f'{commit}:{p}']) for p in paths)
+              except subprocess.CalledProcessError as e:
+                  print('MISSING'); print('CASE_END'); continue
+              for mode in ('direct','strip_ws'):
+                  raw=enc if mode=='direct' else b''.join(enc.split())
                   try:
-                      meta,path=row.split('\t',1)
-                      _,typ,blob=meta.split()
-                  except ValueError:
-                      continue
-                  if typ!='blob': continue
-                  low=path.lower()
-                  if any(p in low for p in pats):
-                      key=(blob,path)
-                      if key in seen: continue
-                      seen.add(key)
-                      size=int(subprocess.check_output(['git','cat-file','-s',blob],text=True).strip())
-                      print(commit, blob, size, path)
-          print('TRANSFER_PATHS_END')
+                      data=base64.b64decode(raw,validate=False)
+                  except Exception as e:
+                      print('DECODE_FAIL',mode,type(e).__name__,str(e)); continue
+                  print('DECODED',mode,'SIZE',len(data),'SHA256',hashlib.sha256(data).hexdigest(),'HEAD',data[:16].hex())
+                  try:
+                      with zipfile.ZipFile(io.BytesIO(data)) as z:
+                          files=[i for i in z.infolist() if not i.is_dir()]
+                          print('ZIP_FILES',len(files))
+                          for i in files:
+                              b=z.read(i.filename)
+                              print(hashlib.sha256(b).hexdigest(),i.filename)
+                  except zipfile.BadZipFile:
+                      try:
+                          txt=data.decode('utf-8')
+                          print('TEXT_HEAD',repr(txt[:500]))
+                      except Exception:
+                          print('NOT_ZIP_NOT_TEXT')
+                  break
+              print('CASE_END')
           PY
