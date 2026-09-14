@@ -1,0 +1,117 @@
+name: Live Railway Berg and BWV regression
+on:
+  push:
+    branches:
+      - live-berg-bwv-railway-20260914
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download byte-identical regression PDFs
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -A 'Mozilla/5.0' -fL --retry 4 --retry-delay 2 -o berg.pdf 'https://s9.imslp.org/files/imglnks/usimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
+          test "$(stat -c%s berg.pdf)" = "579006"
+          echo '815d95242d6e2076866594174617361c87373bce7e1642b66812240a3aef400c  berg.pdf' | sha256sum -c -
+          curl -fL --retry 4 --retry-delay 2 -o bwv661.pdf 'https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf'
+          test "$(stat -c%s bwv661.pdf)" = "101270"
+          echo 'd50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661.pdf' | sha256sum -c -
+      - name: Wait for development health
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 60); do
+            if curl -fsS 'https://tone-metric-analyzer-development-production.up.railway.app/api/status' -o status.json; then
+              cat status.json
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+      - name: Exact Berg live regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          start=$(date +%s)
+          code=$(curl --silent --show-error --max-time 600 -w '%{http_code}' \
+            -F file=@berg.pdf -F meter_override=auto \
+            'https://tone-metric-analyzer-development-production.up.railway.app/api/analyze' \
+            -o berg-live.json)
+          elapsed=$(( $(date +%s) - start ))
+          echo "BERG HTTP=$code elapsed=${elapsed}s bytes=$(stat -c%s berg-live.json)"
+          test "$code" = "200"
+          python3 - <<'PY'
+          import json
+          d=json.load(open('berg-live.json'))
+          events=[e for s in d.get('segments',[]) for e in s.get('events',[])]
+          missing=[e for e in events if not e.get('tone_metric_levels')]
+          po=d.get('physical_overlay') or {}; m=po.get('matching') or {}
+          summary={
+            'symbolic': d.get('symbolic_hit_count'), 'canonical': d.get('canonical_hit_count'),
+            'events': len(events), 'missing_levels': len(missing),
+            'levels': d.get('levels_enabled'), 'max_level': d.get('max_level'),
+            'physical': po.get('available'), 'omr_saved': d.get('omr_saved'),
+            'structural_labels_missing': m.get('structural_parenthetical_labels_missing'),
+            'structural_sources': m.get('structural_registration_sources'),
+            'tree_nodes': m.get('tree_event_nodes_mapped'),
+            'tree_branches': m.get('tree_branches_mapped'),
+            'waves': m.get('wave_profile_points_mapped'),
+            'pivots': m.get('pivot_profile_mapped'),
+          }
+          print(json.dumps(summary, indent=2))
+          assert d.get('analysis_hit_source') == 'canonical-score-time'
+          assert d.get('symbolic_hit_count') == 859
+          assert d.get('canonical_hit_count') == 1329
+          assert len(events) == 1329
+          assert len(missing) == 0
+          assert d.get('max_level') == 14
+          assert po.get('available') is True
+          assert d.get('omr_saved') is True
+          assert m.get('structural_parenthetical_labels_missing') == 0
+          src=m.get('structural_registration_sources') or {}
+          assert int(src.get('structural-score-time-local-extrapolation') or 0) > 0
+          print('LIVE EXACT BERG: PASS')
+          PY
+      - name: Exact BWV 661 live regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          start=$(date +%s)
+          code=$(curl --silent --show-error --max-time 600 -w '%{http_code}' \
+            -F file=@bwv661.pdf -F meter_override=auto \
+            'https://tone-metric-analyzer-development-production.up.railway.app/api/analyze' \
+            -o bwv-live.json)
+          elapsed=$(( $(date +%s) - start ))
+          echo "BWV HTTP=$code elapsed=${elapsed}s bytes=$(stat -c%s bwv-live.json)"
+          test "$code" = "200"
+          python3 - <<'PY'
+          import json
+          d=json.load(open('bwv-live.json'))
+          events=[e for s in d.get('segments',[]) for e in s.get('events',[])]
+          po=d.get('physical_overlay') or {}; m=po.get('matching') or {}
+          summary={
+            'symbolic':d.get('symbolic_hit_count'),'canonical':d.get('canonical_hit_count'),
+            'events':len(events),'levels':d.get('levels_enabled'),'max_level':d.get('max_level'),
+            'physical':po.get('available'),'waves':m.get('wave_profile_points_mapped'),
+            'pivots':m.get('pivot_profile_mapped'),'tree_nodes':m.get('tree_event_nodes_mapped'),
+            'tree_branches':m.get('tree_branches_mapped')}
+          print(json.dumps(summary,indent=2))
+          assert d.get('analysis_hit_source') == 'canonical-score-time'
+          assert d.get('symbolic_hit_count') == 549
+          assert d.get('canonical_hit_count') == 733
+          assert len(events) == 733
+          assert all(e.get('tone_metric_levels') for e in events)
+          assert d.get('levels_enabled') == list(range(1,10))
+          assert d.get('max_level') == 9
+          assert po.get('available') is True
+          assert m.get('wave_profile_points_mapped') == 735
+          assert m.get('pivot_profile_mapped') == 27
+          assert m.get('tree_event_nodes_mapped') == 733
+          assert m.get('tree_branches_mapped') == 732
+          print('LIVE EXACT BWV 661: PASS')
+          PY
