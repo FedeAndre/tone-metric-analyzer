@@ -14,41 +14,42 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Inspect all historical runtime ZIPs
+      - name: Inspect every historical ZIP blob
         shell: bash
         run: |
           python3 - <<'PY'
           import hashlib, io, subprocess, zipfile
 
-          commits = subprocess.check_output([
-              'git','log','--all','--format=%H','--','tone_metric_runtime_source.zip'
-          ], text=True).splitlines()
-          seen = set()
-          print('HISTORY_COMMIT_COUNT', len(commits))
+          commits = subprocess.check_output(['git','rev-list','--all'], text=True).splitlines()
+          seen_blobs = set()
+          candidates = []
           for commit in commits:
-              try:
-                  data = subprocess.check_output(['git','show',f'{commit}:tone_metric_runtime_source.zip'])
-              except subprocess.CalledProcessError:
-                  continue
-              archive_sha = hashlib.sha256(data).hexdigest()
-              if archive_sha in seen:
-                  continue
-              seen.add(archive_sha)
-              try:
-                  with zipfile.ZipFile(io.BytesIO(data)) as z:
-                      files = [i for i in z.infolist() if not i.is_dir()]
-                      names = {i.filename for i in files}
-                      print('ARCHIVE', commit, 'SIZE', len(data), 'SHA256', archive_sha, 'FILES', len(files))
-                      print('STRICT',
-                            'validate_release.py=' + ('PRESENT' if 'validate_release.py' in names else 'ABSENT'),
-                            'tone_metric/omr_exact.py=' + ('PRESENT' if 'tone_metric/omr_exact.py' in names else 'ABSENT'),
-                            'tests/test_real_berg_fixture.py=' + ('PRESENT' if 'tests/test_real_berg_fixture.py' in names else 'ABSENT'))
-                      if len(files) == 45:
-                          print('MATCH45_BEGIN', commit)
-                          for i in files:
-                              print(f'{hashlib.sha256(z.read(i.filename)).hexdigest()}  {i.filename}')
-                          print('MATCH45_END', commit)
-              except zipfile.BadZipFile:
-                  print('BAD_ZIP', commit, archive_sha)
-          print('UNIQUE_ARCHIVES', len(seen))
+              rows = subprocess.check_output(['git','ls-tree','-r',commit], text=True, errors='replace').splitlines()
+              for row in rows:
+                  try:
+                      meta, path = row.split('\t', 1)
+                      mode, typ, blob = meta.split()
+                  except ValueError:
+                      continue
+                  if typ != 'blob' or not path.lower().endswith('.zip') or blob in seen_blobs:
+                      continue
+                  seen_blobs.add(blob)
+                  data = subprocess.check_output(['git','cat-file','blob',blob])
+                  try:
+                      with zipfile.ZipFile(io.BytesIO(data)) as z:
+                          files = [i for i in z.infolist() if not i.is_dir()]
+                          names = [i.filename for i in files]
+                          archive_sha = hashlib.sha256(data).hexdigest()
+                          print('ZIP', 'BLOB', blob, 'COMMIT', commit, 'PATH', path, 'SIZE', len(data), 'SHA256', archive_sha, 'FILES', len(files))
+                          if len(files) == 45:
+                              print('MATCH45_BEGIN', blob, commit, path)
+                              for i in files:
+                                  print(f'{hashlib.sha256(z.read(i.filename)).hexdigest()}  {i.filename}')
+                              print('MATCH45_END', blob)
+                          if any(x in path.lower() for x in ('tone','runtime','metric')) or len(files) == 45:
+                              candidates.append((blob, commit, path, len(files), archive_sha))
+                  except zipfile.BadZipFile:
+                      print('BAD_ZIP', blob, commit, path)
+          print('UNIQUE_ZIP_BLOBS', len(seen_blobs))
+          print('CANDIDATE_COUNT', len(candidates))
           PY
