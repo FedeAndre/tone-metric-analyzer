@@ -5,6 +5,9 @@ on:
     branches: [inspect-v0152-runtime]
     paths: ['.github/workflows/find-bwv661-blob.yml']
 
+permissions:
+  contents: write
+
 jobs:
   find:
     runs-on: ubuntu-latest
@@ -15,23 +18,36 @@ jobs:
       - name: Scan every reachable Git blob by exact SHA-256
         shell: bash
         run: |
-          set -euo pipefail
+          set -u
           target='d50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc'
           found=''
+          : > bwv661-scan-result.txt
+          echo "target_sha256=$target" >> bwv661-scan-result.txt
+          echo "target_size=101270" >> bwv661-scan-result.txt
           git rev-list --objects --all | awk '{print $1}' | sort -u > /tmp/objects.txt
           while read -r obj; do
             [ "$(git cat-file -t "$obj" 2>/dev/null || true)" = blob ] || continue
-            size="$(git cat-file -s "$obj")"
+            size="$(git cat-file -s "$obj" 2>/dev/null || true)"
             [ "$size" = 101270 ] || continue
             sha="$(git cat-file blob "$obj" | sha256sum | awk '{print $1}')"
-            echo "candidate $obj size=$size sha256=$sha"
+            echo "candidate=$obj size=$size sha256=$sha" >> bwv661-scan-result.txt
             if [ "$sha" = "$target" ]; then
-              echo "EXACT_BWV661_BLOB=$obj"
               found="$obj"
               break
             fi
           done < /tmp/objects.txt
-          if [ -z "$found" ]; then
-            echo 'EXACT_BWV661_BLOB=NOT_FOUND'
-            exit 1
+          if [ -n "$found" ]; then
+            echo "EXACT_BWV661_BLOB=$found" >> bwv661-scan-result.txt
+          else
+            echo 'EXACT_BWV661_BLOB=NOT_FOUND' >> bwv661-scan-result.txt
           fi
+          cat bwv661-scan-result.txt
+      - name: Persist scan result
+        shell: bash
+        run: |
+          set -e
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add bwv661-scan-result.txt
+          git commit -m 'Record exact BWV661 blob scan result' || exit 0
+          git push origin HEAD:inspect-v0152-runtime
