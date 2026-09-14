@@ -4,13 +4,15 @@ from pathlib import Path
 
 import fitz
 
-import dissertation_exact_pdf_app as exact
+import dissertation_exact_pdf_app_v2 as current
 
-# Presentation-only refinement. Analytical generation remains in the exact-PDF
+old = current.old
+
+# Presentation-only refinement. Analytical generation remains in the current single-pass exact-PDF
 # wrapper and the dissertation analysis engine; this module only changes where
 # the already-computed graphics are drawn and how large their labels appear.
 APP_VERSION = "1.1.1-dissertation-system-aligned"
-app = exact.app
+app = current.app
 app.version = APP_VERSION
 
 
@@ -246,10 +248,10 @@ def _aligned_write_annotated_pdf(source_pdf: Path, out_pdf: Path, overlay: dict)
     doc.close()
 
 
-exact._system_models = _aligned_system_models
-exact._write_annotated_pdf = _aligned_write_annotated_pdf
+old._system_models = _aligned_system_models
+old._write_annotated_pdf = _aligned_write_annotated_pdf
 
-base = exact.base
+base = old.base
 
 _style_replacements = {
     ".tm-level{font:700 9px Arial,sans-serif;": ".tm-level{font:700 14px Arial,sans-serif;",
@@ -259,10 +261,10 @@ _style_replacements = {
     ".tm-level-guide{stroke:#111;stroke-width:.55;": ".tm-level-guide{stroke:#111;stroke-width:.75;",
     ".tm-wave{fill:none;stroke:#111;stroke-width:1.15;": ".tm-wave{fill:none;stroke:#111;stroke-width:1.7;",
 }
-for old, new in _style_replacements.items():
-    if base.HTML.count(old) != 1:
-        raise RuntimeError(f"Expected exactly one current score-overlay style token: {old}")
-    base.HTML = base.HTML.replace(old, new, 1)
+for old_token, new_token in _style_replacements.items():
+    if base.HTML.count(old_token) != 1:
+        raise RuntimeError(f"Expected exactly one current score-overlay style token: {old_token}")
+    base.HTML = base.HTML.replace(old_token, new_token, 1)
 
 start_token = " function buildModels(pp,w,h){"
 end_token = "\n function yLevel(m,l){"
