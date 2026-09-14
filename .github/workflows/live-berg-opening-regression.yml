@@ -1,0 +1,95 @@
+name: Live Berg opening regression
+on:
+  push:
+    branches:
+      - live-berg-opening-regression-20260914
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download byte-identical fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -A 'Mozilla/5.0' -fL --retry 4 --retry-delay 2 -o berg.pdf 'https://s9.imslp.org/files/imglnks/usimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
+          test "$(stat -c%s berg.pdf)" = "579006"
+          echo '815d95242d6e2076866594174617361c87373bce7e1642b66812240a3aef400c  berg.pdf' | sha256sum -c -
+          curl -fL --retry 4 --retry-delay 2 -o bwv661.pdf 'https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf'
+          test "$(stat -c%s bwv661.pdf)" = "101270"
+          echo 'd50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661.pdf' | sha256sum -c -
+      - name: Health check
+        run: curl -fsS 'https://tone-metric-analyzer-development-production.up.railway.app/api/status'
+      - name: Exact Berg live regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          start=$(date +%s)
+          code=$(curl --silent --show-error --max-time 600 -w '%{http_code}' -F file=@berg.pdf -F meter_override=auto 'https://tone-metric-analyzer-development-production.up.railway.app/api/analyze' -o berg.json)
+          echo "BERG HTTP=$code elapsed=$(( $(date +%s)-start ))s"
+          test "$code" = "200"
+          python3 - <<'PY'
+          import json
+          d=json.load(open('berg.json'))
+          events=[e for s in d.get('segments',[]) for e in s.get('events',[])]
+          meta=d.get('canonical_score_meta') or {}
+          po=d.get('physical_overlay') or {}; m=po.get('matching') or {}
+          assert len(d.get('measures',[]))==175
+          assert d.get('symbolic_hit_count')==859 and d.get('canonical_hit_count')==1724
+          assert len(events)==1724 and all(e.get('tone_metric_levels') for e in events)
+          assert d.get('max_level')==16
+          assert meta.get('musicxml_measure_count')==136 and meta.get('omr_measure_stack_count')==175
+          assert meta.get('framework_measure_count')==175 and meta.get('synthesized_measure_count')==39
+          m0=d['measures'][0]
+          assert m0.get('number')=='1' and m0.get('pickup_shift_quarter')=='0' and m0.get('opening_anacrusis') is True
+          s0=d['segments'][0]
+          assert s0.get('opening_anacrusis') is True and s0.get('opening_anacrusis_pre_entry_quarter')=='-1'
+          pre=[p for p in s0.get('structural_points',[]) if p.get('opening_anacrusis_pre_entry')]
+          assert len(pre)==1 and pre[0].get('time_quarter')=='-1' and pre[0].get('levels')==[1]
+          assert events[0].get('onset_quarter')=='0' and events[0].get('tone_metric_levels')==[1,2]
+          assert po.get('available') is True
+          assert m.get('structural_parenthetical_positions')==257
+          assert m.get('structural_parenthetical_labels_expected')==656
+          assert m.get('structural_parenthetical_labels_mapped')==656
+          assert m.get('structural_parenthetical_labels_missing')==0
+          assert (m.get('structural_reasons') or {}).get('opening-anacrusis-pre-entry-metric-position')==1
+          assert m.get('wave_profile_points_mapped')==1980
+          assert m.get('pivot_profile_mapped')==143
+          assert m.get('tree_event_nodes_mapped')==1724
+          assert m.get('tree_branches_mapped')==1723
+          pages={int(p.get('page_index')):p for p in po.get('pages',[])}
+          preanchors=[a for a in pages[0].get('structural_anchors',[]) if a.get('structural_reason')=='opening-anacrusis-pre-entry-metric-position']
+          assert len(preanchors)==1
+          first=min((a for a in pages[0].get('layer_anchors',[]) if int(a.get('measure_index',-1))==0),key=lambda a:float(a.get('recovered_x_abs',1e18)))
+          assert float(preanchors[0]['recovered_x_abs']) < float(first['recovered_x_abs'])
+          print(json.dumps({'measures':175,'events':1724,'pre_entry':pre[0]['time_quarter'],'first_levels':events[0]['tone_metric_levels'],'parenthetical_positions':m.get('structural_parenthetical_positions'),'wave':m.get('wave_profile_points_mapped'),'pivots':m.get('pivot_profile_mapped'),'tree_nodes':m.get('tree_event_nodes_mapped'),'tree_branches':m.get('tree_branches_mapped')},indent=2))
+          print('LIVE BERG OPENING + FULL SCORE: PASS')
+          PY
+      - name: Exact BWV 661 live regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          start=$(date +%s)
+          code=$(curl --silent --show-error --max-time 600 -w '%{http_code}' -F file=@bwv661.pdf -F meter_override=auto 'https://tone-metric-analyzer-development-production.up.railway.app/api/analyze' -o bwv.json)
+          echo "BWV HTTP=$code elapsed=$(( $(date +%s)-start ))s"
+          test "$code" = "200"
+          python3 - <<'PY'
+          import json
+          d=json.load(open('bwv.json')); events=[e for s in d.get('segments',[]) for e in s.get('events',[])]
+          po=d.get('physical_overlay') or {}; m=po.get('matching') or {}
+          assert len(d.get('measures',[]))==92
+          assert d.get('symbolic_hit_count')==549 and d.get('canonical_hit_count')==733
+          assert len(events)==733 and all(e.get('tone_metric_levels') for e in events)
+          assert d.get('levels_enabled')==list(range(1,10)) and d.get('max_level')==9
+          assert d['measures'][0].get('opening_anacrusis') is False
+          assert not any(p.get('opening_anacrusis_pre_entry') for s in d.get('segments',[]) for p in s.get('structural_points',[]))
+          assert po.get('available') is True
+          assert m.get('wave_profile_points_mapped')==735
+          assert m.get('pivot_profile_mapped')==27
+          assert m.get('tree_event_nodes_mapped')==733
+          assert m.get('tree_branches_mapped')==732
+          print('LIVE EXACT BWV 661 UNCHANGED: PASS')
+          PY
