@@ -86,7 +86,9 @@ def pdf_to_annotations(pdf_path: str | Path, output_dir: str | Path) -> tuple[Pa
     """Generate physical annotations from the already-finalized OMR project.
 
     This is annotation-only: it never retranscribes the PDF and never uses
-    save-every-step. Failure remains non-fatal to tone-metric analysis because
+    save-every-step. Audiveris writes book annotations beside the finalized
+    OMR project, so the annotation pass is deliberately run in that same
+    directory. Failure remains non-fatal to tone-metric analysis because
     annotations are used only for the physical score overlay.
     """
     output_dir = Path(output_dir)
@@ -96,7 +98,7 @@ def pdf_to_annotations(pdf_path: str | Path, output_dir: str | Path) -> tuple[Pa
     if omr is None:
         return None, "Finalized Audiveris OMR project was not found; physical overlay is unavailable."
 
-    existing = _find_annotations(output_dir)
+    existing = _find_annotations(primary_dir)
     if existing is not None:
         return existing, ""
 
@@ -106,7 +108,7 @@ def pdf_to_annotations(pdf_path: str | Path, output_dir: str | Path) -> tuple[Pa
 
     proc = _run(
         cmd,
-        ["-batch", "-annotate", "-output", str(output_dir), "--", str(omr)],
+        ["-batch", "-annotate", "-output", str(primary_dir), "--", str(omr)],
     )
     try:
         (output_dir / "audiveris-annotate.log").write_text(
@@ -115,7 +117,7 @@ def pdf_to_annotations(pdf_path: str | Path, output_dir: str | Path) -> tuple[Pa
     except Exception:
         pass
 
-    archive = _find_annotations(output_dir)
+    archive = _find_annotations(primary_dir)
     if proc.returncode != 0:
         return None, (
             f"Audiveris annotation-only pass failed with exit code {proc.returncode}; "
