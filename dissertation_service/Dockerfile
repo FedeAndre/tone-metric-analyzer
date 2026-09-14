@@ -37,12 +37,13 @@ RUN git clone https://github.com/FedeAndre/tone-metric-analyzer.git /app \
 WORKDIR /app
 RUN python3 -m pip install --no-cache-dir --break-system-packages -r requirements.txt
 
-# Keep the validated v0.4 Level-1 analysis untouched; validate the v0.5
-# presentation runtime separately. v0.5 only replaces PDF registration and
-# aligns real Level-1 attacks to exact Audiveris OMR note/chord time slots.
+# Preserve and re-run every validated Level-1 regression before Level 2.
+# v0.6 imports the frozen v0.4 Level-1 analysis and v0.5 exact OMR registration,
+# then adds only the recursive dissertation Level-2 layer.
 RUN python3 validate_level1_clean_v4.py
 RUN python3 validate_level1_clean_v5.py
-RUN python3 -c "import level1_clean_v5; print(level1_clean_v5.APP_VERSION)"
+RUN python3 validate_level1_level2_clean_v6.py
+RUN python3 -c "import level1_level2_clean_v6; print(level1_level2_clean_v6.APP_VERSION)"
 
 EXPOSE 8080
-CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "level1_clean_v5:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "level1_level2_clean_v6:app", "--host", "0.0.0.0", "--port", "8080"]
