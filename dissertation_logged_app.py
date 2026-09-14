@@ -6,10 +6,9 @@ from fastapi import HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, Response
 
-# Import only the current per-score-line exact-PDF presentation wrapper.
-# Older visualization modules remain as implementation dependencies/history but
-# are not active application entry points.
-from dissertation_system_aligned_app_v2 import APP_VERSION, app
+# Single active presentation entry point. Older score-layout wrappers are not
+# imported here and therefore cannot override the current dissertation-style view.
+from dissertation_example_layout_app import APP_VERSION, app
 
 logger = logging.getLogger("tone_metric.dissertation")
 
@@ -56,6 +55,6 @@ def diagnostics():
         "version": APP_VERSION,
         "exception_logging": True,
         "request_validation_logging": True,
-        "visualization": "exact-uploaded-pdf-overlay-per-printed-score-line-single-omr-pass",
-        "legacy_visualization_imported": False,
+        "visualization": "exact-uploaded-pdf-dissertation-style-analysis-band-per-score-system",
+        "legacy_layout_wrappers_active": False,
     }
