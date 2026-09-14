@@ -30,16 +30,22 @@ RUN apt-get update \
     && fc-cache -f \
     && rm -f /tmp/audiveris.deb \
     && rm -rf /var/lib/apt/lists/*
-WORKDIR /transport
-COPY runtime.part*.b64 /transport/
-RUN test "$(find /transport -maxdepth 1 -type f -name 'runtime.part*.b64' | wc -l)" -eq 12 \
-    && cat /transport/runtime.part*.b64 | base64 -d > /tmp/tone_metric_v0_17_0_runtime.zip \
-    && echo "6e2ce25ac7181d62ff3acd9db6b0da958d0c1732580f5ecd20caa811e94c9ed0  /tmp/tone_metric_v0_17_0_runtime.zip" | sha256sum -c -
 WORKDIR /app
-RUN unzip -q /tmp/tone_metric_v0_17_0_runtime.zip -d /app \
-    && rm -f /tmp/tone_metric_v0_17_0_runtime.zip \
-    && rm -rf /transport \
-    && python3 -m pip install --no-cache-dir --break-system-packages -r /app/requirements.txt \
-    && PYTHONDONTWRITEBYTECODE=1 python3 -B /app/validate_release.py
+COPY requirements.txt /app/requirements.txt
+RUN python3 -m pip install --no-cache-dir --break-system-packages -r /app/requirements.txt
+COPY app.py /app/app.py
+COPY tone_metric /app/tone_metric
+COPY static /app/static
+COPY v0152_sha256.txt /app/v0152_sha256.txt
+RUN mkdir -p /app/.tone_metric_cache \
+    && cd /app \
+    && sha256sum -c v0152_sha256.txt \
+    && test ! -e /app/validate_release.py \
+    && test ! -e /app/tone_metric/omr_exact.py \
+    && test ! -e /app/tone_metric/omr_visual_rhythm.py \
+    && test ! -e /app/tone_metric/layer_registration.py \
+    && test ! -e /app/tone_metric/render.py \
+    && python3 -B -c "import tone_metric; assert tone_metric.__version__ == '0.15.2'" \
+    && python3 -m py_compile /app/app.py /app/tone_metric/*.py
 EXPOSE 8080
 CMD ["sh", "-c", "python3 -B -m uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
