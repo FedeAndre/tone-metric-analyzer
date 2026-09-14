@@ -22,7 +22,10 @@ jobs:
           test ! -e tone_metric/layer_registration.py
           test ! -e tone_metric/render.py
           test "$(grep -R '^def pdf_to_musicxml' -n tone_metric | wc -l)" -eq 1
-          test "$(grep -R -- '"'"'-save'"'"'' -n tone_metric/omr.py 2>/dev/null | wc -l)" -eq 0
+          if grep -q -- '"-save"' tone_metric/omr.py; then
+            echo 'Unexpected Audiveris -save flag remains in candidate runtime'
+            exit 1
+          fi
           python3 -m py_compile app.py tone_metric/*.py
       - name: Download exact BWV 661 fixture
         shell: bash
@@ -37,7 +40,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          docker run --rm -v "$PWD:/work" tone-metric-nosave python3 - <<'PY'
+          docker run --rm -i -v "$PWD:/work" tone-metric-nosave python3 - <<'PY'
           import fitz
           src=fitz.open('/work/bwv661-a4.pdf')
           out=fitz.open()
@@ -53,7 +56,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf composite-out && mkdir composite-out
-          timeout 900 docker run --rm -v "$PWD:/work" tone-metric-nosave python3 - <<'PY'
+          timeout 900 docker run --rm -i -v "$PWD:/work" tone-metric-nosave python3 - <<'PY'
           from pathlib import Path
           from tone_metric.omr import pdf_to_musicxml, pdf_to_annotations
           symbolic, omr = pdf_to_musicxml('/work/bwv661-12pages.pdf','/work/composite-out')
