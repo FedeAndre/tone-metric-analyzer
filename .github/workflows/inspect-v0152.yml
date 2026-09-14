@@ -14,89 +14,66 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Scan historical chunked runtimes and manifest clues
+      - name: Find unpacked v0.15.2 source trees and hidden manifests
         shell: bash
         run: |
           python3 - <<'PY'
-          import base64, hashlib, io, re, subprocess, zipfile
+          import re, subprocess
 
           commits = subprocess.check_output(['git','rev-list','--all'], text=True).splitlines()
-          seen_archives = set()
-          chunk_candidates = 0
-          print('CHUNK_SCAN_BEGIN')
+          print('TREE45_BEGIN')
+          seen_trees = set()
           for commit in commits:
+              tree = subprocess.check_output(['git','show','-s','--format=%T',commit], text=True).strip()
+              if tree in seen_trees:
+                  continue
+              seen_trees.add(tree)
               rows = subprocess.check_output(['git','ls-tree','-r',commit], text=True, errors='replace').splitlines()
-              chunk_paths = []
-              for row in rows:
-                  try:
-                      _, path = row.split('\t', 1)
-                  except ValueError:
-                      continue
-                  low = path.lower()
-                  if re.search(r'(?:^|/)runtime\.part[^/]*\.b64$', low):
-                      chunk_paths.append(path)
-              if not chunk_paths:
-                  continue
-              chunk_paths.sort()
-              chunk_candidates += 1
-              encoded = b''.join(subprocess.check_output(['git','show',f'{commit}:{p}']) for p in chunk_paths)
-              try:
-                  data = base64.b64decode(encoded, validate=False)
-              except Exception as e:
-                  print('CHUNK_DECODE_ERROR', commit, len(chunk_paths), type(e).__name__, str(e))
-                  continue
-              archive_sha = hashlib.sha256(data).hexdigest()
-              if archive_sha in seen_archives:
-                  continue
-              seen_archives.add(archive_sha)
-              try:
-                  with zipfile.ZipFile(io.BytesIO(data)) as z:
-                      files = [i for i in z.infolist() if not i.is_dir()]
-                      names = {i.filename for i in files}
-                      print('CHUNK_ARCHIVE', commit, 'PARTS', len(chunk_paths), 'SIZE', len(data), 'SHA256', archive_sha, 'FILES', len(files),
-                            'VALIDATE', 'PRESENT' if 'validate_release.py' in names else 'ABSENT',
-                            'OMR_EXACT', 'PRESENT' if 'tone_metric/omr_exact.py' in names else 'ABSENT',
-                            'BERG', 'PRESENT' if 'tests/test_real_berg_fixture.py' in names else 'ABSENT')
-                      if len(files) == 45:
-                          print('CHUNK_MATCH45_BEGIN', commit)
-                          for i in files:
-                              print(f'{hashlib.sha256(z.read(i.filename)).hexdigest()}  {i.filename}')
-                          print('CHUNK_MATCH45_END', commit)
-              except zipfile.BadZipFile:
-                  print('CHUNK_BAD_ZIP', commit, 'PARTS', len(chunk_paths), 'SIZE', len(data), 'SHA256', archive_sha)
-          print('CHUNK_COMMIT_SETS', chunk_candidates)
-          print('UNIQUE_CHUNK_ARCHIVES', len(seen_archives))
-          print('CHUNK_SCAN_END')
-
-          print('MANIFEST_CLUES_BEGIN')
-          keywords = ('v0.15.2','v0152','sha-256','sha256','manifest','checksum','45-file','45 file')
-          seen = set()
-          for commit in commits:
-              rows = subprocess.check_output(['git','ls-tree','-r',commit], text=True, errors='replace').splitlines()
+              files = []
               for row in rows:
                   try:
                       meta, path = row.split('\t',1)
                       _, typ, blob = meta.split()
                   except ValueError:
                       continue
-                  if typ != 'blob' or blob in seen:
-                      continue
-                  seen.add(blob)
-                  lowp = path.lower()
-                  if not any(x in lowp for x in ('manifest','checksum','readme','dockerfile','runtime','transport','validation','release')):
-                      continue
+                  if typ == 'blob':
+                      files.append((path,blob))
+              if len(files) == 45:
+                  msg = subprocess.check_output(['git','show','-s','--format=%s',commit], text=True).strip()
+                  print('TREE45', commit, 'TREE', tree, 'MSG', msg)
+                  for path,blob in files:
+                      print(' ', blob, path)
+          print('TREE45_END')
+
+          print('ALL_TEXT_MANIFEST_SCAN_BEGIN')
+          seen_blobs=set()
+          for commit in commits:
+              rows = subprocess.check_output(['git','ls-tree','-r',commit], text=True, errors='replace').splitlines()
+              for row in rows:
                   try:
-                      raw = subprocess.check_output(['git','cat-file','blob',blob])
-                      text = raw.decode('utf-8')
-                  except Exception:
+                      meta,path=row.split('\t',1)
+                      _,typ,blob=meta.split()
+                  except ValueError:
                       continue
-                  hits = [k for k in keywords if k in text.lower()]
-                  hex64 = re.findall(r'(?<![0-9a-f])[0-9a-f]{64}(?![0-9a-f])', text.lower())
-                  if hits or len(hex64) >= 5:
-                      print('CLUE', commit, path, 'HITS', ','.join(hits) if hits else '-', 'HEX64_COUNT', len(hex64))
+                  if typ!='blob' or blob in seen_blobs:
+                      continue
+                  seen_blobs.add(blob)
+                  size=int(subprocess.check_output(['git','cat-file','-s',blob], text=True).strip())
+                  if size > 2_000_000:
+                      continue
+                  raw=subprocess.check_output(['git','cat-file','blob',blob])
+                  try:
+                      text=raw.decode('utf-8')
+                  except UnicodeDecodeError:
+                      continue
+                  low=text.lower()
+                  hashes=re.findall(r'(?<![0-9a-f])[0-9a-f]{64}(?![0-9a-f])',low)
+                  interesting=('v0.15.2' in low or 'v0152' in low or '0.15.2' in low or '45-file' in low or '45 file' in low or len(hashes)>=20)
+                  if interesting:
+                      print('TEXT_CLUE', commit, path, 'HEX64_COUNT', len(hashes))
                       for line in text.splitlines():
                           ll=line.lower()
-                          if any(k in ll for k in keywords) or re.search(r'(?<![0-9a-f])[0-9a-f]{64}(?![0-9a-f])', ll):
-                              print('  ', line[:300])
-          print('MANIFEST_CLUES_END')
+                          if ('v0.15.2' in ll or 'v0152' in ll or '0.15.2' in ll or '45-file' in ll or '45 file' in ll or re.search(r'(?<![0-9a-f])[0-9a-f]{64}(?![0-9a-f])',ll)):
+                              print(' ', line[:500])
+          print('ALL_TEXT_MANIFEST_SCAN_END')
           PY
