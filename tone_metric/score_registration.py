@@ -213,6 +213,50 @@ def _structural_layout_position(measure_meta: dict, local_time: Fraction) -> tup
     return x, source, 0.58 if not columns else 0.64, None
 
 
+def _pre_pickup_structural_layout_position(
+    measure_meta: dict,
+    metric_offset: Fraction,
+    pickup_shift: Fraction,
+) -> tuple[float | None, str, float]:
+    """Place an opening pre-pickup structural articulation before the first attack.
+
+    ``metric_offset`` is measured in the complete underlying metric measure, while
+    canonical notation columns in an anacrustic measure begin at local score time 0
+    for the first printed pickup event.  The dissertation nevertheless preserves the
+    silent metric articulation(s) that precede that event and renders their Levels in
+    parentheses.  This helper maps those *already-generated* structural times only;
+    it never creates attacks or changes tone-metric timing.
+
+    The available horizontal space from the canonical measure boundary to the first
+    printed column represents the silent pre-pickup portion.  Multiple structural
+    points retain their chronological order within that space.
+    """
+    if pickup_shift <= 0 or metric_offset < 0 or metric_offset >= pickup_shift:
+        return None, "pre-pickup-structural-time-unavailable", 0.0
+
+    left = float(measure_meta.get("stack_left", 0.0) or 0.0)
+    right = float(measure_meta.get("stack_right", left + 1.0) or (left + 1.0))
+    xs = []
+    for col in measure_meta.get("columns", []):
+        try:
+            xs.append(float(col.get("x_abs")))
+        except Exception:
+            pass
+    if xs:
+        first_x = min(xs)
+        visual_left = min(max(left + 1.0, left), max(left, first_x - 1.0))
+        if first_x > visual_left:
+            ratio = float(metric_offset / pickup_shift)
+            x = visual_left + ratio * (first_x - visual_left)
+            return x, "opening-pickup-pre-attack-metric-layout", 0.90
+
+    if right > left:
+        ratio = float(metric_offset / pickup_shift)
+        x = left + 1.0 + ratio * max(0.0, right - left - 2.0)
+        return x, "opening-pickup-measure-layout-fallback", 0.62
+    return None, "pre-pickup-structural-time-unavailable", 0.0
+
+
 def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensions: dict[int, tuple[float, float]]):
     """Build exact attack anchors plus dissertation-style parenthetical anchors."""
     meta = analysis_result.get("canonical_score_meta") or {}
@@ -312,7 +356,12 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
             structural_per_level[level]["expected"] += 1
 
         cm = measure_meta.get(mi)
-        if cm is None or local_time < 0 or local_time >= m["full"]:
+        is_opening_pre_pickup = (
+            mi == 0
+            and m["shift"] > 0
+            and Fraction(0) <= offset < m["shift"]
+        )
+        if cm is None or ((local_time < 0 and not is_opening_pre_pickup) or local_time >= m["full"]):
             for level in target["levels"]:
                 structural_per_level[level]["missing"] += 1
                 structural_missing[level].append({
@@ -337,7 +386,13 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
                 })
             continue
 
-        x_abs, source, confidence, exact_col = _structural_layout_position(cm, local_time)
+        if is_opening_pre_pickup:
+            x_abs, source, confidence = _pre_pickup_structural_layout_position(
+                cm, offset, m["shift"]
+            )
+            exact_col = None
+        else:
+            x_abs, source, confidence, exact_col = _structural_layout_position(cm, local_time)
         if x_abs is None:
             for level in target["levels"]:
                 structural_per_level[level]["missing"] += 1
@@ -349,7 +404,11 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
                 })
             continue
 
-        reason = _structural_reason(cm, local_time, exact_col)
+        reason = (
+            "opening-pickup-pre-attack-metric-position"
+            if is_opening_pre_pickup
+            else _structural_reason(cm, local_time, exact_col)
+        )
         pw, ph = float(dims[0]), float(dims[1])
         y_abs = float(exact_col.get("y_abs", 0.0)) if exact_col is not None else 0.0
         row = {
