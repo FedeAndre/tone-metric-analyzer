@@ -19,7 +19,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/full_framework_validate.py prepare
+          PYTHONPATH=. PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/full_framework_validate.py prepare
           sha256sum -c v0152_sha256.txt
           test ! -e validate_release.py
           test ! -e tone_metric/omr_exact.py
@@ -52,9 +52,9 @@ jobs:
             sleep 1
           done
           timeout 900 curl --fail-with-body --silent --show-error -F file=@berg.pdf -F meter_override=auto http://127.0.0.1:18080/api/analyze -o berg.json
-          PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/full_framework_validate.py berg berg.json
+          PYTHONPATH=. PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/full_framework_validate.py berg berg.json
           timeout 900 curl --fail-with-body --silent --show-error -F file=@bwv661.pdf -F meter_override=auto http://127.0.0.1:18080/api/analyze -o bwv.json
-          PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/full_framework_validate.py bwv bwv.json
+          PYTHONPATH=. PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/full_framework_validate.py bwv bwv.json
 
       - name: Final clean-tree audit and commit validated runtime only
         shell: bash
