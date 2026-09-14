@@ -6,7 +6,9 @@ from fastapi import HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, Response
 
-from dissertation_overlay_app import APP_VERSION, app
+# Import only the current exact-PDF presentation wrapper. Older visualization
+# wrappers remain in the repository for history but are not imported or executed.
+from dissertation_exact_pdf_app import APP_VERSION, app
 
 logger = logging.getLogger("tone_metric.dissertation")
 
@@ -53,4 +55,6 @@ def diagnostics():
         "version": APP_VERSION,
         "exception_logging": True,
         "request_validation_logging": True,
+        "visualization": "exact-uploaded-pdf-overlay",
+        "legacy_visualization_imported": False,
     }
