@@ -1,0 +1,149 @@
+name: Live BWV661 Railway regression
+
+on:
+  push:
+    branches: [inspect-v0152-runtime]
+    paths: ['.github/workflows/live-bwv661-regression.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  live-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Download and verify exact BWV661 fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 5 --retry-delay 3 \
+            -A 'tone-metric-v0152-regression/1.0' \
+            -o /tmp/bwv661-a4.pdf \
+            'https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf'
+          test "$(stat -c%s /tmp/bwv661-a4.pdf)" -eq 101270
+          echo 'd50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  /tmp/bwv661-a4.pdf' | sha256sum -c -
+
+      - name: Analyze exact fixture on Railway development
+        shell: bash
+        run: |
+          set -uo pipefail
+          endpoint='https://tone-metric-analyzer-development-production.up.railway.app/api/analyze'
+          http_code="$(curl -sS -L --max-time 1000 \
+            -o /tmp/railway-response.json \
+            -w '%{http_code}' \
+            -F 'file=@/tmp/bwv661-a4.pdf;filename=bwv661-a4.pdf;type=application/pdf' \
+            -F 'meter_override=auto' \
+            "$endpoint" || true)"
+          printf '%s' "$http_code" > /tmp/http-code.txt
+          echo "Railway HTTP $http_code"
+          wc -c /tmp/railway-response.json || true
+
+      - name: Build compact regression report
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, hashlib
+          from pathlib import Path
+
+          pdf = Path('/tmp/bwv661-a4.pdf')
+          body = Path('/tmp/railway-response.json')
+          http_code = Path('/tmp/http-code.txt').read_text().strip()
+          report = {
+              'fixture_sha256': hashlib.sha256(pdf.read_bytes()).hexdigest(),
+              'fixture_size': pdf.stat().st_size,
+              'http_code': http_code,
+              'response_size': body.stat().st_size if body.exists() else 0,
+          }
+          try:
+              data = json.loads(body.read_text(encoding='utf-8'))
+              report['response_is_json'] = True
+          except Exception as exc:
+              report['response_is_json'] = False
+              report['parse_error'] = str(exc)
+              report['response_preview'] = body.read_text(encoding='utf-8', errors='replace')[:2000] if body.exists() else ''
+              data = {}
+
+          segments = data.get('segments', []) if isinstance(data, dict) else []
+          events = [e for s in segments for e in s.get('events', [])]
+          events_with_levels = [e for e in events if e.get('tone_metric_levels')]
+          overlay = data.get('physical_overlay', {}) if isinstance(data, dict) else {}
+          pages = overlay.get('pages', []) if isinstance(overlay, dict) else []
+          waves = [r for p in pages for r in p.get('wave_anchors', [])]
+          pivots = [r for p in pages for r in p.get('pivot_anchors', [])]
+          nodes = [r for p in pages for r in p.get('tree_nodes', [])]
+          branches = [r for p in pages for r in p.get('tree_branches', [])]
+          pivot_ids = {int(r.get('pivot_index')) for r in pivots if r.get('pivot_index') is not None}
+          node_ids = {int(r.get('node_index')) for r in nodes if r.get('node_index') is not None}
+          branch_ids = {int(r.get('branch_index')) for r in branches if r.get('branch_index') is not None}
+
+          report.update({
+              'app_analysis_hit_source': data.get('analysis_hit_source') if isinstance(data, dict) else None,
+              'symbolic_hit_count': data.get('symbolic_hit_count') if isinstance(data, dict) else None,
+              'canonical_hit_count': data.get('canonical_hit_count') if isinstance(data, dict) else None,
+              'levels_enabled': data.get('levels_enabled') if isinstance(data, dict) else None,
+              'max_level': data.get('max_level') if isinstance(data, dict) else None,
+              'segment_event_count': len(events),
+              'events_with_levels': len(events_with_levels),
+              'events_without_levels': len(events) - len(events_with_levels),
+              'physical_overlay_available': overlay.get('available') if isinstance(overlay, dict) else None,
+              'wave_anchor_count': len(waves),
+              'pivot_anchor_row_count': len(pivots),
+              'unique_pivot_count': len(pivot_ids),
+              'tree_node_row_count': len(nodes),
+              'unique_tree_node_count': len(node_ids),
+              'tree_branch_row_count': len(branches),
+              'unique_tree_branch_count': len(branch_ids),
+              'omr_saved': data.get('omr_saved') if isinstance(data, dict) else None,
+              'parse_warnings': data.get('parse_warnings', []) if isinstance(data, dict) else [],
+              'physical_warnings': overlay.get('warnings', []) if isinstance(overlay, dict) else [],
+          })
+
+          checks = {
+              'fixture_sha_exact': report['fixture_sha256'] == 'd50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc',
+              'fixture_size_exact': report['fixture_size'] == 101270,
+              'http_200': http_code == '200',
+              'json_response': report.get('response_is_json') is True,
+              'canonical_source': report.get('app_analysis_hit_source') == 'canonical-score-time',
+              'canonical_hits_733': report.get('canonical_hit_count') == 733,
+              'levels_1_through_9': report.get('levels_enabled') == list(range(1, 10)),
+              'max_level_9': report.get('max_level') == 9,
+              'events_733': report.get('segment_event_count') == 733,
+              'zero_events_without_levels': report.get('events_without_levels') == 0,
+              'physical_overlay_available': report.get('physical_overlay_available') is True,
+              'wave_points_735': report.get('wave_anchor_count') == 735,
+              'pivots_27': report.get('unique_pivot_count') == 27,
+              'tree_nodes_733': report.get('unique_tree_node_count') == 733,
+              'tree_branches_732': report.get('unique_tree_branch_count') == 732,
+          }
+          report['checks'] = checks
+          report['pass'] = all(checks.values())
+          Path('live-bwv661-result.json').write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding='utf-8')
+          print(json.dumps(report, indent=2, ensure_ascii=False))
+          PY
+
+      - name: Persist live regression report
+        shell: bash
+        run: |
+          set -e
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add live-bwv661-result.json
+          git commit -m 'Record live BWV661 Railway regression result' || exit 0
+          git push origin HEAD:inspect-v0152-runtime
+
+      - name: Enforce regression result
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          r=json.load(open('live-bwv661-result.json', encoding='utf-8'))
+          if not r.get('pass'):
+              failed=[k for k,v in r.get('checks',{}).items() if not v]
+              raise SystemExit('LIVE BWV661 REGRESSION FAILED: ' + ', '.join(failed))
+          print('LIVE BWV661 REGRESSION: PASS')
+          PY
