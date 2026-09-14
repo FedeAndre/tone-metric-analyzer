@@ -6,9 +6,10 @@ from fastapi import HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, Response
 
-# Single active presentation entry point. Older score-layout wrappers are not
-# imported here and therefore cannot override the current dissertation-style view.
-from dissertation_example_layout_app import APP_VERSION, app
+# Single active presentation entry point. The audited wrapper replaces the active
+# registration/rendering functions, so earlier presentation paths cannot override
+# the current dissertation-style score analysis.
+from dissertation_example_layout_app_v2 import APP_VERSION, app
 
 logger = logging.getLogger("tone_metric.dissertation")
 
@@ -55,6 +56,7 @@ def diagnostics():
         "version": APP_VERSION,
         "exception_logging": True,
         "request_validation_logging": True,
-        "visualization": "exact-uploaded-pdf-dissertation-style-analysis-band-per-score-system",
+        "visualization": "exact-uploaded-pdf-dissertation-style-audited-system-analysis",
+        "system_registration_order": "levels->printed-systems->waves->pivots->trees",
         "legacy_layout_wrappers_active": False,
     }
