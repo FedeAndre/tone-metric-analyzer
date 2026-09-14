@@ -1,4 +1,4 @@
-name: Probe exact Berg direct source
+name: Exact Berg end-to-end regression
 on:
   push:
     branches:
@@ -6,45 +6,79 @@ on:
 permissions:
   contents: read
 jobs:
-  probe:
+  berg:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
-      - name: Probe exact IMSLP02556 bytes
+      - uses: actions/checkout@v4
+      - name: Download byte-identical IMSLP02556 fixture
         shell: bash
         run: |
-          set -u
-          expected_size=579006
-          expected_sha=815d95242d6e2076866594174617361c87373bce7e1642b66812240a3aef400c
-          urls=(
-            'https://imslp.org/files/imglnks/usimg/5/52/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
-            'https://s9.imslp.org/files/imglnks/usimg/5/52/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
-            'https://ks15.imslp.org/files/imglnks/usimg/5/52/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
-            'https://imslp.org/files/imglnks/usimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
-            'https://s9.imslp.org/files/imglnks/usimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
-            'https://ks15.imslp.org/files/imglnks/usimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
-            'https://imslp.org/files/imglnks/usimg/d/d4/Berg_-_Piano_Sonata_Op.1.pdf'
-            'https://s9.imslp.org/files/imglnks/usimg/d/d4/Berg_-_Piano_Sonata_Op.1.pdf'
-            'https://ks15.imslp.org/files/imglnks/usimg/d/d4/Berg_-_Piano_Sonata_Op.1.pdf'
-            'https://imslp.eu/files/imglnks/euimg/5/52/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
-            'https://imslp.eu/files/imglnks/euimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
-          )
-          found=0
-          i=0
-          for u in "${urls[@]}"; do
-            i=$((i+1)); rm -f candidate.pdf
-            echo "TRY $i $u"
-            if curl -A 'Mozilla/5.0' -fL --connect-timeout 10 --max-time 45 -o candidate.pdf "$u"; then
-              size=$(stat -c%s candidate.pdf)
-              sha=$(sha256sum candidate.pdf | awk '{print $1}')
-              type=$(file -b candidate.pdf || true)
-              echo "RESULT size=$size sha=$sha type=$type"
-              if [ "$size" = "$expected_size" ] && [ "$sha" = "$expected_sha" ]; then
-                echo "EXACT_BERG_SOURCE=$u"
-                found=1
-                break
-              fi
-            else
-              echo 'curl failed'
-            fi
+          set -euo pipefail
+          url='https://s9.imslp.org/files/imglnks/usimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
+          curl -A 'Mozilla/5.0' -fL --retry 4 --retry-delay 2 -o berg.pdf "$url"
+          test "$(stat -c%s berg.pdf)" = "579006"
+          echo '815d95242d6e2076866594174617361c87373bce7e1642b66812240a3aef400c  berg.pdf' | sha256sum -c -
+          file berg.pdf
+      - name: Runtime checksum and override audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum -c v0152_sha256.txt
+          test ! -e validate_release.py
+          test ! -e tone_metric/omr_exact.py
+          test ! -e tone_metric/omr_visual_rhythm.py
+          test ! -e tone_metric/layer_registration.py
+          test ! -e tone_metric/render.py
+          test "$(grep -R '^def pdf_to_musicxml' -n tone_metric | wc -l)" -eq 1
+          if grep -q -- '"-save"' tone_metric/omr.py; then echo 'Unexpected -save remains'; exit 1; fi
+          python3 -m py_compile app.py tone_metric/*.py
+      - name: Build candidate
+        run: docker build -t tone-metric-berg .
+      - name: Analyze exact Berg PDF through API
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run -d --name tma-berg -p 18080:8080 tone-metric-berg
+          trap 'docker logs tma-berg || true; docker rm -f tma-berg >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 60); do
+            curl -fsS http://127.0.0.1:18080/api/status >/dev/null && break
+            sleep 1
           done
-          test "$found" = 1
+          timeout 900 curl --fail-with-body --silent --show-error \
+            -F file=@berg.pdf -F meter_override=auto \
+            http://127.0.0.1:18080/api/analyze -o berg.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('berg.json'))
+          events=[e for s in d.get('segments',[]) for e in s.get('events',[])]
+          without=[e for e in events if not e.get('tone_metric_levels')]
+          po=d.get('physical_overlay') or {}
+          m=po.get('matching') or {}
+          summary={
+            'analysis_hit_source': d.get('analysis_hit_source'),
+            'symbolic_hit_count': d.get('symbolic_hit_count'),
+            'canonical_hit_count': d.get('canonical_hit_count'),
+            'hit_count': d.get('hit_count'),
+            'levels_enabled': d.get('levels_enabled'),
+            'max_level': d.get('max_level'),
+            'segment_count': len(d.get('segments',[])),
+            'event_count': len(events),
+            'events_without_levels': len(without),
+            'physical_overlay_available': po.get('available'),
+            'physical_matching': m,
+            'parse_warnings': d.get('parse_warnings'),
+            'physical_warnings': po.get('warnings'),
+            'omr_saved': d.get('omr_saved'),
+          }
+          print(json.dumps(summary, indent=2))
+          assert d.get('analysis_hit_source') == 'canonical-score-time'
+          assert int(d.get('canonical_hit_count') or 0) > 0
+          assert int(d.get('symbolic_hit_count') or 0) > 0
+          assert len(events) > 0
+          assert len(without) == 0
+          assert int(d.get('max_level') or 0) >= 1
+          assert d.get('omr_saved') is True
+          assert po.get('available') is True
+          PY
+          echo 'EXACT BERG API REGRESSION: PASS'
