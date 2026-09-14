@@ -111,14 +111,14 @@ jobs:
           docker run --rm -i -v "$PWD/bwv-out:/work/out" tone-metric-two-stage python3 - <<'PY'
           from pathlib import Path
           from tone_metric.musicxml import parse_musicxml
-          from tone_metric.canonical_score import recover_canonical_score_hits
+          from tone_metric.canonical_score import build_hits_from_canonical_score
           xml=next(p for pat in ('*.mxl','*.musicxml') for p in Path('/work/out').rglob(pat))
           omr=next(Path('/work/out').rglob('*.omr'))
-          parsed=parse_musicxml(xml, meter_override='auto')
-          hits, meta = recover_canonical_score_hits(omr, parsed.measures, parsed.hits)
-          print('symbolic',len(parsed.hits),'canonical',len(hits),'columns',meta.get('column_count'),'attack columns',meta.get('attack_column_count'))
-          assert len(parsed.hits)==549
-          assert len(hits)==733
+          symbolic_hits, measures, parse_warnings = parse_musicxml(xml, initial_meter_override=None)
+          recovered_hits, canonical_warnings, meta = build_hits_from_canonical_score(omr, measures, symbolic_hits=symbolic_hits)
+          print('symbolic',len(symbolic_hits),'canonical',len(recovered_hits),'columns',meta.get('column_count'),'attack columns',meta.get('attack_column_count'))
+          assert len(symbolic_hits)==549
+          assert len(recovered_hits)==733
           assert meta.get('attack_column_count')==733
           PY
           echo 'BWV661 TWO-STAGE CANONICAL RECOVERY: PASS'
