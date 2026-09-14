@@ -1,0 +1,115 @@
+name: Assemble exact v0.15.2 runtime
+
+on:
+  push:
+    branches:
+      - inspect-v0152-runtime
+    paths:
+      - 'transport/**'
+      - '.github/workflows/assemble-v0152.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Assemble and verify exact runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf assembled-v0152
+          mkdir -p assembled-v0152/static assembled-v0152/tone_metric
+
+          cp transport/app.py assembled-v0152/app.py
+          cp transport/__init__.py assembled-v0152/tone_metric/__init__.py
+          cp transport/engine.py assembled-v0152/tone_metric/engine.py
+          cp transport/models.py assembled-v0152/tone_metric/models.py
+
+          cat transport/static.00 transport/static.01 transport/static.02 transport/static.03 transport/static.04 transport/static.05 > assembled-v0152/static/index.html
+          cat transport/musicxml.00 transport/musicxml.01 transport/musicxml.02 transport/musicxml.03 transport/musicxml.04 > assembled-v0152/tone_metric/musicxml.py
+          cat transport/canonical.00 transport/canonical.01 transport/canonical.02 transport/canonical.03 transport/canonical.04 transport/canonical.05 > assembled-v0152/tone_metric/canonical_score.py
+
+          git cat-file blob 2ca68e2f3b168979b3dfedd66c5537e82aed2be4 > assembled-v0152/requirements.txt
+          git cat-file blob 34dc160a3b6e982885865ec160f3b318224cc1d4 > assembled-v0152/tone_metric/omr.py
+          git cat-file blob c74ab68581cf7ae46c6f8017296a20cf41fe1470 > assembled-v0152/tone_metric/omr_project.py
+          git cat-file blob 84326f3c47d7aaef773ee189a062ee0145ef9198 > assembled-v0152/tone_metric/pdfview.py
+          git cat-file blob dceb380a5c2fb5f27fc3b6976f0663393db900c6 > assembled-v0152/tone_metric/physical.py
+          git cat-file blob 5c1f6472ebb6427932aab1509eb8d974563ee3ac > assembled-v0152/tone_metric/pivots.py
+          git cat-file blob b7bffaaadbbf151563fb6a169729dede8741ecfc > assembled-v0152/tone_metric/score_registration.py
+          git cat-file blob 626c0bc412d0c35c6fb65bb9f81afaaf76cde8b2 > assembled-v0152/tone_metric/theory.py
+          git cat-file blob bb2cd32c992052543aceb5b022a243cf603dc59f > assembled-v0152/tone_metric/trees.py
+          git cat-file blob 8901b71a8046586b9b6f658bd10adc1a96869aa5 > assembled-v0152/tone_metric/waves.py
+
+          cat > assembled-v0152/v0152_sha256.txt <<'EOF'
+          221eb5c4e85982b410476dde629278f0bdad908abd277ff8655e525ca60c9772  app.py
+          bb10b031019a0b118e2244ddb8fc81a16cc6c9c70965e3ff26b43c8f8314ff2e  requirements.txt
+          9e0c440574269ecbf1b813b8a2d20e341cfe8c59c28bd5700a80900229b55eb3  static/index.html
+          04e0b925415bce48421bdea1aceb47ee41035c5dda34e838919f7b3b31b3aee2  tone_metric/__init__.py
+          c78828c867e30c3818b23b11fc4435af2adb28bef7dd59d7fd6b2cc728655ca2  tone_metric/canonical_score.py
+          66837f774f3ab948ea2c7d0a3b4addf5ca1dbd5dd65b76d6ed4e579070938caf  tone_metric/engine.py
+          cb59c48bc9943b03eb2f769f693075cf7299c64e5a6c5be5fb64785dc023cb8c  tone_metric/models.py
+          1c53a620ac83e638c05bf08a08ab914ab1dc4b22b9cdb950e58dc87d73df865c  tone_metric/musicxml.py
+          aced1f5aeed1a914751c61b2e537216cc12d7c3b948f2bfb2c6c475baef95c94  tone_metric/omr.py
+          5cb9463a2fb504d7119f7f83c42abb0f36091ccb5c52d08510d59930ec5d743c  tone_metric/omr_project.py
+          f448b0ac4218b06cfac9b3bb60ec9a43737b2a07e5d1b2a0acf743f8fe137234  tone_metric/pdfview.py
+          8dfb5164532a98f952d649897620185b82520693ac581de48cec83984eccfa16  tone_metric/physical.py
+          7dd4cb3af0d53f0a18ed588a0e99cfbaa6f76c9d26aa2e3d5121aa818288d919  tone_metric/pivots.py
+          882140e522fb0f82604da8af3a2095a417167ae9b31b2927e0e74b11c9392a3f  tone_metric/score_registration.py
+          27fa46b6d4118f9d6be2720cd6ac0ed92aff502a05200a763fbda99df3cbe278  tone_metric/theory.py
+          beff72cd48b937da2be347b3de8da39e6924e03e6a0f983f69937f3ab9771410  tone_metric/trees.py
+          f3144a4ea87622c66ede2c0b02a45c6f555837dc441d9b311a1d09c1cb8528d2  tone_metric/waves.py
+          EOF
+          sed -i 's/^          //' assembled-v0152/v0152_sha256.txt
+          (cd assembled-v0152 && sha256sum -c v0152_sha256.txt)
+
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          root = Path('assembled-v0152')
+          forbidden = [
+              'validate_release.py',
+              'tone_metric/omr_exact.py',
+              'tests/test_real_berg_fixture.py',
+              'tone_metric/omr_visual_rhythm.py',
+              'tone_metric/layer_registration.py',
+              'tone_metric/render.py',
+          ]
+          for rel in forbidden:
+              if (root / rel).exists():
+                  raise SystemExit(f'forbidden legacy/strict path present: {rel}')
+          for path in [root / 'app.py', *sorted((root / 'tone_metric').glob('*.py'))]:
+              tree = ast.parse(path.read_text(encoding='utf-8'), filename=str(path))
+              names = []
+              for node in tree.body:
+                  if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                      names.append(node.name)
+              dup = sorted({name for name in names if names.count(name) > 1})
+              if dup:
+                  raise SystemExit(f'duplicate top-level definitions in {path}: {dup}')
+          init = (root / 'tone_metric' / '__init__.py').read_text(encoding='utf-8')
+          if '0.15.2' not in init:
+              raise SystemExit('v0.15.2 version marker missing')
+          print('override/conflict audit: PASS')
+          PY
+
+          python3 -m py_compile assembled-v0152/app.py assembled-v0152/tone_metric/*.py
+
+      - name: Commit verified assembled runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add assembled-v0152
+          if git diff --cached --quiet; then
+            echo 'assembled runtime already current'
+          else
+            git commit -m 'Assemble exact hash-verified v0.15.2 runtime'
+            git push origin HEAD:inspect-v0152-runtime
+          fi

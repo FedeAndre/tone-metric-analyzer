@@ -1,0 +1,173 @@
+
+    return Fraction(g, den)
+
+
+@dataclass
+class CanonicalColumn:
+    global_measure_index: int
+    page_index: int
+    system_index: int
+    stack_index_in_system: int
+    x_abs: float
+    y_abs: float
+    onset_quarter: Fraction
+    duration_quarter: Fraction
+    attack: bool
+    rest: bool
+    tie_continuation_only: bool
+    chord_ids: list[str]
+    assigned_begin_times: list[Fraction]
+    notation_events: list[dict]
+    timing_source: str
+    confidence: float
+
+    def row(self) -> dict:
+        row = asdict(self)
+        row["onset_quarter"] = str(self.onset_quarter)
+        row["duration_quarter"] = str(self.duration_quarter)
+        row["assigned_begin_times"] = [str(x) for x in self.assigned_begin_times]
+        return row
+
+
+def _choose_feasible_semantic_anchors(columns: list[dict], quantum: Fraction, full: Fraction) -> dict[int, int]:
+    """Choose a maximum-support monotonic subset of Audiveris BEGIN times.
+
+    Feasibility includes enough unused metric-grid positions for every intervening
+    physical column.  This is the key safeguard against contradictory OMR slot data.
+    """
+    n = len(columns)
+    units = int(full / quantum)
+    candidates: list[tuple[int, int, int]] = []
+    for i, col in enumerate(columns):
+        counts = Counter(col.get("assigned_begin_times", []))
+        for t, support in counts.items():
+            if t < 0 or t >= full:
+                continue
+            ratio = t / quantum
+            if ratio.denominator != 1:
+                continue
+            j = int(ratio)
+            if j < i or units - 1 - j < n - 1 - i:
+                continue
+            candidates.append((i, j, int(support)))
+
+    # The leftmost recognized event/rest column defines the measure origin.  If OMR
+    # failed to provide it semantically we still place it on the pre-existing t=0 grid.
+    anchors: dict[int, int] = {0: 0}
+    if n <= 1:
+        return anchors
+
+    # Weighted longest feasible path.  Support dominates anchor count.
+    candidates = [(i, j, w) for i, j, w in candidates if i > 0 and j > 0]
+    dp: list[tuple[int, int, int, int] | None] = [None] * len(candidates)
+    parent = [-1] * len(candidates)
+    for a, (i, j, w) in enumerate(candidates):
+        if j < i:  # must leave one grid position per preceding column
+            continue
+        best = (w, 1, -j, -i)
+        best_parent = -1
+        for b in range(a):
+            if dp[b] is None:
+                continue
+            pi, pj, _pw = candidates[b]
+            if i <= pi or j - pj < i - pi:
+                continue
+            score = (dp[b][0] + w, dp[b][1] + 1, -j, -i)
+            if score > best:
+                best = score
+                best_parent = b
+        dp[a] = best
+        parent[a] = best_parent
+
+    if not dp:
+        return anchors
+    valid = [i for i, x in enumerate(dp) if x is not None]
+    if not valid:
+        return anchors
+    k = max(valid, key=lambda idx: dp[idx])
+    chain = []
+    while k >= 0:
+        chain.append(candidates[k])
+        k = parent[k]
+    for i, j, _w in reversed(chain):
+        anchors[i] = j
+    return anchors
+
+
+def _fill_metric_positions(columns: list[dict], anchors: dict[int, int], quantum: Fraction, full: Fraction) -> tuple[list[int], dict]:
+    n = len(columns)
+    units = int(full / quantum)
+    if n == 0:
+        return [], {}
+    anchors = dict(anchors)
+    anchors[0] = 0
+
+    # Estimate pixels per grid unit from trusted anchor pairs.
+    ordered = sorted(anchors.items())
+    scales = []
+    for (i0, j0), (i1, j1) in zip(ordered, ordered[1:]):
+        if j1 > j0 and columns[i1]["x_abs"] > columns[i0]["x_abs"]:
+            scales.append((columns[i1]["x_abs"] - columns[i0]["x_abs"]) / (j1 - j0))
+    if scales:
+        px_per_unit = sorted(scales)[len(scales) // 2]
+    elif n > 1:
+        px_per_unit = max(1.0, (columns[-1]["x_abs"] - columns[0]["x_abs"]) / max(1, n - 1))
+    else:
+        px_per_unit = 1.0
+
+    # If there is no semantic anchor at the right, extrapolate only as far as the
+    # notation spacing suggests; never beyond the measure grid.
+    last_i, last_j = max(anchors.items())
+    if last_i < n - 1:
+        dx = columns[-1]["x_abs"] - columns[last_i]["x_abs"]
+        estimated = last_j + max(n - 1 - last_i, int(round(dx / max(px_per_unit, 1e-6))))
+        last_target = min(units - 1, max(last_j + (n - 1 - last_i), estimated))
+        anchors[n - 1] = last_target
+
+    js = [-1] * n
+    for i, j in anchors.items():
+        js[i] = j
+
+    ordered = sorted(anchors.items())
+    for (i0, j0), (i1, j1) in zip(ordered, ordered[1:]):
+        count = i1 - i0
+        if count <= 1:
+            continue
+        x0 = columns[i0]["x_abs"]
+        x1 = columns[i1]["x_abs"]
+        prev = j0
+        for i in range(i0 + 1, i1):
+            remaining = i1 - i
+            if x1 > x0:
+                ideal = j0 + (j1 - j0) * ((columns[i]["x_abs"] - x0) / (x1 - x0))
+            else:
+                ideal = j0 + (j1 - j0) * ((i - i0) / count)
+            lo = prev + 1
+            hi = j1 - remaining
+            j = max(lo, min(hi, int(round(ideal))))
+            js[i] = j
+            prev = j
+
+    # Defensive fill (should only occur with a one-column measure).
+    prev = -1
+    for i, j in enumerate(js):
+        if j < 0:
+            j = min(units - 1, prev + 1)
+            js[i] = j
+        prev = j
+
+    semantic = _choose_feasible_semantic_anchors(columns, quantum, full)
+    audit = {
+        "quantum_quarter": str(quantum),
+        "grid_units_per_measure": units,
+        "semantic_anchor_count": len(semantic),
+        "semantic_anchor_indices": {str(i): int(j) for i, j in sorted(semantic.items())},
+        "all_timing_anchor_indices": {str(i): int(j) for i, j in sorted(anchors.items())},
+        "px_per_grid_unit": float(px_per_unit),
+    }
+    return js, audit
+
+
+def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_px: float = 12.0) -> tuple[list[CanonicalColumn], dict]:
+    path = Path(omr_path)
+    out: list[CanonicalCol

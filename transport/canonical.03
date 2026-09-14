@@ -1,0 +1,100 @@
+ip())
+                                if not cid or t is None:
+                                    continue
+                                if (val.get("status") or "").upper() == "BEGIN":
+                                    begin_times[str(cid)].append(t)
+                                else:
+                                    continue_times[str(cid)].append(t)
+
+                    head_chords = list(dict.fromkeys(head_chords))
+                    rest_chords = list(dict.fromkeys(rest_chords))
+                    infos = []
+                    # First pass: geometry, semantic beams/flags, tie/dot identity.
+                    for cid in head_chords:
+                        cel = objs.get(cid)
+                        cb = _bounds(cel) if cel is not None else None
+                        if cel is None or cb is None:
+                            continue
+                        x, y, w, h = cb
+                        members = [objs[m] for m in chord_members.get(cid, []) if m in objs]
+                        heads = [m for m in members if _local(m.tag) == "head"]
+                        hb = [_bounds(hd) for hd in heads]
+                        hb = [b for b in hb if b]
+                        hcx = [a + c / 2 for a, b, c, d in hb]
+                        hcy = [b + d / 2 for a, b, c, d in hb]
+                        # Horizontal registration uses the physical chord box center.  We do
+                        # not average multiple independent attack columns; notehead y-centers
+                        # are used only to keep the vertical guide near the sounding heads.
+                        center = (x + w / 2, sum(hcy) / len(hcy)) if hcy else (x + w / 2, y + h / 2)
+                        stem_id = chord_stem.get(cid)
+                        stem = objs.get(stem_id) if stem_id else None
+                        median = _median_points(stem) if stem is not None else None
+                        direction = "none"
+                        distal = None
+                        if median:
+                            p1, p2 = median
+                            distal = p1 if abs(p1[1] - center[1]) >= abs(p2[1] - center[1]) else p2
+                            direction = "up" if distal[1] < center[1] else "down"
+                        flag_count = 0
+                        for fid in stem_flags.get(stem_id, []):
+                            shape = (objs.get(fid).get("shape") if fid in objs else "") or ""
+                            m = re.search(r"FLAG_(\d+)", shape.upper())
+                            flag_count = max(flag_count, int(m.group(1)) if m else 1)
+                        infos.append({
+                            "cid": cid,
+                            "kind": "head",
+                            "staff": _int(cel.get("staff"), 0) or 0,
+                            "x_abs": float(center[0]),
+                            "y_abs": float(center[1]),
+                            "heads": heads,
+                            "head_kind": _head_kind([h.get("shape", "") for h in heads]),
+                            "stem_id": stem_id,
+                            "direction": direction,
+                            "distal": distal,
+                            "beam_count": len(stem_beams.get(stem_id, set())) if stem_id else 0,
+                            "flag_count": flag_count,
+                            "assigned_begin_times": list(begin_times.get(cid, [])),
+                            "assigned_continue_times": list(continue_times.get(cid, [])),
+                        })
+
+                    # Raster beams supplement missing Audiveris beam relations only.
+                    if arr is not None:
+                        local_groups = defaultdict(list)
+                        for info in infos:
+                            local_groups[(info["staff"], info["direction"])].append(info)
+                        for group in local_groups.values():
+                            group.sort(key=lambda r: r["x_abs"])
+                            for a, b in zip(group, group[1:]):
+                                count = _beam_band_count(arr, a, b, interline)
+                                if count:
+                                    a["beam_count"] = max(a["beam_count"], count)
+                                    b["beam_count"] = max(b["beam_count"], count)
+
+                    events = []
+                    for info in infos:
+                        base = Fraction(4) if info["head_kind"] == "whole" else Fraction(2) if info["head_kind"] == "half" else Fraction(1)
+                        divisions = max(int(info["beam_count"]), int(info["flag_count"]))
+                        duration = base / (2 ** divisions) if divisions and base <= 1 else base
+                        dot_count = max((dotted_heads.get(str(h.get("id")), 0) for h in info["heads"]), default=0)
+                        duration *= _dot_multiplier(dot_count)
+                        all_tied = bool(info["heads"]) and all(str(h.get("id")) in tie_right_heads for h in info["heads"])
+                        events.append({
+                            **info,
+                            "duration_quarter": duration,
+                            "dot_count": dot_count,
+                            "attack": not all_tied,
+                            "tie_continuation": all_tied,
+                            "rest": False,
+                        })
+
+                    for cid in rest_chords:
+                        cel = objs.get(cid)
+                        cb = _bounds(cel) if cel is not None else None
+                        if cel is None or cb is None:
+                            continue
+                        x, y, w, h = cb
+                        members = [objs[m] for m in chord_members.get(cid, []) if m in objs]
+                        rests = [m for m in members if _local(m.tag) == "rest"]
+                        shape = rests[0].get("shape", "") if rests else ""
+                        duration = _rest_duration(shape) or Fraction(1)
+  

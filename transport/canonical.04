@@ -1,0 +1,99 @@
+                      # A centered whole-rest in an otherwise active staff denotes a
+                        # full-measure silence; its printed center is not an onset column.
+                        if "WHOLE_REST" in shape.upper() and duration >= full:
+                            continue
+                        events.append({
+                            "cid": cid,
+                            "kind": "rest",
+                            "staff": _int(cel.get("staff"), 0) or 0,
+                            "x_abs": float(x + w / 2),
+                            "y_abs": float(y + h / 2),
+                            "duration_quarter": duration,
+                            "assigned_begin_times": list(begin_times.get(cid, [])),
+                            "assigned_continue_times": list(continue_times.get(cid, [])),
+                            "attack": False,
+                            "tie_continuation": False,
+                            "rest": True,
+                        })
+
+                    events.sort(key=lambda r: (r["x_abs"], r["staff"], r["cid"]))
+                    clusters: list[list[dict]] = []
+                    for event in events:
+                        if not clusters or event["x_abs"] - clusters[-1][-1]["x_abs"] > cluster_tolerance_px:
+                            clusters.append([event])
+                        else:
+                            clusters[-1].append(event)
+
+                    columns = []
+                    for group in clusters:
+                        rep = min(group, key=lambda a: (sum(abs(a["x_abs"] - b["x_abs"]) for b in group), a["cid"]))
+                        durations = [e["duration_quarter"] for e in group if e.get("duration_quarter", 0) > 0]
+                        head_events = [e for e in group if e["kind"] == "head"]
+                        columns.append({
+                            "x_abs": float(rep["x_abs"]),
+                            "y_abs": float(rep["y_abs"]),
+                            "events": group,
+                            "attack": any(e.get("attack") for e in head_events),
+                            "rest": any(e.get("rest") for e in group),
+                            "tie_continuation_only": bool(head_events) and all(e.get("tie_continuation") for e in head_events),
+                            # A global attack can contain several simultaneous notes.  Keep
+                            # the longest sounding duration on the column (the same convention
+                            # used by the symbolic Hit model), while the metric lattice below
+                            # still considers every constituent duration independently.
+                            "duration_quarter": max(durations, default=Fraction(1)),
+                            "assigned_begin_times": [t for e in group for t in e.get("assigned_begin_times", [])],
+                        })
+
+                    duration_values = [
+                        e["duration_quarter"]
+                        for c in columns for e in c["events"]
+                        if e.get("duration_quarter", 0) > 0
+                    ]
+                    assigned_unique = sorted({t for c in columns for t in c["assigned_begin_times"] if 0 <= t < full})
+                    duration_values.extend(b - a for a, b in zip(assigned_unique, assigned_unique[1:]) if b > a)
+                    quantum = _fraction_gcd(duration_values)
+                    if quantum > 1:
+                        quantum = Fraction(1)
+                    while columns and int(full / quantum) < len(columns):
+                        quantum /= 2
+                    # Do not allow an accidental exotic denominator to explode the grid.
+                    if quantum < Fraction(1, 32):
+                        quantum = Fraction(1, 32)
+                        while columns and int(full / quantum) < len(columns):
+                            quantum /= 2
+
+                    selected = _choose_feasible_semantic_anchors(columns, quantum, full) if columns else {}
+                    positions, timing_audit = _fill_metric_positions(columns, selected, quantum, full) if columns else ([], {})
+                    measure_rows = []
+                    for i, (col, grid_index) in enumerate(zip(columns, positions)):
+                        onset = Fraction(grid_index) * quantum
+                        assigned = list(col["assigned_begin_times"])
+                        exact_support = sum(1 for t in assigned if t == onset)
+                        if exact_support:
+                            source = "semantic-begin-anchor"
+                            confidence = min(1.0, 0.90 + 0.02 * exact_support)
+                        elif i in selected:
+                            source = "semantic-monotonic-anchor"
+                            confidence = 0.90
+                        else:
+                            source = "canonical-grid-interpolation"
+                            confidence = 0.72
+                        chord_ids = [e["cid"] for e in col["events"] if e["kind"] == "head"]
+                        canonical = CanonicalColumn(
+                            global_measure_index=global_measure,
+                            page_index=page_index,
+                            system_index=system_index,
+                            stack_index_in_system=stack_index,
+                            x_abs=col["x_abs"],
+                            y_abs=col["y_abs"],
+                            onset_quarter=onset,
+                            duration_quarter=col["duration_quarter"],
+                            attack=bool(col["attack"]),
+                            rest=bool(col["rest"]),
+                            tie_continuation_only=bool(col["tie_continuation_only"]),
+                            chord_ids=chord_ids,
+                            assigned_begin_times=assigned,
+                            notation_events=[
+                                {
+                                    "chord_id": e.get("cid"),
+  

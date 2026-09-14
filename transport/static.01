@@ -1,0 +1,41 @@
+ls, wave points, or pivots.</p>
+<div class="panel">
+  <div id="status" class="muted">Checking PDF-recognition engine…</div>
+  <form id="form" class="row">
+    <input id="file" type="file" accept="application/pdf,.pdf,.mxl,.musicxml,.xml" required />
+    <label>Meter <select id="meter-override"><option value="auto" selected>Auto from score</option><option value="2/2">2/2 (cut time)</option><option value="4/4">4/4</option><option value="3/4">3/4</option><option value="6/8">6/8</option><option value="9/8">9/8</option><option value="12/8">12/8</option></select></label>
+    <button type="submit">Analyze score</button>
+  </form>
+  <p class="muted">Project rules: tied continuations do not re-attack; grace notes and tuplet-voice attacks are ignored; simultaneous attacks merge into one hit; rests create no hit; pickups are right-aligned inside an otherwise empty full measure; meter changes reset the algorithm.</p>
+</div>
+<div id="out"></div>
+<script>
+const statusEl=document.getElementById('status'), out=document.getElementById('out');
+fetch('/api/status').then(r=>r.json()).then(s=>{statusEl.textContent=s.audiveris_found?'PDF recognition ready (Audiveris detected).':'PDF recognition is not yet available on this machine: Audiveris was not detected. MusicXML/MXL can still be used to test the Tone-Metric engine.'}).catch(()=>statusEl.textContent='Could not check backend status.');
+document.getElementById('form').addEventListener('submit', async e=>{
+ e.preventDefault(); out.innerHTML='<div class="panel">Analyzing… This can take a while for PDF scores.</div>';
+ const fd=new FormData(); fd.append('file',document.getElementById('file').files[0]); fd.append('meter_override',document.getElementById('meter-override').value);
+ try{
+  const r=await fetch('/api/analyze',{method:'POST',body:fd}); const data=await r.json();
+  if(!r.ok) throw new Error(data.detail||JSON.stringify(data)); render(data);
+ }catch(err){out.innerHTML=`<div class="panel error"><strong>Analysis stopped</strong>\n${escapeHtml(err.message)}</div>`}
+});
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+const modeExplanation={
+ attacks:'Attacks only: identical in principle to v0.10.0. Normal level numbers are drawn only at exact canonical attack columns with the same measure and score onset.',
+ full:'Full tone-metric grid: normal numbers are actual attacks; parenthetical numbers mark recursive metric articulations where no new sonic event occurs. Parenthetical x-placement is display-only and never changes score time or the Levels calculation.',
+ waves:'Tone-metric wave: the shaded step envelope is the top boundary of the superimposed recursive Levels. Its height at each score-time position is the highest active Level; it is derived from the completed grid and does not recalculate the analysis.',
+ fullwave:'Full grid + wave: shows the v0.11.0 attack/parenthetical Levels together with the derived v0.12.0 wave envelope.',
+ wavepivots:'Waves + pivots: marks each Definition-8 pivot as the single structural-turning moment at the rightmost crest point before descent. The marker spans the full rendered width of the wave hit at that turning point; simple pivots descend one level and compound pivots descend two or more levels before recovery.',
+ fullanalysis:'Full analysis: displays the complete recursive grid, wave envelope, and derived simple/compound pivots together. This preserves the v0.13.0 combined view.',
+ trees:'Trees: actual sonic events are placed at their lowest occupied recursive Level. Each event receives at most one incoming left-to-right branch from the closest earlier event at the same or a lower Level.',
+ fulltree:'Full analysis + trees: displays Levels, parenthetical structural articulations, wave, pivots, and the derived tone-metric tree together.',
+ none:'Original PDF only.'
+};
+function renderActualViewer(d){
+ const pages=d.original_score_pages||[]; if(!pages.length) return '';
+ const po=d.physical_overlay||{}; const m=po.matching||{};
+ const perLevel=m.per_level||{}; const levelSummary=Object.keys(perLevel).sort((a,b)=>Number(a)-Number(b)).map(k=>`L${k} ${perLevel[k].mapped||0}/${perLevel[k].expected||0}`).join('; ');
+ const registrationReady=Number(m.layer_hits_mapped||0)>0, structuralReady=Number(m.structural_parenthetical_labels_missing||0)===0, waveReady=Number(m.wave_profile_points_missing||0)===0, pivotReady=Number(m.pivot_profile_missing||0)===0, treeReady=Number(m.tree_event_nodes_missing||0)===0&&Number(m.tree_branches_missing||0)===0; const status=po.available?(registrationReady?`Recursive Levels registration ready through Level ${m.max_layer_level||0}: ${levelSummary}. Full grid structural labels: ${m.structural_parenthetical_labels_mapped||0}/${m.structural_parenthetical_labels_expected||0}${structuralReady?' placed':' placed with omissions'}. Wave points: ${m.wave_profile_points_mapped||0}/${m.wave_profile_points_expected||0}${waveReady?' mapped':' mapped with omissions'}. Pivots: ${m.pivot_profile_mapped||0}/${m.pivot_profile_expected||0}${pivotReady?' mapped':' mapped with omissions'} (${m.simple_pivots||0} simple, ${m.compound_pivots||0} compound). Trees: ${m.tree_event_nodes_mapped||0}/${m.tree_event_nodes_expected||0} event nodes and ${m.tree_branches_mapped||0}/${m.tree_branches_expected||0} branches${treeReady?' mapped':' mapped with omissions'}.`:`Physical overlay ready, but canonical attack registration is unavailable; recursive Levels, waves, pivots, and trees will be omitted rather than guessed.`):`Physical overlay not available; recursive Levels, waves, pivots, and trees cannot be placed on the PDF.`;
+ const warnings=(po.warnings||[]).map(w=>`<div class="error">${escapeHtml(w)}</div>`).join('');
+ return `<section class="panel actualViewer"><h2>Actual uploaded score</h2><p class="actualNotice">The PDF page below is the score you uploaded. The analysis is drawn in a separate transparent layer over the original page.</p><div

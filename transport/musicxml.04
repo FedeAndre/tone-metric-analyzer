@@ -1,0 +1,48 @@
+
+                    visual_kind = "grace" if is_grace else "main"
+                    global_onset = templates[mi]["start"] + templates[mi]["shift"] + onset_local
+                    layout = measure_layouts[mi] if mi < len(measure_layouts) else {}
+                    layout_x_abs = None
+                    if xkey is not None and layout.get("x_start") is not None:
+                        try:
+                            layout_x_abs = float(layout["x_start"]) + float(xkey)
+                        except Exception:
+                            layout_x_abs = None
+                    key = (mi, layout.get("page_index", 0), layout.get("system_index", 0), xkey if xkey is not None else global_onset, visual_kind)
+                    row = groups.setdefault(key, {
+                        "serial": serial,
+                        "measure_index": mi,
+                        "measure_number": templates[mi]["number"],
+                        "layout_page": layout.get("page_index", 0),
+                        "layout_system": layout.get("system_index", 0),
+                        "layout_x_abs": layout_x_abs,
+                        "layout_default_x": xkey,
+                        "layout_measure_x_start": layout.get("x_start"),
+                        "layout_measure_width": layout.get("width"),
+                        "layout_page_width": layout.get("page_width"),
+                        "layout_page_height": layout.get("page_height"),
+                        "measure_start_quarter": frac_to_str(templates[mi]["start"]),
+                        "measure_full_quarter": frac_to_str(templates[mi]["full"]),
+                        "measure_shift_quarter": frac_to_str(templates[mi]["shift"]),
+                        "offset_in_measure_quarter": frac_to_str(templates[mi]["shift"] + onset_local),
+                        "duration_quarter": frac_to_str(dur),
+                        "attack_key": f"{mi}:{frac_to_str(templates[mi]['shift'] + onset_local)}",
+                        "visual_kind": visual_kind,
+                        "onset_quarter": frac_to_str(global_onset),
+                        "analyzed": False,
+                        "pitches": [],
+                    })
+                    serial += 1
+                    row["pitches"].append(_pitch_string(child))
+                    is_tuplet = child.find("time-modification") is not None
+                    tie_stop = _has_tie(child, "stop")
+                    if not is_grace and not is_tuplet and not tie_stop:
+                        row["analyzed"] = True
+                elif tag == "backup":
+                    cursor -= Fraction(_text_int(child, "duration", 0), divisions)
+                elif tag == "forward":
+                    cursor += Fraction(_text_int(child, "duration", 0), divisions)
+
+    rows = list(groups.values())
+    rows.sort(key=lambda r: (r["layout_page"], r["layout_system"], r["measure_index"], r["serial"]))
+    return rows, layout_known

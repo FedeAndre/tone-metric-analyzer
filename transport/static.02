@@ -1,0 +1,33 @@
+ class="overlayStatus" id="overlay-status">${escapeHtml(status)}</div>${warnings}${d.debug_bundle_url?`<p><a href="${escapeHtml(d.debug_bundle_url)}">Download Audiveris debug bundle (.omr + MusicXML + annotations + mapping summary)</a></p>`:''}<div class="viewToolbar"><button type="button" id="actual-attacks" class="active">Attacks only</button><button type="button" id="actual-full">Full grid</button><button type="button" id="actual-waves">Waves</button><button type="button" id="actual-fullwave">Full grid + waves</button><button type="button" id="actual-wavepivots">Waves + pivots</button><button type="button" id="actual-fullanalysis">Full analysis</button><button type="button" id="actual-trees">Trees</button><button type="button" id="actual-fulltree">Full analysis + trees</button><button type="button" id="actual-none">Original</button><button type="button" id="page-prev">◀ Page</button><span id="page-label" class="viewLabel"></span><button type="button" id="page-next">Page ▶</button><div class="zoomControl"><span>Zoom</span><input id="page-zoom" type="range" min="50" max="250" value="100" step="10"><span id="page-zoom-label">100%</span></div></div><div id="actual-explanation" class="viewExplanation"></div><div class="legend" id="actual-legend"></div><div class="pageStage" id="page-stage"><div class="pageSurface" id="page-surface"></div></div></section>`;
+}
+function render(d){
+ let h=`<div class="panel"><div class="grid"><div class="stat"><b>Hits</b><br>${d.hit_count}</div><div class="stat"><b>Measures</b><br>${d.measure_count}</div><div class="stat"><b>Meter segments</b><br>${d.segments.length}</div><div class="stat"><b>Source</b><br>${escapeHtml(d.source_filename||'')}</div></div></div>`;
+ (d.parse_warnings||[]).forEach(w=>h+=`<div class="panel error">${escapeHtml(w)}</div>`);
+ h+=renderActualViewer(d);
+ d.segments.forEach((s,si)=>{
+  h+=`<section class="panel segment"><h2>Segment ${si+1}: ${escapeHtml(s.meter)}</h2><div class="grid"><div class="stat"><b>Tactus unit</b><br>${escapeHtml(s.beat_unit_name||'')} (${s.beat_unit_quarter} quarter-note units)</div><div class="stat"><b>Level-1 anchors</b><br>${escapeHtml((s.level1_anchor_labels||[]).slice(0,20).join(', '))}${(s.level1_anchor_labels||[]).length>20?' …':''}</div><div class="stat"><b>Generated levels</b><br>1–${s.max_level||0}</div><div class="stat"><b>Recognized hits</b><br>${s.events.length}</div></div>`;
+  (s.warnings||[]).forEach(w=>h+=`<p class="error">${escapeHtml(w)}</p>`);
+  h+=`<details><summary>Event / recursive-level table</summary><div style="overflow:auto"><table><thead><tr><th>#</th><th>Measure</th><th>Offset</th><th>Score time</th><th>Levels K(t)</th><th>H(t)</th><th>D(t)</th><th>λ(t)</th><th>Pitches</th></tr></thead><tbody>`;
+  s.events.forEach((e,i)=>h+=`<tr><td>${i}</td><td>${escapeHtml(e.measure_number)}</td><td>${e.offset_in_measure_quarter}</td><td>${e.onset_quarter}</td><td>${escapeHtml((e.tone_metric_levels||[]).join(', '))}</td><td>${escapeHtml(e.tone_metric_height??'')}</td><td>${escapeHtml(e.tone_metric_density??'')}</td><td>${escapeHtml(e.lowest_tone_metric_level??'')}</td><td>${escapeHtml(e.pitches.join(' '))}</td></tr>`);
+  h+='</tbody></table></div></details></section>';
+ });
+ out.innerHTML=h;
+ setupActualViewer(d);
+}
+function setupActualViewer(d){
+ const pages=d.original_score_pages||[]; if(!pages.length) return;
+ const physical=d.physical_overlay||{}; let pageIndex=0,zoom=100,mode='attacks';
+ const surface=document.getElementById('page-surface'), label=document.getElementById('page-label'), slider=document.getElementById('page-zoom'), zoomLabel=document.getElementById('page-zoom-label'), stage=document.getElementById('page-stage'), statusBox=document.getElementById('overlay-status'), explanation=document.getElementById('actual-explanation');
+ const modeButtons={attacks:document.getElementById('actual-attacks'),full:document.getElementById('actual-full'),waves:document.getElementById('actual-waves'),fullwave:document.getElementById('actual-fullwave'),wavepivots:document.getElementById('actual-wavepivots'),fullanalysis:document.getElementById('actual-fullanalysis'),trees:document.getElementById('actual-trees'),fulltree:document.getElementById('actual-fulltree'),none:document.getElementById('actual-none')};
+ function physicalPage(){return (physical.pages||[]).find(x=>x.page_index===pageIndex)||null;}
+ function buildPageLayout(pp,w,h,expandBands=true){
+  const overlayBy=new Map();(pp?.overlays||[]).forEach(o=>{const k=Number(o.system_index||0);if(!overlayBy.has(k))overlayBy.set(k,[]);overlayBy.get(k).push(o);});
+  const layerBy=new Map();(pp?.layer_anchors||[]).forEach(o=>{const k=Number(o.system_index||0);if(!layerBy.has(k))layerBy.set(k,[]);layerBy.get(k).push(o);});
+  const structuralBy=new Map();(pp?.structural_anchors||[]).forEach(o=>{const k=Number(o.system_index||0);if(!structuralBy.has(k))structuralBy.set(k,[]);structuralBy.get(k).push(o);});
+  const waveBy=new Map();(pp?.wave_anchors||[]).forEach(o=>{const k=Number(o.system_index||0);if(!waveBy.has(k))waveBy.set(k,[]);waveBy.get(k).push(o);});
+  const pivotBy=new Map();(pp?.pivot_anchors||[]).forEach(o=>{const k=Number(o.system_index||0);if(!pivotBy.has(k))pivotBy.set(k,[]);pivotBy.get(k).push(o);});
+  const treeNodeBy=new Map();(pp?.tree_nodes||[]).forEach(o=>{const k=Number(o.system_index||0);if(!treeNodeBy.has(k))treeNodeBy.set(k,[]);treeNodeBy.get(k).push(o);});
+  const treeBranchBy=new Map();(pp?.tree_branches||[]).forEach(o=>{const k=Number(o.system_index||0);if(!treeBranchBy.has(k))treeBranchBy.set(k,[]);treeBranchBy.get(k).push(o);});
+  const boundsBy=new Map();(pp?.system_bounds||[]).forEach(b=>boundsBy.set(Number(b.system_index||0),b));
+  const keys=[...new Set([...overlayBy.keys(),...layerBy.keys(),...structuralBy.keys(),...waveBy.keys(),...pivotBy.keys(),...treeNodeBy.keys(),...treeBranchBy.keys(),...boundsBy.keys()])];const models=new Map();
+  const systems=keys.map(k=>{const ovs=overlayBy.get(k)||[],layers=layerBy.get(k)||

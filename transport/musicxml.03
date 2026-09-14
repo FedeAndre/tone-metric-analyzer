@@ -1,0 +1,131 @@
+               if tie_start:
+                        open_ties[key] = attack
+                elif tag == "backup":
+                    cursor -= Fraction(_text_int(child, "duration", 0), divisions)
+                elif tag == "forward":
+                    cursor += Fraction(_text_int(child, "duration", 0), divisions)
+
+    by_onset: Dict[Fraction, List[NoteAttack]] = {}
+    for a in raw_attacks:
+        by_onset.setdefault(a.onset, []).append(a)
+
+    hits: List[Hit] = []
+    for onset in sorted(by_onset):
+        src = by_onset[onset]
+        first = src[0]
+        hits.append(Hit(
+            onset=onset,
+            duration=max((s.duration for s in src), default=Fraction(0)),
+            measure_index=first.measure_index,
+            measure_number=first.measure_number,
+            offset_in_measure=first.offset_in_measure,
+            sources=src,
+        ))
+
+    if layout_note_count == 0:
+        warnings.append("The MusicXML export did not provide usable note layout coordinates, so coloring on the original PDF may be unavailable or approximate for this score.")
+    return hits, measures, warnings
+
+
+def extract_visual_groups(path: str | Path, initial_meter_override=None) -> tuple[list[dict], bool]:
+    """Return symbolic notehead/chord columns in visual reading order.
+
+    Unlike analysis hits, this includes grace notes, tuplet attacks, and tied continuations
+    because those noteheads are physically present on the score. Each group is marked
+    ``analyzed`` only when at least one contained note creates a Tone-Metric attack.
+    This lets Audiveris physical notehead columns be matched without shifting the overlay.
+    """
+    path = Path(path)
+    root = etree.fromstring(_read_musicxml_bytes(path))
+    if root.tag.split("}")[-1] != "score-partwise":
+        return [], False
+    parts = root.findall("part")
+    if not parts:
+        return [], False
+
+    measure_layouts = _measure_layouts(root)
+    layout_known = any(
+        m.find("print") is not None or m.get("width") is not None
+        for m in parts[0].findall("measure")
+    )
+
+    # Canonical measure timing/pickup shifts from first part.
+    templates = []
+    divisions = 1
+    meter_override = _parse_meter_override(initial_meter_override)
+    num, den = meter_override or (4, 4)
+    cumulative = Fraction(0)
+    for mi, measure in enumerate(parts[0].findall("measure")):
+        attrs = measure.find("attributes")
+        if attrs is not None:
+            if attrs.find("divisions") is not None:
+                divisions = int(attrs.findtext("divisions"))
+            time = attrs.find("time")
+            if time is not None:
+                if mi == 0 and meter_override is not None:
+                    num, den = meter_override
+                else:
+                    num, den = _normalized_time_signature(time, num, den)
+        full = Fraction(num * 4, den)
+        cursor = Fraction(0); max_cursor = Fraction(0); last_nonchord = Fraction(0)
+        for child in measure:
+            tag = child.tag.split("}")[-1]
+            if tag == "note":
+                dur = Fraction(_text_int(child, "duration", 0), divisions) if divisions else Fraction(0)
+                if child.find("chord") is not None:
+                    onset = last_nonchord
+                else:
+                    onset = cursor; last_nonchord = onset
+                    if child.find("grace") is None:
+                        cursor += dur; max_cursor = max(max_cursor, cursor)
+            elif tag == "backup":
+                cursor -= Fraction(_text_int(child, "duration", 0), divisions)
+            elif tag == "forward":
+                cursor += Fraction(_text_int(child, "duration", 0), divisions); max_cursor = max(max_cursor, cursor)
+        implicit = (measure.get("implicit") or "").lower() == "yes"
+        short_first = mi == 0 and max_cursor < full
+        shift = full - max_cursor if (implicit or short_first) and max_cursor < full else Fraction(0)
+        templates.append({
+            "start": cumulative,
+            "shift": shift,
+            "full": full,
+            "number": measure.get("number") or str(mi + 1),
+        })
+        cumulative += full
+
+    groups: dict[tuple, dict] = {}
+    serial = 0
+    for part in parts:
+        divisions = 1
+        for mi, measure in enumerate(part.findall("measure")):
+            if mi >= len(templates):
+                break
+            attrs = measure.find("attributes")
+            if attrs is not None and attrs.find("divisions") is not None:
+                divisions = int(attrs.findtext("divisions"))
+            cursor = Fraction(0); last_nonchord = Fraction(0)
+            for child in measure:
+                tag = child.tag.split("}")[-1]
+                if tag == "note":
+                    dur = Fraction(_text_int(child, "duration", 0), divisions) if divisions else Fraction(0)
+                    is_chord = child.find("chord") is not None
+                    is_grace = child.find("grace") is not None
+                    if is_chord:
+                        onset_local = last_nonchord
+                    else:
+                        onset_local = cursor; last_nonchord = onset_local
+                    if not is_chord and not is_grace:
+                        cursor += dur
+                    if child.find("rest") is not None:
+                        continue
+
+                    # Prefer exported horizontal engraving position when present.
+                    # Audiveris MusicXML default-x is local to the measure; combining it
+                    # with the exported measure x_start gives us an engraving-aware
+                    # horizontal coordinate that can later be registered to the PDF.
+                    dx = child.get("default-x")
+                    try:
+                        xkey = round(float(dx), 2) if dx is not None else None
+                    except Exception:
+                        xkey = None
+                    # Grace note at same rhythmic onset must remain a separate visual column.

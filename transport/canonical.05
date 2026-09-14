@@ -1,0 +1,88 @@
+                                  "kind": e.get("kind"),
+                                    "staff": int(e.get("staff", 0) or 0),
+                                    "duration_quarter": str(e.get("duration_quarter", Fraction(0))),
+                                    "dot_count": int(e.get("dot_count", 0) or 0),
+                                    "attack": bool(e.get("attack")),
+                                    "tie_continuation": bool(e.get("tie_continuation")),
+                                    "rest": bool(e.get("rest")),
+                                }
+                                for e in col["events"]
+                            ],
+                            timing_source=source,
+                            confidence=confidence,
+                        )
+                        out.append(canonical)
+                        measure_rows.append(canonical.row())
+
+                    meta["measures"].append({
+                        "global_measure_index": global_measure,
+                        "measure_number": measure.number,
+                        "page_index": page_index,
+                        "system_index": system_index,
+                        "stack_index_in_system": stack_index,
+                        "stack_left": left,
+                        "stack_right": right,
+                        "full_duration_quarter": str(full),
+                        "quantum_quarter": str(quantum),
+                        "physical_column_count": len(columns),
+                        "attack_column_count": sum(1 for c in columns if c["attack"]),
+                        "timing_audit": timing_audit,
+                        "columns": measure_rows,
+                    })
+                    global_measure += 1
+            page_index += 1
+
+    meta["available"] = bool(out)
+    meta["column_count"] = len(out)
+    meta["attack_column_count"] = sum(1 for c in out if c.attack)
+    meta["augmentation_dot_count"] = int(augmentation_relation_count)
+    meta["tie_continuation_column_count"] = sum(1 for c in out if c.tie_continuation_only)
+    meta["rest_column_count"] = sum(1 for c in out if c.rest)
+    return out, meta
+
+
+def build_hits_from_canonical_score(omr_path, measures, symbolic_hits=None):
+    """Return global sonic attacks on the canonical score-time grid.
+
+    Symbolic MusicXML note details are attached only when they agree exactly with the
+    recovered measure/time.  They are never allowed to move a visual attack.
+    """
+    columns, meta = recover_canonical_columns(omr_path, measures)
+    symbolic_hits = list(symbolic_hits or [])
+    symbolic_by_key = {(int(h.measure_index), h.offset_in_measure): h for h in symbolic_hits}
+
+    grouped = defaultdict(list)
+    for col in columns:
+        if not col.attack:
+            continue
+        mi = int(col.global_measure_index)
+        if mi < 0 or mi >= len(measures):
+            continue
+        measure = measures[mi]
+        offset = measure.pickup_shift + col.onset_quarter
+        if not (Fraction(0) <= offset < measure.full_duration):
+            continue
+        grouped[(mi, offset)].append(col)
+
+    hits = []
+    for (mi, offset), cols in sorted(grouped.items(), key=lambda item: (item[0][0], item[0][1])):
+        measure = measures[mi]
+        symbolic = symbolic_by_key.get((mi, offset))
+        durations = [c.duration_quarter for c in cols if c.duration_quarter > 0]
+        hits.append(Hit(
+            onset=measure.start + offset,
+            duration=max(durations, default=Fraction(0)),
+            measure_index=mi,
+            measure_number=measure.number,
+            offset_in_measure=offset,
+            sources=list(symbolic.sources) if symbolic is not None else [],
+        ))
+
+    meta = dict(meta)
+    meta["canonical_hit_count"] = len(hits)
+    meta["symbolic_hit_count"] = len(symbolic_hits)
+    meta["canonical_attack_keys"] = [f"{h.measure_index}:{h.offset_in_measure}" for h in hits]
+    warnings = []
+    if not hits:
+        warnings.append("Canonical score-time recovery produced no usable attacks; symbolic MusicXML hits were retained.")
+    return hits, warnings, meta

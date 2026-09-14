@@ -1,0 +1,152 @@
+from __future__ import annotations
+from fractions import Fraction
+from pathlib import Path
+from typing import Dict, List, Tuple
+from zipfile import ZipFile
+from lxml import etree
+
+from .models import NoteAttack, Hit, MeasureInfo, frac_to_str
+
+
+def _read_musicxml_bytes(path: Path) -> bytes:
+    if path.suffix.lower() == ".mxl":
+        with ZipFile(path, "r") as zf:
+            rootfile = None
+            try:
+                container = etree.fromstring(zf.read("META-INF/container.xml"))
+                ns = {"c": "urn:oasis:names:tc:opendocument:xmlns:container"}
+                node = container.find(".//c:rootfile", namespaces=ns)
+                if node is not None:
+                    rootfile = node.get("full-path")
+            except Exception:
+                rootfile = None
+            if not rootfile:
+                candidates = [n for n in zf.namelist() if n.lower().endswith((".xml", ".musicxml")) and not n.startswith("META-INF/")]
+                if not candidates:
+                    raise ValueError("No MusicXML document found inside .mxl archive")
+                rootfile = candidates[0]
+            return zf.read(rootfile)
+    return path.read_bytes()
+
+
+def _text_int(node, xpath: str, default: int = 0) -> int:
+    el = node.find(xpath)
+    if el is None or el.text is None:
+        return default
+    return int(el.text.strip())
+
+
+def _text_float(node, xpath: str, default: float) -> float:
+    el = node.find(xpath)
+    if el is None or el.text is None:
+        return default
+    try:
+        return float(el.text.strip())
+    except Exception:
+        return default
+
+
+
+
+def _normalized_time_signature(time, current_num: int, current_den: int, warnings: List[str] | None = None) -> tuple[int, int]:
+    """Read a MusicXML <time> element and honor semantic common/cut symbols.
+
+    Audiveris may preserve the semantic symbol even when the exported beats/beat-type
+    pair is generic.  For tone-metric analysis the notated tactus is decisive, so a
+    cut-time symbol is normalized to 2/2 and common time to 4/4.
+    """
+    if time is None:
+        return current_num, current_den
+    num, den = current_num, current_den
+    try:
+        if time.find("beats") is not None and time.find("beat-type") is not None:
+            num = int(time.findtext("beats"))
+            den = int(time.findtext("beat-type"))
+    except Exception:
+        pass
+    symbol = (time.get("symbol") or "").strip().lower().replace("_", "-")
+    if symbol in {"cut", "cut-time", "alla-breve", "allabreve"} or ("cut" in symbol and "time" in symbol):
+        if (num, den) != (2, 2) and warnings is not None:
+            warnings.append(f"Cut-time symbol detected; normalized exported {num}/{den} to 2/2 for tone-metric tactus.")
+        return 2, 2
+    if symbol in {"common", "common-time"}:
+        if (num, den) != (4, 4) and warnings is not None:
+            warnings.append(f"Common-time symbol detected; normalized exported {num}/{den} to 4/4.")
+        return 4, 4
+    return num, den
+
+
+def _parse_meter_override(value) -> tuple[int, int] | None:
+    if value is None:
+        return None
+    if isinstance(value, tuple) and len(value) == 2:
+        try:
+            n, d = int(value[0]), int(value[1])
+            return (n, d) if n > 0 and d > 0 else None
+        except Exception:
+            return None
+    text = str(value).strip().lower()
+    if not text or text == "auto":
+        return None
+    if "/" not in text:
+        return None
+    try:
+        n, d = [int(x.strip()) for x in text.split("/", 1)]
+    except Exception:
+        return None
+    return (n, d) if n > 0 and d > 0 else None
+
+def _pitch_string(note) -> str:
+    pitch = note.find("pitch")
+    if pitch is None:
+        unpitched = note.find("unpitched")
+        return "unpitched" if unpitched is not None else "unknown"
+    step = (pitch.findtext("step") or "?").strip()
+    alter = int(pitch.findtext("alter") or "0")
+    octave = (pitch.findtext("octave") or "?").strip()
+    accidental = {2:"##",1:"#",0:"",-1:"b",-2:"bb"}.get(alter, f"({alter:+d})")
+    return f"{step}{accidental}{octave}"
+
+
+def _has_tie(note, tie_type: str) -> bool:
+    return any((t.get("type") or "").lower() == tie_type for t in note.findall("tie")) or any(
+        (t.get("type") or "").lower() == tie_type for t in note.findall("notations/tied")
+    )
+
+
+def _layout_defaults(root) -> dict:
+    defaults = root.find("defaults")
+    if defaults is None:
+        return {
+            "page_width": 1190.0, "page_height": 1684.0,
+            "left_margin": 80.0, "right_margin": 80.0,
+            "top_margin": 80.0, "bottom_margin": 80.0,
+            "system_left": 0.0, "top_system_distance": 100.0,
+            "system_distance": 220.0, "staff_distance": 80.0,
+        }
+    pl = defaults.find("page-layout")
+    page_width = _text_float(pl, "page-width", 1190.0) if pl is not None else 1190.0
+    page_height = _text_float(pl, "page-height", 1684.0) if pl is not None else 1684.0
+    left = right = top = bottom = 80.0
+    if pl is not None:
+        margins = pl.find("page-margins")
+        if margins is not None:
+            left = _text_float(margins, "left-margin", left)
+            right = _text_float(margins, "right-margin", right)
+            top = _text_float(margins, "top-margin", top)
+            bottom = _text_float(margins, "bottom-margin", bottom)
+    sl = defaults.find("system-layout")
+    system_left = 0.0
+    top_system_distance = 100.0
+    system_distance = 220.0
+    if sl is not None:
+        sm = sl.find("system-margins")
+        if sm is not None:
+            system_left = _text_float(sm, "left-margin", 0.0)
+        top_system_distance = _text_float(sl, "top-system-distance", top_system_distance)
+        system_distance = _text_float(sl, "system-distance", system_distance)
+    staff_distance = 80.0
+    staff_layouts = defaults.findall("staff-layout")
+    if staff_layouts:
+        vals = [_text_float(x, "staff-distance", staff_distance) for x in staff_layouts]
+        vals = [x for x i

@@ -1,0 +1,111 @@
+umn] = []
+    meta = {
+        "available": False,
+        "warnings": [],
+        "measures": [],
+        "page_dimensions": {},
+        "architecture": "metric-grid-first/notation-semantics/global-attack-map",
+    }
+    if not path.exists():
+        meta["warnings"].append("Saved OMR project not found.")
+        return out, meta
+
+    global_measure = 0
+    page_index = 0
+    augmentation_relation_count = 0
+    with ZipFile(path, "r") as zf:
+        members = sorted(
+            [n for n in zf.namelist() if re.search(r"sheet#\d+/sheet#\d+\.xml$", n, re.I)],
+            key=_sheet_no,
+        )
+        for member in members:
+            root = etree.fromstring(zf.read(member))
+            image = _page_image(zf, member)
+            arr = np.asarray(image) if image is not None else None
+            if image is not None:
+                meta["page_dimensions"][str(page_index)] = [int(image.width), int(image.height)]
+            interline = 19.0
+            il = next((e for e in root.iter() if _local(e.tag) == "interline"), None)
+            if il is not None:
+                interline = float(il.get("main") or il.get("min") or interline)
+
+            systems = [e for e in root.iter() if _local(e.tag) == "system"]
+            for system_index, system in enumerate(systems):
+                objs = {str(e.get("id")): e for e in system.iter() if e.get("id") is not None}
+                rels = []
+                for rel in system.iter():
+                    if _local(rel.tag) != "relation":
+                        continue
+                    typ = next((_local(c.tag) for c in rel if isinstance(c.tag, str)), "")
+                    rels.append((str(rel.get("source") or ""), str(rel.get("target") or ""), typ, rel))
+
+                chord_members = defaultdict(list)
+                chord_stem = {}
+                stem_beams = defaultdict(set)
+                stem_flags = defaultdict(list)
+                dotted_heads = Counter()
+                tie_right_heads = set()
+                for source, target, typ, rel in rels:
+                    if typ == "containment" and source in objs and target in objs:
+                        if _local(objs[source].tag) in {"head-chord", "rest-chord"}:
+                            chord_members[source].append(target)
+                    elif typ == "chord-stem":
+                        chord_stem[source] = target
+                    elif typ == "beam-stem":
+                        stem_beams[target].add(source)
+                    elif typ == "flag-stem":
+                        stem_flags[target].append(source)
+                    elif typ == "augmentation" and source in objs and target in objs:
+                        augmentation_relation_count += 1
+                        if _local(objs[source].tag) == "head":
+                            dotted_heads[source] += 1
+                        elif _local(objs[target].tag) == "head":
+                            dotted_heads[target] += 1
+                    elif typ == "slur-head" and source in objs and target in objs:
+                        slur = objs[source]
+                        if _local(slur.tag) == "slur" and (slur.get("tie") or "").lower() == "true":
+                            spec = next((c for c in rel if _local(c.tag) == "slur-head"), None)
+                            if spec is not None and (spec.get("side") or "").upper() == "RIGHT":
+                                tie_right_heads.add(target)
+
+                stacks = [e for e in system if _local(e.tag) == "stack"]
+                parts = [e for e in system if _local(e.tag) == "part"]
+                part_measures = [[m for m in p if _local(m.tag) == "measure"] for p in parts]
+
+                for stack_index, stack in enumerate(stacks):
+                    if global_measure >= len(measures):
+                        meta["warnings"].append("OMR contains more measure stacks than the canonical MusicXML framework.")
+                        break
+                    measure = measures[global_measure]
+                    full = measure.full_duration
+                    left = float(stack.get("left") or 0.0)
+                    right = float(stack.get("right") or left + 1.0)
+                    slot_time = {}
+                    for sl in stack:
+                        if _local(sl.tag) == "slot":
+                            key = str(sl.get("id") or "")
+                            t = _frac(sl.get("time-offset"))
+                            if key and t is not None:
+                                slot_time[key] = t * 4
+
+                    measure_nodes = [ms[stack_index] for ms in part_measures if stack_index < len(ms)]
+                    head_chords: list[str] = []
+                    rest_chords: list[str] = []
+                    begin_times = defaultdict(list)
+                    continue_times = defaultdict(list)
+                    for meas in measure_nodes:
+                        for tag, bucket in (("head-chords", head_chords), ("rest-chords", rest_chords)):
+                            el = next((c for c in meas if _local(c.tag) == tag), None)
+                            if el is not None and el.text:
+                                bucket.extend(el.text.split())
+                        for voice in [c for c in meas if _local(c.tag) == "voice"]:
+                            slots_el = next((c for c in voice if _local(c.tag) == "slots"), None)
+                            if slots_el is None:
+                                continue
+                            for entry in [c for c in slots_el if _local(c.tag) == "entry"]:
+                                key = next((c for c in entry if _local(c.tag) == "key"), None)
+                                val = next((c for c in entry if _local(c.tag) == "value"), None)
+                                if key is None or val is None or not key.text:
+                                    continue
+                                cid = val.get("chord")
+                                t = slot_time.get(key.text.str

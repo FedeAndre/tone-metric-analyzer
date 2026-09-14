@@ -1,0 +1,124 @@
+dur
+                        max_cursor = max(max_cursor, cursor)
+            elif tag == "backup":
+                cursor -= Fraction(_text_int(child, "duration", 0), divisions)
+            elif tag == "forward":
+                cursor += Fraction(_text_int(child, "duration", 0), divisions)
+                max_cursor = max(max_cursor, cursor)
+        implicit = (measure.get("implicit") or "").lower() == "yes"
+        short_first = mi == 0 and max_cursor < full
+        pickup_shift = full - max_cursor if (implicit or short_first) and max_cursor < full else Fraction(0)
+        measure_templates.append({
+            "index": mi,
+            "number": measure.get("number") or str(mi + 1),
+            "start": cumulative,
+            "full": full,
+            "actual": max_cursor,
+            "shift": pickup_shift,
+            "num": num,
+            "den": den,
+            "implicit": implicit,
+        })
+        cumulative += full
+
+    measures = [MeasureInfo(
+        index=m["index"], number=m["number"], start=m["start"], full_duration=m["full"],
+        actual_duration=m["actual"], pickup_shift=m["shift"], numerator=m["num"], denominator=m["den"], implicit=m["implicit"]
+    ) for m in measure_templates]
+
+    raw_attacks: List[NoteAttack] = []
+    open_ties: Dict[tuple, NoteAttack] = {}
+    layout_note_count = 0
+
+    for part in parts:
+        part_id = part.get("id") or "P?"
+        divisions = 1
+        p_measures = part.findall("measure")
+        if len(p_measures) != len(measure_templates):
+            warnings.append(f"Part {part_id} has {len(p_measures)} measures; canonical part has {len(measure_templates)}. Alignment uses measure index.")
+        for mi, measure in enumerate(p_measures):
+            if mi >= len(measure_templates):
+                break
+            tmpl = measure_templates[mi]
+            layout = measure_layouts[mi] if mi < len(measure_layouts) else None
+            attrs = measure.find("attributes")
+            if attrs is not None and attrs.find("divisions") is not None:
+                divisions = int(attrs.findtext("divisions"))
+            cursor = Fraction(0)
+            last_nonchord_onset = Fraction(0)
+            for child in measure:
+                tag = child.tag.split("}")[-1]
+                if tag == "note":
+                    dur_div = _text_int(child, "duration", 0)
+                    dur = Fraction(dur_div, divisions) if divisions else Fraction(0)
+                    is_grace = child.find("grace") is not None
+                    is_tuplet = child.find("time-modification") is not None
+                    is_chord = child.find("chord") is not None
+                    if is_chord:
+                        onset_local = last_nonchord_onset
+                    else:
+                        onset_local = cursor
+                        last_nonchord_onset = onset_local
+                    if not is_chord and not is_grace:
+                        cursor += dur
+
+                    if child.find("rest") is not None or is_grace or is_tuplet:
+                        continue
+
+                    voice = (child.findtext("voice") or "1").strip()
+                    staff = (child.findtext("staff") or "1").strip()
+                    pitch = _pitch_string(child)
+                    tie_start = _has_tie(child, "start")
+                    tie_stop = _has_tie(child, "stop")
+                    key = (part_id, staff, voice, pitch)
+                    global_onset = tmpl["start"] + tmpl["shift"] + onset_local
+
+                    page_index = None
+                    x_norm = None
+                    y_norm = None
+                    if layout is not None:
+                        try:
+                            dx = float(child.get("default-x")) if child.get("default-x") is not None else None
+                            dy = float(child.get("default-y")) if child.get("default-y") is not None else None
+                            if dx is not None:
+                                x_abs = layout["x_start"] + dx
+                                x_norm = max(0.0, min(1.0, x_abs / max(layout["page_width"], 1.0)))
+                            if dy is not None:
+                                staff_no = max(1, int(staff))
+                                staff_top = layout["system_top"] + part_offsets.get(part_id, 0.0) + (staff_no - 1) * layout["staff_distance"]
+                                y_abs = staff_top - dy
+                                y_norm = max(0.0, min(1.0, y_abs / max(layout["page_height"], 1.0)))
+                            page_index = layout["page_index"]
+                            if x_norm is not None and y_norm is not None:
+                                layout_note_count += 1
+                        except Exception:
+                            pass
+
+                    if tie_stop:
+                        prev = open_ties.get(key)
+                        if prev is not None:
+                            prev.duration += dur
+                        else:
+                            warnings.append(f"Unmatched tie-stop at measure {tmpl['number']} for {pitch}; treated as continuation with no new attack.")
+                        if not tie_start:
+                            open_ties.pop(key, None)
+                        continue
+
+                    attack = NoteAttack(
+                        onset=global_onset,
+                        duration=dur,
+                        measure_index=mi,
+                        measure_number=tmpl["number"],
+                        offset_in_measure=tmpl["shift"] + onset_local,
+                        part_id=part_id,
+                        voice=voice,
+                        staff=staff,
+                        pitch=pitch,
+                        tie_start=tie_start,
+                        tie_stop=tie_stop,
+                        page_index=page_index,
+                        x_norm=x_norm,
+                        y_norm=y_norm,
+                    )
+                    raw_attacks.append(attack)
+     
