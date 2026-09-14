@@ -1,0 +1,68 @@
+name: Execute corrected opening pickup registration
+on:
+  push:
+    branches:
+      - pickup-registration-integration-20260914
+permissions:
+  contents: write
+jobs:
+  integrate:
+    if: github.event.head_commit.message == 'Execute validated opening pickup registration fix'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Execute previously verified replacement logic with corrected hash gate
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import textwrap
+          workflow=Path('.github/workflows/integrate-pickup-registration.yml').read_text()
+          marker="      - name: Apply dissertation pickup registration correction\n        run: |\n          python - <<'PY'\n"
+          start=workflow.index(marker)+len(marker)
+          end=workflow.index("\n          PY\n", start)
+          script=textwrap.dedent(workflow[start:end])
+          script=script.replace(
+              "want='1115f2c46d29ce1d2b1e381446d5d0e65b29078d31459f2c5027bd01f6e61a5e'",
+              "want='ab7c5e2089779ca0640a93bf66446dc8d4cc38f35958c4144f872c47dc9dacfc'",
+          )
+          exec(compile(script, '<pickup-integration>', 'exec'))
+          PY
+      - name: Compile and verify pickup behavior
+        run: |
+          python -m pip install -q -r requirements.txt
+          python -m py_compile app.py tone_metric/*.py
+          python - <<'PY'
+          from tone_metric.score_registration import build_layer_anchors_from_canonical_score
+          columns=[{'page_index':0,'system_index':0,'x_abs':300.0,'y_abs':100.0,'onset_quarter':'0','attack':True,'rest':False,'tie_continuation_only':False,'chord_ids':['pickup'],'timing_source':'semantic-begin-anchor','confidence':0.96,'notation_events':[]}]
+          result={'measures':[{'index':0,'number':'1','start_quarter':'0','end_quarter':'4','full_duration_quarter':'4','pickup_shift_quarter':'3'}],'segments':[{'segment_end_quarter':'4','events':[{'event_index':0,'measure_index':0,'measure_number':'1','onset_quarter':'3','offset_in_measure_quarter':'3','duration_quarter':'1','tone_metric_levels':[2],'attack_key':'0:3'}],'structural_points':[{'time_quarter':'0','levels':[1],'height':1},{'time_quarter':'1','levels':[1],'height':1},{'time_quarter':'2','levels':[1,2],'height':2},{'time_quarter':'3','levels':[2],'height':2}]}],'canonical_score_meta':{'available':True,'column_count':1,'attack_column_count':1,'measures':[{'global_measure_index':0,'measure_number':'1','page_index':0,'system_index':0,'stack_index_in_system':0,'stack_left':80.0,'stack_right':340.0,'full_duration_quarter':'4','columns':columns}],'warnings':[]}}
+          attacks, structural, stats, warnings=build_layer_anchors_from_canonical_score(result,{0:(500,300)})
+          assert len(attacks[0])==1 and attacks[0][0]['recovered_x_abs']==300.0
+          rows=structural[0]
+          assert [r['offset_in_measure_quarter'] for r in rows]==['0','1','2']
+          xs=[r['recovered_x_abs'] for r in rows]
+          assert xs==sorted(xs) and all(80.0 < x < 300.0 for x in xs)
+          assert all(r['parenthetical'] is True for r in rows)
+          assert all(r['structural_reason']=='opening-pickup-pre-attack-metric-position' for r in rows)
+          assert stats['structural_parenthetical_labels_missing']==0 and not warnings
+          print('Opening pickup registration: PASS')
+          PY
+      - name: Checksum and override audit
+        run: |
+          sha256sum -c v0152_sha256.txt
+          test "$(grep -R '^def build_layer_anchors_from_canonical_score' -n tone_metric | wc -l)" -eq 1
+          test "$(grep -R '^def _pre_pickup_structural_layout_position' -n tone_metric | wc -l)" -eq 1
+          test ! -e tone_metric/omr_exact.py
+          test ! -e validate_release.py
+          changed="$(git diff --name-only | grep -v '^.github/workflows/' | sort)"
+          expected="$(printf '%s\n' tone_metric/score_registration.py v0152_sha256.txt | sort)"
+          test "$changed" = "$expected"
+      - name: Commit clean integrated runtime
+        run: |
+          rm -f .github/workflows/integrate-pickup-registration.yml .github/workflows/retry-pickup-registration.yml .github/workflows/execute-corrected-pickup-registration.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m "Preserve dissertation opening-pickup parenthetical articulations"
+          git push origin HEAD:pickup-registration-integration-20260914
