@@ -39,7 +39,7 @@ def pdf_to_musicxml(pdf_path: str | Path, output_dir: str | Path) -> tuple[Path,
     cmd = find_audiveris()
     if not cmd:
         raise RuntimeError("Audiveris was not found. PDF upload requires Audiveris. Set AUDIVERIS_CMD or add it to PATH.")
-    proc = _run(cmd, ["-batch", "-transcribe", "-save", "-export", "-output", str(output_dir), "--", str(pdf_path)])
+    proc = _run(cmd, ["-batch", "-transcribe", "-save", "-export", "-annotate", "-output", str(output_dir), "--", str(pdf_path)])
     try:
         (output_dir / "audiveris-transcribe.log").write_text(proc.stdout or "", encoding="utf-8", errors="replace")
     except Exception:
@@ -54,24 +54,15 @@ def pdf_to_musicxml(pdf_path: str | Path, output_dir: str | Path) -> tuple[Path,
 
 
 def pdf_to_annotations(pdf_path: str | Path, output_dir: str | Path) -> tuple[Path | None, str]:
-    """Ask Audiveris for its physical symbol-annotation archive.
+    """Return annotations produced by the primary Audiveris pass.
 
-    This is deliberately optional: if annotation export fails, the ordinary MusicXML analysis
-    still succeeds and the UI falls back to MusicXML layout coordinates.
+    Audiveris can export MusicXML, save the .omr project, and annotate symbols in
+    the same transcription. Re-running transcription here would duplicate the
+    expensive OMR pass and can exceed hosted HTTP request limits.
     """
-    pdf_path = Path(pdf_path); output_dir = Path(output_dir); output_dir.mkdir(parents=True, exist_ok=True)
-    cmd = find_audiveris()
-    if not cmd:
-        return None, "Audiveris not found for annotation pass."
-    proc = _run(cmd, ["-batch", "-transcribe", "-annotate", "-output", str(output_dir), "--", str(pdf_path)])
-    try:
-        (output_dir / "audiveris-annotate.log").write_text(proc.stdout or "", encoding="utf-8", errors="replace")
-    except Exception:
-        pass
-    archive = _find_annotations(output_dir)
-    log = (proc.stdout or "")[-5000:]
-    if proc.returncode != 0:
-        return None, f"Audiveris annotation pass failed with exit code {proc.returncode}. {log}"
-    if archive is None:
-        return None, f"Audiveris annotation pass completed but no *annotations*.zip file was found. {log}"
-    return archive, log
+    output_dir = Path(output_dir)
+    primary_dir = output_dir.parent / "omr"
+    archive = _find_annotations(primary_dir)
+    if archive is not None:
+        return archive, ""
+    return None, "Audiveris primary pass completed without an annotation archive; physical overlay is unavailable."
