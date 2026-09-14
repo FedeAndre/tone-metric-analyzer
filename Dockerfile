@@ -1,6 +1,8 @@
 FROM ubuntu:24.04
 ARG DEBIAN_FRONTEND=noninteractive
 ARG AUDIVERIS_VERSION=5.11.0
+ARG AUDIVERIS_ASSET_ID=473797293
+ARG AUDIVERIS_SHA256=f20113aaa33b3149ec8d6a09b2a7963360e65fafd92d69389987a85bbc3ec7a3
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     AUDIVERIS_CMD=/opt/audiveris/bin/Audiveris \
@@ -11,9 +13,14 @@ RUN apt-get update \
        fontconfig fonts-dejavu-core fonts-liberation \
        tesseract-ocr tesseract-ocr-eng \
        libasound2t64 libgtk-3-0t64 libx11-6 libxext6 libxi6 libxrender1 libxtst6 xdg-utils \
-    && curl -fL --retry 4 --retry-delay 3 \
-       -o /tmp/audiveris.deb \
-       "https://github.com/Audiveris/audiveris/releases/download/${AUDIVERIS_VERSION}/Audiveris-${AUDIVERIS_VERSION}-ubuntu24.04-x86_64.deb" \
+    && (curl -fL --retry 8 --retry-delay 5 --retry-all-errors \
+          -o /tmp/audiveris.deb \
+          "https://github.com/Audiveris/audiveris/releases/download/${AUDIVERIS_VERSION}/Audiveris-${AUDIVERIS_VERSION}-ubuntu24.04-x86_64.deb" \
+        || curl -fL --retry 8 --retry-delay 5 --retry-all-errors \
+          -H 'Accept: application/octet-stream' \
+          -o /tmp/audiveris.deb \
+          "https://api.github.com/repos/Audiveris/audiveris/releases/assets/${AUDIVERIS_ASSET_ID}") \
+    && echo "${AUDIVERIS_SHA256}  /tmp/audiveris.deb" | sha256sum -c - \
     && dpkg-deb -x /tmp/audiveris.deb / \
     && test -x /opt/audiveris/bin/Audiveris \
     && mkdir -p /root/.config/AudiverisLtd/audiveris/tessdata \
