@@ -1,0 +1,190 @@
+name: Integrate canonical score-time ternary recovery
+on:
+  push:
+    branches:
+      - probe-berg-direct-20260914
+permissions:
+  contents: write
+jobs:
+  integrate:
+    if: ${{ !contains(github.event.head_commit.message, '[canonical-ternary-integrated]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Integrate canonical score-time ternary recovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+
+          def replace_once(path, old, new):
+              p=Path(path)
+              s=p.read_text()
+              n=s.count(old)
+              if n != 1:
+                  raise SystemExit(f'{path}: expected exactly one patch target, found {n}')
+              p.write_text(s.replace(old,new,1))
+
+          replace_once(
+              'tone_metric/models.py',
+              '    sources: List[NoteAttack] = field(default_factory=list)\n\n    def to_dict(self):',
+              '    sources: List[NoteAttack] = field(default_factory=list)\n    # True only for attacks recovered from the saved Audiveris score-time graph.\n    # This provenance lets the recursive engine distinguish exact canonical timing\n    # from generic symbolic spacing when explicit MusicXML tuplet metadata is absent.\n    canonical_recovered: bool = False\n\n    def to_dict(self):'
+          )
+
+          replace_once(
+              'tone_metric/canonical_score.py',
+              '            sources=list(symbolic.sources) if symbolic is not None else [],\n        ))',
+              '            sources=list(symbolic.sources) if symbolic is not None else [],\n            canonical_recovered=True,\n        ))'
+          )
+
+          helper = '''\n\ndef _canonical_score_time_ternary_factor(\n    a: Fraction,\n    b: Fraction,\n    hits: List[Hit],\n) -> int | None:\n    \"\"\"Recover a forced local ternary subdivision from exact canonical timing.\n\n    PDF analysis can recover genuine attack positions from Audiveris' saved score-time\n    graph even when its MusicXML export omits the corresponding note or its\n    ``time-modification`` metadata.  In a binary child span, a reduced relative\n    denominator containing a factor of 3 cannot ever be reached by repeated binary\n    subdivision.  Selecting ternary at that span is therefore not a free grouping\n    guess: within the accepted binary/ternary model it is the required local arity\n    for the recovered attack time.\n\n    This fallback is deliberately restricted to canonical OMR attacks and to a\n    binary default span.  It does not infer duplets in compound meter, where a\n    midpoint is structurally ambiguous without explicit notation.\n    \"\"\"\n    span = b - a\n    if span <= 0:\n        return None\n    for h in hits:\n        if not getattr(h, 'canonical_recovered', False) or not (a < h.onset < b):\n            continue\n        rel = (h.onset - a) / span\n        den = rel.denominator\n        while den % 2 == 0:\n            den //= 2\n        if den % 3 == 0:\n            return 3\n    return None\n'''
+          replace_once(
+              'tone_metric/engine.py',
+              '\ndef _contains_interior_hit(hits: List[Fraction], a: Fraction, b: Fraction) -> bool:\n    return any(a < t < b for t in hits)\n\n\ndef _refine_span(',
+              '\ndef _contains_interior_hit(hits: List[Fraction], a: Fraction, b: Fraction) -> bool:\n    return any(a < t < b for t in hits)\n' + helper + '\n\ndef _refine_span('
+          )
+
+          replace_once(
+              'tone_metric/engine.py',
+              '    explicit_factor = _explicit_tuplet_factor(a, b, hits, warnings)\n    factor = explicit_factor or default_factor\n',
+              "    explicit_factor = _explicit_tuplet_factor(a, b, hits, warnings)\n    canonical_ternary = None\n    if explicit_factor is None and default_factor == 2:\n        canonical_ternary = _canonical_score_time_ternary_factor(a, b, hits)\n        if canonical_ternary is not None:\n            _warn_once(\n                warnings,\n                'Local ternary subdivision recovered from exact canonical score-time where explicit MusicXML tuplet metadata was unavailable.'\n            )\n    factor = explicit_factor or canonical_ternary or default_factor\n"
+          )
+
+          replace_once(
+              'tone_metric/engine.py',
+              "            'explicit_tuplet_rule': 'prime actual-notes arity replaces the default only in the recursively matched parent span',\n",
+              "            'explicit_tuplet_rule': 'prime actual-notes arity replaces the default only in the recursively matched parent span',\n            'canonical_score_time_ternary_rule': 'canonical OMR positions that cannot be reached dyadically force local ternary subdivision only in binary spans',\n"
+          )
+
+          manifest=Path('v0152_sha256.txt')
+          lines=manifest.read_text().splitlines()
+          changed={'tone_metric/models.py','tone_metric/canonical_score.py','tone_metric/engine.py'}
+          out=[]
+          seen=set()
+          for line in lines:
+              parts=line.split()
+              if len(parts) >= 2 and parts[-1] in changed:
+                  path=parts[-1]
+                  digest=hashlib.sha256(Path(path).read_bytes()).hexdigest()
+                  out.append(f'{digest}  {path}')
+                  seen.add(path)
+              else:
+                  out.append(line)
+          if seen != changed:
+              raise SystemExit(f'manifest paths missing: {changed-seen}')
+          manifest.write_text('\n'.join(out)+'\n')
+          PY
+          python3 -m py_compile app.py tone_metric/*.py
+          sha256sum -c v0152_sha256.txt
+          test ! -e validate_release.py
+          test ! -e tone_metric/omr_exact.py
+          test ! -e tone_metric/omr_visual_rhythm.py
+          test ! -e tone_metric/layer_registration.py
+          test ! -e tone_metric/render.py
+          test "$(grep -R '^def _canonical_score_time_ternary_factor' -n tone_metric | wc -l)" -eq 1
+          test "$(grep -R '^def pdf_to_musicxml' -n tone_metric | wc -l)" -eq 1
+      - name: Download exact regression scores
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 4 --retry-delay 2 -o bwv661.pdf 'https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf'
+          test "$(stat -c%s bwv661.pdf)" = "101270"
+          echo 'd50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661.pdf' | sha256sum -c -
+          curl -A 'Mozilla/5.0' -fL --retry 4 --retry-delay 2 -o berg.pdf 'https://s9.imslp.org/files/imglnks/usimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
+          test "$(stat -c%s berg.pdf)" = "579006"
+          echo '815d95242d6e2076866594174617361c87373bce7e1642b66812240a3aef400c  berg.pdf' | sha256sum -c -
+      - name: Build candidate image
+        run: docker build -t tone-metric-canonical-ternary .
+      - name: Focused binary ternary and tuplet regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm tone-metric-canonical-ternary python3 - <<'PY'
+          from fractions import Fraction
+          from tone_metric.engine import analyze
+          from tone_metric.models import Hit, MeasureInfo, NoteAttack
+
+          m=MeasureInfo(index=0,number='1',start=Fraction(0),full_duration=Fraction(4),actual_duration=Fraction(4),pickup_shift=Fraction(0),numerator=4,denominator=4,implicit=False)
+          def h(t, canonical=False, src=None):
+              t=Fraction(t)
+              return Hit(onset=t,duration=Fraction(1,3),measure_index=0,measure_number='1',offset_in_measure=t,sources=[] if src is None else [src],canonical_recovered=canonical)
+          can=[h(0,True),h(Fraction(1,3),True),h(Fraction(2,3),True),h(1,True),h(2,True),h(3,True)]
+          r=analyze(can,[m]); ev=[e for s in r['segments'] for e in s['events']]
+          assert all(e['tone_metric_levels'] for e in ev), [(e['onset_quarter'],e['tone_metric_levels']) for e in ev]
+          assert any('canonical score-time' in w for w in r['segments'][0]['warnings'])
+
+          generic=[h(0),h(Fraction(1,3)),h(1),h(2),h(3)]
+          g=analyze(generic,[m]); gev=[e for s in g['segments'] for e in s['events']]
+          assert any(not e['tone_metric_levels'] for e in gev), 'generic symbolic spacing must not silently infer a triplet'
+
+          def src(t):
+              t=Fraction(t)
+              return NoteAttack(onset=t,duration=Fraction(1,3),measure_index=0,measure_number='1',offset_in_measure=t,part_id='P1',voice='1',staff='1',pitch='C4',tuplet_actual=3,tuplet_normal=2)
+          explicit=[h(0,False,src(0)),h(Fraction(1,3),False,src(Fraction(1,3))),h(Fraction(2,3),False,src(Fraction(2,3))),h(1),h(2),h(3)]
+          x=analyze(explicit,[m]); xev=[e for s in x['segments'] for e in s['events']]
+          assert all(e['tone_metric_levels'] for e in xev)
+          print('FOCUSED CANONICAL TERNARY REGRESSION: PASS')
+          PY
+      - name: Exact Berg and BWV API regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run -d --name tma-candidate -p 18080:8080 tone-metric-canonical-ternary
+          trap 'docker logs tma-candidate || true; docker rm -f tma-candidate >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:18080/api/status >/dev/null; then break; fi
+            sleep 1
+          done
+          timeout 900 curl --fail-with-body --silent --show-error -F file=@berg.pdf -F meter_override=auto http://127.0.0.1:18080/api/analyze -o berg.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('berg.json'))
+          events=[e for s in d.get('segments',[]) for e in s.get('events',[])]
+          missing=[e for e in events if not e.get('tone_metric_levels')]
+          po=d.get('physical_overlay') or {}
+          assert d.get('analysis_hit_source') == 'canonical-score-time'
+          assert d.get('symbolic_hit_count') == 859, d.get('symbolic_hit_count')
+          assert d.get('canonical_hit_count') == 1329, d.get('canonical_hit_count')
+          assert len(events) == 1329, len(events)
+          assert len(missing) == 0, [(e.get('measure_number'),e.get('offset_in_measure_quarter')) for e in missing[:20]]
+          assert po.get('available') is True
+          assert d.get('omr_saved') is True
+          assert any('canonical score-time' in w for s in d.get('segments',[]) for w in s.get('warnings',[]))
+          print('EXACT BERG: PASS', {'events':len(events),'max_level':d.get('max_level')})
+          PY
+          rm -rf /tmp/bwv-response.json
+          timeout 900 curl --fail-with-body --silent --show-error -F file=@bwv661.pdf -F meter_override=auto http://127.0.0.1:18080/api/analyze -o /tmp/bwv-response.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/bwv-response.json'))
+          events=[e for s in d.get('segments',[]) for e in s.get('events',[])]
+          po=d.get('physical_overlay') or {}; m=po.get('matching') or {}
+          assert d.get('analysis_hit_source') == 'canonical-score-time'
+          assert d.get('symbolic_hit_count') == 549
+          assert d.get('canonical_hit_count') == 733
+          assert len(events) == 733
+          assert all(e.get('tone_metric_levels') for e in events)
+          assert d.get('levels_enabled') == list(range(1,10)), d.get('levels_enabled')
+          assert d.get('max_level') == 9
+          assert po.get('available') is True
+          assert m.get('wave_profile_points_mapped') == 735, m.get('wave_profile_points_mapped')
+          assert m.get('pivot_profile_mapped') == 27, m.get('pivot_profile_mapped')
+          assert m.get('tree_event_nodes_mapped') == 733, m.get('tree_event_nodes_mapped')
+          assert m.get('tree_branches_mapped') == 732, m.get('tree_branches_mapped')
+          print('EXACT BWV 661: PASS')
+          PY
+      - name: Commit validated integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tone_metric/engine.py tone_metric/models.py tone_metric/canonical_score.py v0152_sha256.txt
+          git diff --cached --check
+          git commit -m 'Integrate canonical score-time ternary recovery [canonical-ternary-integrated]'
+          git push origin HEAD:probe-berg-direct-20260914
