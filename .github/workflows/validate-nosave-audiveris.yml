@@ -55,11 +55,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf composite-out && mkdir composite-out
+          rm -rf composite-out && mkdir -p composite-out/omr composite-out/annotations
           timeout 900 docker run --rm -i -v "$PWD:/work" tone-metric-nosave python3 - <<'PY'
           from pathlib import Path
           from tone_metric.omr import pdf_to_musicxml, pdf_to_annotations
-          symbolic, omr = pdf_to_musicxml('/work/bwv661-12pages.pdf','/work/composite-out')
+          symbolic, omr = pdf_to_musicxml('/work/bwv661-12pages.pdf','/work/composite-out/omr')
           annotation, warning = pdf_to_annotations('/work/bwv661-12pages.pdf','/work/composite-out/annotations')
           print('symbolic',symbolic)
           print('omr',omr)
