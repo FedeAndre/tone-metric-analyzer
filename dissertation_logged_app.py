@@ -6,7 +6,7 @@ from fastapi import HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, Response
 
-from dissertation_app import APP_VERSION, app
+from dissertation_overlay_app import APP_VERSION, app
 
 logger = logging.getLogger("tone_metric.dissertation")
 
