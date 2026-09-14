@@ -7,8 +7,6 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     AUDIVERIS_CMD=/opt/audiveris/bin/Audiveris
 
-# Headless Audiveris still requires a real fontconfig database and at least one
-# installed font. English tessdata is copied into Audiveris' own OCR directory.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ca-certificates curl git python3 python3-pip python3-venv \
@@ -38,9 +36,10 @@ RUN git clone https://github.com/FedeAndre/tone-metric-analyzer.git /app \
 
 WORKDIR /app
 RUN python3 -m pip install --no-cache-dir --break-system-packages -r requirements.txt
-RUN python3 validate_dissertation_build.py
-RUN test -f /app/dissertation_logged_app.py
-RUN python3 -c "import dissertation_logged_app; print(dissertation_logged_app.APP_VERSION)"
+
+# Clean-room Level-1 validation only. No previous analyzer is imported at build time.
+RUN python3 validate_level1_standalone.py
+RUN python3 -c "import level1_standalone_app; print(level1_standalone_app.APP_VERSION)"
 
 EXPOSE 8080
-CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "dissertation_logged_app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "level1_standalone_app:app", "--host", "0.0.0.0", "--port", "8080"]
