@@ -41,6 +41,7 @@ jobs:
           set -euo pipefail
           mkdir -p profile-berg
           docker run --rm \
+            -e PYTHONPATH=/app \
             -v "$PWD/berg.pdf:/input.pdf:ro" \
             -v "$PWD/.github/scripts/profile_omr_pipeline.py:/profile.py:ro" \
             -v "$PWD/profile-berg:/profile-out" \
@@ -52,6 +53,7 @@ jobs:
           set -euo pipefail
           mkdir -p profile-bwv
           docker run --rm \
+            -e PYTHONPATH=/app \
             -v "$PWD/bwv661.pdf:/input.pdf:ro" \
             -v "$PWD/.github/scripts/profile_omr_pipeline.py:/profile.py:ro" \
             -v "$PWD/profile-bwv:/profile-out" \
