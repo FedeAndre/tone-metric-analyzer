@@ -57,6 +57,7 @@ def _analysis_measures(analysis_result: dict) -> list[dict]:
             "end": end,
             "full": full,
             "shift": shift,
+            "opening_anacrusis": bool(row.get("opening_anacrusis", False)),
         })
     return out
 
@@ -86,7 +87,12 @@ def _structural_targets(analysis_result: dict) -> list[dict]:
             levels = sorted({int(x) for x in point.get("levels", []) if int(x) > 0})
             if not levels:
                 continue
+            pre_entry = bool(point.get("opening_anacrusis_pre_entry", False))
             measure = next((m for m in measures if m["start"] <= t < m["end"]), None)
+            if measure is None and pre_entry and measures:
+                first = measures[0]
+                if first.get("opening_anacrusis") and t < first["start"]:
+                    measure = first
             if measure is None:
                 continue
             offset = t - measure["start"]
@@ -100,6 +106,7 @@ def _structural_targets(analysis_result: dict) -> list[dict]:
                 "levels": levels,
                 "measure": measure,
                 "offset": offset,
+                "opening_anacrusis_pre_entry": pre_entry,
             })
     return rows
 
@@ -257,6 +264,32 @@ def _pre_pickup_structural_layout_position(
     return None, "pre-pickup-structural-time-unavailable", 0.0
 
 
+def _opening_anacrusis_pre_entry_layout_position(measure_meta: dict) -> tuple[float | None, str, float]:
+    """Place the engine-generated silent Level-1 articulation before the first attack.
+
+    The score-time point is already fixed by the Levels engine.  This function only
+    maps it into the visible opening space between Audiveris' measure boundary and
+    the first canonical column.  It cannot create or move a sonic event.
+    """
+    left = float(measure_meta.get("stack_left", 0.0) or 0.0)
+    right = float(measure_meta.get("stack_right", left + 1.0) or (left + 1.0))
+    xs = []
+    for col in measure_meta.get("columns", []):
+        try:
+            xs.append(float(col.get("x_abs")))
+        except Exception:
+            pass
+    if xs:
+        first_x = min(xs)
+        if first_x > left + 2.0:
+            # Midway through the explicit pre-attack opening space keeps the label
+            # clear of both the meter signature and the first sounding notehead.
+            return left + 0.5 * (first_x - left), "opening-anacrusis-pre-entry-layout", 0.90
+    if right > left:
+        return left + 1.0, "opening-anacrusis-measure-layout-fallback", 0.62
+    return None, "opening-anacrusis-layout-unavailable", 0.0
+
+
 def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensions: dict[int, tuple[float, float]]):
     """Build exact attack anchors plus dissertation-style parenthetical anchors."""
     meta = analysis_result.get("canonical_score_meta") or {}
@@ -361,7 +394,13 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
             and m["shift"] > 0
             and Fraction(0) <= offset < m["shift"]
         )
-        if cm is None or ((local_time < 0 and not is_opening_pre_pickup) or local_time >= m["full"]):
+        is_opening_pre_entry = bool(
+            mi == 0
+            and m.get("opening_anacrusis")
+            and target.get("opening_anacrusis_pre_entry")
+            and offset < 0
+        )
+        if cm is None or ((local_time < 0 and not (is_opening_pre_pickup or is_opening_pre_entry)) or local_time >= m["full"]):
             for level in target["levels"]:
                 structural_per_level[level]["missing"] += 1
                 structural_missing[level].append({
@@ -386,7 +425,10 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
                 })
             continue
 
-        if is_opening_pre_pickup:
+        if is_opening_pre_entry:
+            x_abs, source, confidence = _opening_anacrusis_pre_entry_layout_position(cm)
+            exact_col = None
+        elif is_opening_pre_pickup:
             x_abs, source, confidence = _pre_pickup_structural_layout_position(
                 cm, offset, m["shift"]
             )
@@ -405,9 +447,13 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
             continue
 
         reason = (
-            "opening-pickup-pre-attack-metric-position"
-            if is_opening_pre_pickup
-            else _structural_reason(cm, local_time, exact_col)
+            "opening-anacrusis-pre-entry-metric-position"
+            if is_opening_pre_entry
+            else (
+                "opening-pickup-pre-attack-metric-position"
+                if is_opening_pre_pickup
+                else _structural_reason(cm, local_time, exact_col)
+            )
         )
         pw, ph = float(dims[0]), float(dims[1])
         y_abs = float(exact_col.get("y_abs", 0.0)) if exact_col is not None else 0.0
