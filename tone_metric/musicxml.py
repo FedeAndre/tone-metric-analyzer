@@ -319,6 +319,26 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
         implicit = (measure.get("implicit") or "").lower() == "yes"
         short_first = mi == 0 and max_cursor < full
         pickup_shift = full - max_cursor if (implicit or short_first) and max_cursor < full else Fraction(0)
+
+        # A metrically full opening can still carry an explicit sectional
+        # anacrusis cue.  Preserve only the concrete notation case of a first
+        # measure closed by a heavy-light sectional double barline without a
+        # repeat sign.  This supplies score metadata for one pre-entry Level-1
+        # articulation; no score title, filename, pitch, or hard-coded measure
+        # identity participates in the rule.
+        right_bar_style = ""
+        right_bar_has_repeat = False
+        for barline in measure.findall("barline"):
+            if (barline.get("location") or "right").strip().lower() != "right":
+                continue
+            right_bar_style = (barline.findtext("bar-style") or "").strip().lower()
+            right_bar_has_repeat = barline.find("repeat") is not None
+        opening_anacrusis = bool(
+            mi == 0
+            and pickup_shift == 0
+            and right_bar_style == "heavy-light"
+            and not right_bar_has_repeat
+        )
         measure_templates.append({
             "index": mi,
             "number": measure.get("number") or str(mi + 1),
@@ -329,12 +349,14 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
             "num": num,
             "den": den,
             "implicit": implicit,
+            "opening_anacrusis": opening_anacrusis,
         })
         cumulative += full
 
     measures = [MeasureInfo(
         index=m["index"], number=m["number"], start=m["start"], full_duration=m["full"],
-        actual_duration=m["actual"], pickup_shift=m["shift"], numerator=m["num"], denominator=m["den"], implicit=m["implicit"]
+        actual_duration=m["actual"], pickup_shift=m["shift"], numerator=m["num"], denominator=m["den"],
+        implicit=m["implicit"], opening_anacrusis=bool(m.get("opening_anacrusis", False))
     ) for m in measure_templates]
 
     raw_attacks: List[NoteAttack] = []

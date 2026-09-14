@@ -84,6 +84,10 @@ class MeasureInfo:
     numerator: int
     denominator: int
     implicit: bool = False
+    # True only when the notation itself supplies the conservative opening
+    # anacrusis cue used by the dissertation-aligned structural grid.  This is
+    # score metadata, not a second timing algorithm or a filename exception.
+    opening_anacrusis: bool = False
 
     @property
     def end(self) -> Fraction:
@@ -102,5 +106,6 @@ class MeterSegment:
     beat_count: int
     top_base: int
     compound: bool
+    opening_anacrusis: bool = False
     hits: List[Hit] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)

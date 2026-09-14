@@ -177,6 +177,7 @@ def build_segments(measures: List[MeasureInfo], hits: List[Hit]) -> List[MeterSe
                 start=start, end=end, start_measure_index=start_i, end_measure_index=i - 1,
                 numerator=cur[0], denominator=cur[1], beat_unit=beat_unit,
                 beat_count=beat_count, top_base=top_base, compound=compound,
+                opening_anacrusis=bool(start_i == 0 and getattr(measures[start_i], "opening_anacrusis", False)),
                 hits=seg_hits, warnings=warns,
             ))
             if i < len(measures):
@@ -417,6 +418,15 @@ def analyze_segment(segment: MeterSegment) -> dict:
             parent_level, first_factor, warnings=segment.warnings,
         )
 
+    # Dissertation opening-anacrusis rule.  This is part of the authoritative
+    # structural grid, not a rendering patch: one silent Level-1 articulation
+    # precedes the first scored attack while all existing attack Levels retain
+    # their validated score-time assignments.
+    pre_entry_time = None
+    if segment.opening_anacrusis:
+        pre_entry_time = segment.start - beat
+        structural.setdefault(pre_entry_time, set()).add(1)
+
     event_rows = []
     unmapped = []
     for h in segment.hits:
@@ -450,12 +460,17 @@ def analyze_segment(segment: MeterSegment) -> dict:
             'height': max(v),
             'density': len(v),
             'lowest_level': min(v),
+            'opening_anacrusis_pre_entry': bool(pre_entry_time is not None and t == pre_entry_time),
         }
-        for t, v in sorted(structural.items()) if segment.start <= t <= segment.end
+        for t, v in sorted(structural.items())
+        if segment.start <= t <= segment.end or (pre_entry_time is not None and t == pre_entry_time)
     ]
     level_positions: Dict[str, List[str]] = {}
     for t, levels in sorted(structural.items()):
-        if not (segment.start <= t < segment.end):
+        if not (
+            segment.start <= t < segment.end
+            or (pre_entry_time is not None and t == pre_entry_time)
+        ):
             continue
         for level in sorted(int(x) for x in levels):
             level_positions.setdefault(str(level), []).append(frac_to_str(t))
@@ -477,6 +492,8 @@ def analyze_segment(segment: MeterSegment) -> dict:
         'beat_count': segment.beat_count,
         'top_sequence_base': segment.top_base,
         'compound': segment.compound,
+        'opening_anacrusis': bool(segment.opening_anacrusis),
+        'opening_anacrusis_pre_entry_quarter': frac_to_str(pre_entry_time) if pre_entry_time is not None else None,
         # This records the arities actually used by the current score-analysis
         # route. The full ordered mixed-arity formalism and cumulative scale
         # vector are implemented independently in tone_metric.theory so they can
@@ -518,6 +535,7 @@ def analyze(hits: List[Hit], measures: List[MeasureInfo]) -> dict:
                 'full_duration_quarter': frac_to_str(m.full_duration),
                 'actual_duration_quarter': frac_to_str(m.actual_duration),
                 'pickup_shift_quarter': frac_to_str(m.pickup_shift),
+                'opening_anacrusis': bool(getattr(m, 'opening_anacrusis', False)),
                 'meter': f"{m.numerator}/{m.denominator}",
             }
             for m in measures
