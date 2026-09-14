@@ -1,0 +1,124 @@
+name: Test finalized OMR annotate pipeline
+on:
+  push:
+    branches:
+      - test-audiveris-nosave-20260914
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download exact BWV 661 fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 5 --retry-delay 2 -o bwv661-a4.pdf https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf
+          test "$(stat -c%s bwv661-a4.pdf)" = "101270"
+          echo "d50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661-a4.pdf" | sha256sum -c -
+      - name: Build candidate image and 12-page composite
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker build -t tone-metric-two-stage .
+          docker run --rm -i -v "$PWD:/work" tone-metric-two-stage python3 - <<'PY'
+          import fitz
+          src=fitz.open('/work/bwv661-a4.pdf')
+          out=fitz.open()
+          for _ in range(3):
+              out.insert_pdf(src)
+          out.save('/work/bwv661-12pages.pdf')
+          assert out.page_count == 12
+          print('12-page composite created')
+          PY
+      - name: 12-page finalized OMR then annotate-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf two-stage && mkdir two-stage
+          echo '=== PRIMARY: one transcription, no -save, no -annotate ==='
+          timeout 900 docker run --rm \
+            -v "$PWD/bwv661-12pages.pdf:/work/bwv661-12pages.pdf:ro" \
+            -v "$PWD/two-stage:/work/out" \
+            tone-metric-two-stage \
+            /opt/audiveris/bin/Audiveris -batch -transcribe -export -output /work/out -- /work/bwv661-12pages.pdf \
+            > two-stage/transcribe.log 2>&1
+          tail -n 120 two-stage/transcribe.log
+          OMR="$(find two-stage -type f -name '*.omr' | head -n1)"
+          XML="$(find two-stage -type f \( -name '*.mxl' -o -name '*.musicxml' \) | head -n1)"
+          test -n "$OMR" && test -s "$OMR"
+          test -n "$XML" && test -s "$XML"
+          echo "OMR=$OMR"
+          echo "XML=$XML"
+          python3 - "$OMR" <<'PY'
+          import sys, zipfile
+          p=sys.argv[1]
+          with zipfile.ZipFile(p) as z:
+              bad=z.testzip(); names=z.namelist()
+          print('finalized OMR members',len(names),'bad',bad)
+          assert bad is None
+          assert 'book.xml' in names
+          PY
+          echo '=== SECONDARY: annotate finalized .omr only ==='
+          BASENAME="$(basename "$OMR")"
+          timeout 900 docker run --rm \
+            -v "$PWD/two-stage:/work/out" \
+            tone-metric-two-stage \
+            /opt/audiveris/bin/Audiveris -batch -annotate -output /work/out -- "/work/out/$BASENAME" \
+            > two-stage/annotate.log 2>&1
+          tail -n 160 two-stage/annotate.log
+          ANN="$(find two-stage -type f -name '*annotations*.zip' | head -n1)"
+          test -n "$ANN" && test -s "$ANN"
+          echo "ANN=$ANN"
+          python3 - "$ANN" <<'PY'
+          import sys, zipfile
+          p=sys.argv[1]
+          with zipfile.ZipFile(p) as z:
+              bad=z.testzip(); names=z.namelist()
+              xml=[n for n in names if n.lower().endswith('.xml')]
+              imgs=[n for n in names if n.lower().endswith(('.png','.jpg','.jpeg','.tif','.tiff'))]
+              for n in xml:
+                  z.read(n)
+          print('annotation members',len(names),'xml',len(xml),'images',len(imgs),'bad',bad)
+          assert bad is None
+          assert len(xml) >= 12, xml
+          assert len(imgs) >= 12, imgs
+          PY
+          echo '12-PAGE TWO-STAGE PIPELINE: PASS'
+      - name: Exact BWV two-stage outputs and canonical recovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf bwv-out && mkdir bwv-out
+          timeout 600 docker run --rm \
+            -v "$PWD/bwv661-a4.pdf:/work/bwv661-a4.pdf:ro" \
+            -v "$PWD/bwv-out:/work/out" \
+            tone-metric-two-stage \
+            /opt/audiveris/bin/Audiveris -batch -transcribe -export -output /work/out -- /work/bwv661-a4.pdf \
+            > bwv-out/transcribe.log 2>&1
+          OMR="$(find bwv-out -type f -name '*.omr' | head -n1)"
+          test -n "$OMR" && test -s "$OMR"
+          BASENAME="$(basename "$OMR")"
+          timeout 300 docker run --rm \
+            -v "$PWD/bwv-out:/work/out" \
+            tone-metric-two-stage \
+            /opt/audiveris/bin/Audiveris -batch -annotate -output /work/out -- "/work/out/$BASENAME" \
+            > bwv-out/annotate.log 2>&1
+          ANN="$(find bwv-out -type f -name '*annotations*.zip' | head -n1)"
+          test -n "$ANN" && test -s "$ANN"
+          docker run --rm -i -v "$PWD/bwv-out:/work/out" tone-metric-two-stage python3 - <<'PY'
+          from pathlib import Path
+          from tone_metric.musicxml import parse_musicxml
+          from tone_metric.canonical_score import recover_canonical_score_hits
+          xml=next(p for pat in ('*.mxl','*.musicxml') for p in Path('/work/out').rglob(pat))
+          omr=next(Path('/work/out').rglob('*.omr'))
+          parsed=parse_musicxml(xml, meter_override='auto')
+          hits, meta = recover_canonical_score_hits(omr, parsed.measures, parsed.hits)
+          print('symbolic',len(parsed.hits),'canonical',len(hits),'columns',meta.get('column_count'),'attack columns',meta.get('attack_column_count'))
+          assert len(parsed.hits)==549
+          assert len(hits)==733
+          assert meta.get('attack_column_count')==733
+          PY
+          echo 'BWV661 TWO-STAGE CANONICAL RECOVERY: PASS'
