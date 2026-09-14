@@ -37,9 +37,9 @@ RUN git clone https://github.com/FedeAndre/tone-metric-analyzer.git /app \
 WORKDIR /app
 RUN python3 -m pip install --no-cache-dir --break-system-packages -r requirements.txt
 
-# Validate/import only the new clean Level-1 runtime.
-RUN python3 validate_level1_clean_v3.py
-RUN python3 -c "import level1_clean_v3; print(level1_clean_v3.APP_VERSION)"
+# Validate/import only the clean v4 Level-1 runtime. No prior analyzer runtime is loaded.
+RUN python3 validate_level1_clean_v4.py
+RUN python3 -c "import level1_clean_v4; print(level1_clean_v4.APP_VERSION)"
 
 EXPOSE 8080
-CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "level1_clean_v3:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "level1_clean_v4:app", "--host", "0.0.0.0", "--port", "8080"]
