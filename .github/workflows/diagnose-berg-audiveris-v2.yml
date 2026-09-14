@@ -1,0 +1,99 @@
+name: Diagnose Berg Audiveris v2
+on:
+  push:
+    branches:
+      - diagnose-berg-audiveris-20260914
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download exact IMSLP02556 through normal IMSLP session
+        shell: bash
+        run: |
+          set -euo pipefail
+          PAGE='https://imslp.org/wiki/Piano_Sonata,_Op.1_(Berg,_Alban)'
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/153 Safari/537.36'
+          curl --compressed -fL -A "$UA" -c /tmp/imslp.cookies -o /tmp/page.html "$PAGE"
+          python - <<'PY'
+          import json, urllib.parse, urllib.request
+          title='File:Berg_-_Piano_Sonata_Op.1.pdf'
+          q=urllib.parse.urlencode({'action':'query','titles':title,'prop':'imageinfo','iiprop':'url|size','format':'json','origin':'*'})
+          data=json.load(urllib.request.urlopen('https://imslp.org/api.php?'+q, timeout=30))
+          info=next(iter(data['query']['pages'].values()))['imageinfo'][0]
+          url=info['url']
+          if url.startswith('//'): url='https:'+url
+          print('expected_size',info['size'],'url',url)
+          open('/tmp/url.txt','w').write(url)
+          open('/tmp/size.txt','w').write(str(info['size']))
+          PY
+          URL="$(cat /tmp/url.txt)"
+          EXPECTED="$(cat /tmp/size.txt)"
+          set +e
+          curl --compressed -fL --retry 3 --retry-delay 2 -A "$UA" -b /tmp/imslp.cookies -c /tmp/imslp.cookies -e "$PAGE" -o berg.pdf "$URL"
+          RC=$?
+          set -e
+          if [ "$RC" -ne 0 ] || [ ! -f berg.pdf ] || [ "$(stat -c%s berg.pdf)" != "$EXPECTED" ]; then
+            echo 'Direct image route did not return exact PDF; trying Special:ImagefromIndex with same session'
+            curl --compressed -fL --retry 3 --retry-delay 2 -A "$UA" -b /tmp/imslp.cookies -c /tmp/imslp.cookies -e "$PAGE" -o berg.pdf 'https://imslp.org/wiki/Special:ImagefromIndex/02556'
+          fi
+          file berg.pdf
+          stat -c 'bytes=%s' berg.pdf
+          sha256sum berg.pdf
+          python - <<'PY'
+          from pathlib import Path
+          b=Path('berg.pdf').read_bytes()
+          assert b.startswith(b'%PDF-'), b[:200]
+          assert len(b)==579006, len(b)
+          print('Exact IMSLP02556 PDF gate: PASS')
+          PY
+      - name: Build exact deployed image
+        run: docker build -t tone-metric-diag .
+      - name: Reproduce current command
+        shell: bash
+        run: |
+          set +e
+          mkdir -p diag/current
+          timeout 900 docker run --rm -v "$PWD/berg.pdf:/work/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf:ro" -v "$PWD/diag/current:/work/out" tone-metric-diag /opt/audiveris/bin/Audiveris -batch -transcribe -save -export -annotate -output /work/out -- /work/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf > diag/current.log 2>&1
+          RC=$?
+          echo "$RC" > diag/current.rc
+          echo "CURRENT_RC=$RC"
+          tail -n 120 diag/current.log
+          find diag/current -type f -printf '%p %s bytes\n' | sort | tail -100
+          exit 0
+      - name: Test without save-every-step
+        shell: bash
+        run: |
+          set +e
+          mkdir -p diag/nosave
+          timeout 900 docker run --rm -v "$PWD/berg.pdf:/work/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf:ro" -v "$PWD/diag/nosave:/work/out" tone-metric-diag /opt/audiveris/bin/Audiveris -batch -transcribe -export -annotate -output /work/out -- /work/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf > diag/nosave.log 2>&1
+          RC=$?
+          echo "$RC" > diag/nosave.rc
+          echo "NOSAVE_RC=$RC"
+          tail -n 120 diag/nosave.log
+          find diag/nosave -type f -printf '%p %s bytes\n' | sort | tail -100
+          exit 0
+      - name: Test no-save sequential internals
+        shell: bash
+        run: |
+          set +e
+          mkdir -p diag/sequential
+          timeout 900 docker run --rm -v "$PWD/berg.pdf:/work/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf:ro" -v "$PWD/diag/sequential:/work/out" tone-metric-diag /opt/audiveris/bin/Audiveris -batch -constant org.audiveris.omr.util.OmrExecutors.useParallelism=false -transcribe -export -annotate -output /work/out -- /work/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf > diag/sequential.log 2>&1
+          RC=$?
+          echo "$RC" > diag/sequential.rc
+          echo "SEQUENTIAL_RC=$RC"
+          tail -n 120 diag/sequential.log
+          find diag/sequential -type f -printf '%p %s bytes\n' | sort | tail -100
+          exit 0
+      - name: Summary
+        run: |
+          echo "current=$(cat diag/current.rc)"
+          echo "nosave=$(cat diag/nosave.rc)"
+          echo "sequential=$(cat diag/sequential.rc)"
+          for d in current nosave sequential; do
+            echo "--- $d files ---"
+            find "diag/$d" -type f -printf '%f %s\n' | sort | tail -80
+          done
