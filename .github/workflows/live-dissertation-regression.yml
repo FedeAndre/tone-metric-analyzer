@@ -1,0 +1,67 @@
+name: Live dissertation regression
+on:
+  push:
+    branches:
+      - live-dissertation-regression-20260914
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exact BWV 661 live regression
+        run: |
+          set -euo pipefail
+          curl -L --fail --silent --show-error https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf -o bwv661-a4.pdf
+          test "$(stat -c%s bwv661-a4.pdf)" = "101270"
+          echo "d50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661-a4.pdf" | sha256sum -c -
+          curl --fail-with-body --max-time 290 --silent --show-error \
+            -F file=@bwv661-a4.pdf -F meter_override=auto \
+            https://tone-metric-analyzer-development-production.up.railway.app/api/analyze -o bwv.json
+          python - <<'PY'
+          import json
+          d=json.load(open('bwv.json'))
+          assert d['hit_count']==733, d.get('hit_count')
+          assert d.get('symbolic_hit_count')==549, d.get('symbolic_hit_count')
+          assert d.get('analysis_hit_source')=='canonical-score-time', d.get('analysis_hit_source')
+          events=[e for s in d['segments'] for e in s['events']]
+          assert len(events)==733
+          assert all(e.get('tone_metric_levels') for e in events)
+          assert max(s.get('max_level',0) for s in d['segments'])==9
+          po=d.get('physical_overlay') or {}; m=po.get('matching') or {}
+          assert po.get('available') is True
+          assert m.get('wave_profile_points_mapped')==735, m.get('wave_profile_points_mapped')
+          assert m.get('pivot_profile_mapped')==27, m.get('pivot_profile_mapped')
+          assert m.get('tree_event_nodes_mapped')==733, m.get('tree_event_nodes_mapped')
+          assert m.get('tree_branches_mapped')==732, m.get('tree_branches_mapped')
+          print('BWV661 LIVE PASS: 549 symbolic -> 733 canonical; L1-9; wave 735; pivots 27; tree 733/732')
+          PY
+      - name: Live explicit triplet and duplet cases
+        run: |
+          cat > triplet.musicxml <<'XML'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <score-partwise version="4.0"><part-list><score-part id="P1"><part-name>T</part-name></score-part></part-list><part id="P1"><measure number="1"><attributes><divisions>12</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes><note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification></note><note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification></note><note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification></note><note><rest/><duration>36</duration><voice>1</voice></note></measure></part></score-partwise>
+          XML
+          cat > duplet.musicxml <<'XML'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <score-partwise version="4.0"><part-list><score-part id="P1"><part-name>D</part-name></score-part></part-list><part id="P1"><measure number="1"><attributes><divisions>8</divisions><time><beats>6</beats><beat-type>8</beat-type></time></attributes><note><pitch><step>C</step><octave>4</octave></pitch><duration>6</duration><voice>1</voice><time-modification><actual-notes>2</actual-notes><normal-notes>3</normal-notes></time-modification></note><note><pitch><step>D</step><octave>4</octave></pitch><duration>6</duration><voice>1</voice><time-modification><actual-notes>2</actual-notes><normal-notes>3</normal-notes></time-modification></note><note><rest/><duration>12</duration><voice>1</voice></note></measure></part></score-partwise>
+          XML
+          for f in triplet.musicxml duplet.musicxml; do
+            curl --fail-with-body --max-time 120 --silent --show-error -F file=@$f -F meter_override=auto https://tone-metric-analyzer-development-production.up.railway.app/api/analyze -o ${f%.musicxml}.json
+          done
+          python - <<'PY'
+          import json
+          from fractions import Fraction
+          t=json.load(open('triplet.json')); s=t['segments'][0]
+          assert t['hit_count']==3
+          assert [e['offset_in_measure_quarter'] for e in s['events']]==['0','1/3','2/3']
+          assert all(e['tone_metric_levels'] for e in s['events'])
+          assert '3:2' in s['arity_policy']['explicit_tuplet_ratios']
+          pts={p['time_quarter'] for p in s['structural_points'] if Fraction(p['time_quarter']) <= 1}
+          assert '1/3' in pts and '2/3' in pts and '1/2' not in pts
+          d=json.load(open('duplet.json')); s=d['segments'][0]
+          assert d['hit_count']==2
+          assert [e['offset_in_measure_quarter'] for e in s['events']]==['0','3/4']
+          assert all(e['tone_metric_levels'] for e in s['events'])
+          assert s['compound'] is True and s['beat_unit_quarter']=='3/2'
+          assert '2:3' in s['arity_policy']['explicit_tuplet_ratios']
+          print('TUPLET LIVE PASS: 3:2 triplet and 2:3 duplet retained and recursively mapped')
+          PY
