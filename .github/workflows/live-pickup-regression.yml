@@ -1,0 +1,82 @@
+name: Live opening pickup regression
+on:
+  push:
+    branches:
+      - live-pickup-regression-20260914
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exact BWV 661 live regression
+        run: |
+          set -euo pipefail
+          curl -L --fail --silent --show-error https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf -o bwv661-a4.pdf
+          test "$(stat -c%s bwv661-a4.pdf)" = "101270"
+          echo "d50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661-a4.pdf" | sha256sum -c -
+          curl --fail-with-body --max-time 290 --silent --show-error \
+            -F file=@bwv661-a4.pdf -F meter_override=auto \
+            https://tone-metric-analyzer-development-production.up.railway.app/api/analyze -o bwv.json
+          python - <<'PY'
+          import json
+          d=json.load(open('bwv.json'))
+          assert d['hit_count']==733, d.get('hit_count')
+          assert d.get('symbolic_hit_count')==549, d.get('symbolic_hit_count')
+          assert d.get('analysis_hit_source')=='canonical-score-time', d.get('analysis_hit_source')
+          events=[e for s in d['segments'] for e in s['events']]
+          assert len(events)==733
+          assert all(e.get('tone_metric_levels') for e in events)
+          assert max(s.get('max_level',0) for s in d['segments'])==9
+          po=d.get('physical_overlay') or {}; m=po.get('matching') or {}
+          assert po.get('available') is True
+          assert m.get('wave_profile_points_mapped')==735, m.get('wave_profile_points_mapped')
+          assert m.get('pivot_profile_mapped')==27, m.get('pivot_profile_mapped')
+          assert m.get('tree_event_nodes_mapped')==733, m.get('tree_event_nodes_mapped')
+          assert m.get('tree_branches_mapped')==732, m.get('tree_branches_mapped')
+          print('BWV661 LIVE PASS: 549 symbolic -> 733 canonical; L1-9; wave 735; pivots 27; tree 733/732')
+          PY
+      - name: Live opening pickup musical-time regression
+        run: |
+          set -euo pipefail
+          cat > pickup.musicxml <<'XML'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <score-partwise version="4.0">
+            <part-list><score-part id="P1"><part-name>Pickup</part-name></score-part></part-list>
+            <part id="P1">
+              <measure number="0" implicit="yes">
+                <attributes><divisions>1</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>
+                <note><pitch><step>G</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice></note>
+              </measure>
+              <measure number="1">
+                <note><pitch><step>C</step><octave>5</octave></pitch><duration>1</duration><voice>1</voice></note>
+                <note><pitch><step>D</step><octave>5</octave></pitch><duration>1</duration><voice>1</voice></note>
+                <note><pitch><step>E</step><octave>5</octave></pitch><duration>1</duration><voice>1</voice></note>
+                <note><pitch><step>F</step><octave>5</octave></pitch><duration>1</duration><voice>1</voice></note>
+              </measure>
+            </part>
+          </score-partwise>
+          XML
+          curl --fail-with-body --max-time 120 --silent --show-error \
+            -F file=@pickup.musicxml -F meter_override=auto \
+            https://tone-metric-analyzer-development-production.up.railway.app/api/analyze -o pickup.json
+          python - <<'PY'
+          import json
+          from fractions import Fraction
+          d=json.load(open('pickup.json'))
+          m=d['measures'][0]
+          assert m['number']=='0'
+          assert m['full_duration_quarter']=='4'
+          assert m['actual_duration_quarter']=='1'
+          assert m['pickup_shift_quarter']=='3'
+          events=[e for s in d['segments'] for e in s['events']]
+          first=events[0]
+          assert first['measure_number']=='0'
+          assert first['offset_in_measure_quarter']=='3', first
+          pts=[]
+          for s in d['segments']:
+            for p in s.get('structural_points',[]):
+              t=Fraction(p['time_quarter'])
+              if t < Fraction(3):
+                pts.append((t, tuple(p.get('levels',[]))))
+          assert {Fraction(0),Fraction(1),Fraction(2)} <= {t for t,_ in pts}, pts
+          print('PICKUP LIVE PASS: first short 4/4 measure shift=3; attack offset=3; pre-pickup structural times 0,1,2 retained')
+          PY
