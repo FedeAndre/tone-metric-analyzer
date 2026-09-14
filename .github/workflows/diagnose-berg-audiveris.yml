@@ -29,8 +29,11 @@ jobs:
                   page=next(iter(data.get('query',{}).get('pages',{}).values()))
                   info=(page.get('imageinfo') or [None])[0]
                   if info and info.get('url'):
-                      print(title, info.get('size'), info['url'])
-                      open('/tmp/url.txt','w').write(info['url'])
+                      url=info['url']
+                      if url.startswith('//'):
+                          url='https:'+url
+                      print(title, info.get('size'), url)
+                      open('/tmp/url.txt','w').write(url)
                       break
               except Exception as e:
                   print(title, 'API resolution failed:', repr(e))
