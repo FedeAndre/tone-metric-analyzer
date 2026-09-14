@@ -21,6 +21,12 @@ class NoteAttack:
     pitch: str
     tie_start: bool = False
     tie_stop: bool = False
+    # Explicit MusicXML tuplet metadata.  These fields describe the local
+    # performed subdivision (actual notes in the time of normal notes) without
+    # changing attack identity.  They are used only to select the recursive
+    # arity of the span that the tuplet actually occupies.
+    tuplet_actual: Optional[int] = None
+    tuplet_normal: Optional[int] = None
     page_index: Optional[int] = None
     x_norm: Optional[float] = None
     y_norm: Optional[float] = None
@@ -52,6 +58,8 @@ class Hit:
                     "voice": s.voice,
                     "staff": s.staff,
                     "duration_quarter": frac_to_str(s.duration),
+                    "tuplet_actual": s.tuplet_actual,
+                    "tuplet_normal": s.tuplet_normal,
                     "page_index": s.page_index,
                     "x_norm": s.x_norm,
                     "y_norm": s.y_norm,

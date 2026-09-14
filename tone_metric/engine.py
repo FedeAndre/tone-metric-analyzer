@@ -29,6 +29,102 @@ def _is_power(n: int, base: int) -> bool:
     return n == 1
 
 
+def _is_prime(n: int) -> bool:
+    if n < 2:
+        return False
+    if n % 2 == 0:
+        return n == 2
+    d = 3
+    while d * d <= n:
+        if n % d == 0:
+            return False
+        d += 2
+    return True
+
+
+def _warn_once(warnings: List[str] | None, text: str) -> None:
+    if warnings is not None and text not in warnings:
+        warnings.append(text)
+
+
+def _explicit_tuplet_factor(
+    a: Fraction,
+    b: Fraction,
+    hits: List[Hit],
+    warnings: List[str] | None = None,
+) -> int | None:
+    """Return an explicit local tuplet arity for exactly this parent span.
+
+    The dissertation treats sounding tuplet notes as sonic events.  A triplet or
+    duplet therefore changes the local recursive subdivision; it does not remove
+    attacks.  MusicXML supplies the performed duration plus ``actual:normal``
+    metadata.  We use that information only when it identifies the span the tuplet
+    actually occupies, which prevents a triplet nested inside (say) the second half
+    of a beat from incorrectly ternarizing the whole beat.
+
+    Composite tuplets such as 6:4 are deliberately not collapsed to one invented
+    hierarchy: the dissertation explicitly allows alternative 3+3 / 2+2+2 readings
+    in such situations.
+    """
+    span = b - a
+    if span <= 0:
+        return None
+
+    strong: Dict[int, set[Fraction]] = {}
+    aligned: Dict[int, set[Fraction]] = {}
+    composite: set[tuple[int, int]] = set()
+    for h in hits:
+        if not (a <= h.onset < b):
+            continue
+        rel = (h.onset - a) / span
+        for src in h.sources:
+            actual = getattr(src, 'tuplet_actual', None)
+            normal = getattr(src, 'tuplet_normal', None)
+            if not actual or not normal or int(actual) == int(normal):
+                continue
+            actual = int(actual); normal = int(normal)
+            if not _is_prime(actual):
+                composite.add((actual, normal))
+                continue
+            # At the correct parent span, every equal tuplet position lies on the
+            # p-grid.  Misaligned positions indicate that the tuplet belongs to a
+            # smaller recursively reached child span.
+            if (rel * actual).denominator != 1:
+                continue
+            aligned.setdefault(actual, set()).add(h.onset)
+            if src.duration > 0 and src.duration * actual == span:
+                strong.setdefault(actual, set()).add(h.onset)
+
+    for actual, normal in sorted(composite):
+        _warn_once(
+            warnings,
+            f'Explicit {actual}:{normal} composite tuplet attacks were retained, but no unique local Tone-Metric arity was inferred automatically.'
+        )
+
+    strong_candidates = sorted(p for p, times in strong.items() if times)
+    if len(strong_candidates) == 1:
+        return strong_candidates[0]
+    if len(strong_candidates) > 1:
+        _warn_once(
+            warnings,
+            'Conflicting simultaneous explicit tuplet arities occur in the same parent span; attacks were retained without inventing a single hierarchy.'
+        )
+        return None
+
+    # Fallback for exporters that preserve time-modification but normalize note
+    # durations unusually.  Two or more distinct aligned tuplet attacks are enough
+    # to locate the correct parent span for ordinary duplets/triplets.
+    aligned_candidates = sorted(p for p, times in aligned.items() if len(times) >= 2)
+    if len(aligned_candidates) == 1:
+        return aligned_candidates[0]
+    if len(aligned_candidates) > 1:
+        _warn_once(
+            warnings,
+            'Conflicting simultaneous explicit tuplet arities occur in the same parent span; attacks were retained without inventing a single hierarchy.'
+        )
+    return None
+
+
 def meter_properties(num: int, den: int) -> Tuple[Fraction, int, int, bool, List[str]]:
     warnings: List[str] = []
     compound = num > 3 and num % 3 == 0
@@ -196,12 +292,12 @@ def _contains_interior_hit(hits: List[Fraction], a: Fraction, b: Fraction) -> bo
 def _refine_span(
     a: Fraction,
     b: Fraction,
+    hits: List[Hit],
     hit_times: List[Fraction],
     stacks: Dict[Fraction, set],
     structural: Dict[Fraction, set],
     parent_level: int,
-    factor: int,
-    next_factor: int,
+    default_factor: int,
     depth: int = 0,
     max_depth: int | None = None,
     warnings: List[str] | None = None,
@@ -230,12 +326,14 @@ def _refine_span(
             )
         return
 
+    explicit_factor = _explicit_tuplet_factor(a, b, hits, warnings)
+    factor = explicit_factor or default_factor
     child_spans = _add_local_structure(a, b, parent_level, factor, stacks, structural)
     for x, y, child_parent_level in child_spans:
         if _contains_interior_hit(hit_times, x, y):
             _refine_span(
-                x, y, hit_times, stacks, structural,
-                child_parent_level, next_factor, 2,
+                x, y, hits, hit_times, stacks, structural,
+                child_parent_level, 2,
                 depth + 1, max_depth, warnings,
             )
 
@@ -273,8 +371,8 @@ def analyze_segment(segment: MeterSegment) -> dict:
         # neighboring intervals.
         parent_level = int(interval_levels.get(i + 1, 1))
         _refine_span(
-            a, b, hit_times, stacks, structural,
-            parent_level, first_factor, 2, warnings=segment.warnings,
+            a, b, segment.hits, hit_times, stacks, structural,
+            parent_level, first_factor, warnings=segment.warnings,
         )
 
     event_rows = []
@@ -345,6 +443,12 @@ def analyze_segment(segment: MeterSegment) -> dict:
             'top_recursive_arity': segment.top_base,
             'within_tactus_initial_arity': first_factor,
             'finer_continuation_arity': 2,
+            'explicit_tuplet_rule': 'prime actual-notes arity replaces the default only in the recursively matched parent span',
+            'explicit_tuplet_ratios': sorted({
+                f"{int(src.tuplet_actual)}:{int(src.tuplet_normal)}"
+                for h in segment.hits for src in h.sources
+                if getattr(src, 'tuplet_actual', None) and getattr(src, 'tuplet_normal', None)
+            }),
         },
         'warnings': segment.warnings,
         'events': event_rows,

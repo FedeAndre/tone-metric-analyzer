@@ -114,6 +114,27 @@ def _has_tie(note, tie_type: str) -> bool:
     )
 
 
+def _tuplet_ratio(note) -> tuple[int | None, int | None]:
+    """Return MusicXML ``actual-notes : normal-notes`` when explicitly present.
+
+    MusicXML ``duration`` already encodes performed score time.  The ratio is
+    therefore metadata for the recursive tone-metric subdivision, not a duration
+    correction.  In particular, 3:2 triplets and 2:3 duplets remain genuine
+    sounding attacks; they are not filtered out.
+    """
+    tm = note.find("time-modification")
+    if tm is None:
+        return None, None
+    try:
+        actual = int((tm.findtext("actual-notes") or "").strip())
+        normal = int((tm.findtext("normal-notes") or "").strip())
+    except Exception:
+        return None, None
+    if actual < 2 or normal < 1:
+        return None, None
+    return actual, normal
+
+
 def _layout_defaults(root) -> dict:
     defaults = root.find("defaults")
     if defaults is None:
@@ -232,7 +253,7 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
     Project rules:
     - ties: only initial attack; duration extended through tied continuation
     - grace notes: ignored
-    - tuplets (time-modification): attack ignored, cursor still advances
+    - tuplets (time-modification): sounding attacks are retained with their explicit local ratio
     - rests: no attack
     - simultaneous attacks: merged globally into one hit
     - pickup: first short/implicit measure is right-aligned inside a full measure
@@ -342,7 +363,7 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
                     dur_div = _text_int(child, "duration", 0)
                     dur = Fraction(dur_div, divisions) if divisions else Fraction(0)
                     is_grace = child.find("grace") is not None
-                    is_tuplet = child.find("time-modification") is not None
+                    tuplet_actual, tuplet_normal = _tuplet_ratio(child)
                     is_chord = child.find("chord") is not None
                     if is_chord:
                         onset_local = last_nonchord_onset
@@ -352,7 +373,7 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
                     if not is_chord and not is_grace:
                         cursor += dur
 
-                    if child.find("rest") is not None or is_grace or is_tuplet:
+                    if child.find("rest") is not None or is_grace:
                         continue
 
                     voice = (child.findtext("voice") or "1").strip()
@@ -406,6 +427,8 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
                         pitch=pitch,
                         tie_start=tie_start,
                         tie_stop=tie_stop,
+                        tuplet_actual=tuplet_actual,
+                        tuplet_normal=tuplet_normal,
                         page_index=page_index,
                         x_norm=x_norm,
                         y_norm=y_norm,
@@ -443,9 +466,10 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
 def extract_visual_groups(path: str | Path, initial_meter_override=None) -> tuple[list[dict], bool]:
     """Return symbolic notehead/chord columns in visual reading order.
 
-    Unlike analysis hits, this includes grace notes, tuplet attacks, and tied continuations
-    because those noteheads are physically present on the score. Each group is marked
-    ``analyzed`` only when at least one contained note creates a Tone-Metric attack.
+    Unlike analysis hits, this includes grace notes and tied continuations because those
+    noteheads are physically present on the score. Tuplet attacks are analysis attacks too;
+    their ratio changes the recursive subdivision, not whether the note sounds. Each group
+    is marked ``analyzed`` only when at least one contained note creates a Tone-Metric attack.
     This lets Audiveris physical notehead columns be matched without shifting the overlay.
     """
     path = Path(path)
@@ -577,9 +601,12 @@ def extract_visual_groups(path: str | Path, initial_meter_override=None) -> tupl
                     })
                     serial += 1
                     row["pitches"].append(_pitch_string(child))
-                    is_tuplet = child.find("time-modification") is not None
+                    tuplet_actual, tuplet_normal = _tuplet_ratio(child)
+                    if tuplet_actual is not None:
+                        row["tuplet_actual"] = tuplet_actual
+                        row["tuplet_normal"] = tuplet_normal
                     tie_stop = _has_tie(child, "stop")
-                    if not is_grace and not is_tuplet and not tie_stop:
+                    if not is_grace and not tie_stop:
                         row["analyzed"] = True
                 elif tag == "backup":
                     cursor -= Fraction(_text_int(child, "duration", 0), divisions)
