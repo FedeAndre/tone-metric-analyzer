@@ -1,4 +1,4 @@
-name: Locate exact v0.15.2 blobs
+name: Locate exact v0.15.2 shared blobs
 
 on:
   push:
@@ -14,43 +14,38 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Locate exact SHA-256 source blobs in Git history
+      - name: Locate unchanged exact v0.15.2 source blobs
         shell: bash
         run: |
           python3 - <<'PY'
           import hashlib, subprocess
           targets = {
-            '221eb5c4e85982b410476dde629278f0bdad908abd277ff8655e525ca60c9772': 'app.py',
-            '9e0c440574269ecbf1b813b8a2d20e341cfe8c59c28bd5700a80900229b55eb3': 'static/index.html',
-            '1c53a620ac83e638c05bf08a08ab914ab1dc4b22b9cdb950e58dc87d73df865c': 'tone_metric/musicxml.py',
-            'cb59c48bc9943b03eb2f769f693075cf7299c64e5a6c5be5fb64785dc023cb8c': 'tone_metric/models.py',
-            '66837f774f3ab948ea2c7d0a3b4addf5ca1dbd5dd65b76d6ed4e579070938caf': 'tone_metric/engine.py',
-            'c78828c867e30c3818b23b11fc4435af2adb28bef7dd59d7fd6b2cc728655ca2': 'tone_metric/canonical_score.py',
-            '04e0b925415bce48421bdea1aceb47ee41035c5dda34e838919f7b3b31b3aee2': 'tone_metric/__init__.py',
+            'bb10b031019a0b118e2244ddb8fc81a16cc6c9c70965e3ff26b43c8f8314ff2e':'requirements.txt',
+            'aced1f5aeed1a914751c61b2e537216cc12d7c3b948f2bfb2c6c475baef95c94':'tone_metric/omr.py',
+            '7dd4cb3af0d53f0a18ed588a0e99cfbaa6f76c9d26aa2e3d5121aa818288d919':'tone_metric/pivots.py',
+            '882140e522fb0f82604da8af3a2095a417167ae9b31b2927e0e74b11c9392a3f':'tone_metric/score_registration.py',
+            'f448b0ac4218b06cfac9b3bb60ec9a43737b2a07e5d1b2a0acf743f8fe137234':'tone_metric/pdfview.py',
+            '5cb9463a2fb504d7119f7f83c42abb0f36091ccb5c52d08510d59930ec5d743c':'tone_metric/omr_project.py',
+            '8dfb5164532a98f952d649897620185b82520693ac581de48cec83984eccfa16':'tone_metric/physical.py',
+            'f3144a4ea87622c66ede2c0b02a45c6f555837dc441d9b311a1d09c1cb8528d2':'tone_metric/waves.py',
+            '27fa46b6d4118f9d6be2720cd6ac0ed92aff502a05200a763fbda99df3cbe278':'tone_metric/theory.py',
+            'beff72cd48b937da2be347b3de8da39e6924e03e6a0f983f69937f3ab9771410':'tone_metric/trees.py',
           }
-          found = {k: [] for k in targets}
-          commits = subprocess.check_output(['git','rev-list','--all'], text=True).splitlines()
-          seen = set()
-          for commit in commits:
-            for row in subprocess.check_output(['git','ls-tree','-r',commit], text=True, errors='replace').splitlines():
+          found={h:[] for h in targets}; seen=set()
+          for commit in subprocess.check_output(['git','rev-list','--all'],text=True).splitlines():
+            for row in subprocess.check_output(['git','ls-tree','-r',commit],text=True,errors='replace').splitlines():
               try:
-                meta, path = row.split('\t',1)
-                _, typ, blob = meta.split()
-              except ValueError:
-                continue
-              if typ != 'blob' or blob in seen:
-                continue
+                meta,path=row.split('\t',1); _,typ,blob=meta.split()
+              except ValueError: continue
+              if typ!='blob' or blob in seen: continue
               seen.add(blob)
-              data = subprocess.check_output(['git','cat-file','blob',blob])
-              h = hashlib.sha256(data).hexdigest()
-              if h in targets:
-                found[h].append((commit,path,blob))
-          for h, expected in targets.items():
-            print('TARGET', h, expected, 'MATCHES', len(found[h]))
-            for commit,path,blob in found[h]:
-              print('MATCH', h, commit, blob, path)
+              data=subprocess.check_output(['git','cat-file','blob',blob])
+              h=hashlib.sha256(data).hexdigest()
+              if h in targets: found[h].append((commit,path,blob))
+          for h,path in targets.items():
+            print('TARGET',h,path,'MATCHES',len(found[h]))
+            for commit,p,blob in found[h]: print('MATCH',h,commit,blob,p)
           missing=[targets[h] for h,v in found.items() if not v]
-          print('MISSING', missing)
-          if missing:
-            raise SystemExit(2)
+          print('MISSING',missing)
+          if missing: raise SystemExit(2)
           PY
