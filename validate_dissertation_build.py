@@ -1,5 +1,6 @@
 # Railway dissertation build validation; this file is watched by the dedicated deployment.
 from fractions import Fraction
+from pathlib import Path
 
 from tone_metric.dissertation_full import analyze_full
 from tone_metric.models import Hit, MeasureInfo, NoteAttack
@@ -76,5 +77,16 @@ duplet = analyze_full(
 )
 assert levels_at(duplet, Fraction(3, 4))
 assert duplet["summary"]["duplet_spans"] == 1
+
+# PDF integration audit. The dissertation PDF endpoint must analyze the canonical
+# physical attack sequence recovered from the saved Audiveris OMR project. Older
+# MusicXML-only analysis and the former discarded-canonical-hit path must never
+# override this route.
+integration = (Path(__file__).resolve().parent / "dissertation_exact_pdf_app_v2.py").read_text(encoding="utf-8")
+assert "analysis_payload = base.analyze_full(canonical_hits, measures)" in integration
+assert 'analysis_payload["analysis_hit_source"] = "canonical-score-time"' in integration
+assert "_unused_hits" not in integration
+assert "will not silently substitute MusicXML timing" in integration
+assert "canonical_meta," in integration
 
 print("dissertation-build-validation: PASS")
