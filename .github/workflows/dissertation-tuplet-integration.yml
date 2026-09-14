@@ -1,0 +1,219 @@
+name: Integrate dissertation tuplet rules
+on:
+  push:
+    branches:
+      - dissertation-tuplet-integration-20260914
+permissions:
+  contents: write
+jobs:
+  integrate:
+    if: github.event.head_commit.message == 'Bootstrap dissertation tuplet integration'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Integrate exact validated changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import base64, hashlib, json, os, pathlib, urllib.request
+
+          repo = os.environ['REPO']
+          token = os.environ['GH_TOKEN']
+
+          def fetch_blob(sha, path):
+              req = urllib.request.Request(
+                  f'https://api.github.com/repos/{repo}/git/blobs/{sha}',
+                  headers={
+                      'Authorization': f'Bearer {token}',
+                      'Accept': 'application/vnd.github+json',
+                      'X-GitHub-Api-Version': '2022-11-28',
+                  },
+              )
+              with urllib.request.urlopen(req) as r:
+                  data = json.load(r)
+              pathlib.Path(path).write_bytes(base64.b64decode(data['content']))
+
+          fetch_blob('10e733651d4e3e9b58719ee391b96177fb6b259d', 'tone_metric/models.py')
+          fetch_blob('acb359dd8d82f1dd8195af19a9b8c5e7f952f62a', 'tone_metric/engine.py')
+
+          p = pathlib.Path('tone_metric/musicxml.py')
+          text = p.read_text()
+
+          def one(old, new):
+              global text
+              n = text.count(old)
+              if n != 1:
+                  raise SystemExit(f'Expected exactly one musicxml replacement, found {n}: {old[:80]!r}')
+              text = text.replace(old, new, 1)
+
+          one(
+              'def _has_tie(note, tie_type: str) -> bool:\n'
+              '    return any((t.get("type") or "").lower() == tie_type for t in note.findall("tie")) or any(\n'
+              '        (t.get("type") or "").lower() == tie_type for t in note.findall("notations/tied")\n'
+              '    )\n\n\n'
+              'def _layout_defaults(root) -> dict:',
+              'def _has_tie(note, tie_type: str) -> bool:\n'
+              '    return any((t.get("type") or "").lower() == tie_type for t in note.findall("tie")) or any(\n'
+              '        (t.get("type") or "").lower() == tie_type for t in note.findall("notations/tied")\n'
+              '    )\n\n\n'
+              'def _tuplet_ratio(note) -> tuple[int | None, int | None]:\n'
+              '    """Return MusicXML ``actual-notes : normal-notes`` when explicitly present.\n\n'
+              '    MusicXML ``duration`` already encodes performed score time.  The ratio is\n'
+              '    therefore metadata for the recursive tone-metric subdivision, not a duration\n'
+              '    correction.  In particular, 3:2 triplets and 2:3 duplets remain genuine\n'
+              '    sounding attacks; they are not filtered out.\n'
+              '    """\n'
+              '    tm = note.find("time-modification")\n'
+              '    if tm is None:\n'
+              '        return None, None\n'
+              '    try:\n'
+              '        actual = int((tm.findtext("actual-notes") or "").strip())\n'
+              '        normal = int((tm.findtext("normal-notes") or "").strip())\n'
+              '    except Exception:\n'
+              '        return None, None\n'
+              '    if actual < 2 or normal < 1:\n'
+              '        return None, None\n'
+              '    return actual, normal\n\n\n'
+              'def _layout_defaults(root) -> dict:'
+          )
+          one(
+              '    - tuplets (time-modification): attack ignored, cursor still advances\n',
+              '    - tuplets (time-modification): sounding attacks are retained with their explicit local ratio\n'
+          )
+          one(
+              '                    is_grace = child.find("grace") is not None\n'
+              '                    is_tuplet = child.find("time-modification") is not None\n'
+              '                    is_chord = child.find("chord") is not None\n',
+              '                    is_grace = child.find("grace") is not None\n'
+              '                    tuplet_actual, tuplet_normal = _tuplet_ratio(child)\n'
+              '                    is_chord = child.find("chord") is not None\n'
+          )
+          one(
+              '                    if child.find("rest") is not None or is_grace or is_tuplet:\n'
+              '                        continue\n',
+              '                    if child.find("rest") is not None or is_grace:\n'
+              '                        continue\n'
+          )
+          one(
+              '                        tie_start=tie_start,\n'
+              '                        tie_stop=tie_stop,\n'
+              '                        page_index=page_index,\n',
+              '                        tie_start=tie_start,\n'
+              '                        tie_stop=tie_stop,\n'
+              '                        tuplet_actual=tuplet_actual,\n'
+              '                        tuplet_normal=tuplet_normal,\n'
+              '                        page_index=page_index,\n'
+          )
+          one(
+              '    Unlike analysis hits, this includes grace notes, tuplet attacks, and tied continuations\n'
+              '    because those noteheads are physically present on the score. Each group is marked\n'
+              '    ``analyzed`` only when at least one contained note creates a Tone-Metric attack.\n',
+              '    Unlike analysis hits, this includes grace notes and tied continuations because those\n'
+              '    noteheads are physically present on the score. Tuplet attacks are analysis attacks too;\n'
+              '    their ratio changes the recursive subdivision, not whether the note sounds. Each group\n'
+              '    is marked ``analyzed`` only when at least one contained note creates a Tone-Metric attack.\n'
+          )
+          one(
+              '                    row["pitches"].append(_pitch_string(child))\n'
+              '                    is_tuplet = child.find("time-modification") is not None\n'
+              '                    tie_stop = _has_tie(child, "stop")\n'
+              '                    if not is_grace and not is_tuplet and not tie_stop:\n'
+              '                        row["analyzed"] = True\n',
+              '                    row["pitches"].append(_pitch_string(child))\n'
+              '                    tuplet_actual, tuplet_normal = _tuplet_ratio(child)\n'
+              '                    if tuplet_actual is not None:\n'
+              '                        row["tuplet_actual"] = tuplet_actual\n'
+              '                        row["tuplet_normal"] = tuplet_normal\n'
+              '                    tie_stop = _has_tie(child, "stop")\n'
+              '                    if not is_grace and not tie_stop:\n'
+              '                        row["analyzed"] = True\n'
+          )
+          p.write_text(text)
+
+          expected = {
+              'tone_metric/engine.py': '05cfefdfc51192b3ed807ca5e4e1cf4bf7c925c202f59af14273a5313a08ebdd',
+              'tone_metric/models.py': '74f829aa3b07f8aa493ca614a45170fdfa8ffacf42cef8aacae63056bb427c8d',
+              'tone_metric/musicxml.py': '011338665f7300032d9f7707be8fbbc8069d80e6aff491feddf9c00f2f178485',
+          }
+          for path, want in expected.items():
+              got = hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
+              if got != want:
+                  raise SystemExit(f'{path} sha256 mismatch: {got} != {want}')
+
+          runtime = [
+              'app.py','requirements.txt','static/index.html','tone_metric/__init__.py',
+              'tone_metric/canonical_score.py','tone_metric/engine.py','tone_metric/models.py',
+              'tone_metric/musicxml.py','tone_metric/omr.py','tone_metric/omr_project.py',
+              'tone_metric/pdfview.py','tone_metric/physical.py','tone_metric/pivots.py',
+              'tone_metric/score_registration.py','tone_metric/theory.py','tone_metric/trees.py',
+              'tone_metric/waves.py',
+          ]
+          lines=[]
+          for path in runtime:
+              digest=hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
+              lines.append(f'{digest}  {path}')
+          pathlib.Path('v0152_sha256.txt').write_text('\n'.join(lines)+'\n')
+          PY
+      - name: Compile and smoke-test explicit triplet and duplet handling
+        run: |
+          python -m pip install -q -r requirements.txt
+          python -m py_compile app.py tone_metric/*.py
+          python - <<'PY'
+          from fractions import Fraction
+          from pathlib import Path
+          from tempfile import TemporaryDirectory
+          from tone_metric.musicxml import parse_musicxml
+          from tone_metric.engine import analyze
+
+          triplet='''<?xml version="1.0" encoding="UTF-8"?>
+          <score-partwise version="4.0"><part-list><score-part id="P1"><part-name>T</part-name></score-part></part-list><part id="P1"><measure number="1">
+          <attributes><divisions>12</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>
+          <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification></note>
+          <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification></note>
+          <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice><time-modification><actual-notes>3</actual-notes><normal-notes>2</normal-notes></time-modification></note>
+          <note><rest/><duration>36</duration><voice>1</voice></note></measure></part></score-partwise>'''
+          duplet='''<?xml version="1.0" encoding="UTF-8"?>
+          <score-partwise version="4.0"><part-list><score-part id="P1"><part-name>D</part-name></score-part></part-list><part id="P1"><measure number="1">
+          <attributes><divisions>8</divisions><time><beats>6</beats><beat-type>8</beat-type></time></attributes>
+          <note><pitch><step>C</step><octave>4</octave></pitch><duration>6</duration><voice>1</voice><time-modification><actual-notes>2</actual-notes><normal-notes>3</normal-notes></time-modification></note>
+          <note><pitch><step>D</step><octave>4</octave></pitch><duration>6</duration><voice>1</voice><time-modification><actual-notes>2</actual-notes><normal-notes>3</normal-notes></time-modification></note>
+          <note><rest/><duration>12</duration><voice>1</voice></note></measure></part></score-partwise>'''
+          with TemporaryDirectory() as td:
+              td=Path(td)
+              p=td/'triplet.musicxml'; p.write_text(triplet)
+              hits, measures, _=parse_musicxml(p)
+              assert [h.onset for h in hits] == [Fraction(0),Fraction(1,3),Fraction(2,3)]
+              seg=analyze(hits,measures)['segments'][0]
+              assert all(e['tone_metric_levels'] for e in seg['events'])
+              assert '3:2' in seg['arity_policy']['explicit_tuplet_ratios']
+              pts={x['time_quarter'] for x in seg['structural_points'] if Fraction(x['time_quarter']) <= 1}
+              assert {'1/3','2/3'} <= pts and '1/2' not in pts
+              p=td/'duplet.musicxml'; p.write_text(duplet)
+              hits, measures, _=parse_musicxml(p)
+              assert [h.onset for h in hits] == [Fraction(0),Fraction(3,4)]
+              seg=analyze(hits,measures)['segments'][0]
+              assert seg['compound'] and seg['beat_unit_quarter']=='3/2'
+              assert '2:3' in seg['arity_policy']['explicit_tuplet_ratios']
+              assert all(e['tone_metric_levels'] for e in seg['events'])
+          print('Tuplet smoke tests: PASS')
+          PY
+      - name: Override and legacy-path audit
+        run: |
+          test ! -e tone_metric/omr_exact.py
+          test ! -e validate_release.py
+          grep -R "def analyze(" -n tone_metric | tee /tmp/analyze_defs.txt
+          test "$(wc -l < /tmp/analyze_defs.txt)" -eq 1
+          grep -R "time-modification.*attack ignored\|is_tuplet.*continue" -n tone_metric && exit 1 || true
+          sha256sum -c v0152_sha256.txt
+      - name: Commit integrated tree and remove bootstrap workflow
+        run: |
+          rm -f .github/workflows/dissertation-tuplet-integration.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m "Align tuplets with dissertation sonic-event rules"
+          git push origin HEAD:dissertation-tuplet-integration-20260914
