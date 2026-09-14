@@ -1,0 +1,28 @@
+name: Inspect IMSLP redirect
+on:
+  push:
+    branches:
+      - diagnose-berg-audiveris-20260914
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect direct image and Special redirect responses
+        shell: bash
+        run: |
+          set -u
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/153 Safari/537.36'
+          PAGE='https://imslp.org/wiki/Piano_Sonata,_Op.1_(Berg,_Alban)'
+          curl --compressed -sS -L -A "$UA" -c /tmp/cookies -o /tmp/page "$PAGE" || true
+          curl -sS -D /tmp/direct.headers -L -A "$UA" -b /tmp/cookies -e "$PAGE" -o /tmp/direct 'https://imslp.org/images/d/d4/Berg_-_Piano_Sonata_Op.1.pdf' || true
+          curl -sS -D /tmp/special.headers -L -A "$UA" -b /tmp/cookies -e "$PAGE" -o /tmp/special 'https://imslp.org/wiki/Special:ImagefromIndex/02556' || true
+          echo '=== DIRECT HEADERS ==='; cat /tmp/direct.headers
+          echo '=== DIRECT FILE ==='; file /tmp/direct; wc -c /tmp/direct
+          echo '=== DIRECT DECODED TEXT ==='
+          if file /tmp/direct | grep -qi gzip; then gzip -dc /tmp/direct 2>/dev/null | head -c 12000 || true; else head -c 12000 /tmp/direct; fi
+          echo; echo '=== SPECIAL HEADERS ==='; cat /tmp/special.headers
+          echo '=== SPECIAL FILE ==='; file /tmp/special; wc -c /tmp/special
+          echo '=== SPECIAL TEXT ==='; head -c 12000 /tmp/special
+          echo
