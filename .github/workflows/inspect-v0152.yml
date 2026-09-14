@@ -1,0 +1,38 @@
+name: Inspect v0.15.2 runtime archive
+
+on:
+  push:
+    branches:
+      - inspect-v0152-runtime
+    paths:
+      - .github/workflows/inspect-v0152.yml
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Inspect archive
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, zipfile
+          from pathlib import Path
+          p = Path('tone_metric_runtime_source.zip')
+          data = p.read_bytes()
+          print('ARCHIVE_SIZE', len(data))
+          print('ARCHIVE_SHA256', hashlib.sha256(data).hexdigest())
+          with zipfile.ZipFile(p) as z:
+              files = [i for i in z.infolist() if not i.is_dir()]
+              print('FILE_COUNT', len(files))
+              print('FILES_BEGIN')
+              for i in files:
+                  b = z.read(i.filename)
+                  print(f'{hashlib.sha256(b).hexdigest()}  {i.filename}')
+              print('FILES_END')
+              names = {i.filename for i in files}
+              for target in ['validate_release.py','tone_metric/omr_exact.py','tests/test_real_berg_fixture.py']:
+                  print('STRICT_FILE', target, 'PRESENT' if target in names else 'ABSENT')
+          PY
