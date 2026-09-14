@@ -755,6 +755,7 @@ def build_hits_from_canonical_score(omr_path, measures, symbolic_hits=None):
             measure_number=measure.number,
             offset_in_measure=offset,
             sources=list(symbolic.sources) if symbolic is not None else [],
+            canonical_recovered=True,
         ))
 
     meta = dict(meta)
