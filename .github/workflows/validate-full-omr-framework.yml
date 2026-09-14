@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Python runtime dependencies for validation
+        run: python3 -m pip install -r requirements.txt
+
       - name: Integrate authoritative full-score framework fix
         run: python3 .github/scripts/full_framework_patch.py
 
