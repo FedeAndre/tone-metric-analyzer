@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse, Response
 
 # Import only the current exact-PDF presentation wrapper. Older visualization
 # wrappers remain in the repository for history but are not imported or executed.
-from dissertation_exact_pdf_app import APP_VERSION, app
+from dissertation_exact_pdf_app_v2 import APP_VERSION, app
 
 logger = logging.getLogger("tone_metric.dissertation")
 
@@ -55,6 +55,6 @@ def diagnostics():
         "version": APP_VERSION,
         "exception_logging": True,
         "request_validation_logging": True,
-        "visualization": "exact-uploaded-pdf-overlay",
+        "visualization": "exact-uploaded-pdf-overlay-single-omr-pass",
         "legacy_visualization_imported": False,
     }
