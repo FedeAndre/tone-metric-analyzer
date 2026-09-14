@@ -17,7 +17,7 @@ from tone_metric.omr import pdf_to_musicxml, pdf_to_annotations, find_audiveris
 from tone_metric.pdfview import render_pdf_pages
 from tone_metric.physical import build_normalized_overlay
 from tone_metric.omr_project import read_omr_slots, omr_slots_debug_rows
-from tone_metric.canonical_score import build_hits_from_canonical_score
+from tone_metric.canonical_score import build_hits_from_canonical_score, CanonicalFrameworkError
 
 ROOT = Path(__file__).resolve().parent
 CACHE = ROOT / ".tone_metric_cache"
@@ -150,13 +150,14 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
                 recovered_hits, canonical_warnings, canonical_score_meta = build_hits_from_canonical_score(
                     omr_path, measures, symbolic_hits=hits
                 )
-                if recovered_hits:
-                    analysis_hits = recovered_hits
-                    parse_warnings = list(parse_warnings) + list(canonical_warnings)
+            except CanonicalFrameworkError as exc:
+                raise HTTPException(422, f"Canonical score framework could not be reconciled safely: {exc}")
             except Exception as exc:
-                parse_warnings = list(parse_warnings) + [
-                    f"Canonical score-time recovery failed; symbolic MusicXML hits were used: {exc}"
-                ]
+                raise HTTPException(422, f"Canonical score-time recovery failed: {exc}")
+            if not recovered_hits:
+                raise HTTPException(422, "Canonical score-time recovery produced no usable attacks.")
+            analysis_hits = recovered_hits
+            parse_warnings = list(parse_warnings) + list(canonical_warnings)
         result = analyze(analysis_hits, measures)
         result["analysis_hit_source"] = "canonical-score-time" if analysis_hits is not hits else "musicxml-symbolic"
         result["symbolic_hit_count"] = len(hits)
