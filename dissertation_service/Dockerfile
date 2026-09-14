@@ -37,12 +37,10 @@ RUN git clone https://github.com/FedeAndre/tone-metric-analyzer.git /app \
 WORKDIR /app
 RUN python3 -m pip install --no-cache-dir --break-system-packages -r requirements.txt
 
-# Revalidate every frozen prior stage, then validate generalized recursion.
-RUN python3 validate_level1_clean_v4.py
-RUN python3 validate_level1_clean_v5.py
-RUN python3 validate_level1_level2_clean_v6.py
-RUN python3 validate_recursive_levels_clean_v7.py
-RUN python3 -c "import recursive_levels_clean_v7; print(recursive_levels_clean_v7.APP_VERSION)"
+# Standalone clean runtime only. No previous analyzer/version is imported,
+# executed, validated, or started in this image.
+RUN python3 validate_recursive_levels_clean_v8.py
+RUN python3 -c "import recursive_levels_clean_v8 as appmod; assert appmod.APP_VERSION.startswith('0.8.0-'); print(appmod.APP_VERSION)"
 
 EXPOSE 8080
-CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "recursive_levels_clean_v7:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python3", "-m", "uvicorn", "--app-dir", "/app", "recursive_levels_clean_v8:app", "--host", "0.0.0.0", "--port", "8080"]
