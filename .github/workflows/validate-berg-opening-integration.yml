@@ -1,0 +1,68 @@
+name: Validate integrated Berg opening rule
+on:
+  push:
+    branches:
+      - berg-opening-integration-20260914
+permissions:
+  contents: write
+jobs:
+  validate:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install validation dependencies
+        run: python3 -m pip install -r requirements.txt pytest
+      - name: Apply integrated runtime change
+        run: python3 .github/scripts/integrate_berg_opening.py
+      - name: Synthetic rule checks and clean audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=. PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/validate_berg_opening.py synthetic
+          PYTHONPATH=. PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/validate_berg_opening.py clean
+          sha256sum -c v0152_sha256.txt
+          changed="$(git diff --name-only | sort | tr '\n' ' ')"
+          test "$changed" = "tone_metric/engine.py tone_metric/models.py tone_metric/musicxml.py tone_metric/score_registration.py v0152_sha256.txt "
+          if [ -d tests ]; then PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q; fi
+      - name: Build candidate Docker image
+        run: docker build -t tma-berg-opening .
+      - name: Download exact regression scores
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -A 'Mozilla/5.0' -fL --retry 4 --retry-delay 2 -o berg.pdf 'https://s9.imslp.org/files/imglnks/usimg/d/d4/IMSLP02556-Berg_-_Piano_Sonata_Op.1.pdf'
+          test "$(stat -c%s berg.pdf)" = "579006"
+          echo '815d95242d6e2076866594174617361c87373bce7e1642b66812240a3aef400c  berg.pdf' | sha256sum -c -
+          curl -fL --retry 4 --retry-delay 2 -o bwv661.pdf 'https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf'
+          test "$(stat -c%s bwv661.pdf)" = "101270"
+          echo 'd50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661.pdf' | sha256sum -c -
+      - name: Exact Berg and BWV API regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run -d --name tma-opening -p 18080:8080 tma-berg-opening
+          trap 'docker logs tma-opening || true; docker rm -f tma-opening >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 90); do
+            curl -fsS http://127.0.0.1:18080/api/status >/dev/null && break
+            sleep 1
+          done
+          timeout 900 curl --fail-with-body --silent --show-error -F file=@berg.pdf -F meter_override=auto http://127.0.0.1:18080/api/analyze -o berg.json
+          PYTHONPATH=. PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/validate_berg_opening.py berg berg.json
+          timeout 900 curl --fail-with-body --silent --show-error -F file=@bwv661.pdf -F meter_override=auto http://127.0.0.1:18080/api/analyze -o bwv.json
+          PYTHONPATH=. PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/validate_berg_opening.py bwv bwv.json
+      - name: Commit validated runtime only
+        shell: bash
+        run: |
+          set -euo pipefail
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          sha256sum -c v0152_sha256.txt
+          PYTHONPATH=. PYTHONDONTWRITEBYTECODE=1 python3 .github/scripts/validate_berg_opening.py clean
+          git config user.name 'FedeAndre'
+          git config user.email 'federico.andreoni@gmail.com'
+          git add tone_metric/engine.py tone_metric/models.py tone_metric/musicxml.py tone_metric/score_registration.py v0152_sha256.txt
+          test "$(git diff --cached --name-only | sort | tr '\n' ' ')" = "tone_metric/engine.py tone_metric/models.py tone_metric/musicxml.py tone_metric/score_registration.py v0152_sha256.txt "
+          git commit -m 'Integrate dissertation opening-anacrusis structural articulation [skip ci]'
+          git push origin HEAD:berg-opening-integration-20260914
