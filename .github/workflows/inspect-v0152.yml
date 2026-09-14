@@ -14,66 +14,30 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Find unpacked v0.15.2 source trees and hidden manifests
+      - name: Enumerate all historical transfer and chunk files
         shell: bash
         run: |
           python3 - <<'PY'
           import re, subprocess
-
-          commits = subprocess.check_output(['git','rev-list','--all'], text=True).splitlines()
-          print('TREE45_BEGIN')
-          seen_trees = set()
+          commits=subprocess.check_output(['git','rev-list','--all'], text=True).splitlines()
+          seen=set()
+          pats=('chunk','part','b64','base64','transport','v0152','v0_15_2','0_15_2','0152','transfer')
+          print('TRANSFER_PATHS_BEGIN')
           for commit in commits:
-              tree = subprocess.check_output(['git','show','-s','--format=%T',commit], text=True).strip()
-              if tree in seen_trees:
-                  continue
-              seen_trees.add(tree)
-              rows = subprocess.check_output(['git','ls-tree','-r',commit], text=True, errors='replace').splitlines()
-              files = []
-              for row in rows:
-                  try:
-                      meta, path = row.split('\t',1)
-                      _, typ, blob = meta.split()
-                  except ValueError:
-                      continue
-                  if typ == 'blob':
-                      files.append((path,blob))
-              if len(files) == 45:
-                  msg = subprocess.check_output(['git','show','-s','--format=%s',commit], text=True).strip()
-                  print('TREE45', commit, 'TREE', tree, 'MSG', msg)
-                  for path,blob in files:
-                      print(' ', blob, path)
-          print('TREE45_END')
-
-          print('ALL_TEXT_MANIFEST_SCAN_BEGIN')
-          seen_blobs=set()
-          for commit in commits:
-              rows = subprocess.check_output(['git','ls-tree','-r',commit], text=True, errors='replace').splitlines()
+              rows=subprocess.check_output(['git','ls-tree','-r',commit],text=True,errors='replace').splitlines()
               for row in rows:
                   try:
                       meta,path=row.split('\t',1)
                       _,typ,blob=meta.split()
                   except ValueError:
                       continue
-                  if typ!='blob' or blob in seen_blobs:
-                      continue
-                  seen_blobs.add(blob)
-                  size=int(subprocess.check_output(['git','cat-file','-s',blob], text=True).strip())
-                  if size > 2_000_000:
-                      continue
-                  raw=subprocess.check_output(['git','cat-file','blob',blob])
-                  try:
-                      text=raw.decode('utf-8')
-                  except UnicodeDecodeError:
-                      continue
-                  low=text.lower()
-                  hashes=re.findall(r'(?<![0-9a-f])[0-9a-f]{64}(?![0-9a-f])',low)
-                  interesting=('v0.15.2' in low or 'v0152' in low or '0.15.2' in low or '45-file' in low or '45 file' in low or len(hashes)>=20)
-                  if interesting:
-                      print('TEXT_CLUE', commit, path, 'HEX64_COUNT', len(hashes))
-                      for line in text.splitlines():
-                          ll=line.lower()
-                          if ('v0.15.2' in ll or 'v0152' in ll or '0.15.2' in ll or '45-file' in ll or '45 file' in ll or re.search(r'(?<![0-9a-f])[0-9a-f]{64}(?![0-9a-f])',ll)):
-                              print(' ', line[:500])
-          print('ALL_TEXT_MANIFEST_SCAN_END')
+                  if typ!='blob': continue
+                  low=path.lower()
+                  if any(p in low for p in pats):
+                      key=(blob,path)
+                      if key in seen: continue
+                      seen.add(key)
+                      size=int(subprocess.check_output(['git','cat-file','-s',blob],text=True).strip())
+                      print(commit, blob, size, path)
+          print('TRANSFER_PATHS_END')
           PY
