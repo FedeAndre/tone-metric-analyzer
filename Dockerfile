@@ -1,35 +1,41 @@
+FROM eclipse-temurin:25-jdk AS audiveris-builder
+ARG AUDIVERIS_VERSION=5.11.0
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git ca-certificates unzip \
+    && rm -rf /var/lib/apt/lists/*
+RUN git clone --depth 1 --branch "${AUDIVERIS_VERSION}" https://github.com/Audiveris/audiveris.git /src/audiveris \
+    && sed -i 's/new MorphoProcessor(se)\.close(buffer);/new MorphoProcessor(se).fclose(buffer);/' \
+       /src/audiveris/app/src/main/java/org/audiveris/omr/sheet/beam/SpotsBuilder.java \
+    && grep -F 'new MorphoProcessor(se).fclose(buffer);' \
+       /src/audiveris/app/src/main/java/org/audiveris/omr/sheet/beam/SpotsBuilder.java
+WORKDIR /src/audiveris
+RUN ./gradlew --no-daemon -PisFlatpak=true :app:installDist -x test \
+    && test -x /src/audiveris/app/build/install/Audiveris/bin/Audiveris
+
 FROM ubuntu:24.04
 ARG DEBIAN_FRONTEND=noninteractive
-ARG AUDIVERIS_VERSION=5.11.0
-ARG AUDIVERIS_ASSET_ID=473797293
-ARG AUDIVERIS_SHA256=f20113aaa33b3149ec8d6a09b2a7963360e65fafd92d69389987a85bbc3ec7a3
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
+    JAVA_HOME=/opt/java/openjdk \
+    PATH=/opt/java/openjdk/bin:${PATH} \
     AUDIVERIS_CMD=/opt/audiveris/bin/Audiveris \
     TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-       ca-certificates coreutils curl unzip python3 python3-pip python3-venv \
+       ca-certificates coreutils python3 python3-pip python3-venv \
        fontconfig fonts-dejavu-core fonts-liberation \
        tesseract-ocr tesseract-ocr-eng \
        libasound2t64 libgtk-3-0t64 libx11-6 libxext6 libxi6 libxrender1 libxtst6 xdg-utils \
-    && (curl -fL --retry 8 --retry-delay 5 --retry-all-errors \
-          -o /tmp/audiveris.deb \
-          "https://github.com/Audiveris/audiveris/releases/download/${AUDIVERIS_VERSION}/Audiveris-${AUDIVERIS_VERSION}-ubuntu24.04-x86_64.deb" \
-        || curl -fL --retry 8 --retry-delay 5 --retry-all-errors \
-          -H 'Accept: application/octet-stream' \
-          -o /tmp/audiveris.deb \
-          "https://api.github.com/repos/Audiveris/audiveris/releases/assets/${AUDIVERIS_ASSET_ID}") \
-    && echo "${AUDIVERIS_SHA256}  /tmp/audiveris.deb" | sha256sum -c - \
-    && dpkg-deb -x /tmp/audiveris.deb / \
-    && test -x /opt/audiveris/bin/Audiveris \
     && mkdir -p /root/.config/AudiverisLtd/audiveris/tessdata \
     && ENG="$(dpkg -L tesseract-ocr-eng | grep '/eng.traineddata$' | head -n1)" \
     && test -n "$ENG" \
     && cp "$ENG" /root/.config/AudiverisLtd/audiveris/tessdata/eng.traineddata \
     && fc-cache -f \
-    && rm -f /tmp/audiveris.deb \
     && rm -rf /var/lib/apt/lists/*
+COPY --from=audiveris-builder /opt/java/openjdk /opt/java/openjdk
+COPY --from=audiveris-builder /src/audiveris/app/build/install/Audiveris /opt/audiveris
+RUN test -x /opt/audiveris/bin/Audiveris \
+    && java -version
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 RUN python3 -m pip install --no-cache-dir --break-system-packages -r /app/requirements.txt
