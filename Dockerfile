@@ -9,7 +9,7 @@ RUN git clone --depth 1 --branch "${AUDIVERIS_VERSION}" https://github.com/Audiv
     && grep -F 'new MorphoProcessor(se).fclose(buffer);' \
        /src/audiveris/app/src/main/java/org/audiveris/omr/sheet/beam/SpotsBuilder.java
 WORKDIR /src/audiveris
-RUN ./gradlew --no-daemon -PisFlatpak=true :app:installDist -x test \
+RUN ./gradlew --no-daemon :app:installDist -x test \
     && test -x /src/audiveris/app/build/install/Audiveris/bin/Audiveris
 
 FROM ubuntu:24.04
