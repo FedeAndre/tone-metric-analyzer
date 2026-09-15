@@ -34,7 +34,11 @@ def main():
 
     pages = timed("render_pdf_pages", lambda: render_pdf_pages(pdf, out / "pages"), rows)
     symbolic, omr = timed("audiveris_transcribe_export", lambda: pdf_to_musicxml(pdf, out / "omr"), rows)
-    annotations, annotation_warning = timed("audiveris_annotation_only", lambda: pdf_to_annotations(pdf, out / "annotations"), rows)
+    annotations, annotation_warning = timed(
+        "audiveris_annotation_only",
+        lambda: pdf_to_annotations(pdf, out / "annotations", omr_path=omr),
+        rows,
+    )
     hits, measures, parse_warnings = timed("parse_musicxml", lambda: parse_musicxml(symbolic, initial_meter_override=None), rows)
     recovered_hits, canonical_warnings, canonical_meta = timed(
         "canonical_score_recovery",
