@@ -51,7 +51,11 @@ def pdf_to_musicxml(pdf_path: str | Path, output_dir: str | Path) -> tuple[Path,
 
     proc = _run(
         cmd,
-        ["-batch", "-transcribe", "-export", "-output", str(output_dir), "--", str(pdf_path)],
+        [
+            "-batch",
+            "-constant", "org.audiveris.omr.text.tesseract.TesseractOCR.useOCR=false",
+            "-transcribe", "-export", "-output", str(output_dir), "--", str(pdf_path),
+        ],
     )
     try:
         (output_dir / "audiveris-transcribe.log").write_text(
