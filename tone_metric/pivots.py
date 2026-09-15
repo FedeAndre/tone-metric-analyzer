@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-"""Dissertation-faithful pivot derivation from the validated wave profile.
+"""Paper-aligned pivot derivation from the validated wave profile.
 
-A pivot is derived *after* the recursive Levels and validated wave profile have
-already been completed.  This module cannot create musical events, alter score
-time, change Levels, or synthesize PDF coordinates.
+A pivot is derived *after* the recursive Levels and wave profile have already
+been completed.  This module cannot create musical events, alter score time,
+change Levels, or synthesize PDF coordinates.
 
-The dissertation defines a pivot as the region spanning the moments immediately
-before and after a wave descent.  A simple pivot descends one level before the
-wave rises again; a compound pivot descends at least two levels before the next
-rise.  Equal-height points between the drop and the recovery are permitted and
-do not create extra pivots.
+Definition 8 treats a pivot as a single moment of structural turning: the
+rightmost point of a crest immediately before the wave begins to descend.  The
+subsequent trough and first renewed ascent are consulted only to determine the
+depth of that turn and whether it is simple or compound; they are not part of
+the pivot itself.
 """
 
 from collections import defaultdict
@@ -43,18 +43,22 @@ def _height(point: dict) -> int:
 
 
 def build_pivot_profile(wave_profile: list[dict]) -> list[dict]:
-    """Derive simple/compound pivots from the fixed score-time wave profile.
+    """Derive simple/compound pivot moments from the fixed wave profile.
 
-    One pivot is emitted for each descent that is eventually followed by an
-    ascent within the same meter segment.  Its visible region is the first drop:
-    the adjacent wave positions immediately before and after that drop.  We then
-    look ahead, without changing either endpoint, to classify the descent:
+    One pivot is emitted for each rightmost crest point whose immediately
+    following wave point is lower and whose ensuing descent is eventually
+    followed by an ascent within the same meter segment.  The pivot itself is
+    the crest point ``t_c``: a single score-time moment of structural turning.
+
+    Classification looks forward without extending the pivot in time:
 
     * simple   -> total descent depth before the next ascent is exactly 1 level
     * compound -> total descent depth before the next ascent is 2+ levels
 
-    A terminal descent with no subsequent ascent is not called a pivot because
-    the dissertation defines a pivot as a descent followed by a new ascent.
+    The trough and recovery remain diagnostic points used only to calculate the
+    depth.  A terminal descent with no subsequent ascent is not called a pivot,
+    because the later ascent is what establishes that a structural turn has
+    taken place rather than an unfinished falling tail.
     """
     by_segment: dict[int, list[dict]] = defaultdict(list)
     for point in wave_profile:
@@ -77,17 +81,16 @@ def build_pivot_profile(wave_profile: list[dict]) -> list[dict]:
         )
         i = 0
         while i < len(points) - 1:
-            start = points[i]
+            pivot = points[i]
             after = points[i + 1]
-            start_h = _height(start)
+            pivot_h = _height(pivot)
             after_h = _height(after)
-            if start_h <= 0 or after_h <= 0 or after_h >= start_h:
+            if pivot_h <= 0 or after_h <= 0 or after_h >= pivot_h:
                 i += 1
                 continue
 
-            # The pivot region itself is the adjacent pair spanning the first
-            # descent.  Classification may look farther ahead to see whether the
-            # descent continues before the eventual recovery.
+            # The pivot is the rightmost crest point immediately before this
+            # first descent.  Look ahead only to classify its depth.
             minimum_h = after_h
             trough_index = i + 1
             recovery_index = None
@@ -106,28 +109,26 @@ def build_pivot_profile(wave_profile: list[dict]) -> list[dict]:
                         trough_index = j + 1
                     j += 1
                     continue
-                # First ascent after this descent run.
                 recovery_index = j + 1
                 break
 
             if recovery_index is None:
-                # A falling tail at the end of a segment is not a pivot because
-                # there is no following ascent that establishes a new wave.
                 i += 1
                 continue
 
-            total_depth = start_h - minimum_h
+            total_depth = pivot_h - minimum_h
             if total_depth <= 0:
                 i += 1
                 continue
+
             kind = "simple" if total_depth == 1 else "compound"
             trough = points[trough_index]
             recovery = points[recovery_index]
-            start_key = _point_key(start)
+            pivot_key = _point_key(pivot)
             after_key = _point_key(after)
             trough_key = _point_key(trough)
             recovery_key = _point_key(recovery)
-            if None in (start_key, after_key, trough_key, recovery_key):
+            if None in (pivot_key, after_key, trough_key, recovery_key):
                 i = max(i + 1, trough_index)
                 continue
 
@@ -138,24 +139,30 @@ def build_pivot_profile(wave_profile: list[dict]) -> list[dict]:
                 "simple": kind == "simple",
                 "compound": kind == "compound",
                 "drop_depth": int(total_depth),
-                "immediate_drop_depth": int(start_h - after_h),
-                "crest_height": int(start_h),
+                "immediate_drop_depth": int(pivot_h - after_h),
+                "crest_height": int(pivot_h),
                 "after_drop_height": int(after_h),
                 "trough_height": int(minimum_h),
                 "recovery_height": int(_height(recovery)),
-                # Visible dissertation-style region: two adjacent positions
-                # immediately before and after the wave drop.
-                "start_measure_index": int(start["measure_index"]),
-                "start_measure_number": start.get("measure_number"),
-                "start_offset_in_measure_quarter": start.get("offset_in_measure_quarter"),
-                "start_onset_quarter": start.get("onset_quarter"),
-                "start_attack": bool(start.get("attack")),
-                "end_measure_index": int(after["measure_index"]),
-                "end_measure_number": after.get("measure_number"),
-                "end_offset_in_measure_quarter": after.get("offset_in_measure_quarter"),
-                "end_onset_quarter": after.get("onset_quarter"),
-                "end_attack": bool(after.get("attack")),
-                # Look-ahead diagnostics used only to classify the pivot.
+                # Definition-8 pivot moment: the rightmost crest point t_c.
+                "pivot_measure_index": int(pivot["measure_index"]),
+                "pivot_measure_number": pivot.get("measure_number"),
+                "pivot_offset_in_measure_quarter": pivot.get("offset_in_measure_quarter"),
+                "pivot_onset_quarter": pivot.get("onset_quarter"),
+                "pivot_attack": bool(pivot.get("attack")),
+                # Compatibility aliases identify the same single moment; there
+                # is deliberately no distinct temporal endpoint for a pivot.
+                "start_measure_index": int(pivot["measure_index"]),
+                "start_measure_number": pivot.get("measure_number"),
+                "start_offset_in_measure_quarter": pivot.get("offset_in_measure_quarter"),
+                "start_onset_quarter": pivot.get("onset_quarter"),
+                "start_attack": bool(pivot.get("attack")),
+                # Look-ahead diagnostics used only for classification.
+                "after_drop_measure_index": int(after["measure_index"]),
+                "after_drop_measure_number": after.get("measure_number"),
+                "after_drop_offset_in_measure_quarter": after.get("offset_in_measure_quarter"),
+                "after_drop_onset_quarter": after.get("onset_quarter"),
+                "after_drop_attack": bool(after.get("attack")),
                 "trough_measure_index": int(trough["measure_index"]),
                 "trough_measure_number": trough.get("measure_number"),
                 "trough_offset_in_measure_quarter": trough.get("offset_in_measure_quarter"),
@@ -164,11 +171,11 @@ def build_pivot_profile(wave_profile: list[dict]) -> list[dict]:
                 "recovery_measure_number": recovery.get("measure_number"),
                 "recovery_offset_in_measure_quarter": recovery.get("offset_in_measure_quarter"),
                 "recovery_onset_quarter": recovery.get("onset_quarter"),
-                "pivot_source": "derived-wave-descent-before-next-ascent",
+                "pivot_source": "definition-8-structural-turning-point",
             })
             pivot_index += 1
-            # Suppress duplicate pivots inside a compound descent.  Resume at the
-            # trough; the next transition is the ascent that validated this pivot.
+            # Suppress duplicate pivots inside the same compound descent.  Resume
+            # at the trough; the next transition is the ascent that validated it.
             i = max(i + 1, trough_index)
 
     return out
@@ -178,11 +185,11 @@ def register_pivot_profile(
     pivot_profile: list[dict],
     wave_anchors_by_page: dict[int, list[dict]],
 ) -> tuple[dict[int, list[dict]], dict, list[str]]:
-    """Register pivots only to already-registered wave anchors.
+    """Register each pivot to its single existing wave anchor.
 
-    Same-system pivots become one visual span.  If the two adjacent score-time
-    positions straddle a system/page break, two endpoint markers are emitted so
-    the pivot is not discarded.  No x-coordinate is estimated or synthesized.
+    A pivot has no temporal span and therefore never becomes a cross-system
+    segment.  Its marker is placed only at the already-registered wave point for
+    the structural turning moment.  No x-coordinate is estimated or synthesized.
     """
     lookup = {}
     duplicates = []
@@ -199,72 +206,42 @@ def register_pivot_profile(
     by_page: dict[int, list[dict]] = defaultdict(list)
     missing = []
     mapped_pivots = 0
-    cross_system = 0
     simple_count = 0
     compound_count = 0
 
     for pivot in pivot_profile:
-        start_key = (
-            int(pivot["start_measure_index"]),
-            _frac(pivot["start_offset_in_measure_quarter"]),
+        pivot_key = (
+            int(pivot["pivot_measure_index"]),
+            _frac(pivot["pivot_offset_in_measure_quarter"]),
         )
-        end_key = (
-            int(pivot["end_measure_index"]),
-            _frac(pivot["end_offset_in_measure_quarter"]),
-        )
-        start_found = lookup.get(start_key)
-        end_found = lookup.get(end_key)
-        if start_found is None or end_found is None:
+        found = lookup.get(pivot_key)
+        if found is None:
             missing.append({
                 **pivot,
                 "reason": "existing-wave-anchor-not-found",
-                "missing_start": start_found is None,
-                "missing_end": end_found is None,
             })
             continue
 
-        start_page, start = start_found
-        end_page, end = end_found
-        start_system = int(start.get("system_index", 0))
-        end_system = int(end.get("system_index", 0))
-        common = {
+        page, anchor = found
+        system = int(anchor.get("system_index", 0))
+        x_norm = float(anchor["cx_norm"])
+        x_abs = float(anchor["recovered_x_abs"])
+        by_page[page].append({
             **pivot,
-            "registration_source": "existing-wave-anchors-only",
+            "registration_source": "existing-wave-anchor-only",
             "pivot_coordinate_synthesis": False,
-            "start_page_index": start_page,
-            "start_system_index": start_system,
-            "start_cx_norm": float(start["cx_norm"]),
-            "start_x_abs": float(start["recovered_x_abs"]),
-            "end_page_index": end_page,
-            "end_system_index": end_system,
-            "end_cx_norm": float(end["cx_norm"]),
-            "end_x_abs": float(end["recovered_x_abs"]),
-        }
-        if start_page == end_page and start_system == end_system:
-            row = {
-                **common,
-                "page_index": start_page,
-                "system_index": start_system,
-                "span_role": "complete",
-                "cx_norm": (float(start["cx_norm"]) + float(end["cx_norm"])) / 2.0,
-            }
-            by_page[start_page].append(row)
-        else:
-            cross_system += 1
-            by_page[start_page].append({
-                **common,
-                "page_index": start_page,
-                "system_index": start_system,
-                "span_role": "start-endpoint",
-                "cx_norm": float(start["cx_norm"]),
-            })
-            by_page[end_page].append({
-                **common,
-                "page_index": end_page,
-                "system_index": end_system,
-                "span_role": "end-endpoint",
-                "cx_norm": float(end["cx_norm"]),
-            })
+            "page_index": page,
+            "system_index": system,
+            "span_role": "point",
+            "cx_norm": x_norm,
+            "pivot_cx_norm": x_norm,
+            "pivot_x_abs": x_abs,
+            # Compatibility start-coordinate aliases refer to the same point.
+            "start_page_index": page,
+            "start_system_index": system,
+            "start_cx_norm": x_norm,
+            "start_x_abs": x_abs,
+        })
         mapped_pivots += 1
         if pivot.get("kind") == "simple":
             simple_count += 1
@@ -275,14 +252,13 @@ def register_pivot_profile(
         rows.sort(key=lambda r: (
             int(r.get("system_index", 0)),
             int(r.get("pivot_index", -1)),
-            str(r.get("span_role", "")),
         ))
 
     warnings = []
     if duplicates:
         warnings.append(f"{len(duplicates)} duplicate existing wave-anchor key(s) were found while registering pivots.")
     if missing:
-        warnings.append(f"{len(missing)} pivot(s) could not be matched to their two existing wave anchors.")
+        warnings.append(f"{len(missing)} pivot(s) could not be matched to their existing wave anchor.")
 
     stats = {
         "pivot_profile_expected": len(pivot_profile),
@@ -290,9 +266,9 @@ def register_pivot_profile(
         "pivot_profile_missing": len(missing),
         "simple_pivots": simple_count,
         "compound_pivots": compound_count,
-        "cross_system_pivots": cross_system,
+        "cross_system_pivots": 0,
         "pivot_visual_pieces": sum(len(v) for v in by_page.values()),
-        "pivot_registration": "score-time-pivot->existing-wave-anchors-only",
+        "pivot_registration": "score-time-pivot-point->existing-wave-anchor-only",
         "pivot_coordinate_synthesis": False,
         "pivot_missing": missing,
         "pivot_duplicate_wave_anchor_keys": [f"{mi}:{off}" for mi, off in duplicates],

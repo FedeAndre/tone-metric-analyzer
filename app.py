@@ -3,8 +3,6 @@ import shutil
 import time
 import uuid
 import json
-import asyncio
-import threading
 from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
 from fractions import Fraction
@@ -15,60 +13,17 @@ from fastapi.staticfiles import StaticFiles
 
 from tone_metric.musicxml import parse_musicxml, extract_visual_groups
 from tone_metric.engine import analyze
-from tone_metric.preprocessing import prepare_hits_for_dissertation_core
 from tone_metric.omr import pdf_to_musicxml, pdf_to_annotations, find_audiveris
 from tone_metric.pdfview import render_pdf_pages
 from tone_metric.physical import build_normalized_overlay
 from tone_metric.omr_project import read_omr_slots, omr_slots_debug_rows
-from tone_metric.canonical_score import build_hits_from_canonical_score, reconcile_measure_framework_from_omr
+from tone_metric.canonical_score import build_hits_from_canonical_score, CanonicalFrameworkError
 
 ROOT = Path(__file__).resolve().parent
 CACHE = ROOT / ".tone_metric_cache"
 CACHE.mkdir(exist_ok=True)
-app = FastAPI(title="Tone-Metric Analyzer", version="0.16.1")
+app = FastAPI(title="Tone-Metric Analyzer", version="0.15.2")
 app.mount("/static", StaticFiles(directory=ROOT / "static"), name="static")
-
-# Hosted PDF recognition can exceed a reverse-proxy request timeout. Run long
-# analyses in a worker thread and let the browser poll short status requests;
-# this scheduling layer has no access to the Levels calculation.
-JOBS: dict[str, dict] = {}
-JOBS_LOCK = threading.Lock()
-
-def _job_set(job_id: str, **values):
-    with JOBS_LOCK:
-        current = JOBS.setdefault(job_id, {})
-        current.update(values)
-
-
-def _run_analysis_job(job_id: str, input_path: Path, filename: str, meter_override: str):
-    started = time.time()
-    _job_set(job_id, status="running", started_at=started)
-    try:
-        with input_path.open("rb") as fh:
-            upload = UploadFile(file=fh, filename=filename)
-            response = asyncio.run(analyze_upload(upload, meter_override))
-        if isinstance(response, JSONResponse):
-            payload = json.loads(response.body.decode("utf-8"))
-        else:
-            payload = response
-        _job_set(
-            job_id, status="done", result=payload,
-            finished_at=time.time(), elapsed_seconds=round(time.time() - started, 3)
-        )
-    except HTTPException as exc:
-        _job_set(
-            job_id, status="failed", detail=str(exc.detail),
-            http_status=exc.status_code, finished_at=time.time(),
-            elapsed_seconds=round(time.time() - started, 3)
-        )
-    except Exception as exc:
-        _job_set(
-            job_id, status="failed", detail=f"Could not analyze score: {exc}",
-            http_status=500, finished_at=time.time(),
-            elapsed_seconds=round(time.time() - started, 3)
-        )
-    finally:
-        shutil.rmtree(input_path.parent, ignore_errors=True)
 
 
 
@@ -80,7 +35,7 @@ def _meter_override_tuple(value: str | None):
     try:
         n, d = [int(x.strip()) for x in text.split("/", 1)]
     except Exception:
-        raise HTTPException(400, "Meter override must be Auto or one of the explicit profiles: 2/2, 3/4, 4/4, 6/8, 9/8, or 12/8.")
+        raise HTTPException(400, "Meter override must be Auto or a value such as 2/2, 4/4, 3/4, 6/8, or 12/8.")
     if n <= 0 or d <= 0:
         raise HTTPException(400, "Invalid meter override.")
     return n, d
@@ -123,39 +78,6 @@ def index():
 @app.get("/api/status")
 def status():
     return {"ok": True, "audiveris_found": bool(find_audiveris()), "audiveris_command": find_audiveris()}
-
-
-@app.post("/api/analyze/start")
-async def analyze_start(file: UploadFile = File(...), meter_override: str = Form("auto")):
-    suffix = Path(file.filename or "upload").suffix.lower()
-    if suffix not in {".pdf", ".xml", ".musicxml", ".mxl"}:
-        raise HTTPException(400, "Upload a PDF score. MusicXML/MXL are also accepted for validation/testing.")
-    _cleanup_cache()
-    job_id = uuid.uuid4().hex
-    job_dir = CACHE / f"_job_{job_id}"
-    job_dir.mkdir(parents=True, exist_ok=True)
-    safe_name = Path(file.filename or f"upload{suffix}").name
-    input_path = job_dir / safe_name
-    input_path.write_bytes(await file.read())
-    _job_set(job_id, status="queued", created_at=time.time(), filename=safe_name)
-    threading.Thread(
-        target=_run_analysis_job,
-        args=(job_id, input_path, safe_name, meter_override),
-        daemon=True,
-        name=f"tone-metric-{job_id[:8]}",
-    ).start()
-    return {"job_id": job_id, "status": "queued"}
-
-
-@app.get("/api/analyze/job/{job_id}")
-def analyze_job(job_id: str):
-    if not job_id.isalnum():
-        raise HTTPException(404)
-    with JOBS_LOCK:
-        job = JOBS.get(job_id)
-        if job is None:
-            raise HTTPException(404, "Analysis job not found")
-        return dict(job)
 
 
 @app.get("/api/session/{session_id}/page/{page_index}")
@@ -220,61 +142,27 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
             symbolic = inp
 
         meter_override_tuple = _meter_override_tuple(meter_override)
-        symbolic_hits, measures, parse_warnings = parse_musicxml(symbolic, initial_meter_override=meter_override_tuple)
-        raw_analysis_hits = symbolic_hits
-        analysis_hit_source = "musicxml-symbolic-explicit"
+        hits, measures, parse_warnings = parse_musicxml(symbolic, initial_meter_override=meter_override_tuple)
+        analysis_hits = hits
         canonical_score_meta = {}
-        measure_framework_meta = {
-            "source": "musicxml",
-            "omr_stack_count": None,
-            "musicxml_measure_count": len(measures),
-            "expanded_measure_count": len(measures),
-            "synthesized_missing_measure_count": 0,
-            "synthesized_missing_measure_numbers": [],
-            "alignment": "not-applicable",
-        }
-
-        if suffix == ".pdf":
-            if omr_path is None:
-                raise ValueError(
-                    "Strict v0.16 PDF analysis requires the saved Audiveris .omr project; "
-                    "symbolic MusicXML is not used as a silent fallback."
-                )
+        if suffix == ".pdf" and omr_path is not None:
             try:
-                analysis_measures, aligned_symbolic_hits, framework_warnings, measure_framework_meta = (
-                    reconcile_measure_framework_from_omr(
-                        omr_path, measures, symbolic_hits=symbolic_hits, initial_meter_override=meter_override_tuple
-                    )
-                )
-                parse_warnings = list(parse_warnings) + list(framework_warnings)
                 recovered_hits, canonical_warnings, canonical_score_meta = build_hits_from_canonical_score(
-                    omr_path, analysis_measures, symbolic_hits=aligned_symbolic_hits
+                    omr_path, measures, symbolic_hits=hits
                 )
+            except CanonicalFrameworkError as exc:
+                raise HTTPException(422, f"Canonical score framework could not be reconciled safely: {exc}")
             except Exception as exc:
-                raise ValueError(
-                    "Canonical OMR score-time recovery failed. v0.16 stopped rather than substituting "
-                    f"a different event pipeline: {exc}"
-                ) from exc
+                raise HTTPException(422, f"Canonical score-time recovery failed: {exc}")
             if not recovered_hits:
-                raise ValueError(
-                    "Canonical OMR score-time recovery produced no attacks. v0.16 stopped rather than "
-                    "falling back to symbolic MusicXML events."
-                )
-            raw_analysis_hits = recovered_hits
-            measures = analysis_measures
+                raise HTTPException(422, "Canonical score-time recovery produced no usable attacks.")
+            analysis_hits = recovered_hits
             parse_warnings = list(parse_warnings) + list(canonical_warnings)
-            analysis_hit_source = "canonical-omr-score-time-strict"
-
-        analysis_hits, preprocessing_audit = prepare_hits_for_dissertation_core(raw_analysis_hits)
         result = analyze(analysis_hits, measures)
-        result["analysis_hit_source"] = analysis_hit_source
-        result["symbolic_hit_count"] = len(symbolic_hits)
-        result["raw_analysis_hit_count"] = len(raw_analysis_hits)
-        result["preprocessing_audit"] = preprocessing_audit
+        result["analysis_hit_source"] = "canonical-score-time" if analysis_hits is not hits else "musicxml-symbolic"
+        result["symbolic_hit_count"] = len(hits)
         result["canonical_score_meta"] = canonical_score_meta
-        result["measure_framework_meta"] = measure_framework_meta
-        result["canonical_hit_count"] = int(canonical_score_meta.get("canonical_hit_count", 0) or 0)
-        result["silent_event_fallback_enabled"] = False
+        result["canonical_hit_count"] = int(canonical_score_meta.get("canonical_hit_count", len(analysis_hits)) or 0)
         result["levels_enabled"] = sorted({
             int(level)
             for seg in result.get("segments", [])
@@ -323,10 +211,10 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
         elif suffix == ".pdf" and annotation_warning:
             result["physical_overlay"]["warnings"].append(annotation_warning)
 
-        # v0.16 keeps notation/OMR preprocessing separate from the dissertation
-        # Levels mathematics. Tuplet-voice attacks are excluded from the strict core;
-        # ordinary simultaneous attacks remain. No event source or meter arity is
-        # silently substituted or inferred from spacing. Visual centering is display-only.
+        # v0.15.2 aligns the executable output with the mathematical paper by
+        # exposing H(t), D(t), and lambda(t), using Definition 8 pivot moments as single structural turning points,
+        # and retaining the separate executable theory-reference module.
+        # Canonical score timing and exact attack registration remain unchanged.
 
         try:
             debug_summary = {
@@ -335,19 +223,12 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
                 "symbolic_source": result.get("symbolic_source"),
                 "omr_saved": result.get("omr_saved"),
                 "meter_override": result.get("meter_override"),
-                "analysis_hit_source": result.get("analysis_hit_source"),
-                "preprocessing_audit": result.get("preprocessing_audit", {}),
-                "silent_event_fallback_enabled": result.get("silent_event_fallback_enabled"),
-                "measure_framework_meta": result.get("measure_framework_meta", {}),
                 "measures": result.get("measures", []),
                 "segments": [
                     {
                         "meter": seg.get("meter"),
                         "beat_unit_quarter": seg.get("beat_unit_quarter"),
                         "level1_anchor_labels": seg.get("level1_anchor_labels", []),
-                        "arity_policy": seg.get("arity_policy", {}),
-                        "chapter4_boundary_rule": seg.get("chapter4_boundary_rule", {}),
-                        "denomination_stages": seg.get("denomination_stages", []),
                         "events": [
                             {k: e.get(k) for k in (
                                 "event_index","measure_index","measure_number","offset_in_measure_quarter",

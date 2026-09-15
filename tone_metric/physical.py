@@ -1,10 +1,11 @@
 """Physical page geometry for generalized Levels and derived tone-metric waves.
 
-The validated canonical attack and structural registration paths are the only ways
-score-time positions receive PDF coordinates. Wave, pivot, and tree layers reuse
-those already-registered positions; none has an independent timing or coordinate-
-estimation path and none can override the recursive Levels. Legacy event/default-x,
-barline, pivot, tree, and alternate registration implementations remain absent.
+The validated canonical attack and structural registration paths remain the only
+ways score-time positions receive PDF coordinates.  v0.12.0 added a wave display
+that reuses those already-registered positions; it has no independent timing or
+coordinate-estimation path and therefore cannot override the recursive Levels.
+Legacy event/default-x/barline/pivot/tree registration implementations remain
+absent; v0.13.0 adds a new isolated pivot derivative from the validated wave.
 """
 
 
@@ -462,7 +463,7 @@ def _attack_columns(system: list[SymbolBox]) -> list[dict]:
     were occasionally merged into one column.  Once a real attack disappears from
     the physical column sequence, every later onset in that measure can shift by one.
 
-    The canonical visual grouping deliberately prefers *under-merging* to over-merging.  Simultaneous chord
+    v0.6.9 deliberately prefers *under-merging* to over-merging.  Simultaneous chord
     noteheads normally share nearly the same x coordinate, while sequential attacks
     occupy clearly separate columns.  A small tolerance (about one third of an
     interline, capped by notehead width) preserves chords but never swallows the next
@@ -562,10 +563,9 @@ def build_physical_groups(page_outputs: list[dict], expected_system_counts: dict
 def build_normalized_overlay(annotation_zip: str | Path, visual_groups: list[dict], layout_known: bool, analysis_result: dict, out_dir: str | Path, omr_path: str | Path | None = None) -> dict:
     """Build the PDF overlay for recursive Levels, structural points, waves, pivots, and trees.
 
-    The current build retains one canonical registration architecture. Normal attack
-    labels retain canonical score time and may shift only their display x to the true
-    notehead center. Parenthetical structural articulations use the separate display-
-    only placement path. The wave
+    v0.15.0 retains one canonical registration architecture. Normal attack labels
+    return only to their exact originating canonical attack column. Parenthetical
+    structural articulations retain the v0.11 display-only placement path. The wave
     envelope is derived afterward and may reuse only those existing anchors.
     Pivots are derived from that fixed wave and may reuse only wave anchors. Trees
     are the final read-only derivative: actual sonic events are placed at their
@@ -647,16 +647,16 @@ def build_normalized_overlay(annotation_zip: str | Path, visual_groups: list[dic
         wave_by_page, wave_stats, wave_warnings = register_wave_profile(
             wave_profile, anchors_by_page, structural_by_page
         )
-        # Pivots are a read-only derivative of the completed wave profile.
-        # Dissertation-style pivot regions reuse only the two adjacent existing
-        # wave anchors spanning the first descent; they cannot alter score time,
-        # attacks, Levels, or wave coordinates.
+        # v0.13.0 pivots are a second read-only derivative. They inspect only
+        # the already-built v0.12 wave profile and may register only to existing
+        # wave anchors. They cannot alter score time, attacks, Levels, or wave
+        # coordinates.
         pivot_profile = build_pivot_profile(wave_profile)
         pivot_by_page, pivot_stats, pivot_warnings = register_pivot_profile(
             pivot_profile, wave_by_page
         )
-        # Trees remain a read-only derivative. They use only actual sonic-event
-        # points already present in the fixed wave profile.
+        # v0.15.0 trees remain a read-only derivative. They use only actual
+        # sonic-event points already present in the fixed v0.12 wave profile.
         # Each event is placed at its lowest occupied Level and branch topology is
         # determined in score time before reusing the exact existing wave anchors.
         tree_profile = build_tree_profile(wave_profile)

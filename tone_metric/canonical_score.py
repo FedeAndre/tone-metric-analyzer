@@ -11,9 +11,6 @@ Important rules implemented here:
 - augmentation dots extend duration but never create attacks;
 - tie continuations occupy a score position but do not create attacks;
 - rests occupy score time but do not create attacks;
-- triplet attacks are retained on an independent exact ternary timing layer when MusicXML
-  or corroborating Audiveris BEGIN semantics provide a defensible score-time position;
-- unresolved tuplet notation is never allowed to distort the ordinary binary metric grid;
 - an attack in any other voice at the same position still creates a global hit;
 - simultaneous/near-coincident noteheads are one physical attack column;
 - Audiveris BEGIN slot times are useful constraints, but contradictory ones cannot
@@ -23,7 +20,7 @@ Important rules implemented here:
 """
 
 from collections import Counter, defaultdict
-from dataclasses import asdict, dataclass, replace
+from dataclasses import asdict, dataclass
 from fractions import Fraction
 from io import BytesIO
 from math import gcd
@@ -35,7 +32,7 @@ import numpy as np
 from lxml import etree
 from PIL import Image
 
-from .models import Hit, MeasureInfo, NoteAttack
+from .models import Hit, MeasureInfo
 
 
 def _local(tag: str) -> str:
@@ -223,12 +220,6 @@ class CanonicalColumn:
     notation_events: list[dict]
     timing_source: str
     confidence: float
-    # Display-only horizontal anchor.  Timing/order continues to use x_abs; this
-    # value centers an analytical label on the sounding notehead(s), not on the
-    # broader head-chord box.
-    visual_x_abs: float | None = None
-    tuplet_arity: int | None = None
-    tuplet_group: str | None = None
 
     def row(self) -> dict:
         row = asdict(self)
@@ -378,373 +369,155 @@ def _fill_metric_positions(columns: list[dict], anchors: dict[int, int], quantum
 
 
 
-def _raw_ratio(value: str | None) -> tuple[int, int] | None:
-    """Parse an unreduced n/d ratio while preserving the written denominator.
-
-    This matters for meter: 3/4 and 6/8 have the same rational duration but a
-    different tactus interpretation in the Tone-Metric engine.
-    """
-    if value is None:
-        return None
-    m = re.match(r"^\s*(\d+)\s*/\s*(\d+)\s*$", str(value))
-    if not m:
-        return None
-    n, d = int(m.group(1)), int(m.group(2))
-    if n <= 0 or d <= 0:
-        return None
-    return n, d
+class CanonicalFrameworkError(RuntimeError):
+    """Raised when OMR and MusicXML cannot be reconciled without guessing."""
 
 
-def _stack_time_signature(measure_nodes: list, objs: dict[str, object]) -> tuple[int, int] | None:
-    """Return an explicit time signature stored in one Audiveris measure stack.
-
-    Audiveris measure nodes refer to time-signature inters through a ``times``
-    child.  ``time-rational`` is preferred because it preserves 6/8 vs 3/4.
-    Common/cut-time symbols are accepted as explicit notation semantics.
-    """
-    found: list[tuple[int, int]] = []
-    for meas in measure_nodes:
-        times = next((c for c in meas if _local(c.tag) == "times"), None)
-        if times is None or not (times.text or "").strip():
-            continue
-        for oid in times.text.split():
-            obj = objs.get(str(oid))
-            if obj is None:
-                continue
-            ratio = _raw_ratio(obj.get("time-rational"))
-            if ratio is not None:
-                found.append(ratio)
-                continue
-            shape = (obj.get("shape") or "").upper()
-            if "CUT_TIME" in shape or "ALLA_BREVE" in shape:
-                found.append((2, 2))
-            elif "COMMON_TIME" in shape:
-                found.append((4, 4))
-    if not found:
-        return None
-    counts = Counter(found)
-    return max(counts, key=lambda x: (counts[x], -found.index(x)))
-
-
-def _read_omr_measure_stacks(omr_path: str | Path) -> tuple[list[dict], list[str]]:
-    """Read the complete physical measure-stack sequence from a saved .omr.
-
-    The returned sequence exists independently of MusicXML export.  This is the
-    authoritative measure *cardinality/order* for PDF analyses; MusicXML remains a
-    source of symbolic details where Audiveris successfully exported them.
-    """
+def _omr_measure_stack_count(omr_path: str | Path) -> int:
     path = Path(omr_path)
-    rows: list[dict] = []
-    warnings: list[str] = []
-    if not path.exists():
-        return rows, ["Saved OMR project not found while building the measure framework."]
-
+    count = 0
     with ZipFile(path, "r") as zf:
         members = sorted(
             [n for n in zf.namelist() if re.search(r"sheet#\d+/sheet#\d+\.xml$", n, re.I)],
             key=_sheet_no,
         )
-        page_index = 0
         for member in members:
-            try:
-                root = etree.fromstring(zf.read(member))
-            except Exception as exc:
-                warnings.append(f"Could not parse {member} while building the OMR measure framework: {exc}")
-                continue
-            pages = [e for e in root.iter() if _local(e.tag) == "page"] or [root]
-            for page in pages:
-                systems = [e for e in page if _local(e.tag) == "system"]
-                if not systems:
-                    systems = [e for e in page.iter() if _local(e.tag) == "system"]
-                for system_index, system in enumerate(systems):
-                    objs = {str(e.get("id")): e for e in system.iter() if e.get("id") is not None}
-                    stacks = [e for e in system if _local(e.tag) == "stack"]
-                    parts = [e for e in system if _local(e.tag) == "part"]
-                    part_measures = [[m for m in p if _local(m.tag) == "measure"] for p in parts]
-                    for stack_index, stack in enumerate(stacks):
-                        measure_nodes = [ms[stack_index] for ms in part_measures if stack_index < len(ms)]
-                        expected = _frac(stack.get("expected"))
-                        duration = _frac(stack.get("duration"))
-                        abnormal = any((m.get("abnormal") or "").lower() in {"true", "1", "yes"} for m in measure_nodes)
-                        rows.append({
-                            "global_measure_index": len(rows),
-                            "page_index": page_index,
-                            "system_index": system_index,
-                            "stack_index_in_system": stack_index,
-                            "stack_id": str(stack.get("id") or ""),
-                            "expected_whole": expected,
-                            "duration_whole": duration,
-                            "explicit_meter": _stack_time_signature(measure_nodes, objs),
-                            "abnormal": abnormal,
-                        })
-                page_index += 1
-    return rows, warnings
+            root = etree.fromstring(zf.read(member))
+            for system in [e for e in root.iter() if _local(e.tag) == "system"]:
+                count += sum(1 for child in system if _local(child.tag) == "stack")
+    return count
 
 
-def _numeric_measure_alignment(measures: list[MeasureInfo], stack_count: int) -> tuple[dict[int, int], int | None]:
-    """Conservatively align exported measure numbers to physical OMR stacks.
+def _numeric_measure_number(value) -> int | None:
+    m = re.fullmatch(r"\s*(-?\d+)\s*", str(value or ""))
+    return int(m.group(1)) if m else None
 
-    Audiveris preserves original printed measure numbers even when PartwiseBuilder
-    omits individual measures.  We exploit that only when the numeric span exactly
-    equals the physical stack count; otherwise no guess is made.
+
+def _reconcile_measure_framework_with_omr(omr_path, measures, symbolic_hits=None) -> tuple[dict, list[str]]:
+    """Expand sparse MusicXML measure metadata to the finalized OMR stack order.
+
+    Audiveris can retain all physical measure stacks in the finalized OMR while
+    omitting individual measures from MusicXML.  When the surviving MusicXML
+    numbers unambiguously span the complete OMR score, restore only the missing
+    measure shells and keep known MusicXML measures at their true physical ordinal.
+    Meter is inherited across a gap only when both known neighbors agree.
     """
-    parsed: list[int] = []
-    for m in measures:
-        text = str(m.number).strip()
-        if not re.fullmatch(r"-?\d+", text):
-            return {}, None
-        parsed.append(int(text))
-    if not parsed or len(set(parsed)) != len(parsed) or parsed != sorted(parsed):
-        return {}, None
-    lo, hi = parsed[0], parsed[-1]
-    if hi - lo + 1 != stack_count:
-        return {}, None
-    mapping = {old_i: number - lo for old_i, number in enumerate(parsed)}
-    if any(idx < 0 or idx >= stack_count for idx in mapping.values()):
-        return {}, None
-    return mapping, lo
-
-
-def reconcile_measure_framework_from_omr(
-    omr_path: str | Path,
-    measures: list[MeasureInfo],
-    symbolic_hits: list[Hit] | None = None,
-    initial_meter_override=None,
-) -> tuple[list[MeasureInfo], list[Hit], list[str], dict]:
-    """Rebuild the PDF measure/time framework from the complete saved OMR project.
-
-    This fixes an Audiveris export failure mode in which the .omr contains all
-    physical measure stacks but PartwiseBuilder silently omits some measures from
-    MusicXML.  The function never invents omitted *attacks*: it restores the full
-    measure sequence, after which :func:`recover_canonical_columns` reads attacks
-    directly from those OMR stacks.
-
-    Existing exported measures keep their validated meter/pickup metadata. Missing
-    measures inherit the active meter (or an explicit OMR time signature) and are
-    assigned ordinary full-measure timing.  The mapping is applied only when it is
-    unambiguous; otherwise the original MusicXML framework is returned unchanged.
-    """
-    stacks, warnings = _read_omr_measure_stacks(omr_path)
+    original = list(measures)
     symbolic_hits = list(symbolic_hits or [])
-    meta = {
-        "source": "musicxml",
-        "omr_stack_count": len(stacks),
-        "musicxml_measure_count": len(measures),
-        "expanded_measure_count": len(measures),
-        "synthesized_missing_measure_count": 0,
-        "synthesized_missing_measure_numbers": [],
-        "alignment": "unchanged",
+    omr_count = _omr_measure_stack_count(omr_path)
+    info = {
+        "musicxml_measure_count": len(original),
+        "omr_measure_stack_count": omr_count,
+        "framework_measure_count": len(original),
+        "framework_reconciled": False,
+        "synthesized_measure_count": 0,
+        "synthesized_measure_numbers": [],
+        "framework_alignment": "musicxml-sequential",
     }
-    if not stacks or not measures:
-        return list(measures), symbolic_hits, warnings, meta
-    if len(stacks) == len(measures):
-        meta.update({"source": "omr-cardinality+musicxml-metadata", "alignment": "direct-index"})
-        return list(measures), symbolic_hits, warnings, meta
-    if len(stacks) < len(measures):
-        warnings.append(
-            f"OMR has {len(stacks)} physical measure stacks but MusicXML has {len(measures)} measures; "
-            "the MusicXML framework was retained because expansion would be unsafe."
-        )
-        return list(measures), symbolic_hits, warnings, meta
-
-    old_to_new, numeric_start = _numeric_measure_alignment(measures, len(stacks))
-    if not old_to_new:
-        warnings.append(
-            f"OMR has {len(stacks)} physical measure stacks but MusicXML has {len(measures)} measures. "
-            "Their numbering could not be aligned unambiguously, so the MusicXML framework was retained."
-        )
-        return list(measures), symbolic_hits, warnings, meta
-
-    known_by_new = {new_i: measures[old_i] for old_i, new_i in old_to_new.items()}
-    old_index_by_new = {new_i: old_i for old_i, new_i in old_to_new.items()}
-    meter_override = None
-    if initial_meter_override:
-        try:
-            meter_override = tuple(int(x) for x in initial_meter_override)
-            if len(meter_override) != 2 or min(meter_override) <= 0:
-                meter_override = None
-        except Exception:
-            meter_override = None
-
-    current_meter: tuple[int, int] | None = meter_override
-    if current_meter is None and 0 in known_by_new:
-        km = known_by_new[0]
-        current_meter = (int(km.numerator), int(km.denominator))
-    if current_meter is None and stacks[0].get("explicit_meter"):
-        current_meter = tuple(stacks[0]["explicit_meter"])
-    if current_meter is None:
-        raise ValueError(
-            "No explicit initial meter could be recovered from MusicXML, the OMR time-signature semantics, "
-            "or the user override. Strict v0.16 will not infer meter/arity from measure duration and will not assume 4/4."
-        )
-
-    expanded: list[MeasureInfo] = []
-    synthesized_numbers: list[str] = []
-    cumulative = Fraction(0)
-    for i, stack in enumerate(stacks):
-        known = known_by_new.get(i)
-        explicit = stack.get("explicit_meter")
-        if i == 0 and meter_override is not None:
-            current_meter = meter_override
-        elif known is not None:
-            known_meter = (int(known.numerator), int(known.denominator))
-            if explicit is not None and tuple(explicit) != known_meter:
-                warnings.append(
-                    f"Measure {known.number}: OMR time signature {explicit[0]}/{explicit[1]} disagrees with "
-                    f"MusicXML {known_meter[0]}/{known_meter[1]}; MusicXML was retained for this exported measure."
-                )
-            current_meter = known_meter
-        elif explicit is not None:
-            current_meter = tuple(explicit)
-
-        num, den = current_meter
-        full = Fraction(num * 4, den)
-        expected = stack.get("expected_whole")
-        expected_q = expected * 4 if expected is not None else None
-        if expected_q is not None and expected_q > 0 and expected_q != full:
+    warnings: list[str] = []
+    if omr_count <= len(original):
+        if omr_count < len(original):
             warnings.append(
-                f"Physical measure {i + 1}: OMR expected duration {expected_q} quarter-notes disagrees with "
-                f"active meter {num}/{den} ({full}); the explicit/validated meter was retained."
+                f"Finalized OMR contains {omr_count} measure stacks but MusicXML contains {len(original)} measures; no OMR expansion was required."
             )
+        return info, warnings
 
-        if known is not None:
-            number = str(known.number)
-            actual = known.actual_duration
-            shift = known.pickup_shift
-            implicit = bool(known.implicit)
-        else:
-            number = str((numeric_start if numeric_start is not None else 1) + i)
-            synthesized_numbers.append(number)
-            actual = full
-            shift = Fraction(0)
-            implicit = False
-            # Only the opening physical measure can be a pickup without creating a
-            # discontinuity in later score time.  Use OMR abnormal+short duration as
-            # evidence; do not interpret under/overfull interior OMR durations as meter.
-            if i == 0 and stack.get("abnormal") and stack.get("duration_whole"):
-                aq = stack["duration_whole"] * 4
-                if Fraction(0) < aq < full:
-                    actual = aq
-                    shift = full - aq
-                    implicit = True
-
-        expanded.append(MeasureInfo(
-            index=i,
-            number=number,
-            start=cumulative,
-            full_duration=full,
-            actual_duration=actual,
-            pickup_shift=shift,
-            numerator=num,
-            denominator=den,
-            implicit=implicit,
-        ))
-        cumulative += full
-
-    remapped_hits: list[Hit] = []
-    for h in symbolic_hits:
-        new_i = old_to_new.get(int(h.measure_index))
-        if new_i is None or new_i >= len(expanded):
-            continue
-        m = expanded[new_i]
-        old_measure_start = h.onset - h.offset_in_measure
-        timeline_delta = m.start - old_measure_start
-        new_sources: list[NoteAttack] = []
-        for src in h.sources:
-            src_offset = src.offset_in_measure
-            new_sources.append(replace(
-                src,
-                onset=m.start + src_offset,
-                measure_index=new_i,
-                measure_number=m.number,
-                tuplet_span_start=(src.tuplet_span_start + timeline_delta if src.tuplet_span_start is not None else None),
-                tuplet_span_end=(src.tuplet_span_end + timeline_delta if src.tuplet_span_end is not None else None),
-            ))
-        remapped_hits.append(replace(
-            h,
-            onset=m.start + h.offset_in_measure,
-            measure_index=new_i,
-            measure_number=m.number,
-            sources=new_sources,
-            tuplet_span_start=(h.tuplet_span_start + timeline_delta if h.tuplet_span_start is not None else None),
-            tuplet_span_end=(h.tuplet_span_end + timeline_delta if h.tuplet_span_end is not None else None),
-        ))
-
-    meta.update({
-        "source": "omr-complete-measure-framework",
-        "alignment": "numeric-measure-number-span",
-        "numeric_measure_start": numeric_start,
-        "expanded_measure_count": len(expanded),
-        "synthesized_missing_measure_count": len(synthesized_numbers),
-        "synthesized_missing_measure_numbers": synthesized_numbers,
-        "remapped_symbolic_hit_count": len(remapped_hits),
-    })
-    if synthesized_numbers:
-        warnings.append(
-            f"Restored {len(synthesized_numbers)} measure(s) omitted from Audiveris MusicXML export "
-            f"using the complete OMR stack sequence: {', '.join(synthesized_numbers[:20])}"
-            + (" ..." if len(synthesized_numbers) > 20 else "")
+    numbers = [_numeric_measure_number(m.number) for m in original]
+    if not original or any(n is None for n in numbers):
+        raise CanonicalFrameworkError(
+            f"Finalized OMR contains {omr_count} measure stacks but MusicXML contains only {len(original)} measures, and MusicXML numbering is not a complete numeric ordinal map."
         )
-    return expanded, remapped_hits, warnings, meta
+    nums = [int(n) for n in numbers]
+    if any(b <= a for a, b in zip(nums, nums[1:])):
+        raise CanonicalFrameworkError(
+            "Sparse MusicXML measure numbers are not strictly increasing, so omitted OMR measures cannot be restored without guessing."
+        )
+    base_number = nums[0]
+    target_indices = [n - base_number for n in nums]
+    if target_indices[0] != 0 or target_indices[-1] != omr_count - 1:
+        raise CanonicalFrameworkError(
+            f"MusicXML measure numbering spans {nums[0]}–{nums[-1]}, which does not unambiguously cover all {omr_count} finalized OMR measure stacks."
+        )
+    if len(set(target_indices)) != len(target_indices) or any(i < 0 or i >= omr_count for i in target_indices):
+        raise CanonicalFrameworkError(
+            "MusicXML measure numbers cannot be mapped one-to-one onto the finalized OMR measure stacks."
+        )
 
-def _single_valid_begin_time(group: list[dict], full: Fraction) -> Fraction | None:
-    """Return one corroborating OMR BEGIN value when a group has exactly one.
+    expanded: list[MeasureInfo | None] = [None] * omr_count
+    old_to_new: dict[int, int] = {}
+    for old_index, (measure, target_index) in enumerate(zip(original, target_indices)):
+        expanded[target_index] = measure
+        old_to_new[old_index] = target_index
 
-    Audiveris slot offsets are not trusted as absolute score time here.  Their
-    equality is used only as independent evidence that two nearby cross-staff
-    attack groups denote the same simultaneous event.
-    """
-    values = {
-        t for event in group for t in event.get("assigned_begin_times", [])
-        if Fraction(0) <= t < full
-    }
-    return next(iter(values)) if len(values) == 1 else None
+    missing_indices = [i for i, measure in enumerate(expanded) if measure is None]
+    for i in missing_indices:
+        prev = next((expanded[j] for j in range(i - 1, -1, -1) if expanded[j] is not None), None)
+        nxt = next((expanded[j] for j in range(i + 1, omr_count) if expanded[j] is not None), None)
+        if prev is None or nxt is None:
+            raise CanonicalFrameworkError(
+                f"OMR measure {base_number + i} is missing from MusicXML at an unbounded score edge; its meter cannot be restored safely."
+            )
+        prev_meter = (int(prev.numerator), int(prev.denominator))
+        next_meter = (int(nxt.numerator), int(nxt.denominator))
+        if prev_meter != next_meter:
+            raise CanonicalFrameworkError(
+                f"OMR measure {base_number + i} is missing from MusicXML between conflicting meters {prev_meter[0]}/{prev_meter[1]} and {next_meter[0]}/{next_meter[1]}; analysis will not guess the meter change."
+            )
+        numerator, denominator = prev_meter
+        full = Fraction(numerator * 4, denominator)
+        expanded[i] = MeasureInfo(
+            index=i,
+            number=str(base_number + i),
+            start=Fraction(0),
+            full_duration=full,
+            actual_duration=full,
+            pickup_shift=Fraction(0),
+            numerator=numerator,
+            denominator=denominator,
+            implicit=False,
+        )
 
+    restored = [m for m in expanded if m is not None]
+    if len(restored) != omr_count:
+        raise CanonicalFrameworkError(
+            "Internal framework reconciliation failed to restore every finalized OMR measure stack."
+        )
 
-def _merge_cross_staff_simultaneous_clusters(
-    clusters: list[list[dict]],
-    full: Fraction,
-    interline: float,
-    cluster_tolerance_px: float,
-) -> list[list[dict]]:
-    """Merge only strongly corroborated cross-staff simultaneities.
+    start = Fraction(0)
+    for i, measure in enumerate(restored):
+        measure.index = i
+        measure.start = start
+        start += measure.full_duration
 
-    The ordinary x-cluster tolerance remains deliberately tight so rapid
-    successive attacks on one staff stay distinct.  A second adjacent group is
-    merged only when (1) the attack staves are disjoint, (2) both groups carry
-    the same single valid Audiveris BEGIN value, and (3) their horizontal gap is
-    no larger than about one staff interline.  This corrects chord-box offsets
-    caused by accidentals/stems without using Audiveris slot time as the active
-    score-time grid.
-    """
-    if not clusters:
-        return []
-    tolerance = max(float(cluster_tolerance_px), float(interline) * 1.10)
-    merged: list[list[dict]] = []
-    for group in clusters:
-        if merged:
-            previous = merged[-1]
-            prev_heads = [e for e in previous if e.get("kind") == "head" and e.get("attack")]
-            curr_heads = [e for e in group if e.get("kind") == "head" and e.get("attack")]
-            prev_staves = {int(e.get("staff", 0) or 0) for e in prev_heads}
-            curr_staves = {int(e.get("staff", 0) or 0) for e in curr_heads}
-            prev_time = _single_valid_begin_time(previous, full)
-            curr_time = _single_valid_begin_time(group, full)
-            gap = float(group[0]["x_abs"] - previous[-1]["x_abs"])
-            if (
-                prev_heads and curr_heads
-                and prev_staves.isdisjoint(curr_staves)
-                and prev_time is not None and prev_time == curr_time
-                and gap <= tolerance
-            ):
-                previous.extend(group)
-                previous.sort(key=lambda row: (row["x_abs"], row["staff"], row["cid"]))
-                continue
-        merged.append(list(group))
-    return merged
+    for hit in symbolic_hits:
+        old_index = int(hit.measure_index)
+        if old_index not in old_to_new:
+            raise CanonicalFrameworkError(
+                f"Symbolic hit references unknown MusicXML measure index {old_index} during OMR reconciliation."
+            )
+        new_index = old_to_new[old_index]
+        measure = restored[new_index]
+        hit.measure_index = new_index
+        hit.onset = measure.start + hit.offset_in_measure
+        for src in hit.sources:
+            src.measure_index = new_index
+            src.onset = measure.start + src.offset_in_measure
 
+    measures[:] = restored
+    synthesized_numbers = [str(base_number + i) for i in missing_indices]
+    info.update({
+        "framework_measure_count": len(restored),
+        "framework_reconciled": True,
+        "synthesized_measure_count": len(missing_indices),
+        "synthesized_measure_numbers": synthesized_numbers,
+        "framework_alignment": "finalized-omr-stack-order+musicxml-number-anchors",
+    })
+    warnings.append(
+        f"Restored {len(missing_indices)} MusicXML-omitted measure shells from the finalized OMR stack order; no meter was guessed across a conflicting change."
+    )
+    return info, warnings
 
-def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_px: float = 12.0, symbolic_hits=None) -> tuple[list[CanonicalColumn], dict]:
+def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_px: float = 12.0) -> tuple[list[CanonicalColumn], dict]:
     path = Path(omr_path)
     out: list[CanonicalColumn] = []
     meta = {
@@ -754,17 +527,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
         "page_dimensions": {},
         "architecture": "metric-grid-first/notation-semantics/global-attack-map",
     }
-    symbolic_hits = list(symbolic_hits or [])
-    symbolic_tuplet_offsets = defaultdict(list)
-    for h in symbolic_hits:
-        if any(getattr(src, "tuplet_actual_notes", None) for src in getattr(h, "sources", [])):
-            mi = int(h.measure_index)
-            if 0 <= mi < len(measures):
-                local = h.offset_in_measure - measures[mi].pickup_shift
-                if Fraction(0) <= local < measures[mi].full_duration:
-                    symbolic_tuplet_offsets[mi].append(local)
-    for mi in list(symbolic_tuplet_offsets):
-        symbolic_tuplet_offsets[mi] = sorted(set(symbolic_tuplet_offsets[mi]))
     if not path.exists():
         meta["warnings"].append("Saved OMR project not found.")
         return out, meta
@@ -772,12 +534,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
     global_measure = 0
     page_index = 0
     augmentation_relation_count = 0
-    recognized_tuplet_chord_count = 0
-    recovered_tuplet_chord_count = 0
-    recovered_tuplet_column_count = 0
-    unresolved_tuplet_chord_count = 0
-    unresolved_tuplet_column_count = 0
-    cross_staff_simultaneity_merge_count = 0
     with ZipFile(path, "r") as zf:
         members = sorted(
             [n for n in zf.namelist() if re.search(r"sheet#\d+/sheet#\d+\.xml$", n, re.I)],
@@ -810,9 +566,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                 stem_flags = defaultdict(list)
                 dotted_heads = Counter()
                 tie_right_heads = set()
-                tuplet_chords = set()
-                chord_tuplet_id = {}
-                tuplet_shapes = {}
                 for source, target, typ, rel in rels:
                     if typ == "containment" and source in objs and target in objs:
                         if _local(objs[source].tag) in {"head-chord", "rest-chord"}:
@@ -823,19 +576,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                         stem_beams[target].add(source)
                     elif typ == "flag-stem":
                         stem_flags[target].append(source)
-                    elif typ == "chord-tuplet":
-                        chord_id = None
-                        tuplet_id = None
-                        if source in objs and _local(objs[source].tag) in {"head-chord", "rest-chord"}:
-                            chord_id, tuplet_id = source, target
-                        elif target in objs and _local(objs[target].tag) in {"head-chord", "rest-chord"}:
-                            chord_id, tuplet_id = target, source
-                        if chord_id is not None:
-                            tuplet_chords.add(chord_id)
-                            chord_tuplet_id[chord_id] = tuplet_id
-                            tel = objs.get(tuplet_id)
-                            if tel is not None:
-                                tuplet_shapes[tuplet_id] = (tel.get("shape") or "").upper()
                     elif typ == "augmentation" and source in objs and target in objs:
                         augmentation_relation_count += 1
                         if _local(objs[source].tag) == "head":
@@ -913,13 +653,10 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                         hb = [b for b in hb if b]
                         hcx = [a + c / 2 for a, b, c, d in hb]
                         hcy = [b + d / 2 for a, b, c, d in hb]
-                        # Keep the head-chord box center as the timing/order geometry, but
-                        # retain a separate display-only notehead center.  Accidentals are not
-                        # members of ``heads`` and therefore cannot pull this visual anchor left.
-                        # This separation prevents a rendering correction from changing the
-                        # canonical musical-time reconstruction.
+                        # Horizontal registration uses the physical chord box center.  We do
+                        # not average multiple independent attack columns; notehead y-centers
+                        # are used only to keep the vertical guide near the sounding heads.
                         center = (x + w / 2, sum(hcy) / len(hcy)) if hcy else (x + w / 2, y + h / 2)
-                        notehead_x = (sum(hcx) / len(hcx)) if hcx else center[0]
                         stem_id = chord_stem.get(cid)
                         stem = objs.get(stem_id) if stem_id else None
                         median = _median_points(stem) if stem is not None else None
@@ -939,7 +676,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                             "kind": "head",
                             "staff": _int(cel.get("staff"), 0) or 0,
                             "x_abs": float(center[0]),
-                            "visual_x_abs": float(notehead_x),
                             "y_abs": float(center[1]),
                             "heads": heads,
                             "head_kind": _head_kind([h.get("shape", "") for h in heads]),
@@ -950,9 +686,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                             "flag_count": flag_count,
                             "assigned_begin_times": list(begin_times.get(cid, [])),
                             "assigned_continue_times": list(continue_times.get(cid, [])),
-                            "tuplet": cid in tuplet_chords,
-                            "tuplet_id": chord_tuplet_id.get(cid),
-                            "tuplet_shape": tuplet_shapes.get(chord_tuplet_id.get(cid), ""),
                         })
 
                     # Raster beams supplement missing Audiveris beam relations only.
@@ -980,7 +713,7 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                             **info,
                             "duration_quarter": duration,
                             "dot_count": dot_count,
-                            "attack": (not all_tied),
+                            "attack": not all_tied,
                             "tie_continuation": all_tied,
                             "rest": False,
                         })
@@ -1013,12 +746,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                             "rest": True,
                         })
 
-                    tuplet_events = [e for e in events if e.get("kind") == "head" and e.get("tuplet")]
-                    recognized_tuplet_chord_count += len(tuplet_events)
-                    # Tuplets are timed independently from the ordinary metric lattice.
-                    # This prevents 1/3, 1/6, ... positions from perturbing binary
-                    # attacks in other voices while still retaining defensible triplet attacks.
-                    events = [e for e in events if not (e.get("kind") == "head" and e.get("tuplet"))]
                     events.sort(key=lambda r: (r["x_abs"], r["staff"], r["cid"]))
                     clusters: list[list[dict]] = []
                     for event in events:
@@ -1026,26 +753,14 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                             clusters.append([event])
                         else:
                             clusters[-1].append(event)
-                    pre_merge_cluster_count = len(clusters)
-                    clusters = _merge_cross_staff_simultaneous_clusters(
-                        clusters, full, interline, cluster_tolerance_px
-                    )
-                    cross_staff_simultaneity_merge_count += pre_merge_cluster_count - len(clusters)
 
                     columns = []
                     for group in clusters:
                         rep = min(group, key=lambda a: (sum(abs(a["x_abs"] - b["x_abs"]) for b in group), a["cid"]))
                         durations = [e["duration_quarter"] for e in group if e.get("duration_quarter", 0) > 0]
                         head_events = [e for e in group if e["kind"] == "head"]
-                        visual_xs = sorted(float(e.get("visual_x_abs", e["x_abs"])) for e in head_events)
-                        if visual_xs:
-                            mid = len(visual_xs) // 2
-                            visual_x = visual_xs[mid] if len(visual_xs) % 2 else (visual_xs[mid - 1] + visual_xs[mid]) / 2.0
-                        else:
-                            visual_x = float(rep["x_abs"])
                         columns.append({
                             "x_abs": float(rep["x_abs"]),
-                            "visual_x_abs": float(visual_x),
                             "y_abs": float(rep["y_abs"]),
                             "events": group,
                             "attack": any(e.get("attack") for e in head_events),
@@ -1064,12 +779,8 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                         for c in columns for e in c["events"]
                         if e.get("duration_quarter", 0) > 0
                     ]
-                    # The ordinary metric lattice is derived from non-tuplet durations only.
-                    # Audiveris BEGIN times are retained as optional anchors below, but their
-                    # differences must not define the lattice: conflicting voice slots and
-                    # the independent tuplet layer can otherwise introduce 1/3, 1/6, ... units
-                    # into an otherwise binary/dotted notated surface.  A semantic BEGIN time
-                    # is accepted only when it lies exactly on this duration-derived grid.
+                    assigned_unique = sorted({t for c in columns for t in c["assigned_begin_times"] if 0 <= t < full})
+                    duration_values.extend(b - a for a, b in zip(assigned_unique, assigned_unique[1:]) if b > a)
                     quantum = _fraction_gcd(duration_values)
                     if quantum > 1:
                         quantum = Fraction(1)
@@ -1122,94 +833,14 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                                     "attack": bool(e.get("attack")),
                                     "tie_continuation": bool(e.get("tie_continuation")),
                                     "rest": bool(e.get("rest")),
-                                    "tuplet": bool(e.get("tuplet")),
                                 }
                                 for e in col["events"]
                             ],
                             timing_source=source,
                             confidence=confidence,
-                            visual_x_abs=float(col.get("visual_x_abs", col["x_abs"])),
                         )
                         out.append(canonical)
                         measure_rows.append(canonical.row())
-
-                    # Recover triplet columns without changing the ordinary binary grid.
-                    # Prefer exact MusicXML time-modification offsets when the exported
-                    # symbolic count matches the visible OMR triplet columns.  Otherwise
-                    # accept a single valid Audiveris BEGIN value for that physical column.
-                    tuplet_clusters = []
-                    for event in sorted(tuplet_events, key=lambda r: (r["x_abs"], r["staff"], r["cid"])):
-                        if not tuplet_clusters or event["x_abs"] - tuplet_clusters[-1][-1]["x_abs"] > cluster_tolerance_px:
-                            tuplet_clusters.append([event])
-                        else:
-                            tuplet_clusters[-1].append(event)
-                    if tuplet_clusters:
-                        tuplet_clusters = _merge_cross_staff_simultaneous_clusters(
-                            tuplet_clusters, full, interline, cluster_tolerance_px
-                        )
-                    symbolic_offsets = list(symbolic_tuplet_offsets.get(global_measure, []))
-                    use_symbolic_order = bool(tuplet_clusters) and len(symbolic_offsets) == len(tuplet_clusters)
-                    unresolved_here = 0
-                    for ti, group in enumerate(tuplet_clusters):
-                        onset = symbolic_offsets[ti] if use_symbolic_order else _single_valid_begin_time(group, full)
-                        if onset is None or not (Fraction(0) <= onset < full):
-                            unresolved_here += 1
-                            unresolved_tuplet_chord_count += len(group)
-                            continue
-                        rep = min(group, key=lambda a: (sum(abs(a["x_abs"] - b["x_abs"]) for b in group), a["cid"]))
-                        raw_durations = [e["duration_quarter"] for e in group if e.get("duration_quarter", 0) > 0]
-                        # Audiveris notehead/beam duration is the written value.  For a
-                        # standard TUPLET_THREE relation, three written values occupy the
-                        # time of two, so the sounding duration is scaled by 2/3.
-                        durations = [d * Fraction(2, 3) if "THREE" in (e.get("tuplet_shape") or "") else d for e, d in [(e, e["duration_quarter"]) for e in group if e.get("duration_quarter", 0) > 0]]
-                        visual_xs = sorted(float(e.get("visual_x_abs", e["x_abs"])) for e in group if e.get("kind") == "head")
-                        if visual_xs:
-                            mid = len(visual_xs) // 2
-                            visual_x = visual_xs[mid] if len(visual_xs) % 2 else (visual_xs[mid - 1] + visual_xs[mid]) / 2.0
-                        else:
-                            visual_x = float(rep["x_abs"])
-                        canonical = CanonicalColumn(
-                            global_measure_index=global_measure,
-                            page_index=page_index,
-                            system_index=system_index,
-                            stack_index_in_system=stack_index,
-                            x_abs=float(rep["x_abs"]),
-                            y_abs=float(rep["y_abs"]),
-                            onset_quarter=onset,
-                            duration_quarter=max(durations, default=max(raw_durations, default=Fraction(0))),
-                            attack=any(e.get("attack") for e in group),
-                            rest=False,
-                            tie_continuation_only=bool(group) and all(e.get("tie_continuation") for e in group),
-                            chord_ids=[e["cid"] for e in group],
-                            assigned_begin_times=[t for e in group for t in e.get("assigned_begin_times", [])],
-                            notation_events=[
-                                {
-                                    "chord_id": e.get("cid"),
-                                    "kind": e.get("kind"),
-                                    "staff": int(e.get("staff", 0) or 0),
-                                    "duration_quarter": str(e.get("duration_quarter", Fraction(0))),
-                                    "dot_count": int(e.get("dot_count", 0) or 0),
-                                    "attack": bool(e.get("attack")),
-                                    "tie_continuation": bool(e.get("tie_continuation")),
-                                    "rest": False,
-                                    "tuplet": True,
-                                    "tuplet_id": e.get("tuplet_id"),
-                                    "tuplet_shape": e.get("tuplet_shape"),
-                                }
-                                for e in group
-                            ],
-                            timing_source="symbolic-tuplet-time" if use_symbolic_order else "semantic-tuplet-begin",
-                            confidence=0.98 if use_symbolic_order else 0.90,
-                            visual_x_abs=float(visual_x),
-                            tuplet_arity=3 if any("THREE" in (e.get("tuplet_shape") or "") for e in group) else None,
-                            tuplet_group=(f"p{page_index}:s{system_index}:{next((e.get('tuplet_id') for e in group if e.get('tuplet_id')), 'tuplet')}"),
-                        )
-                        out.append(canonical)
-                        measure_rows.append(canonical.row())
-                        recovered_tuplet_column_count += 1
-                        recovered_tuplet_chord_count += len(group)
-                    unresolved_tuplet_column_count += unresolved_here
-                    measure_rows.sort(key=lambda row: (Fraction(row["onset_quarter"]), float(row["x_abs"])))
 
                     meta["measures"].append({
                         "global_measure_index": global_measure,
@@ -1233,19 +864,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
     meta["column_count"] = len(out)
     meta["attack_column_count"] = sum(1 for c in out if c.attack)
     meta["augmentation_dot_count"] = int(augmentation_relation_count)
-    meta["recognized_tuplet_chord_count"] = int(recognized_tuplet_chord_count)
-    meta["recovered_tuplet_chord_count"] = int(recovered_tuplet_chord_count)
-    meta["recovered_tuplet_column_count"] = int(recovered_tuplet_column_count)
-    meta["unresolved_tuplet_chord_count"] = int(unresolved_tuplet_chord_count)
-    meta["unresolved_tuplet_column_count"] = int(unresolved_tuplet_column_count)
-    # Backward-compatible debug keys: these now mean unresolved/omitted tuplets.
-    meta["ignored_tuplet_chord_count"] = int(unresolved_tuplet_chord_count)
-    meta["ignored_tuplet_column_count"] = int(unresolved_tuplet_column_count)
-    if unresolved_tuplet_column_count:
-        meta["warnings"].append(
-            f"{unresolved_tuplet_column_count} OMR tuplet column(s) lacked a defensible exact score-time position and were not guessed. Tuplet handling is resolved later by the explicit preprocessing contract, not by the Levels engine."
-        )
-    meta["cross_staff_simultaneity_merge_count"] = int(cross_staff_simultaneity_merge_count)
     meta["tie_continuation_column_count"] = sum(1 for c in out if c.tie_continuation_only)
     meta["rest_column_count"] = sum(1 for c in out if c.rest)
     return out, meta
@@ -1257,8 +875,11 @@ def build_hits_from_canonical_score(omr_path, measures, symbolic_hits=None):
     Symbolic MusicXML note details are attached only when they agree exactly with the
     recovered measure/time.  They are never allowed to move a visual attack.
     """
-    columns, meta = recover_canonical_columns(omr_path, measures, symbolic_hits=symbolic_hits)
     symbolic_hits = list(symbolic_hits or [])
+    framework_meta, framework_warnings = _reconcile_measure_framework_with_omr(
+        omr_path, measures, symbolic_hits=symbolic_hits
+    )
+    columns, meta = recover_canonical_columns(omr_path, measures)
     symbolic_by_key = {(int(h.measure_index), h.offset_in_measure): h for h in symbolic_hits}
 
     grouped = defaultdict(list)
@@ -1279,10 +900,6 @@ def build_hits_from_canonical_score(omr_path, measures, symbolic_hits=None):
         measure = measures[mi]
         symbolic = symbolic_by_key.get((mi, offset))
         durations = [c.duration_quarter for c in cols if c.duration_quarter > 0]
-        tuple_cols = [c for c in cols if getattr(c, "tuplet_arity", None)]
-        tuple_groups = {c.tuplet_group for c in tuple_cols if c.tuplet_group}
-        symbolic_tuple_arity = getattr(symbolic, "tuplet_arity", None) if symbolic is not None else None
-        symbolic_tuple_group = getattr(symbolic, "tuplet_group", None) if symbolic is not None else None
         hits.append(Hit(
             onset=measure.start + offset,
             duration=max(durations, default=Fraction(0)),
@@ -1290,17 +907,16 @@ def build_hits_from_canonical_score(omr_path, measures, symbolic_hits=None):
             measure_number=measure.number,
             offset_in_measure=offset,
             sources=list(symbolic.sources) if symbolic is not None else [],
-            tuplet_arity=(symbolic_tuple_arity or (3 if any(c.tuplet_arity == 3 for c in tuple_cols) else None)),
-            tuplet_group=(symbolic_tuple_group or (next(iter(tuple_groups)) if len(tuple_groups) == 1 else None)),
-            tuplet_span_start=(getattr(symbolic, "tuplet_span_start", None) if symbolic is not None else None),
-            tuplet_span_end=(getattr(symbolic, "tuplet_span_end", None) if symbolic is not None else None),
+            canonical_recovered=True,
         ))
 
     meta = dict(meta)
+    meta.update(framework_meta)
+    meta["measure_count"] = len(meta.get("measures", []))
     meta["canonical_hit_count"] = len(hits)
     meta["symbolic_hit_count"] = len(symbolic_hits)
     meta["canonical_attack_keys"] = [f"{h.measure_index}:{h.offset_in_measure}" for h in hits]
-    warnings = []
+    warnings = list(framework_warnings)
     if not hits:
-        warnings.append("Canonical score-time recovery produced no usable attacks. Strict v0.16 does not authorize a symbolic fallback for PDF analysis.")
+        warnings.append("Canonical score-time recovery produced no usable attacks.")
     return hits, warnings, meta

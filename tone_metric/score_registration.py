@@ -2,7 +2,7 @@ from __future__ import annotations
 
 """Register recursive tone-metric results to the canonical score layout.
 
-The current registrar keeps the exact attack path unchanged in principle: every normal
+v0.11.0 keeps the v0.10.0 attack registrar unchanged in principle: every normal
 (non-parenthetical) level label must return to the exact canonical attack column
 that generated that sonic event.  No visual approximation is permitted for attacks.
 
@@ -27,7 +27,7 @@ def _frac(value, default=None):
 
 
 def _event_targets(analysis_result: dict) -> list[dict]:
-    """Return actual sonic events only, preserving the exact attack path."""
+    """Return actual sonic events only, preserving the v0.10.0 attack path."""
     rows = []
     for si, segment in enumerate(analysis_result.get("segments", [])):
         for event in segment.get("events", []):
@@ -57,6 +57,7 @@ def _analysis_measures(analysis_result: dict) -> list[dict]:
             "end": end,
             "full": full,
             "shift": shift,
+            "opening_anacrusis": bool(row.get("opening_anacrusis", False)),
         })
     return out
 
@@ -86,7 +87,12 @@ def _structural_targets(analysis_result: dict) -> list[dict]:
             levels = sorted({int(x) for x in point.get("levels", []) if int(x) > 0})
             if not levels:
                 continue
+            pre_entry = bool(point.get("opening_anacrusis_pre_entry", False))
             measure = next((m for m in measures if m["start"] <= t < m["end"]), None)
+            if measure is None and pre_entry and measures:
+                first = measures[0]
+                if first.get("opening_anacrusis") and t < first["start"]:
+                    measure = first
             if measure is None:
                 continue
             offset = t - measure["start"]
@@ -100,6 +106,7 @@ def _structural_targets(analysis_result: dict) -> list[dict]:
                 "levels": levels,
                 "measure": measure,
                 "offset": offset,
+                "opening_anacrusis_pre_entry": pre_entry,
             })
     return rows
 
@@ -213,6 +220,76 @@ def _structural_layout_position(measure_meta: dict, local_time: Fraction) -> tup
     return x, source, 0.58 if not columns else 0.64, None
 
 
+def _pre_pickup_structural_layout_position(
+    measure_meta: dict,
+    metric_offset: Fraction,
+    pickup_shift: Fraction,
+) -> tuple[float | None, str, float]:
+    """Place an opening pre-pickup structural articulation before the first attack.
+
+    ``metric_offset`` is measured in the complete underlying metric measure, while
+    canonical notation columns in an anacrustic measure begin at local score time 0
+    for the first printed pickup event.  The dissertation nevertheless preserves the
+    silent metric articulation(s) that precede that event and renders their Levels in
+    parentheses.  This helper maps those *already-generated* structural times only;
+    it never creates attacks or changes tone-metric timing.
+
+    The available horizontal space from the canonical measure boundary to the first
+    printed column represents the silent pre-pickup portion.  Multiple structural
+    points retain their chronological order within that space.
+    """
+    if pickup_shift <= 0 or metric_offset < 0 or metric_offset >= pickup_shift:
+        return None, "pre-pickup-structural-time-unavailable", 0.0
+
+    left = float(measure_meta.get("stack_left", 0.0) or 0.0)
+    right = float(measure_meta.get("stack_right", left + 1.0) or (left + 1.0))
+    xs = []
+    for col in measure_meta.get("columns", []):
+        try:
+            xs.append(float(col.get("x_abs")))
+        except Exception:
+            pass
+    if xs:
+        first_x = min(xs)
+        visual_left = min(max(left + 1.0, left), max(left, first_x - 1.0))
+        if first_x > visual_left:
+            ratio = float(metric_offset / pickup_shift)
+            x = visual_left + ratio * (first_x - visual_left)
+            return x, "opening-pickup-pre-attack-metric-layout", 0.90
+
+    if right > left:
+        ratio = float(metric_offset / pickup_shift)
+        x = left + 1.0 + ratio * max(0.0, right - left - 2.0)
+        return x, "opening-pickup-measure-layout-fallback", 0.62
+    return None, "pre-pickup-structural-time-unavailable", 0.0
+
+
+def _opening_anacrusis_pre_entry_layout_position(measure_meta: dict) -> tuple[float | None, str, float]:
+    """Place the engine-generated silent Level-1 articulation before the first attack.
+
+    The score-time point is already fixed by the Levels engine.  This function only
+    maps it into the visible opening space between Audiveris' measure boundary and
+    the first canonical column.  It cannot create or move a sonic event.
+    """
+    left = float(measure_meta.get("stack_left", 0.0) or 0.0)
+    right = float(measure_meta.get("stack_right", left + 1.0) or (left + 1.0))
+    xs = []
+    for col in measure_meta.get("columns", []):
+        try:
+            xs.append(float(col.get("x_abs")))
+        except Exception:
+            pass
+    if xs:
+        first_x = min(xs)
+        if first_x > left + 2.0:
+            # Midway through the explicit pre-attack opening space keeps the label
+            # clear of both the meter signature and the first sounding notehead.
+            return left + 0.5 * (first_x - left), "opening-anacrusis-pre-entry-layout", 0.90
+    if right > left:
+        return left + 1.0, "opening-anacrusis-measure-layout-fallback", 0.62
+    return None, "opening-anacrusis-layout-unavailable", 0.0
+
+
 def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensions: dict[int, tuple[float, float]]):
     """Build exact attack anchors plus dissertation-style parenthetical anchors."""
     meta = analysis_result.get("canonical_score_meta") or {}
@@ -237,7 +314,7 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
     missing = defaultdict(list)
     manufactured_attack_x = 0
 
-    # --- Exact attack-registration path. ---
+    # --- v0.10.0 exact attack-registration path (kept semantically unchanged). ---
     for target in _event_targets(analysis_result):
         event = target["event"]
         mi = int(event.get("measure_index", -1))
@@ -265,12 +342,7 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
                 missing[level].append({"measure_index": mi, "reason": "page-dimensions-unavailable"})
             continue
         pw, ph = float(dims[0]), float(dims[1])
-        # Musical-time registration is already fixed by the canonical column.
-        # For display, center the label on the sounding notehead(s) when that
-        # independent visual anchor is available.  Falling back to x_abs keeps
-        # older/debug canonical rows compatible.
-        timing_x_abs = float(col["x_abs"])
-        x_abs = float(col.get("visual_x_abs", timing_x_abs) or timing_x_abs)
+        x_abs = float(col["x_abs"])
         y_abs = float(col["y_abs"])
         row = {
             "page_index": page,
@@ -295,14 +367,12 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
             "timing_confidence": col.get("confidence"),
             "recovered_chord_ids": list(col.get("chord_ids", [])),
             "recovered_x_abs": x_abs,
-            "canonical_timing_x_abs": timing_x_abs,
-            "visual_anchor_source": "notehead-center" if abs(x_abs - timing_x_abs) > 1e-9 else "canonical-column-center",
         }
         anchors_by_page[page].append(row)
         for level in target["levels"]:
             per_level[level]["mapped"] += 1
 
-    # --- Structural no-attack display path. ---
+    # --- v0.11.0 structural no-attack display path. ---
     structural_by_page = defaultdict(list)
     structural_per_level = defaultdict(lambda: {"expected": 0, "mapped": 0, "missing": 0})
     structural_missing = defaultdict(list)
@@ -319,7 +389,18 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
             structural_per_level[level]["expected"] += 1
 
         cm = measure_meta.get(mi)
-        if cm is None or local_time < 0 or local_time >= m["full"]:
+        is_opening_pre_pickup = (
+            mi == 0
+            and m["shift"] > 0
+            and Fraction(0) <= offset < m["shift"]
+        )
+        is_opening_pre_entry = bool(
+            mi == 0
+            and m.get("opening_anacrusis")
+            and target.get("opening_anacrusis_pre_entry")
+            and offset < 0
+        )
+        if cm is None or ((local_time < 0 and not (is_opening_pre_pickup or is_opening_pre_entry)) or local_time >= m["full"]):
             for level in target["levels"]:
                 structural_per_level[level]["missing"] += 1
                 structural_missing[level].append({
@@ -344,7 +425,16 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
                 })
             continue
 
-        x_abs, source, confidence, exact_col = _structural_layout_position(cm, local_time)
+        if is_opening_pre_entry:
+            x_abs, source, confidence = _opening_anacrusis_pre_entry_layout_position(cm)
+            exact_col = None
+        elif is_opening_pre_pickup:
+            x_abs, source, confidence = _pre_pickup_structural_layout_position(
+                cm, offset, m["shift"]
+            )
+            exact_col = None
+        else:
+            x_abs, source, confidence, exact_col = _structural_layout_position(cm, local_time)
         if x_abs is None:
             for level in target["levels"]:
                 structural_per_level[level]["missing"] += 1
@@ -356,7 +446,15 @@ def build_layer_anchors_from_canonical_score(analysis_result: dict, page_dimensi
                 })
             continue
 
-        reason = _structural_reason(cm, local_time, exact_col)
+        reason = (
+            "opening-anacrusis-pre-entry-metric-position"
+            if is_opening_pre_entry
+            else (
+                "opening-pickup-pre-attack-metric-position"
+                if is_opening_pre_pickup
+                else _structural_reason(cm, local_time, exact_col)
+            )
+        )
         pw, ph = float(dims[0]), float(dims[1])
         y_abs = float(exact_col.get("y_abs", 0.0)) if exact_col is not None else 0.0
         row = {

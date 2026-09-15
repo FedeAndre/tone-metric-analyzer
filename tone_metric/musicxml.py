@@ -114,6 +114,27 @@ def _has_tie(note, tie_type: str) -> bool:
     )
 
 
+def _tuplet_ratio(note) -> tuple[int | None, int | None]:
+    """Return MusicXML ``actual-notes : normal-notes`` when explicitly present.
+
+    MusicXML ``duration`` already encodes performed score time.  The ratio is
+    therefore metadata for the recursive tone-metric subdivision, not a duration
+    correction.  In particular, 3:2 triplets and 2:3 duplets remain genuine
+    sounding attacks; they are not filtered out.
+    """
+    tm = note.find("time-modification")
+    if tm is None:
+        return None, None
+    try:
+        actual = int((tm.findtext("actual-notes") or "").strip())
+        normal = int((tm.findtext("normal-notes") or "").strip())
+    except Exception:
+        return None, None
+    if actual < 2 or normal < 1:
+        return None, None
+    return actual, normal
+
+
 def _layout_defaults(root) -> dict:
     defaults = root.find("defaults")
     if defaults is None:
@@ -232,7 +253,7 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
     Project rules:
     - ties: only initial attack; duration extended through tied continuation
     - grace notes: ignored
-    - tuplets (time-modification): retained here with explicit metadata; the separate v0.16 preprocessing contract decides whether they enter the dissertation core
+    - tuplets (time-modification): sounding attacks are retained with their explicit local ratio
     - rests: no attack
     - simultaneous attacks: merged globally into one hit
     - pickup: first short/implicit measure is right-aligned inside a full measure
@@ -256,7 +277,7 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
     measure_templates: List[dict] = []
     divisions = 1
     meter_override = _parse_meter_override(initial_meter_override)
-    num, den = meter_override or (None, None)
+    num, den = meter_override or (4, 4)
     cumulative = Fraction(0)
     first_part = parts[0]
     for mi, measure in enumerate(first_part.findall("measure")):
@@ -273,11 +294,6 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
                     num, den = meter_override
                 else:
                     num, den = _normalized_time_signature(time, num, den, warnings)
-        if num is None or den is None:
-            raise ValueError(
-                f"Measure {mi + 1}: no explicit/inherited meter is available. "
-                "Strict v0.16 will not assume 4/4; provide a valid meter in the score or use the meter override."
-            )
         full = Fraction(num * 4, den)
         cursor = Fraction(0)
         max_cursor = Fraction(0)
@@ -303,6 +319,26 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
         implicit = (measure.get("implicit") or "").lower() == "yes"
         short_first = mi == 0 and max_cursor < full
         pickup_shift = full - max_cursor if (implicit or short_first) and max_cursor < full else Fraction(0)
+
+        # A metrically full opening can still carry an explicit sectional
+        # anacrusis cue.  Preserve only the concrete notation case of a first
+        # measure closed by a heavy-light sectional double barline without a
+        # repeat sign.  This supplies score metadata for one pre-entry Level-1
+        # articulation; no score title, filename, pitch, or hard-coded measure
+        # identity participates in the rule.
+        right_bar_style = ""
+        right_bar_has_repeat = False
+        for barline in measure.findall("barline"):
+            if (barline.get("location") or "right").strip().lower() != "right":
+                continue
+            right_bar_style = (barline.findtext("bar-style") or "").strip().lower()
+            right_bar_has_repeat = barline.find("repeat") is not None
+        opening_anacrusis = bool(
+            mi == 0
+            and pickup_shift == 0
+            and right_bar_style == "heavy-light"
+            and not right_bar_has_repeat
+        )
         measure_templates.append({
             "index": mi,
             "number": measure.get("number") or str(mi + 1),
@@ -313,12 +349,14 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
             "num": num,
             "den": den,
             "implicit": implicit,
+            "opening_anacrusis": opening_anacrusis,
         })
         cumulative += full
 
     measures = [MeasureInfo(
         index=m["index"], number=m["number"], start=m["start"], full_duration=m["full"],
-        actual_duration=m["actual"], pickup_shift=m["shift"], numerator=m["num"], denominator=m["den"], implicit=m["implicit"]
+        actual_duration=m["actual"], pickup_shift=m["shift"], numerator=m["num"], denominator=m["den"],
+        implicit=m["implicit"], opening_anacrusis=bool(m.get("opening_anacrusis", False))
     ) for m in measure_templates]
 
     raw_attacks: List[NoteAttack] = []
@@ -328,10 +366,6 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
     for part in parts:
         part_id = part.get("id") or "P?"
         divisions = 1
-        open_tuplet_groups = {}
-        open_tuplet_span_starts = {}
-        open_tuplet_span_ends = {}
-        tuplet_group_counters = {}
         p_measures = part.findall("measure")
         if len(p_measures) != len(measure_templates):
             warnings.append(f"Part {part_id} has {len(p_measures)} measures; canonical part has {len(measure_templates)}. Alignment uses measure index.")
@@ -351,42 +385,21 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
                     dur_div = _text_int(child, "duration", 0)
                     dur = Fraction(dur_div, divisions) if divisions else Fraction(0)
                     is_grace = child.find("grace") is not None
-                    tm = child.find("time-modification")
-                    is_tuplet = tm is not None
-                    tuplet_actual = _text_int(tm, "actual-notes", 0) if tm is not None else 0
-                    tuplet_normal = _text_int(tm, "normal-notes", 0) if tm is not None else 0
-                    voice = (child.findtext("voice") or "1").strip()
-                    staff = (child.findtext("staff") or "1").strip()
-                    tuplet_key = (staff, voice)
-                    tuplet_marks = child.findall("notations/tuplet")
-                    if any((mark.get("type") or "").lower() == "start" for mark in tuplet_marks):
-                        next_no = int(tuplet_group_counters.get(tuplet_key, 0)) + 1
-                        tuplet_group_counters[tuplet_key] = next_no
-                        open_tuplet_groups[tuplet_key] = f"{part_id}:{staff}:{voice}:{mi}:{next_no}"
-                    tuplet_group = open_tuplet_groups.get(tuplet_key) if is_tuplet else None
-                    stop_tuplet = any((mark.get("type") or "").lower() == "stop" for mark in tuplet_marks)
+                    tuplet_actual, tuplet_normal = _tuplet_ratio(child)
                     is_chord = child.find("chord") is not None
                     if is_chord:
                         onset_local = last_nonchord_onset
                     else:
                         onset_local = cursor
                         last_nonchord_onset = onset_local
-                    if is_tuplet and any((mark.get("type") or "").lower() == "start" for mark in tuplet_marks):
-                        open_tuplet_span_starts[tuplet_key] = tmpl["start"] + tmpl["shift"] + onset_local
-                        if tuplet_actual and dur > 0:
-                            open_tuplet_span_ends[tuplet_key] = open_tuplet_span_starts[tuplet_key] + dur * tuplet_actual
-                    tuplet_span_start = open_tuplet_span_starts.get(tuplet_key) if is_tuplet else None
-                    tuplet_span_end = open_tuplet_span_ends.get(tuplet_key) if is_tuplet else None
                     if not is_chord and not is_grace:
                         cursor += dur
 
                     if child.find("rest") is not None or is_grace:
-                        if stop_tuplet:
-                            open_tuplet_groups.pop(tuplet_key, None)
-                            open_tuplet_span_starts.pop(tuplet_key, None)
-                            open_tuplet_span_ends.pop(tuplet_key, None)
                         continue
 
+                    voice = (child.findtext("voice") or "1").strip()
+                    staff = (child.findtext("staff") or "1").strip()
                     pitch = _pitch_string(child)
                     tie_start = _has_tie(child, "start")
                     tie_stop = _has_tie(child, "stop")
@@ -422,10 +435,6 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
                             warnings.append(f"Unmatched tie-stop at measure {tmpl['number']} for {pitch}; treated as continuation with no new attack.")
                         if not tie_start:
                             open_ties.pop(key, None)
-                        if stop_tuplet:
-                            open_tuplet_groups.pop(tuplet_key, None)
-                            open_tuplet_span_starts.pop(tuplet_key, None)
-                            open_tuplet_span_ends.pop(tuplet_key, None)
                         continue
 
                     attack = NoteAttack(
@@ -440,22 +449,15 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
                         pitch=pitch,
                         tie_start=tie_start,
                         tie_stop=tie_stop,
+                        tuplet_actual=tuplet_actual,
+                        tuplet_normal=tuplet_normal,
                         page_index=page_index,
                         x_norm=x_norm,
                         y_norm=y_norm,
-                        tuplet_actual_notes=(tuplet_actual or None),
-                        tuplet_normal_notes=(tuplet_normal or None),
-                        tuplet_group=tuplet_group,
-                        tuplet_span_start=tuplet_span_start,
-                        tuplet_span_end=tuplet_span_end,
                     )
                     raw_attacks.append(attack)
                     if tie_start:
                         open_ties[key] = attack
-                    if stop_tuplet:
-                        open_tuplet_groups.pop(tuplet_key, None)
-                        open_tuplet_span_starts.pop(tuplet_key, None)
-                        open_tuplet_span_ends.pop(tuplet_key, None)
                 elif tag == "backup":
                     cursor -= Fraction(_text_int(child, "duration", 0), divisions)
                 elif tag == "forward":
@@ -469,8 +471,6 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
     for onset in sorted(by_onset):
         src = by_onset[onset]
         first = src[0]
-        tuple_sources = [s for s in src if s.tuplet_actual_notes]
-        tuple_groups = {s.tuplet_group for s in tuple_sources if s.tuplet_group}
         hits.append(Hit(
             onset=onset,
             duration=max((s.duration for s in src), default=Fraction(0)),
@@ -478,10 +478,6 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
             measure_number=first.measure_number,
             offset_in_measure=first.offset_in_measure,
             sources=src,
-            tuplet_arity=(3 if any(s.tuplet_actual_notes == 3 for s in tuple_sources) else None),
-            tuplet_group=(next(iter(tuple_groups)) if len(tuple_groups) == 1 else None),
-            tuplet_span_start=(next((x.tuplet_span_start for x in tuple_sources if x.tuplet_span_start is not None), None)),
-            tuplet_span_end=(next((x.tuplet_span_end for x in tuple_sources if x.tuplet_span_end is not None), None)),
         ))
 
     if layout_note_count == 0:
@@ -492,10 +488,10 @@ def parse_musicxml(path: str | Path, initial_meter_override=None) -> Tuple[List[
 def extract_visual_groups(path: str | Path, initial_meter_override=None) -> tuple[list[dict], bool]:
     """Return symbolic notehead/chord columns in visual reading order.
 
-    Unlike analysis hits, this also includes grace notes and tied continuations because
-    those noteheads are physically present on the score. Tuplet noteheads remain present in this visual inventory. Whether their attacks enter
-    the dissertation core is decided later by the separate preprocessing contract. Each group is marked
-    ``analyzed`` only when at least one contained note creates a Tone-Metric attack.
+    Unlike analysis hits, this includes grace notes and tied continuations because those
+    noteheads are physically present on the score. Tuplet attacks are analysis attacks too;
+    their ratio changes the recursive subdivision, not whether the note sounds. Each group
+    is marked ``analyzed`` only when at least one contained note creates a Tone-Metric attack.
     This lets Audiveris physical notehead columns be matched without shifting the overlay.
     """
     path = Path(path)
@@ -516,7 +512,7 @@ def extract_visual_groups(path: str | Path, initial_meter_override=None) -> tupl
     templates = []
     divisions = 1
     meter_override = _parse_meter_override(initial_meter_override)
-    num, den = meter_override or (None, None)
+    num, den = meter_override or (4, 4)
     cumulative = Fraction(0)
     for mi, measure in enumerate(parts[0].findall("measure")):
         attrs = measure.find("attributes")
@@ -529,11 +525,6 @@ def extract_visual_groups(path: str | Path, initial_meter_override=None) -> tupl
                     num, den = meter_override
                 else:
                     num, den = _normalized_time_signature(time, num, den)
-        if num is None or den is None:
-            raise ValueError(
-                f"Measure {mi + 1}: no explicit/inherited meter is available. "
-                "Strict v0.16 will not assume 4/4; provide a valid meter in the score or use the meter override."
-            )
         full = Fraction(num * 4, den)
         cursor = Fraction(0); max_cursor = Fraction(0); last_nonchord = Fraction(0)
         for child in measure:
@@ -632,6 +623,10 @@ def extract_visual_groups(path: str | Path, initial_meter_override=None) -> tupl
                     })
                     serial += 1
                     row["pitches"].append(_pitch_string(child))
+                    tuplet_actual, tuplet_normal = _tuplet_ratio(child)
+                    if tuplet_actual is not None:
+                        row["tuplet_actual"] = tuplet_actual
+                        row["tuplet_normal"] = tuplet_normal
                     tie_stop = _has_tie(child, "stop")
                     if not is_grace and not tie_stop:
                         row["analyzed"] = True

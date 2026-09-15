@@ -21,14 +21,15 @@ class NoteAttack:
     pitch: str
     tie_start: bool = False
     tie_stop: bool = False
+    # Explicit MusicXML tuplet metadata.  These fields describe the local
+    # performed subdivision (actual notes in the time of normal notes) without
+    # changing attack identity.  They are used only to select the recursive
+    # arity of the span that the tuplet actually occupies.
+    tuplet_actual: Optional[int] = None
+    tuplet_normal: Optional[int] = None
     page_index: Optional[int] = None
     x_norm: Optional[float] = None
     y_norm: Optional[float] = None
-    tuplet_actual_notes: Optional[int] = None
-    tuplet_normal_notes: Optional[int] = None
-    tuplet_group: Optional[str] = None
-    tuplet_span_start: Optional[Fraction] = None
-    tuplet_span_end: Optional[Fraction] = None
 
 
 @dataclass
@@ -39,10 +40,10 @@ class Hit:
     measure_number: str
     offset_in_measure: Fraction
     sources: List[NoteAttack] = field(default_factory=list)
-    tuplet_arity: Optional[int] = None
-    tuplet_group: Optional[str] = None
-    tuplet_span_start: Optional[Fraction] = None
-    tuplet_span_end: Optional[Fraction] = None
+    # True only for attacks recovered from the saved Audiveris score-time graph.
+    # This provenance lets the recursive engine distinguish exact canonical timing
+    # from generic symbolic spacing when explicit MusicXML tuplet metadata is absent.
+    canonical_recovered: bool = False
 
     def to_dict(self):
         return {
@@ -53,10 +54,6 @@ class Hit:
             "offset_in_measure_quarter": frac_to_str(self.offset_in_measure),
             "attack_key": f"{self.measure_index}:{frac_to_str(self.offset_in_measure)}",
             "source_count": len(self.sources),
-            "tuplet_arity": self.tuplet_arity,
-            "tuplet_group": self.tuplet_group,
-            "tuplet_span_start_quarter": frac_to_str(self.tuplet_span_start) if self.tuplet_span_start is not None else None,
-            "tuplet_span_end_quarter": frac_to_str(self.tuplet_span_end) if self.tuplet_span_end is not None else None,
             "pitches": sorted({s.pitch for s in self.sources}),
             "source_notes": [
                 {
@@ -65,14 +62,11 @@ class Hit:
                     "voice": s.voice,
                     "staff": s.staff,
                     "duration_quarter": frac_to_str(s.duration),
+                    "tuplet_actual": s.tuplet_actual,
+                    "tuplet_normal": s.tuplet_normal,
                     "page_index": s.page_index,
                     "x_norm": s.x_norm,
                     "y_norm": s.y_norm,
-                    "tuplet_actual_notes": s.tuplet_actual_notes,
-                    "tuplet_normal_notes": s.tuplet_normal_notes,
-                    "tuplet_group": s.tuplet_group,
-                    "tuplet_span_start_quarter": frac_to_str(s.tuplet_span_start) if s.tuplet_span_start is not None else None,
-                    "tuplet_span_end_quarter": frac_to_str(s.tuplet_span_end) if s.tuplet_span_end is not None else None,
                 }
                 for s in self.sources
             ],
@@ -90,6 +84,10 @@ class MeasureInfo:
     numerator: int
     denominator: int
     implicit: bool = False
+    # True only when the notation itself supplies the conservative opening
+    # anacrusis cue used by the dissertation-aligned structural grid.  This is
+    # score metadata, not a second timing algorithm or a filename exception.
+    opening_anacrusis: bool = False
 
     @property
     def end(self) -> Fraction:
@@ -108,5 +106,6 @@ class MeterSegment:
     beat_count: int
     top_base: int
     compound: bool
+    opening_anacrusis: bool = False
     hits: List[Hit] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)

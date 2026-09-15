@@ -107,7 +107,7 @@ def register_wave_profile(
     """Attach fixed score-time wave points to existing validated PDF anchors.
 
     Attack points reuse exact canonical attack anchors.  Non-attack wave points
-    reuse the already-created parenthetical structural anchors.  This
+    reuse the already-created v0.11 parenthetical structural anchors.  This
     function has no coordinate-estimation path of its own.
     """
     lookup = {}
@@ -145,7 +145,7 @@ def register_wave_profile(
             continue
         # D(t) and lambda(t) remain available in the score-time wave profile and
         # event table, but are deliberately not copied into the PDF anchor payload.
-        # This preserves the validated visual wave-anchor contract.
+        # This preserves the previously validated v0.12 visual wave-anchor contract.
         visual_point = {k: v for k, v in p.items() if k not in {"density", "lowest_level"}}
         row = {
             **visual_point,
