@@ -10,7 +10,7 @@ RUN git clone --depth 1 --branch "${AUDIVERIS_VERSION}" https://github.com/Audiv
        /src/audiveris/app/src/main/java/org/audiveris/omr/sheet/beam/SpotsBuilder.java
 WORKDIR /src/audiveris
 RUN ./gradlew --no-daemon :app:installDist -x test \
-    && test -x /src/audiveris/app/build/install/Audiveris/bin/Audiveris
+    && test -x /src/audiveris/app/build/install/app/bin/Audiveris
 
 FROM ubuntu:24.04
 ARG DEBIAN_FRONTEND=noninteractive
@@ -33,7 +33,7 @@ RUN apt-get update \
     && fc-cache -f \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=audiveris-builder /opt/java/openjdk /opt/java/openjdk
-COPY --from=audiveris-builder /src/audiveris/app/build/install/Audiveris /opt/audiveris
+COPY --from=audiveris-builder /src/audiveris/app/build/install/app /opt/audiveris
 RUN test -x /opt/audiveris/bin/Audiveris \
     && java -version
 WORKDIR /app
