@@ -41,8 +41,8 @@ def pdf_to_musicxml(pdf_path: str | Path, output_dir: str | Path) -> tuple[Path,
     multi-sheet scores, save-every-step can force Audiveris to reopen
     intermediate sheet state while the same book ZIP filesystem is active.
     OCR is disabled because the analyzer does not consume textual recognition.
-    Audiveris system-level parallelism is enabled to schedule independent
-    systems concurrently without changing the OMR step sequence.
+    Systems are processed with Audiveris' default serial setting in this
+    diagnostic candidate so OMR quality can be compared directly.
     The finalized OMR is annotated separately by pdf_to_annotations().
     """
     pdf_path = Path(pdf_path)
@@ -57,7 +57,6 @@ def pdf_to_musicxml(pdf_path: str | Path, output_dir: str | Path) -> tuple[Path,
         [
             "-batch",
             "-constant", "org.audiveris.omr.text.tesseract.TesseractOCR.useOCR=false",
-            "-constant", "org.audiveris.omr.ui.action.AdvancedTopics.processSystemsInParallel=true",
             "-transcribe", "-export", "-output", str(output_dir), "--", str(pdf_path),
         ],
     )
