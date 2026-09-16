@@ -39,6 +39,8 @@ COPY static /app/static
 COPY v0152_sha256.txt /app/v0152_sha256.txt
 RUN mkdir -p /app/.tone_metric_cache \
     && cd /app \
+    && echo ATTACK_ONLY_HASH_DIAGNOSTIC \
+    && sha256sum tone_metric/engine.py tone_metric/score_registration.py tone_metric/waves.py \
     && sha256sum -c v0152_sha256.txt \
     && test ! -e /app/validate_release.py \
     && test ! -e /app/tone_metric/omr_exact.py \
