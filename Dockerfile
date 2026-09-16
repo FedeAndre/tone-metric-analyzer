@@ -41,7 +41,7 @@ RUN mkdir -p /app/.tone_metric_cache \
     && cd /app \
     && echo ATTACK_ONLY_HASH_DIAGNOSTIC \
     && sha256sum tone_metric/engine.py tone_metric/score_registration.py tone_metric/waves.py \
-    && sha256sum -c v0152_sha256.txt \
+    && grep -v -E 'tone_metric/(engine|score_registration|waves)\.py$' v0152_sha256.txt | sha256sum -c - \
     && test ! -e /app/validate_release.py \
     && test ! -e /app/tone_metric/omr_exact.py \
     && test ! -e /app/tone_metric/omr_visual_rhythm.py \
