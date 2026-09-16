@@ -34,6 +34,33 @@ def _find_annotations(output_dir: Path) -> Path | None:
     return candidates[0] if candidates else None
 
 
+def _validate_exported_meter(symbolic: Path) -> None:
+    """Stop before analysis when Audiveris exports metrically impossible measures.
+
+    Tone-Metric analysis assumes that attacks are located inside the notated
+    measure framework. If OMR makes a measured bar longer than its notated
+    duration, later attacks can spill into following measures and make an
+    apparently complete result mathematically misleading. Reject that export
+    instead of silently analyzing it.
+    """
+    from .musicxml import parse_musicxml
+
+    _, measures, _ = parse_musicxml(symbolic)
+    overfull = [m for m in measures if m.actual_duration > m.full_duration]
+    if not overfull:
+        return
+
+    detail = ", ".join(
+        f"m.{m.number} ({m.actual_duration} quarter-notes read; expected {m.full_duration})"
+        for m in overfull
+    )
+    raise ValueError(
+        "PDF optical-music recognition produced metrically inconsistent measure(s): "
+        f"{detail}. Tone-Metric analysis was stopped rather than use an unreliable "
+        "transcription. Try a cleaner scan or upload MusicXML/MXL."
+    )
+
+
 def pdf_to_musicxml(pdf_path: str | Path, output_dir: str | Path) -> tuple[Path, Path | None]:
     """Transcribe a PDF once and return the MusicXML export plus finalized OMR.
 
@@ -87,6 +114,8 @@ def pdf_to_musicxml(pdf_path: str | Path, output_dir: str | Path) -> tuple[Path,
             "Audiveris completed but no finalized OMR project was found. "
             + f"Outputs found: {outputs[:50]}"
         )
+
+    _validate_exported_meter(symbolic)
     return symbolic, omr
 
 
