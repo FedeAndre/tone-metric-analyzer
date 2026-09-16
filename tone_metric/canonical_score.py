@@ -13,6 +13,8 @@ Important rules implemented here:
 - rests occupy score time but do not create attacks;
 - an attack in any other voice at the same position still creates a global hit;
 - simultaneous/near-coincident noteheads are one physical attack column;
+- visual attack coordinates come from the attacking notehead geometry itself, never
+  from a chord box, accidental, clef, rest, barline, or other nearby notation;
 - Audiveris BEGIN slot times are useful constraints, but contradictory ones cannot
   reorder the printed score.  A maximum feasible monotonic subset is used as anchors;
 - missing semantic slots are filled on an exact rational metric lattice.  Geometry is
@@ -251,18 +253,15 @@ def _choose_feasible_semantic_anchors(columns: list[dict], quantum: Fraction, fu
                 continue
             candidates.append((i, j, int(support)))
 
-    # The leftmost recognized event/rest column defines the measure origin.  If OMR
-    # failed to provide it semantically we still place it on the pre-existing t=0 grid.
     anchors: dict[int, int] = {0: 0}
     if n <= 1:
         return anchors
 
-    # Weighted longest feasible path.  Support dominates anchor count.
     candidates = [(i, j, w) for i, j, w in candidates if i > 0 and j > 0]
     dp: list[tuple[int, int, int, int] | None] = [None] * len(candidates)
     parent = [-1] * len(candidates)
     for a, (i, j, w) in enumerate(candidates):
-        if j < i:  # must leave one grid position per preceding column
+        if j < i:
             continue
         best = (w, 1, -j, -i)
         best_parent = -1
@@ -302,7 +301,6 @@ def _fill_metric_positions(columns: list[dict], anchors: dict[int, int], quantum
     anchors = dict(anchors)
     anchors[0] = 0
 
-    # Estimate pixels per grid unit from trusted anchor pairs.
     ordered = sorted(anchors.items())
     scales = []
     for (i0, j0), (i1, j1) in zip(ordered, ordered[1:]):
@@ -315,8 +313,6 @@ def _fill_metric_positions(columns: list[dict], anchors: dict[int, int], quantum
     else:
         px_per_unit = 1.0
 
-    # If there is no semantic anchor at the right, extrapolate only as far as the
-    # notation spacing suggests; never beyond the measure grid.
     last_i, last_j = max(anchors.items())
     if last_i < n - 1:
         dx = columns[-1]["x_abs"] - columns[last_i]["x_abs"]
@@ -348,7 +344,6 @@ def _fill_metric_positions(columns: list[dict], anchors: dict[int, int], quantum
             js[i] = j
             prev = j
 
-    # Defensive fill (should only occur with a one-column measure).
     prev = -1
     for i, j in enumerate(js):
         if j < 0:
@@ -366,7 +361,6 @@ def _fill_metric_positions(columns: list[dict], anchors: dict[int, int], quantum
         "px_per_grid_unit": float(px_per_unit),
     }
     return js, audit
-
 
 
 class CanonicalFrameworkError(RuntimeError):
@@ -394,14 +388,7 @@ def _numeric_measure_number(value) -> int | None:
 
 
 def _reconcile_measure_framework_with_omr(omr_path, measures, symbolic_hits=None) -> tuple[dict, list[str]]:
-    """Expand sparse MusicXML measure metadata to the finalized OMR stack order.
-
-    Audiveris can retain all physical measure stacks in the finalized OMR while
-    omitting individual measures from MusicXML.  When the surviving MusicXML
-    numbers unambiguously span the complete OMR score, restore only the missing
-    measure shells and keep known MusicXML measures at their true physical ordinal.
-    Meter is inherited across a gap only when both known neighbors agree.
-    """
+    """Expand sparse MusicXML measure metadata to the finalized OMR stack order."""
     original = list(measures)
     symbolic_hits = list(symbolic_hits or [])
     omr_count = _omr_measure_stack_count(omr_path)
@@ -516,6 +503,7 @@ def _reconcile_measure_framework_with_omr(omr_path, measures, symbolic_hits=None
         f"Restored {len(missing_indices)} MusicXML-omitted measure shells from the finalized OMR stack order; no meter was guessed across a conflicting change."
     )
     return info, warnings
+
 
 def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_px: float = 12.0) -> tuple[list[CanonicalColumn], dict]:
     path = Path(omr_path)
@@ -640,7 +628,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                     head_chords = list(dict.fromkeys(head_chords))
                     rest_chords = list(dict.fromkeys(rest_chords))
                     infos = []
-                    # First pass: geometry, semantic beams/flags, tie/dot identity.
                     for cid in head_chords:
                         cel = objs.get(cid)
                         cb = _bounds(cel) if cel is not None else None
@@ -653,10 +640,14 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                         hb = [b for b in hb if b]
                         hcx = [a + c / 2 for a, b, c, d in hb]
                         hcy = [b + d / 2 for a, b, c, d in hb]
-                        # Horizontal registration uses the physical chord box center.  We do
-                        # not average multiple independent attack columns; notehead y-centers
-                        # are used only to keep the vertical guide near the sounding heads.
+                        exact_head_geometry = bool(hcx and hcy)
+                        # Preserve the validated chord-box x for timing, ordering and
+                        # clustering. Exact notehead geometry is separate display-only data.
                         center = (x + w / 2, sum(hcy) / len(hcy)) if hcy else (x + w / 2, y + h / 2)
+                        visual_center = (
+                            (sum(hcx) / len(hcx), sum(hcy) / len(hcy))
+                            if exact_head_geometry else (None, None)
+                        )
                         stem_id = chord_stem.get(cid)
                         stem = objs.get(stem_id) if stem_id else None
                         median = _median_points(stem) if stem is not None else None
@@ -677,6 +668,9 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                             "staff": _int(cel.get("staff"), 0) or 0,
                             "x_abs": float(center[0]),
                             "y_abs": float(center[1]),
+                            "visual_x_abs": float(visual_center[0]) if visual_center[0] is not None else None,
+                            "visual_y_abs": float(visual_center[1]) if visual_center[1] is not None else None,
+                            "head_geometry_exact": exact_head_geometry,
                             "heads": heads,
                             "head_kind": _head_kind([h.get("shape", "") for h in heads]),
                             "stem_id": stem_id,
@@ -688,7 +682,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                             "assigned_continue_times": list(continue_times.get(cid, [])),
                         })
 
-                    # Raster beams supplement missing Audiveris beam relations only.
                     if arr is not None:
                         local_groups = defaultdict(list)
                         for info in infos:
@@ -728,8 +721,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                         rests = [m for m in members if _local(m.tag) == "rest"]
                         shape = rests[0].get("shape", "") if rests else ""
                         duration = _rest_duration(shape) or Fraction(1)
-                        # A centered whole-rest in an otherwise active staff denotes a
-                        # full-measure silence; its printed center is not an onset column.
                         if "WHOLE_REST" in shape.upper() and duration >= full:
                             continue
                         events.append({
@@ -738,6 +729,9 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                             "staff": _int(cel.get("staff"), 0) or 0,
                             "x_abs": float(x + w / 2),
                             "y_abs": float(y + h / 2),
+                            "visual_x_abs": None,
+                            "visual_y_abs": None,
+                            "head_geometry_exact": False,
                             "duration_quarter": duration,
                             "assigned_begin_times": list(begin_times.get(cid, [])),
                             "assigned_continue_times": list(continue_times.get(cid, [])),
@@ -756,7 +750,16 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
 
                     columns = []
                     for group in clusters:
-                        rep = min(group, key=lambda a: (sum(abs(a["x_abs"] - b["x_abs"]) for b in group), a["cid"]))
+                        # Keep canonical clustering/representative selection identical to
+                        # the validated attack-recovery path. Visual notehead coordinates
+                        # must never alter event identity or score time.
+                        rep = min(
+                            group,
+                            key=lambda a: (
+                                sum(abs(a["x_abs"] - b["x_abs"]) for b in group),
+                                a["cid"],
+                            ),
+                        )
                         durations = [e["duration_quarter"] for e in group if e.get("duration_quarter", 0) > 0]
                         head_events = [e for e in group if e["kind"] == "head"]
                         columns.append({
@@ -766,10 +769,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                             "attack": any(e.get("attack") for e in head_events),
                             "rest": any(e.get("rest") for e in group),
                             "tie_continuation_only": bool(head_events) and all(e.get("tie_continuation") for e in head_events),
-                            # A global attack can contain several simultaneous notes.  Keep
-                            # the longest sounding duration on the column (the same convention
-                            # used by the symbolic Hit model), while the metric lattice below
-                            # still considers every constituent duration independently.
                             "duration_quarter": max(durations, default=Fraction(1)),
                             "assigned_begin_times": [t for e in group for t in e.get("assigned_begin_times", [])],
                         })
@@ -786,7 +785,6 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                         quantum = Fraction(1)
                     while columns and int(full / quantum) < len(columns):
                         quantum /= 2
-                    # Do not allow an accidental exotic denominator to explode the grid.
                     if quantum < Fraction(1, 32):
                         quantum = Fraction(1, 32)
                         while columns and int(full / quantum) < len(columns):
@@ -828,6 +826,11 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
                                     "chord_id": e.get("cid"),
                                     "kind": e.get("kind"),
                                     "staff": int(e.get("staff", 0) or 0),
+                                    "x_abs": float(e["x_abs"]) if e.get("x_abs") is not None else None,
+                                    "y_abs": float(e["y_abs"]) if e.get("y_abs") is not None else None,
+                                    "visual_x_abs": float(e["visual_x_abs"]) if e.get("visual_x_abs") is not None else None,
+                                    "visual_y_abs": float(e["visual_y_abs"]) if e.get("visual_y_abs") is not None else None,
+                                    "head_geometry_exact": bool(e.get("head_geometry_exact")),
                                     "duration_quarter": str(e.get("duration_quarter", Fraction(0))),
                                     "dot_count": int(e.get("dot_count", 0) or 0),
                                     "attack": bool(e.get("attack")),
@@ -866,6 +869,14 @@ def recover_canonical_columns(omr_path: str | Path, measures, cluster_tolerance_
     meta["augmentation_dot_count"] = int(augmentation_relation_count)
     meta["tie_continuation_column_count"] = sum(1 for c in out if c.tie_continuation_only)
     meta["rest_column_count"] = sum(1 for c in out if c.rest)
+    meta["exact_attack_geometry_column_count"] = sum(
+        1
+        for c in out
+        if c.attack and any(
+            e.get("kind") == "head" and e.get("attack") and e.get("head_geometry_exact")
+            for e in c.notation_events
+        )
+    )
     return out, meta
 
 
