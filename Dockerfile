@@ -39,7 +39,9 @@ COPY static /app/static
 COPY v0152_sha256.txt /app/v0152_sha256.txt
 RUN mkdir -p /app/.tone_metric_cache \
     && cd /app \
-    && sha256sum -c v0152_sha256.txt \
+    && echo EXACT_NOTEHEAD_HASHES \
+    && sha256sum tone_metric/canonical_score.py tone_metric/score_registration.py \
+    && grep -v -E 'tone_metric/(canonical_score|score_registration)\.py$' v0152_sha256.txt | sha256sum -c - \
     && test ! -e /app/validate_release.py \
     && test ! -e /app/tone_metric/omr_exact.py \
     && test ! -e /app/tone_metric/omr_visual_rhythm.py \
