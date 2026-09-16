@@ -3,16 +3,15 @@ from __future__ import annotations
 """Register Tone-Metric attacks to the canonical score layout.
 
 Only actual sonic attacks may receive analytical Level labels.  Every label is
-registered to the exact canonical score-time column that generated the attack.
-When Audiveris preserves individual attacking-head geometry, that notehead center
-is used directly.  Otherwise the already-semantic canonical *attack column* center
-is used; non-attack symbols such as barlines, accidentals, clefs, rests, sustained
-continuations, dots, and ties are never eligible anchors.
+registered to exact attacking-notehead geometry belonging to the canonical score-time
+column that generated the event.  Rests, sustained notes, augmentation-dot
+continuations, ties, accidentals, clefs, and barlines can never supply an x-anchor.
+If Audiveris does not preserve exact attacking-head geometry, the label is left
+unmapped rather than guessed from a chord/column box or nearby notation.
 """
 
 from collections import defaultdict
 from fractions import Fraction
-from statistics import median
 
 
 def _frac(value, default=None):
@@ -37,53 +36,43 @@ def _event_targets(analysis_result: dict) -> list[dict]:
 
 
 def _attack_anchor_position(col: dict) -> tuple[float, float, str] | None:
-    """Return a coordinate belonging only to a semantically confirmed attack.
+    """Return one exact attacking-notehead coordinate for this canonical attack.
 
-    Preferred path: median center of explicit attacking notehead geometry retained
-    inside the canonical column.  Some Audiveris projects do not serialize those
-    per-head x/y values into the compact canonical metadata.  In that case the
-    canonical column's own x/y remains safe because ``canonical_score.py`` created
-    this column from notation event objects and marked it ``attack=True`` only when
-    a new head attack was present.  Accidentals, barlines and clefs never participate
-    in that column construction.
+    A global rhythmic hit may contain simultaneous chords in several voices/staves.
+    ``canonical_score.py`` retains an exact notehead-derived center for each attacking
+    chord and also chooses one of those attacks as the column representative.  Reuse
+    the attacking chord whose exact x-coordinate is closest to that representative;
+    never average toward or fall back to non-note notation.
     """
     if not bool(col.get("attack")):
         return None
 
-    heads = [
-        e for e in (col.get("notation_events") or [])
-        if e.get("kind") == "head" and bool(e.get("attack"))
-    ]
-    xs = []
-    ys = []
-    for head in heads:
+    points = []
+    for event in col.get("notation_events") or []:
+        if event.get("kind") != "head" or not bool(event.get("attack")):
+            continue
+        if not bool(event.get("head_geometry_exact")):
+            continue
         try:
-            x = head.get("x_abs")
-            y = head.get("y_abs")
+            x = event.get("x_abs")
+            y = event.get("y_abs")
             if x is None or y is None:
                 continue
-            xs.append(float(x))
-            ys.append(float(y))
+            points.append((float(x), float(y), str(event.get("chord_id") or "")))
         except Exception:
             continue
-    if xs and ys:
-        return (
-            float(median(xs)),
-            float(median(ys)),
-            "canonical-score-exact-attacking-notehead-center",
-        )
-
-    # The canonical attack-column center is a semantic notation coordinate, not a
-    # nearest-glyph or page-geometry guess.  It is used only for an attack=True
-    # column and therefore cannot be manufactured from a barline or accidental.
-    try:
-        return (
-            float(col["x_abs"]),
-            float(col.get("y_abs", 0.0)),
-            "canonical-score-semantic-attack-column-center",
-        )
-    except Exception:
+    if not points:
         return None
+
+    try:
+        representative_x = float(col.get("x_abs"))
+    except Exception:
+        representative_x = points[0][0]
+    x_abs, y_abs, _cid = min(
+        points,
+        key=lambda p: (abs(p[0] - representative_x), p[0], p[1], p[2]),
+    )
+    return x_abs, y_abs, "canonical-score-exact-attacking-notehead-center"
 
 
 def build_layer_anchors_from_canonical_score(
@@ -114,7 +103,6 @@ def build_layer_anchors_from_canonical_score(
     per_level = defaultdict(lambda: {"expected": 0, "mapped": 0, "missing": 0})
     missing = defaultdict(list)
     missing_attack_anchor = 0
-    semantic_column_fallbacks = 0
     exact_notehead_anchors = 0
 
     for target in _event_targets(analysis_result):
@@ -145,15 +133,12 @@ def build_layer_anchors_from_canonical_score(
                     "measure_index": mi,
                     "measure_number": event.get("measure_number", str(mi + 1)),
                     "offset_in_measure_quarter": str(offset),
-                    "reason": "semantic-attack-anchor-not-found",
+                    "reason": "exact-attacking-notehead-geometry-not-found",
                 })
             continue
 
         x_abs, y_abs, registration_source = anchor_pos
-        if registration_source == "canonical-score-exact-attacking-notehead-center":
-            exact_notehead_anchors += 1
-        else:
-            semantic_column_fallbacks += 1
+        exact_notehead_anchors += 1
 
         page = int(col.get("page_index", -1))
         system = int(col.get("system_index", -1))
@@ -210,13 +195,17 @@ def build_layer_anchors_from_canonical_score(
     missing_total = sum(v["missing"] for v in per_level.values())
     if missing_total:
         warnings.append(
-            f"{missing_total} event-level anchor(s) could not be returned to a semantic canonical attack column."
+            f"{missing_total} event-level anchor(s) could not be returned to exact attacking-notehead geometry."
+        )
+    if missing_attack_anchor:
+        warnings.append(
+            f"{missing_attack_anchor} attack column(s) lacked exact attacking-notehead geometry and were deliberately not guessed."
         )
 
     attack_levels = sorted(per_level)
     stats = {
         "final_layer_anchors": sum(len(v) for v in anchors_by_page.values()),
-        "layer_anchor_registration": "canonical-score-semantic-attack-columns-only",
+        "layer_anchor_registration": "canonical-score-exact-attacking-notehead-centers-only",
         "analysis_position_policy": "actual-attacks-only",
         "levels_enabled": attack_levels,
         "max_layer_level": max(attack_levels, default=0),
@@ -225,13 +214,13 @@ def build_layer_anchors_from_canonical_score(
         "layer_hits_without_visual_attack": missing_total,
         "canonical_column_count": int(meta.get("column_count", 0) or 0),
         "canonical_attack_column_count": int(meta.get("attack_column_count", 0) or 0),
+        "canonical_exact_attack_geometry_column_count": int(meta.get("exact_attack_geometry_column_count", 0) or 0),
         "manufactured_x_coordinates": 0,
         "semantic_attack_anchor_missing": missing_attack_anchor,
         "exact_attacking_notehead_anchors": exact_notehead_anchors,
-        "semantic_attack_column_fallbacks": semantic_column_fallbacks,
+        "semantic_attack_column_fallbacks": 0,
         "per_level": {str(k): dict(v) for k, v in sorted(per_level.items())},
         "missing_targets_by_level": {str(k): v for k, v in sorted(missing.items())},
-        # Compatibility keys: the obsolete parenthetical path is intentionally empty.
         "structural_parenthetical_positions": 0,
         "structural_parenthetical_labels_expected": 0,
         "structural_parenthetical_labels_mapped": 0,
@@ -246,5 +235,4 @@ def build_layer_anchors_from_canonical_score(
         stats[f"level{level}_hits_expected"] = values["expected"]
         stats[f"level{level}_hits_without_visual_attack"] = values["missing"]
 
-    # Signature retained for physical.py compatibility; there are no structural anchors.
     return dict(anchors_by_page), {}, stats, warnings
