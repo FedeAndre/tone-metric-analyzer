@@ -2,14 +2,16 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass
+from fractions import Fraction
 from pathlib import Path
 from zipfile import ZipFile
 import re
 
 from lxml import etree
 
-
 RECOVERY_MERGE_TOLERANCE_PX = 8.0
+MIN_EVENT_SEPARATION_PX = 12.0
+SYNTHETIC_TARGET_COST = 45.0
 
 
 @dataclass(frozen=True)
@@ -59,23 +61,103 @@ def _system_vertical_bounds(system, page_height: float) -> tuple[float, float]:
     return (min(ys), max(ys)) if ys else (0.0, page_height)
 
 
+def _spread_targets(
+    xs: list[float],
+    left: float,
+    right: float,
+    minsep: float = MIN_EVENT_SEPARATION_PX,
+) -> list[float]:
+    if not xs:
+        return []
+    out = sorted(float(x) for x in xs)
+    for i in range(1, len(out)):
+        if out[i] < out[i - 1] + minsep:
+            out[i] = out[i - 1] + minsep
+    ceiling = float(right) - 2.0
+    if out[-1] > ceiling:
+        shift = out[-1] - ceiling
+        out = [x - shift for x in out]
+        for i in range(len(out) - 2, -1, -1):
+            if out[i] > out[i + 1] - minsep:
+                out[i] = out[i + 1] - minsep
+    floor = float(left) + 2.0
+    if out[0] < floor:
+        shift = floor - out[0]
+        out = [x + shift for x in out]
+    return out
+
+
+def _assign_positions(
+    targets: list[float],
+    candidate_lists: list[list[float]],
+    minsep: float = MIN_EVENT_SEPARATION_PX,
+) -> list[float]:
+    """Choose one display x for each distinct musical hit.
+
+    A real attacking notehead x is preferred. When old engraving places two
+    different score-times on nearly the same visual x, or when Audiveris gives
+    a non-monotone slot layout, the repaired rhythmic target is used instead.
+    This preserves one visible strike per distinct hit without inventing or
+    deleting events.
+    """
+    if len(targets) != len(candidate_lists):
+        raise ValueError('target/candidate mismatch')
+
+    options: list[list[tuple[float, float, bool]]] = []
+    for target, candidates in zip(targets, candidate_lists):
+        values: list[tuple[float, float, bool]] = []
+        for x in sorted(set(round(float(x), 6) for x in candidates)):
+            values.append((x, abs(x - target), False))
+        values.append((float(target), SYNTHETIC_TARGET_COST, True))
+
+        best_by_x: dict[float, tuple[float, bool]] = {}
+        for x, cost, synthetic in values:
+            if x not in best_by_x or cost < best_by_x[x][0]:
+                best_by_x[x] = (cost, synthetic)
+        options.append([(x, *best_by_x[x]) for x in sorted(best_by_x)])
+
+    states: dict[int, tuple[float, list[float]]] = {
+        j: (cost, [x]) for j, (x, cost, _synthetic) in enumerate(options[0])
+    }
+
+    for i in range(1, len(options)):
+        new_states: dict[int, tuple[float, list[float]]] = {}
+        for j, (x, cost, _synthetic) in enumerate(options[i]):
+            best: tuple[float, list[float]] | None = None
+            for _previous_index, (previous_cost, path) in states.items():
+                if x - path[-1] < minsep - 1e-9:
+                    continue
+                candidate = (previous_cost + cost, path + [x])
+                if best is None or candidate[0] < best[0]:
+                    best = candidate
+            if best is not None:
+                new_states[j] = best
+        if not new_states:
+            return list(targets)
+        states = new_states
+
+    return min(states.values(), key=lambda item: item[0])[1]
+
+
 def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
     """Return exactly one strike for every recognized new sounding hit.
 
-    Primary identity comes from Audiveris semantic rhythmic slots. A BEGIN
-    head-chord with at least one untied head makes its global slot a hit, and
-    simultaneous voices/staves therefore merge to one strike.
+    Timed hit identity comes from semantic BEGIN head-chords grouped by exact
+    Audiveris rhythmic slot. Simultaneous attacks across voices/staves therefore
+    merge to one hit. Rests do not qualify. A chord whose heads are all RIGHT
+    endpoints of semantic ties is a continuation and does not qualify.
 
-    Audiveris can recognize a valid head-chord but fail to insert it into a
-    voice. Such semantic head-chords are recovered directly from their
-    notehead geometry instead of being silently discarded. Recovery is used
-    only when a qualifying chord has no BEGIN voice entry; if its notehead is
-    already essentially coincident with an existing strike, it is considered
-    represented rather than duplicated.
+    Audiveris can recognize a valid sounding head-chord but omit it from all
+    voice BEGIN records. Those semantic attacks are recovered from notehead
+    geometry. If ANY head in an unvoiced chord coincides with a head already
+    assigned to a timed event, the whole chord is treated as simultaneous with
+    that event rather than counted again.
 
-    Rests and non-head-chords never create hits. Chords whose heads are all
-    RIGHT endpoints of semantic ties are continuations and never create hits.
-    MusicXML is not used.
+    Display x is deliberately separate from hit identity. Old engraving can
+    place different musical times on nearly the same x, or simultaneous voices
+    at different x values. The display layer therefore repairs slot ordering,
+    keeps distinct hits visibly separated, and prefers real attacking notehead
+    positions whenever that does not collapse/reverse musical time.
     """
     path = Path(omr_path)
     strikes: list[Strike] = []
@@ -91,6 +173,8 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
         page_index = 0
         for member in members:
             root = etree.fromstring(zf.read(member))
+            by_id = {e.get('id'): e for e in root.iter() if e.get('id')}
+
             picture = next((e for e in root.iter() if _local(e.tag).lower() == 'picture'), None)
             if picture is None:
                 raise ValueError(f'{member}: missing picture geometry')
@@ -99,7 +183,6 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
             if width <= 0 or height <= 0:
                 raise ValueError(f'{member}: invalid picture geometry')
 
-            by_id = {e.get('id'): e for e in root.iter() if e.get('id')}
             chord_heads: dict[str, list[tuple[str, float, float]]] = defaultdict(list)
             tied_right_heads: set[str] = set()
 
@@ -141,15 +224,16 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
                 if not systems:
                     systems = [e for e in page.iter() if _local(e.tag).lower() == 'system']
 
-                staff_to_system: dict[str, int] = {}
-                for system_index, system in enumerate(systems):
-                    for staff in (e for e in system.iter() if _local(e.tag).lower() == 'staff'):
-                        staff_id = staff.get('id')
-                        if staff_id:
-                            staff_to_system[staff_id] = system_index
+                staff_to_system = {
+                    staff.get('id'): system_index
+                    for system_index, system in enumerate(systems)
+                    for staff in system.iter()
+                    if _local(staff.tag).lower() == 'staff' and staff.get('id')
+                }
 
                 represented_chords: set[str] = set()
                 system_strike_x: dict[int, list[float]] = defaultdict(list)
+                system_event_head_x: dict[int, list[float]] = defaultdict(list)
 
                 for system_index, system in enumerate(systems):
                     top, bottom = _system_vertical_bounds(system, height)
@@ -157,7 +241,12 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
                     parts = [e for e in system if _local(e.tag).lower() == 'part']
 
                     for stack_index, stack in enumerate(stacks):
-                        sounding_slot_ids: set[str] = set()
+                        slot_nodes = {
+                            slot.get('id'): slot
+                            for slot in stack
+                            if _local(slot.tag).lower() == 'slot' and slot.get('id')
+                        }
+                        slot_heads: dict[str, list[tuple[str, float, float]]] = defaultdict(list)
 
                         for part in parts:
                             measures = [e for e in part if _local(e.tag).lower() == 'measure']
@@ -177,34 +266,60 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
                                 chord = by_id.get(chord_id)
                                 if chord is None or _local(chord.tag).lower() != 'head-chord':
                                     continue
-                                if not new_heads(chord_id):
+
+                                heads = new_heads(chord_id)
+                                if not heads:
                                     continue
 
                                 represented_chords.add(chord_id)
                                 slot_id = (key_node.text or '').strip()
                                 if slot_id:
-                                    sounding_slot_ids.add(slot_id)
+                                    slot_heads[slot_id].extend(heads)
 
-                        slot_nodes = {
-                            slot.get('id'): slot
-                            for slot in stack
-                            if _local(slot.tag).lower() == 'slot' and slot.get('id')
-                        }
                         left = float(stack.get('left') or 0)
+                        right = float(stack.get('right') or left)
+                        events: list[tuple[Fraction, int, float, list[float]]] = []
 
-                        for slot_id in sorted(sounding_slot_ids, key=lambda x: int(x)):
+                        for slot_id, heads in slot_heads.items():
                             slot = slot_nodes.get(slot_id)
-                            if slot is None:
-                                raise ValueError(f'{member}: sounding slot {slot_id} has no stack slot geometry')
-                            x_offset = slot.get('x-offset')
-                            if x_offset is None:
-                                raise ValueError(f'{member}: sounding slot {slot_id} has no x-offset')
-                            x = left + float(x_offset)
-                            strikes.append(Strike(page_index, system_index, x, top, bottom, width, height))
-                            system_strike_x[system_index].append(x)
+                            if slot is None or slot.get('x-offset') is None:
+                                continue
+                            slot_x = left + float(slot.get('x-offset'))
+                            try:
+                                time_offset = Fraction(slot.get('time-offset') or '0')
+                            except Exception:
+                                time_offset = Fraction(0)
+                            try:
+                                numeric_slot_id = int(slot_id)
+                            except Exception:
+                                numeric_slot_id = 10**9
+                            events.append(
+                                (time_offset, numeric_slot_id, slot_x, [h[1] for h in heads])
+                            )
 
-                # Recover semantic note attacks Audiveris recognized but omitted
-                # from all voice-entry BEGIN records.
+                        events.sort(key=lambda item: (item[0], item[1]))
+                        if events:
+                            targets = _spread_targets([event[2] for event in events], left, right)
+                            positions = _assign_positions(
+                                targets,
+                                [event[3] for event in events],
+                            )
+                            for x, event in zip(positions, events):
+                                strikes.append(
+                                    Strike(
+                                        page_index,
+                                        system_index,
+                                        x,
+                                        top,
+                                        bottom,
+                                        width,
+                                        height,
+                                    )
+                                )
+                                system_strike_x[system_index].append(x)
+                                system_event_head_x[system_index].extend(event[3])
+
+                # Recover sounding semantic chords omitted from all timed BEGIN records.
                 for chord_id, chord in by_id.items():
                     if _local(chord.tag).lower() != 'head-chord' or chord_id in represented_chords:
                         continue
@@ -212,22 +327,46 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
                     if not heads:
                         continue
 
-                    staff_id = chord.get('staff')
-                    system_index = staff_to_system.get(staff_id or '')
+                    system_index = staff_to_system.get(chord.get('staff') or '')
                     if system_index is None:
-                        raise ValueError(
-                            f'{member}: unvoiced sounding head-chord {chord_id} has no system staff mapping'
-                        )
+                        continue
 
-                    xs = sorted(h[1] for h in heads)
-                    x = xs[len(xs) // 2]
-                    existing = system_strike_x[system_index]
-                    if any(abs(x - prior_x) <= RECOVERY_MERGE_TOLERANCE_PX for prior_x in existing):
+                    # If ANY head of this unvoiced chord shares the visual attack
+                    # column of a timed event, the whole chord is already represented.
+                    if any(
+                        abs(head[1] - existing_head_x) <= RECOVERY_MERGE_TOLERANCE_PX
+                        for head in heads
+                        for existing_head_x in system_event_head_x[system_index]
+                    ):
+                        continue
+
+                    chord_center = _bounds_center(chord)
+                    target_x = (
+                        chord_center[0]
+                        if chord_center is not None
+                        else sum(h[1] for h in heads) / len(heads)
+                    )
+                    x = min((h[1] for h in heads), key=lambda candidate: abs(candidate - target_x))
+
+                    if any(
+                        abs(x - prior_x) <= RECOVERY_MERGE_TOLERANCE_PX
+                        for prior_x in system_strike_x[system_index]
+                    ):
                         continue
 
                     top, bottom = _system_vertical_bounds(systems[system_index], height)
-                    strikes.append(Strike(page_index, system_index, x, top, bottom, width, height))
-                    existing.append(x)
+                    strikes.append(
+                        Strike(
+                            page_index,
+                            system_index,
+                            x,
+                            top,
+                            bottom,
+                            width,
+                            height,
+                        )
+                    )
+                    system_strike_x[system_index].append(x)
 
                 page_index += 1
 
