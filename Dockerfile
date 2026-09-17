@@ -51,7 +51,10 @@ RUN mkdir -p /app/.tone_metric_cache \
     && ! grep -R "from .*canonical_score" /app/app.py /app/tone_metric /app/tests \
     && ! grep -R "canonical-score-time" /app/app.py /app/tone_metric /app/tests \
     && ! grep -R "_attack_columns" /app/tone_metric/physical.py \
-    && python3 -B -c "import tone_metric; assert tone_metric.__version__ == '0.18.0-rc2'" \
+    && ! grep -R "build_layer_anchors_from_symbolic_layout" /app/app.py /app/tone_metric/physical.py /app/tone_metric/score_registration.py /app/tests \
+    && ! grep -R "extract_visual_groups" /app/app.py /app/tone_metric/physical.py /app/tone_metric/score_registration.py \
+    && ! grep -R "layout_x_abs" /app/tone_metric/physical.py /app/tone_metric/score_registration.py \
+    && python3 -B -c "import tone_metric; assert tone_metric.__version__ == '0.18.0-rc3'" \
     && python3 -m py_compile /app/app.py /app/tone_metric/*.py /app/tests/*.py \
     && python3 -m unittest discover -s /app/tests -p 'test_*.py' -v
 EXPOSE 8080
