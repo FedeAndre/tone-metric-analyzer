@@ -18,7 +18,7 @@ from render import render_pdf_with_strikes
 SESSIONS = Path(tempfile.gettempdir()) / "tone_metric_hit_only"
 SESSIONS.mkdir(parents=True, exist_ok=True)
 AUDIVERIS = os.environ.get("AUDIVERIS_CMD", "/opt/audiveris/bin/Audiveris")
-VERSION = "hit-only-geometry-first-v7"
+VERSION = "hit-only-displaced-voice-v8"
 
 app = FastAPI(title="Hit-only score marker")
 
@@ -50,8 +50,6 @@ def _find_one(root: Path, suffix: str) -> Path:
 
 
 def _run_audiveris(pdf_path: Path, out_dir: Path) -> Path:
-    # -export forces Audiveris through the complete transcription pipeline.
-    # The exported MusicXML is not used by the hit extractor.
     cmd = [
         AUDIVERIS,
         "-batch",
@@ -88,9 +86,11 @@ def status():
         "ok": True,
         "version": VERSION,
         "audiveris_found": Path(AUDIVERIS).exists(),
-        "hit_source": "semantic-notehead-geometry-with-tie-filtering",
+        "hit_source": "semantic-notehead-geometry-with-tie-filtering-and-displaced-voice-merge",
         "musicxml_used_for_hits": False,
-        "rhythmic_slots_used_for_hits": False,
+        "rhythmic_slots_create_hits": False,
+        "rhythmic_slots_position_hits": False,
+        "rhythmic_slots_used_only_as_displaced_voice_disambiguation": True,
         "one_strike_per_hit": True,
     }
 
