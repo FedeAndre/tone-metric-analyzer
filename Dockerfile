@@ -39,11 +39,12 @@ COPY static /app/static
 COPY tests /app/tests
 RUN mkdir -p /app/.tone_metric_cache \
     && test ! -e /app/validate_release.py \
+    && test ! -e /app/tone_metric/canonical_score.py \
     && test ! -e /app/tone_metric/omr_exact.py \
     && test ! -e /app/tone_metric/omr_visual_rhythm.py \
     && test ! -e /app/tone_metric/layer_registration.py \
     && test ! -e /app/tone_metric/render.py \
-    && python3 -B -c "import tone_metric; assert tone_metric.__version__ == '0.18.0-rc1'" \
+    && python3 -B -c "import tone_metric; assert tone_metric.__version__ == '0.18.0-rc2'" \
     && python3 -m py_compile /app/app.py /app/tone_metric/*.py /app/tests/*.py \
     && python3 -m unittest discover -s /app/tests -p 'test_*.py' -v
 EXPOSE 8080
