@@ -3,7 +3,9 @@ from __future__ import annotations
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
+import traceback
 import uuid
 from pathlib import Path
 
@@ -16,7 +18,7 @@ from render import render_pdf_with_strikes
 SESSIONS = Path(tempfile.gettempdir()) / "tone_metric_hit_only"
 SESSIONS.mkdir(parents=True, exist_ok=True)
 AUDIVERIS = os.environ.get("AUDIVERIS_CMD", "/opt/audiveris/bin/Audiveris")
-VERSION = "hit-only-notehead-v2"
+VERSION = "hit-only-notehead-v3"
 
 app = FastAPI(title="Hit-only score marker")
 
@@ -25,7 +27,7 @@ HTML = r'''<!doctype html>
 <title>Hit-only score marker</title>
 <style>
 body{font-family:Arial,sans-serif;margin:0;background:#eee;color:#111}main{max-width:1200px;margin:auto;padding:20px}
-form{display:flex;gap:10px;align-items:center;margin-bottom:16px}button{padding:8px 14px}#status{margin:8px 0 16px}.page{display:block;width:100%;height:auto;margin:0 0 20px;background:white}
+form{display:flex;gap:10px;align-items:center;margin-bottom:16px}button{padding:8px 14px}#status{margin:8px 0 16px;white-space:pre-wrap}.page{display:block;width:100%;height:auto;margin:0 0 20px;background:white}
 </style></head><body><main>
 <form id="f"><input id="file" type="file" accept="application/pdf,.pdf" required><button>Analyze</button></form>
 <div id="status"></div><div id="pages"></div>
@@ -48,12 +50,31 @@ def _find_one(root: Path, suffix: str) -> Path:
 
 
 def _run_audiveris(pdf_path: Path, out_dir: Path) -> Path:
-    cmd = [AUDIVERIS, "-batch", "-save", "-output", str(out_dir), str(pdf_path)]
-    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=1200)
+    # -export deliberately forces Audiveris through the complete transcription
+    # pipeline.  The exported MusicXML is NOT used by the hit extractor.
+    cmd = [
+        AUDIVERIS,
+        "-batch",
+        "-save",
+        "-export",
+        "-output",
+        str(out_dir),
+        str(pdf_path),
+    ]
+    proc = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        timeout=1200,
+    )
     if proc.returncode != 0:
-        tail = "\n".join(proc.stdout.splitlines()[-40:])
+        tail = "\n".join(proc.stdout.splitlines()[-80:])
         raise RuntimeError(f"Audiveris failed with exit code {proc.returncode}.\n{tail}")
-    return _find_one(out_dir, ".omr")
+    omr_path = _find_one(out_dir, ".omr")
+    if omr_path.stat().st_size <= 0:
+        raise RuntimeError("Audiveris produced an empty .omr project")
+    return omr_path
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -63,7 +84,13 @@ def root():
 
 @app.get("/api/status")
 def status():
-    return {"ok": True, "version": VERSION, "audiveris_found": Path(AUDIVERIS).exists()}
+    return {
+        "ok": True,
+        "version": VERSION,
+        "audiveris_found": Path(AUDIVERIS).exists(),
+        "hit_source": "audiveris-omr-semantic-noteheads",
+        "musicxml_used_for_hits": False,
+    }
 
 
 @app.post("/api/analyze")
@@ -83,6 +110,10 @@ async def analyze(file: UploadFile = File(...)):
                 break
             fh.write(chunk)
 
+    if pdf_path.stat().st_size <= 0:
+        shutil.rmtree(session, ignore_errors=True)
+        raise HTTPException(400, "The uploaded PDF is empty.")
+
     omr_out = session / "audiveris"
     omr_out.mkdir()
     try:
@@ -90,10 +121,13 @@ async def analyze(file: UploadFile = File(...)):
         logical_hit_count, strikes = extract_hit_strikes(omr_path)
         pages = render_pdf_with_strikes(pdf_path, strikes, session / "pages")
     except Exception as exc:
+        print(f"ANALYZE_ERROR [{VERSION}] {type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
+        traceback.print_exc(file=sys.stderr)
         shutil.rmtree(session, ignore_errors=True)
-        raise HTTPException(422, str(exc)) from exc
+        raise HTTPException(422, f"{type(exc).__name__}: {exc}") from exc
 
     return JSONResponse({
+        "version": VERSION,
         "hit_count": logical_hit_count,
         "strike_count": len(strikes),
         "pages": [f"/session/{session_id}/{p.name}" for p in pages],
