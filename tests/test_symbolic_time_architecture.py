@@ -8,7 +8,7 @@ from pathlib import Path
 from tone_metric.engine import analyze
 from tone_metric.models import Hit, MeasureInfo, NoteAttack
 from tone_metric.musicxml import parse_musicxml
-from tone_metric.score_registration import build_layer_anchors_from_canonical_score
+from tone_metric.score_registration import build_layer_anchors_from_symbolic_layout
 
 
 class SymbolicTimeArchitectureTests(unittest.TestCase):
@@ -142,8 +142,6 @@ class SymbolicTimeArchitectureTests(unittest.TestCase):
                 "layout_x_abs": 100.0,
                 "layout_page_width": 200.0,
             },
-            # Extra graphical note group that is not an analyzed attack. It must
-            # never manufacture a new rhythmic event or registration target.
             {
                 "serial": 3,
                 "attack_key": "0:3/2",
@@ -154,7 +152,7 @@ class SymbolicTimeArchitectureTests(unittest.TestCase):
                 "layout_page_width": 200.0,
             },
         ]
-        anchors, _structural, stats, _warnings = build_layer_anchors_from_canonical_score(
+        anchors, _structural, stats, _warnings = build_layer_anchors_from_symbolic_layout(
             result, {0: (1000.0, 1400.0)}
         )
         mapped = [a for rows in anchors.values() for a in rows]
