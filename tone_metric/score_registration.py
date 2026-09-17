@@ -3,15 +3,15 @@ from __future__ import annotations
 """Register analyzed symbolic attacks to PDF layout without deriving musical time.
 
 Musical event identity is fixed upstream by ``parse_musicxml`` and the recursive
-Tone-Metric engine.  This module may only attach already-existing events to the
-layout metadata exported with those same symbolic notes.  It never creates,
-removes, splits, merges, reorders, or retimes attacks.
+Tone-Metric engine. This module may only attach already-existing events to layout
+metadata exported with those same symbolic notes. It never creates, removes,
+splits, merges, reorders, or retimes attacks.
 
-The registration key is the symbolic ``measure_index:offset`` attack key.  Visual
-x coordinates are used only after that key is established.  Multiple engraved
+The registration key is the symbolic ``measure_index:offset`` attack key. Visual
+x coordinates are used only after that key is established. Multiple engraved
 noteheads belonging to the same simultaneous global attack may have different x
-positions; they therefore remain one event and merely provide several candidate
-visual anchors for that already-fixed event.
+positions; they remain one event and merely provide several candidate visual
+anchors for that already-fixed event.
 """
 
 from collections import defaultdict
@@ -81,10 +81,10 @@ def _visual_candidates(analysis_result: dict) -> tuple[dict[str, list[dict]], di
 
 
 def _representative_candidate(candidates: list[dict]) -> dict | None:
-    """Choose one *existing* symbolic note position for a global simultaneous attack.
+    """Select one existing note position for a global simultaneous attack.
 
-    The median is used only to select among real candidate note positions.  No new
-    coordinate is averaged or synthesized between noteheads.
+    Median x is used only to choose among real candidate note positions. No new
+    coordinate is synthesized between noteheads.
     """
     if not candidates:
         return None
@@ -102,15 +102,11 @@ def _representative_candidate(candidates: list[dict]) -> dict | None:
     )
 
 
-def build_layer_anchors_from_canonical_score(
+def build_layer_anchors_from_symbolic_layout(
     analysis_result: dict,
     page_dimensions: dict[int, tuple[float, float]],
 ):
-    """Compatibility entry point: register from symbolic attack keys, never canonical time.
-
-    The historical function name is retained only to avoid an interface break in the
-    physical rendering module.  No canonical-score reconstruction is consulted.
-    """
+    """Attach PDF x/system positions to already-established symbolic attacks."""
     visual_by_key, system_counts = _visual_candidates(analysis_result)
 
     anchors_by_page = defaultdict(list)
@@ -160,12 +156,8 @@ def build_layer_anchors_from_canonical_score(
                 })
             continue
 
-        pw, ph = float(dims[0]), float(dims[1])
+        pw, _ph = float(dims[0]), float(dims[1])
         x_norm = max(0.0, min(1.0, float(chosen["_x_abs"]) / float(chosen["_page_width"])))
-        # Audiveris commonly omits default-y in MusicXML.  Vertical placement is
-        # therefore deliberately system-level only.  The actual analysis label rows
-        # are laid out against the physical system bounds later; this y value cannot
-        # affect event identity or score time.
         n_systems = max(1, int(system_counts.get(page, system + 1)))
         cy_norm = max(0.0, min(1.0, (system + 0.5) / n_systems))
 
