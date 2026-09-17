@@ -10,12 +10,13 @@ from pathlib import Path
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
-from core import extract_hits, map_hits_to_strikes
+from core import extract_hit_strikes
 from render import render_pdf_with_strikes
 
 SESSIONS = Path(tempfile.gettempdir()) / "tone_metric_hit_only"
 SESSIONS.mkdir(parents=True, exist_ok=True)
 AUDIVERIS = os.environ.get("AUDIVERIS_CMD", "/opt/audiveris/bin/Audiveris")
+VERSION = "hit-only-notehead-v2"
 
 app = FastAPI(title="Hit-only score marker")
 
@@ -46,13 +47,13 @@ def _find_one(root: Path, suffix: str) -> Path:
     return matches[0]
 
 
-def _run_audiveris(pdf_path: Path, out_dir: Path) -> tuple[Path, Path]:
-    cmd = [AUDIVERIS, "-batch", "-save", "-export", "-output", str(out_dir), str(pdf_path)]
+def _run_audiveris(pdf_path: Path, out_dir: Path) -> Path:
+    cmd = [AUDIVERIS, "-batch", "-save", "-output", str(out_dir), str(pdf_path)]
     proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=1200)
     if proc.returncode != 0:
         tail = "\n".join(proc.stdout.splitlines()[-40:])
         raise RuntimeError(f"Audiveris failed with exit code {proc.returncode}.\n{tail}")
-    return _find_one(out_dir, ".mxl"), _find_one(out_dir, ".omr")
+    return _find_one(out_dir, ".omr")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -62,7 +63,7 @@ def root():
 
 @app.get("/api/status")
 def status():
-    return {"ok": True, "audiveris_found": Path(AUDIVERIS).exists()}
+    return {"ok": True, "version": VERSION, "audiveris_found": Path(AUDIVERIS).exists()}
 
 
 @app.post("/api/analyze")
@@ -85,18 +86,16 @@ async def analyze(file: UploadFile = File(...)):
     omr_out = session / "audiveris"
     omr_out.mkdir()
     try:
-        mxl_path, omr_path = _run_audiveris(pdf_path, omr_out)
-        hits = extract_hits(mxl_path)
-        strikes = map_hits_to_strikes(hits, omr_path)
-        if len(strikes) != len(hits):
-            raise RuntimeError("Not every hit was mapped exactly.")
+        omr_path = _run_audiveris(pdf_path, omr_out)
+        logical_hit_count, strikes = extract_hit_strikes(omr_path)
         pages = render_pdf_with_strikes(pdf_path, strikes, session / "pages")
     except Exception as exc:
         shutil.rmtree(session, ignore_errors=True)
         raise HTTPException(422, str(exc)) from exc
 
     return JSONResponse({
-        "hit_count": len(hits),
+        "hit_count": logical_hit_count,
+        "strike_count": len(strikes),
         "pages": [f"/session/{session_id}/{p.name}" for p in pages],
     })
 
