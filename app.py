@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parent
 CACHE = ROOT / ".tone_metric_cache"
 CACHE.mkdir(exist_ok=True)
 
-app = FastAPI(title="Tone-Metric Analyzer", version="0.18.0-rc1-symbolic-time")
+app = FastAPI(title="Tone-Metric Analyzer", version="0.18.0-rc2-symbolic-registration")
 app.mount("/static", StaticFiles(directory=ROOT / "static"), name="static")
 
 
@@ -81,6 +81,8 @@ def status():
         "ok": True,
         "version": app.version,
         "timing_authority": "musicxml-symbolic-global-onset",
+        "pdf_registration": "symbolic-attack-key-to-musicxml-note-layout",
+        "geometry_can_create_or_retime_attacks": False,
         "omr_recovery": "disabled-fail-closed",
         "audiveris_found": bool(find_audiveris()),
         "audiveris_command": find_audiveris(),
@@ -156,8 +158,6 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
         result["symbolic_hit_count"] = len(hits)
         result["omr_recovery_policy"] = "disabled-fail-closed"
         result["omr_recovered_hit_count"] = 0
-        result["canonical_score_meta"] = {}
-        result["canonical_hit_count"] = 0
         result["levels_enabled"] = sorted({
             int(level)
             for seg in result.get("segments", [])
@@ -173,7 +173,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
         result["parse_warnings"] = list(parse_warnings)
         if suffix == ".pdf":
             result["parse_warnings"].append(
-                "Architectural rebuild: OMR-only attack recovery is disabled until a separate semantic recovery gate is validated. No OMR geometry can create musical attacks or score time."
+                "OMR-only attack recovery remains disabled. PDF geometry may attach a visual position only to an attack already established by symbolic score time; it cannot create or retime events."
             )
         result["session_id"] = session_id
         result["debug_bundle_url"] = f"/api/session/{session_id}/debug"
@@ -187,7 +187,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
             "pages": [],
             "warnings": [],
             "matching": {
-                "registration_policy": "symbolic-time-authoritative; canonical-x-time-registration-disabled"
+                "registration_policy": "symbolic-attack-key-to-note-layout; geometry-cannot-create-or-retime"
             },
         }
 
@@ -203,40 +203,39 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
             except Exception as exc:
                 (session / "omr-slots-error.txt").write_text(str(exc), encoding="utf-8")
 
-        # During the architecture rebuild we retain annotation-page extraction and
-        # system geometry, but deliberately disable the old canonical-score timing
-        # registration by passing no OMR timing graph. This is fail-closed: missing
-        # visual anchors are preferable to musically incorrect event reconstruction.
+        # Visual registration is downstream of analysis.  It receives the symbolic
+        # MusicXML note-layout groups only after attacks and Levels are complete.
+        # The registrar iterates existing attack keys; extra graphical groups are
+        # ignored and missing groups remain unmapped rather than manufacturing events.
         if suffix == ".pdf" and annotation_archive is not None:
             try:
                 visual_groups, layout_known = extract_visual_groups(
                     symbolic,
                     initial_meter_override=meter_override_tuple,
                 )
+                result["_symbolic_visual_groups"] = visual_groups
                 result["physical_overlay"] = build_normalized_overlay(
                     annotation_archive,
                     visual_groups,
                     layout_known,
                     result,
                     session / "physical",
-                    omr_path=None,
-                )
-                result["physical_overlay"].setdefault("warnings", []).insert(
-                    0,
-                    "Canonical x-derived attack registration is intentionally disabled in this architecture candidate; PDF attack labels will remain unmapped until symbolic-to-notehead registration is validated.",
+                    omr_path=omr_path,
                 )
                 result["physical_overlay"].setdefault("matching", {})[
                     "registration_policy"
-                ] = "symbolic-time-authoritative; canonical-x-time-registration-disabled"
+                ] = "symbolic-attack-key-to-note-layout; geometry-cannot-create-or-retime"
             except Exception as exc:
                 result["physical_overlay"] = {
                     "available": False,
                     "pages": [],
                     "matching": {
-                        "registration_policy": "symbolic-time-authoritative; canonical-x-time-registration-disabled"
+                        "registration_policy": "symbolic-attack-key-to-note-layout; geometry-cannot-create-or-retime"
                     },
                     "warnings": [f"Physical annotation extraction could not be built: {exc}"],
                 }
+            finally:
+                result.pop("_symbolic_visual_groups", None)
         elif suffix == ".pdf" and annotation_warning:
             result["physical_overlay"]["warnings"].append(annotation_warning)
 
