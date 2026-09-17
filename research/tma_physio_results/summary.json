@@ -1,0 +1,223 @@
+{
+  "seed": 20260917,
+  "dataset": "PhysioNet Fantasia v1.0.0",
+  "implementation": "optimized one-pass loading + local dataset prefetch when available + exact vectorized phase rotations",
+  "hypothesis": "Respiration-anchored recursive topology of heartbeats adds information beyond conventional HRV, respiratory, and phase-coupling features.",
+  "peak": {
+    "orientation": "peak",
+    "n_subjects": 40,
+    "n_cycles_total": 55168,
+    "group_counts": {
+      "old": 20,
+      "young": 20
+    },
+    "depths": {
+      "4": {
+        "classification_extended": {
+          "log_loss": 0.3237299233475068,
+          "auc": 0.92,
+          "brier": 0.10005708084674417,
+          "accuracy": 0.875,
+          "balanced_accuracy": 0.875
+        },
+        "delta_logloss_extended_minus_baseline": 0.01576893405199037,
+        "delta_auc_extended_minus_baseline": -0.022499999999999964,
+        "bootstrap_delta_logloss_95ci": [
+          -0.013440769356362061,
+          0.04936304669285234
+        ],
+        "bootstrap_delta_logloss_mean": 0.016121630394953394,
+        "age_regression_extended": {
+          "rmse": 15.755516898550354,
+          "mae": 12.232111424853946,
+          "r2": 0.5922112359752673
+        },
+        "delta_age_rmse_extended_minus_baseline": 0.1133837049862283,
+        "tma_mean_young": 1.198540223115759,
+        "tma_mean_old": 1.1837641305003637,
+        "tma_group_diff_old_minus_young": -0.014776092615395253,
+        "tma_group_permutation_p": 0.19994000299985001,
+        "tma_group_cohens_d": -0.4094477726304259
+      },
+      "5": {
+        "classification_extended": {
+          "log_loss": 0.3336858508367059,
+          "auc": 0.91,
+          "brier": 0.10211844599373365,
+          "accuracy": 0.875,
+          "balanced_accuracy": 0.875
+        },
+        "delta_logloss_extended_minus_baseline": 0.02572486154118947,
+        "delta_auc_extended_minus_baseline": -0.03249999999999997,
+        "bootstrap_delta_logloss_95ci": [
+          -0.002572317140605895,
+          0.06126315753600198
+        ],
+        "bootstrap_delta_logloss_mean": 0.02604165827269428,
+        "age_regression_extended": {
+          "rmse": 15.83213363420407,
+          "mae": 12.349081622016996,
+          "r2": 0.5882355606295064
+        },
+        "delta_age_rmse_extended_minus_baseline": 0.1900004406399436,
+        "tma_mean_young": 1.1680420113348482,
+        "tma_mean_old": 1.1543077771193753,
+        "tma_group_diff_old_minus_young": -0.013734234215472929,
+        "tma_group_permutation_p": 0.18489075546222689,
+        "tma_group_cohens_d": -0.42348156552135646
+      },
+      "6": {
+        "classification_extended": {
+          "log_loss": 0.3343108391019075,
+          "auc": 0.91,
+          "brier": 0.10225148611353659,
+          "accuracy": 0.875,
+          "balanced_accuracy": 0.875
+        },
+        "delta_logloss_extended_minus_baseline": 0.0263498498063911,
+        "delta_auc_extended_minus_baseline": -0.03249999999999997,
+        "bootstrap_delta_logloss_95ci": [
+          -0.002087690851155452,
+          0.062195491346319215
+        ],
+        "bootstrap_delta_logloss_mean": 0.02667036403386991,
+        "age_regression_extended": {
+          "rmse": 15.887625031202779,
+          "mae": 12.399398130439405,
+          "r2": 0.5853440454512806
+        },
+        "delta_age_rmse_extended_minus_baseline": 0.245491837638653,
+        "tma_mean_young": 1.1406568111940305,
+        "tma_mean_old": 1.1293145121726103,
+        "tma_group_diff_old_minus_young": -0.011342299021420255,
+        "tma_group_permutation_p": 0.18284085795710214,
+        "tma_group_cohens_d": -0.4250907683542025
+      }
+    },
+    "baseline_classification": {
+      "log_loss": 0.3079609892955164,
+      "auc": 0.9425,
+      "brier": 0.09719460385470793,
+      "accuracy": 0.875,
+      "balanced_accuracy": 0.875
+    },
+    "baseline_age_regression": {
+      "rmse": 15.642133193564126,
+      "mae": 12.136041720960872,
+      "r2": 0.5980593756008121
+    },
+    "phase_rotation_surrogate_d5": {
+      "observed_cohens_d_old_minus_young": -0.42348156552135646,
+      "surrogate_abs_tail_p": 0.6726546906187625,
+      "surrogate_d_mean": -0.42559842741072906,
+      "surrogate_d_sd": 0.004992673342847292,
+      "surrogate_d_q025": -0.43483744850326617,
+      "surrogate_d_q975": -0.41514445327115385
+    }
+  },
+  "trough": {
+    "orientation": "trough",
+    "n_subjects": 40,
+    "n_cycles_total": 55632,
+    "group_counts": {
+      "old": 20,
+      "young": 20
+    },
+    "depths": {
+      "4": {
+        "classification_extended": {
+          "log_loss": 0.38504496077946027,
+          "auc": 0.9225,
+          "brier": 0.11927713977901755,
+          "accuracy": 0.825,
+          "balanced_accuracy": 0.825
+        },
+        "delta_logloss_extended_minus_baseline": 0.030357232360152364,
+        "delta_auc_extended_minus_baseline": -0.007500000000000062,
+        "bootstrap_delta_logloss_95ci": [
+          -0.0025475029832843234,
+          0.06768211341540442
+        ],
+        "bootstrap_delta_logloss_mean": 0.030820069697850727,
+        "age_regression_extended": {
+          "rmse": 14.27738483921367,
+          "mae": 11.067908152710892,
+          "r2": 0.6651369139456524
+        },
+        "delta_age_rmse_extended_minus_baseline": -1.571724663355205,
+        "tma_mean_young": 1.1975462969792559,
+        "tma_mean_old": 1.1833866141966944,
+        "tma_group_diff_old_minus_young": -0.014159682782561411,
+        "tma_group_permutation_p": 0.21708914554272285,
+        "tma_group_cohens_d": -0.39377996215139144
+      },
+      "5": {
+        "classification_extended": {
+          "log_loss": 0.3852365608899963,
+          "auc": 0.9225,
+          "brier": 0.119315246067444,
+          "accuracy": 0.825,
+          "balanced_accuracy": 0.825
+        },
+        "delta_logloss_extended_minus_baseline": 0.030548832470688403,
+        "delta_auc_extended_minus_baseline": -0.007500000000000062,
+        "bootstrap_delta_logloss_95ci": [
+          -0.0014606426546467956,
+          0.06679847390936225
+        ],
+        "bootstrap_delta_logloss_mean": 0.030999881410722605,
+        "age_regression_extended": {
+          "rmse": 16.45507005179808,
+          "mae": 12.94769752514458,
+          "r2": 0.5551952517964112
+        },
+        "delta_age_rmse_extended_minus_baseline": 0.6059605492292057,
+        "tma_mean_young": 1.1671799535138556,
+        "tma_mean_old": 1.153942070152831,
+        "tma_group_diff_old_minus_young": -0.013237883361024716,
+        "tma_group_permutation_p": 0.19929003549822508,
+        "tma_group_cohens_d": -0.40998459507410834
+      },
+      "6": {
+        "classification_extended": {
+          "log_loss": 0.38511381740971407,
+          "auc": 0.9225,
+          "brier": 0.11905692846192029,
+          "accuracy": 0.825,
+          "balanced_accuracy": 0.825
+        },
+        "delta_logloss_extended_minus_baseline": 0.030426088990406164,
+        "delta_auc_extended_minus_baseline": -0.007500000000000062,
+        "bootstrap_delta_logloss_95ci": [
+          -0.0022792532094302,
+          0.06693195224243398
+        ],
+        "bootstrap_delta_logloss_mean": 0.03087993534567386,
+        "age_regression_extended": {
+          "rmse": 16.503800936195564,
+          "mae": 12.994407218408051,
+          "r2": 0.5525568158006209
+        },
+        "delta_age_rmse_extended_minus_baseline": 0.654691433626688,
+        "tma_mean_young": 1.139949695108374,
+        "tma_mean_old": 1.1290076422140314,
+        "tma_group_diff_old_minus_young": -0.010942052894342691,
+        "tma_group_permutation_p": 0.19729013549322533,
+        "tma_group_cohens_d": -0.4119560347170088
+      }
+    },
+    "baseline_classification": {
+      "log_loss": 0.3546877284193079,
+      "auc": 0.93,
+      "brier": 0.10472485747925582,
+      "accuracy": 0.85,
+      "balanced_accuracy": 0.85
+    },
+    "baseline_age_regression": {
+      "rmse": 15.849109502568876,
+      "mae": 12.036661997162327,
+      "r2": 0.5873520655053796
+    }
+  },
+  "runtime_s": 133.0195610523224
+}
