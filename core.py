@@ -29,18 +29,6 @@ def _sheet_number(name: str) -> int:
     return int(match.group(1)) if match else 10**9
 
 
-def _bounds_center(node) -> tuple[float, float] | None:
-    bounds = next((c for c in node if _local(c.tag).lower() == 'bounds'), None)
-    if bounds is None:
-        return None
-    try:
-        x = float(bounds.get('x')) + float(bounds.get('w')) / 2.0
-        y = float(bounds.get('y')) + float(bounds.get('h')) / 2.0
-    except Exception:
-        return None
-    return x, y
-
-
 def _system_vertical_bounds(system, page_height: float) -> tuple[float, float]:
     ys: list[float] = []
     for staff in (e for e in system.iter() if _local(e.tag).lower() == 'staff'):
@@ -55,45 +43,23 @@ def _system_vertical_bounds(system, page_height: float) -> tuple[float, float]:
     return (min(ys), max(ys)) if ys else (0.0, page_height)
 
 
-def _cluster_x(values: list[float], tolerance_px: float = 4.0) -> list[float]:
-    """Collapse visually identical attack columns only.
-
-    Four OMR pixels are about one rendered display pixel in the current PDF path;
-    this removes duplicate chord/voice anchors that are effectively the same
-    vertical column without using x-distance to invent musical time.
-    """
-    if not values:
-        return []
-    values = sorted(values)
-    groups: list[list[float]] = []
-    for x in values:
-        if groups:
-            center = sum(groups[-1]) / len(groups[-1])
-            if abs(x - center) <= tolerance_px:
-                groups[-1].append(x)
-                continue
-        groups.append([x])
-    return [sum(g) / len(g) for g in groups]
-
-
 def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
-    """Extract only new sounding attacks and their exact visible strike columns.
+    """Return exactly one vertical strike for every global new sounding hit.
 
-    Source of truth:
-      * Audiveris voice entries with status=BEGIN identify sounding chord starts.
-      * Only semantic head-chords qualify; rests and non-note symbols are excluded.
-      * A notehead that is the RIGHT endpoint of a semantic tie is a continuation.
-      * A chord with at least one untied head is a new sounding attack.
-      * Drawing x comes only from the contained attacking notehead geometry.
+    Hit identity comes only from Audiveris's semantic rhythmic slots:
+      * a voice entry with status=BEGIN starts a chord at a global slot;
+      * only head-chords can create hits;
+      * a chord whose heads are all RIGHT endpoints of semantic ties is a
+        continuation and creates no hit;
+      * if any head in the chord is untied, that slot contains a new attack;
+      * simultaneous attacks in any number of voices/staves merge into the
+        same global slot and therefore exactly one strike.
 
-    Slot x-coordinates and MusicXML engraving coordinates are never used to place
-    strikes. If one logical hit contains simultaneous attacks engraved at visibly
-    different x positions, each visible attack column is marked so no real attack
-    disappears from the diagnostic overlay. The logical hit count remains merged by
-    rhythmic slot.
+    The strike x-coordinate is the global rhythmic slot position from the OMR
+    stack. Individual notehead x-coordinates never create additional strikes.
+    MusicXML is not used for hit identity or strike placement.
     """
     path = Path(omr_path)
-    logical_hit_count = 0
     strikes: list[Strike] = []
 
     with ZipFile(path) as zf:
@@ -116,7 +82,7 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
                 raise ValueError(f'{member}: invalid picture geometry')
 
             by_id = {e.get('id'): e for e in root.iter() if e.get('id')}
-            chord_heads: dict[str, list[tuple[str, float, float]]] = defaultdict(list)
+            chord_heads: dict[str, set[str]] = defaultdict(set)
             tied_right_heads: set[str] = set()
 
             for relation in (e for e in root.iter() if _local(e.tag).lower() == 'relation'):
@@ -134,9 +100,7 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
                         _local(source_node.tag).lower() == 'head-chord'
                         and _local(target_node.tag).lower() == 'head'
                     ):
-                        center = _bounds_center(target_node)
-                        if center is not None:
-                            chord_heads[source].append((target, center[0], center[1]))
+                        chord_heads[source].add(target)
 
                 elif kind == 'slur-head' and (child.get('side') or '').upper() == 'RIGHT':
                     slur = by_id.get(source)
@@ -159,14 +123,15 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
                     stacks = [e for e in system if _local(e.tag).lower() == 'stack']
                     parts = [e for e in system if _local(e.tag).lower() == 'part']
 
-                    for stack_index, _stack in enumerate(stacks):
-                        slot_chords: dict[str, set[str]] = defaultdict(set)
+                    for stack_index, stack in enumerate(stacks):
+                        sounding_slot_ids: set[str] = set()
 
                         for part in parts:
                             measures = [e for e in part if _local(e.tag).lower() == 'measure']
                             if stack_index >= len(measures):
                                 continue
                             measure = measures[stack_index]
+
                             for entry in (e for e in measure.iter() if _local(e.tag).lower() == 'entry'):
                                 key_node = next((c for c in entry if _local(c.tag).lower() == 'key'), None)
                                 value = next((c for c in entry if _local(c.tag).lower() == 'value'), None)
@@ -174,36 +139,45 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
                                     continue
                                 if (value.get('status') or '').upper() != 'BEGIN':
                                     continue
+
                                 chord_id = value.get('chord')
                                 chord = by_id.get(chord_id)
                                 if chord is None or _local(chord.tag).lower() != 'head-chord':
                                     continue
-                                slot_id = (key_node.text or '').strip()
-                                if slot_id:
-                                    slot_chords[slot_id].add(chord_id)
 
-                        stack_attack_x: list[float] = []
-                        for chord_ids in slot_chords.values():
-                            slot_sounds = False
-                            for chord_id in chord_ids:
-                                heads = chord_heads.get(chord_id, [])
+                                heads = chord_heads.get(chord_id, set())
                                 if not heads:
                                     continue
-                                new_heads = [h for h in heads if h[0] not in tied_right_heads]
-                                if not new_heads:
+                                if not any(head_id not in tied_right_heads for head_id in heads):
                                     continue
-                                slot_sounds = True
-                                xs = sorted(x for _hid, x, _y in new_heads)
-                                stack_attack_x.append(xs[len(xs) // 2])
-                            if slot_sounds:
-                                logical_hit_count += 1
 
-                        for x in _cluster_x(stack_attack_x):
+                                slot_id = (key_node.text or '').strip()
+                                if slot_id:
+                                    sounding_slot_ids.add(slot_id)
+
+                        slot_nodes = {
+                            slot.get('id'): slot
+                            for slot in stack
+                            if _local(slot.tag).lower() == 'slot' and slot.get('id')
+                        }
+                        left = float(stack.get('left') or 0)
+
+                        for slot_id in sorted(sounding_slot_ids, key=lambda x: int(x)):
+                            slot = slot_nodes.get(slot_id)
+                            if slot is None:
+                                raise ValueError(
+                                    f'{member}: sounding slot {slot_id} has no stack slot geometry'
+                                )
+                            x_offset = slot.get('x-offset')
+                            if x_offset is None:
+                                raise ValueError(
+                                    f'{member}: sounding slot {slot_id} has no x-offset'
+                                )
                             strikes.append(
                                 Strike(
                                     page_index=page_index,
                                     system_index=system_index,
-                                    x=x,
+                                    x=left + float(x_offset),
                                     system_top=top,
                                     system_bottom=bottom,
                                     omr_width=width,
@@ -213,6 +187,8 @@ def extract_hit_strikes(omr_path: str | Path) -> tuple[int, list[Strike]]:
 
                 page_index += 1
 
-    if logical_hit_count <= 0 or not strikes:
+    if not strikes:
         raise ValueError('No sounding note attacks were found')
+
+    logical_hit_count = len(strikes)
     return logical_hit_count, strikes
