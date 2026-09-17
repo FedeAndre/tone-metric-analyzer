@@ -1,0 +1,95 @@
+{
+  "dataset": "DANDI:001695 draft",
+  "n_sessions": 12,
+  "n_subjects": 4,
+  "n_windows": 2899,
+  "window_s": 10.0,
+  "population_simultaneity_bin_s": 0.001,
+  "mapping": "CA1 pyramidal population spikes within peak-to-peak 6-10 Hz CA1 LFP theta cycles",
+  "primary_outcome": "10-second mean running speed (cm/s)",
+  "depths": {
+    "4": {
+      "regression_extended": {
+        "rmse": 4.247941692255413,
+        "mae": 3.5461380060969567,
+        "r2": -0.37477135853370847
+      },
+      "delta_rmse_extended_minus_baseline": -0.3238559524686577,
+      "delta_r2_extended_minus_baseline": 0.2176110855904121,
+      "cluster_bootstrap_delta_rmse_95ci": [
+        -0.4148052852604236,
+        -0.19555336096843767
+      ],
+      "cluster_bootstrap_delta_rmse_mean": -0.3227662560847851,
+      "fast_slow_extended": {
+        "log_loss": 0.6717143823926431,
+        "auc": 0.6939726340913178,
+        "balanced_accuracy": 0.6698844223569993
+      },
+      "delta_logloss_extended_minus_baseline": -0.06819991565266104,
+      "delta_auc_extended_minus_baseline": 0.06469732389530991
+    },
+    "5": {
+      "regression_extended": {
+        "rmse": 4.236689832835634,
+        "mae": 3.5311182331014077,
+        "r2": -0.36749807252861477
+      },
+      "delta_rmse_extended_minus_baseline": -0.3351078118884363,
+      "delta_r2_extended_minus_baseline": 0.22488437159550578,
+      "cluster_bootstrap_delta_rmse_95ci": [
+        -0.44451780383763584,
+        -0.19642669023813975
+      ],
+      "cluster_bootstrap_delta_rmse_mean": -0.3337783491926546,
+      "fast_slow_extended": {
+        "log_loss": 0.6660317213611171,
+        "auc": 0.6970656029818052,
+        "balanced_accuracy": 0.6709797126089161
+      },
+      "delta_logloss_extended_minus_baseline": -0.07388257668418707,
+      "delta_auc_extended_minus_baseline": 0.06779029278579729
+    },
+    "6": {
+      "regression_extended": {
+        "rmse": 4.257859258985286,
+        "mae": 3.5453493194924315,
+        "r2": -0.38119814289747844
+      },
+      "delta_rmse_extended_minus_baseline": -0.3139383857387843,
+      "delta_r2_extended_minus_baseline": 0.2111843012266421,
+      "cluster_bootstrap_delta_rmse_95ci": [
+        -0.4309308773821501,
+        -0.17318543247446527
+      ],
+      "cluster_bootstrap_delta_rmse_mean": -0.3114488951325061,
+      "fast_slow_extended": {
+        "log_loss": 0.6702297833330363,
+        "auc": 0.6914812574585996,
+        "balanced_accuracy": 0.6594366611629694
+      },
+      "delta_logloss_extended_minus_baseline": -0.06968451471226789,
+      "delta_auc_extended_minus_baseline": 0.062205947262591654
+    }
+  },
+  "baseline_regression": {
+    "rmse": 4.571797644724071,
+    "mae": 3.8057163775424017,
+    "r2": -0.5923824441241206
+  },
+  "baseline_fast_slow_classification": {
+    "log_loss": 0.7399142980453042,
+    "auc": 0.6292753101960079,
+    "balanced_accuracy": 0.599411485834791
+  },
+  "phase_rotation_surrogate_d5": {
+    "n_windows": 240,
+    "observed_within_subject_residual_r": 0.15836496749033327,
+    "surrogate_abs_tail_p": 0.42786069651741293,
+    "surrogate_r_mean": 0.15361734774163696,
+    "surrogate_r_sd": 0.02046731272331869,
+    "surrogate_r_q025": 0.11153698082318925,
+    "surrogate_r_q975": 0.19335378894567526
+  },
+  "runtime_s": 111.86626315116882
+}
