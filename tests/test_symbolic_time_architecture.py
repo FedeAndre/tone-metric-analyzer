@@ -8,6 +8,7 @@ from pathlib import Path
 from tone_metric.engine import analyze
 from tone_metric.models import Hit, MeasureInfo, NoteAttack
 from tone_metric.musicxml import parse_musicxml
+from tone_metric.score_registration import build_layer_anchors_from_canonical_score
 
 
 class SymbolicTimeArchitectureTests(unittest.TestCase):
@@ -36,8 +37,6 @@ class SymbolicTimeArchitectureTests(unittest.TestCase):
         )
 
     def test_musicxml_merges_simultaneous_notes_despite_large_x_offset(self):
-        # The two attacks at score time 0 are 42 engraving units apart. Physical
-        # spacing must not split them into separate rhythmic events.
         xml = """<?xml version="1.0" encoding="UTF-8"?>
 <score-partwise version="4.0">
   <part-list>
@@ -99,18 +98,73 @@ class SymbolicTimeArchitectureTests(unittest.TestCase):
         self.assertTrue(by_time["1/2"]["levels"])
         self.assertEqual(result["analysis_position_policy"], "symbolic-attacks-plus-independent-metric-grid")
 
-    def test_ten_symbolic_onsets_remain_ten_global_events(self):
-        # Regression guard for the class of failure observed in Buxtehude m.46:
-        # simultaneous source multiplicity must never turn 10 symbolic attacks into 13.
+    def test_buxtehude_measure46_ten_ground_truth_onsets_remain_ten_events(self):
         measure = MeasureInfo(0, "46", Fraction(0), Fraction(4), Fraction(4), Fraction(0), 4, 4)
         times = [
-            Fraction(0), Fraction(1, 4), Fraction(1, 2), Fraction(3, 4),
-            Fraction(1), Fraction(3, 2), Fraction(2), Fraction(5, 2),
+            Fraction(0), Fraction(1, 2), Fraction(3, 4), Fraction(1),
+            Fraction(3, 2), Fraction(7, 4), Fraction(2), Fraction(5, 2),
             Fraction(3), Fraction(7, 2),
         ]
         hits = [self._hit(t, sources=(3 if i in {1, 6, 8} else 1)) for i, t in enumerate(times)]
         result = analyze(hits, [measure])
-        self.assertEqual(len(result["segments"][0]["events"]), 10)
+        events = result["segments"][0]["events"]
+        self.assertEqual(len(events), 10)
+        self.assertEqual([Fraction(e["onset_quarter"]) for e in events], times)
+
+    def test_registration_uses_attack_key_and_cannot_split_simultaneous_geometry(self):
+        measure = MeasureInfo(0, "4", Fraction(0), Fraction(4), Fraction(4), Fraction(0), 4, 4)
+        result = analyze([self._hit(Fraction(0), sources=2), self._hit(Fraction(1))], [measure])
+        result["_symbolic_visual_groups"] = [
+            {
+                "serial": 0,
+                "attack_key": "0:0",
+                "analyzed": True,
+                "layout_page": 0,
+                "layout_system": 0,
+                "layout_x_abs": 10.0,
+                "layout_page_width": 200.0,
+            },
+            {
+                "serial": 1,
+                "attack_key": "0:0",
+                "analyzed": True,
+                "layout_page": 0,
+                "layout_system": 0,
+                "layout_x_abs": 52.0,
+                "layout_page_width": 200.0,
+            },
+            {
+                "serial": 2,
+                "attack_key": "0:1",
+                "analyzed": True,
+                "layout_page": 0,
+                "layout_system": 0,
+                "layout_x_abs": 100.0,
+                "layout_page_width": 200.0,
+            },
+            # Extra graphical note group that is not an analyzed attack. It must
+            # never manufacture a new rhythmic event or registration target.
+            {
+                "serial": 3,
+                "attack_key": "0:3/2",
+                "analyzed": False,
+                "layout_page": 0,
+                "layout_system": 0,
+                "layout_x_abs": 75.0,
+                "layout_page_width": 200.0,
+            },
+        ]
+        anchors, _structural, stats, _warnings = build_layer_anchors_from_canonical_score(
+            result, {0: (1000.0, 1400.0)}
+        )
+        mapped = [a for rows in anchors.values() for a in rows]
+        self.assertEqual(len(mapped), 2)
+        self.assertEqual({a["attack_key"] for a in mapped}, {"0:0", "0:1"})
+        self.assertEqual(stats["registration_can_create_attacks"], False)
+        self.assertEqual(stats["registration_can_retime_attacks"], False)
+        self.assertEqual(stats["simultaneous_events_with_multiple_visual_positions"], 1)
+        self.assertEqual(stats["max_simultaneous_visual_x_spread"], 42.0)
+        self.assertNotIn("0:3/2", {a["attack_key"] for a in mapped})
 
 
 if __name__ == "__main__":
