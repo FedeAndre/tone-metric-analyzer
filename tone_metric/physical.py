@@ -1,380 +1,92 @@
-"""Physical PDF display geometry for the Tone-Metric Analyzer.
+"""Display-only PDF registration for the Tone-Metric Analyzer.
 
-This module is deliberately downstream of musical analysis.  Symbolic score time
-and the recursive Levels engine are authoritative.  PDF/OMR geometry may only:
-
-1. recover page images and score-system bounds; and
-2. display already-established symbolic attack anchors.
-
-It cannot create, delete, split, merge, reorder, or retime musical events.  There
-is no x-cluster attack reconstruction, nearest-column timing fallback, or alternate
-event pipeline in this module.
+Musical score time and recursive Levels are complete before this module runs.
+The only permitted geometric operation is an exact lookup of an existing symbolic
+attack at the same Audiveris ``(measure_index, offset)`` slot. No geometry can
+create, delete, split, merge, reorder, or retime events.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from io import BytesIO
-from pathlib import Path, PurePosixPath
-from statistics import median
-from zipfile import ZipFile
-
-from lxml import etree
-from PIL import Image
-
-from .score_registration import build_layer_anchors_from_symbolic_layout
+from .omr_project import OmrSlot
+from .score_registration import build_layer_anchors_from_exact_omr_slots
 from .waves import build_wave_profile, register_wave_profile
 from .pivots import build_pivot_profile, register_pivot_profile
 from .trees import build_tree_profile, register_tree_profile
 
 
-@dataclass
-class SymbolBox:
-    shape: str
-    x: float
-    y: float
-    w: float
-    h: float
-    interline: float = 0.0
-    symbol_id: str = ""
-
-    @property
-    def cx(self) -> float:
-        return self.x + self.w / 2.0
-
-    @property
-    def cy(self) -> float:
-        return self.y + self.h / 2.0
-
-
-@dataclass
-class AnnotationPage:
-    page_index: int
-    annotation_member: str
-    image_ref: str
-    annotation_width: float
-    annotation_height: float
-    noteheads: list[SymbolBox] = field(default_factory=list)
-
-
-def _local(tag: str) -> str:
-    return tag.rsplit("}", 1)[-1]
-
-
-def _attr_float(el, *names, default=0.0) -> float:
-    for name in names:
-        value = el.get(name)
-        if value not in (None, ""):
-            try:
-                return float(value)
-            except Exception:
-                pass
-    return default
-
-
-def _find_desc(root, name: str):
-    if root is None:
-        return None
-    for el in root.iter():
-        if _local(el.tag).lower() == name.lower():
-            return el
-    return None
-
-
-def _is_notehead_shape(shape: str) -> bool:
-    return "notehead" in (shape or "").lower().replace("_", "")
-
-
-def _parse_annotation_xml(data: bytes, member: str, page_index: int) -> AnnotationPage | None:
-    root = etree.fromstring(data)
-    page_el = _find_desc(root, "Page")
-    base = page_el if page_el is not None else root
-    image_el = _find_desc(base, "Image")
-    size_el = _find_desc(base, "Size")
-    image_ref = (image_el.text or "").strip() if image_el is not None else ""
-    width = _attr_float(size_el, "w", "width") if size_el is not None else 0.0
-    height = _attr_float(size_el, "h", "height") if size_el is not None else 0.0
-
-    noteheads: list[SymbolBox] = []
-    for el in root.iter():
-        if _local(el.tag).lower() != "symbol":
-            continue
-        shape = el.get("shape") or ""
-        if not _is_notehead_shape(shape):
-            continue
-        bounds = None
-        for child in el:
-            if _local(child.tag).lower() == "bounds":
-                bounds = child
-                break
-        if bounds is None:
-            bounds = _find_desc(el, "Bounds")
-        if bounds is None:
-            continue
-        x = _attr_float(bounds, "x")
-        y = _attr_float(bounds, "y")
-        w = _attr_float(bounds, "w", "width")
-        h = _attr_float(bounds, "h", "height")
-        if w <= 0 or h <= 0:
-            continue
-        noteheads.append(SymbolBox(
-            shape=shape,
-            x=x,
-            y=y,
-            w=w,
-            h=h,
-            interline=_attr_float(el, "interline"),
-            symbol_id=el.get("id") or "",
-        ))
-
-    if not image_ref and not noteheads:
-        return None
-    return AnnotationPage(
-        page_index=page_index,
-        annotation_member=member,
-        image_ref=image_ref,
-        annotation_width=width,
-        annotation_height=height,
-        noteheads=noteheads,
-    )
-
-
-def read_annotation_pages(annotation_zip: str | Path) -> list[AnnotationPage]:
-    pages: list[AnnotationPage] = []
-    with ZipFile(Path(annotation_zip), "r") as zf:
-        members = sorted(
-            [n for n in zf.namelist() if n.lower().endswith(".xml")],
-            key=str.lower,
-        )
-        for member in members:
-            try:
-                page = _parse_annotation_xml(zf.read(member), member, len(pages))
-            except Exception:
-                continue
-            if page is not None:
-                pages.append(page)
-    return pages
-
-
-def _find_image_member(zf: ZipFile, page: AnnotationPage) -> str | None:
-    names = zf.namelist()
-    if page.image_ref:
-        ref = page.image_ref.replace("\\", "/")
-        if ref in names:
-            return ref
-        base = PurePosixPath(ref).name.lower()
-        matches = [n for n in names if PurePosixPath(n).name.lower() == base]
-        if matches:
-            return matches[0]
-    raster_exts = (".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp")
-    images = sorted([n for n in names if n.lower().endswith(raster_exts)], key=str.lower)
-    if page.page_index < len(images):
-        return images[page.page_index]
-    return None
-
-
-def extract_page_images(
-    annotation_zip: str | Path,
-    pages: list[AnnotationPage],
-    out_dir: str | Path,
-) -> tuple[list[dict], list[str]]:
-    out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    warnings: list[str] = []
-    outputs: list[dict] = []
-    with ZipFile(Path(annotation_zip), "r") as zf:
-        for page in pages:
-            member = _find_image_member(zf, page)
-            if member is None:
-                warnings.append(
-                    f"No score image was found in the annotation archive for page {page.page_index + 1}."
-                )
-                continue
-            try:
-                im = Image.open(BytesIO(zf.read(member)))
-                im.load()
-                if im.mode not in ("RGB", "RGBA", "L"):
-                    im = im.convert("RGB")
-                out = out_dir / f"page-{page.page_index + 1:03d}.png"
-                im.save(out, format="PNG")
-                iw, ih = im.size
-            except Exception as exc:
-                warnings.append(
-                    f"Could not decode annotated score image for page {page.page_index + 1}: {exc}"
-                )
-                continue
-
-            aw = page.annotation_width or float(iw)
-            ah = page.annotation_height or float(ih)
-            outputs.append({
-                "page_index": page.page_index,
-                "path": out,
-                "width": iw,
-                "height": ih,
-                "scale_x": iw / aw if aw else 1.0,
-                "scale_y": ih / ah if ah else 1.0,
-                "annotation_page": page,
-            })
-    return outputs, warnings
-
-
-def _expected_system_counts(symbolic_groups: list[dict], layout_known: bool) -> dict[int, int]:
-    if not layout_known:
-        return {}
-    by_page: dict[int, set[int]] = {}
-    for row in symbolic_groups:
+def _normalized_system_bounds(omr_meta: dict) -> dict[int, list[dict]]:
+    out: dict[int, list[dict]] = {}
+    for page in omr_meta.get('pages', []) or []:
         try:
-            page = int(row.get("layout_page", 0))
-            system = int(row.get("layout_system", 0))
+            page_index = int(page.get('page_index', 0))
+            width = float(page.get('width') or 0)
+            height = float(page.get('height') or 0)
         except Exception:
             continue
-        by_page.setdefault(page, set()).add(system)
-    return {page: len(values) for page, values in by_page.items() if values}
-
-
-def _staff_clusters(noteheads: list[SymbolBox]) -> list[list[SymbolBox]]:
-    """Group noteheads vertically into note-bearing staff bands.
-
-    These bands are display geometry only.  They never determine attack identity or
-    musical time.
-    """
-    if not noteheads:
-        return []
-    interlines = [b.interline for b in noteheads if b.interline > 0]
-    heights = [b.h for b in noteheads if b.h > 0]
-    il = median(interlines) if interlines else max(8.0, median(heights) * 1.5 if heights else 8.0)
-    threshold = max(18.0, 4.5 * il)
-    ordered = sorted(noteheads, key=lambda b: b.cy)
-    staves: list[list[SymbolBox]] = [[ordered[0]]]
-    last_y = ordered[0].cy
-    for box in ordered[1:]:
-        if box.cy - last_y > threshold:
-            staves.append([box])
-        else:
-            staves[-1].append(box)
-        last_y = box.cy
-    return staves
-
-
-def _system_clusters(noteheads: list[SymbolBox], expected_count: int | None) -> list[list[SymbolBox]]:
-    """Merge note-bearing staff bands into page systems for display bounds only."""
-    staves = _staff_clusters(noteheads)
-    if not staves:
-        return []
-    if expected_count and expected_count > 0:
-        n = min(int(expected_count), len(staves))
-        if n == 1:
-            return [[b for staff in staves for b in staff]]
-        gaps: list[tuple[float, int]] = []
-        for i in range(len(staves) - 1):
-            upper = max(b.y + b.h for b in staves[i])
-            lower = min(b.y for b in staves[i + 1])
-            gaps.append((lower - upper, i))
-        boundaries = {i for _, i in sorted(gaps, reverse=True)[: n - 1]}
-        systems: list[list[SymbolBox]] = []
-        current: list[SymbolBox] = []
-        for i, staff in enumerate(staves):
-            current.extend(staff)
-            if i in boundaries:
-                systems.append(current)
-                current = []
-        if current:
-            systems.append(current)
-        if len(systems) == n:
-            return systems
-
-    # Conservative display fallback when the MusicXML page/system count is absent.
-    interlines = [b.interline for b in noteheads if b.interline > 0]
-    il = median(interlines) if interlines else 8.0
-    threshold = max(30.0, 16.0 * il)
-    ordered = sorted(noteheads, key=lambda b: b.cy)
-    systems = [[ordered[0]]]
-    last_y = ordered[0].cy
-    for box in ordered[1:]:
-        if box.cy - last_y > threshold:
-            systems.append([box])
-        else:
-            systems[-1].append(box)
-        last_y = box.cy
-    return systems
-
-
-def _system_bounds(
-    page_outputs: list[dict],
-    expected_system_counts: dict[int, int],
-) -> dict[int, list[dict]]:
-    by_page: dict[int, list[dict]] = {}
-    for p in page_outputs:
-        page: AnnotationPage = p["annotation_page"]
-        sx, sy = float(p["scale_x"]), float(p["scale_y"])
-        pw, ph = float(p["width"]), float(p["height"])
-        systems = _system_clusters(page.noteheads, expected_system_counts.get(p["page_index"]))
-        rows: list[dict] = []
-        raw = []
-        for system_index, system in enumerate(systems):
-            raw.append({
-                "system_index": system_index,
-                "top": min((b.y for b in system), default=0.0) * sy,
-                "bottom": max((b.y + b.h for b in system), default=0.0) * sy,
-                "left": min((b.x for b in system), default=0.0) * sx,
-                "right": max((b.x + b.w for b in system), default=0.0) * sx,
-            })
-        for pos, row in enumerate(raw):
-            next_top = raw[pos + 1]["top"] if pos + 1 < len(raw) else row["bottom"]
-            guard_bottom = (row["bottom"] + next_top) / 2.0 if pos + 1 < len(raw) else row["bottom"]
+        if width <= 0 or height <= 0:
+            continue
+        raw = sorted(
+            list(page.get('system_bounds', []) or []),
+            key=lambda b: int(b.get('system_index', 0)),
+        )
+        rows = []
+        for pos, b in enumerate(raw):
+            try:
+                top = float(b['top'])
+                bottom = float(b['bottom'])
+                left = float(b['left'])
+                right = float(b['right'])
+                system_index = int(b.get('system_index', pos))
+            except Exception:
+                continue
+            if pos + 1 < len(raw):
+                try:
+                    next_top = float(raw[pos + 1]['top'])
+                    guard_bottom = (bottom + next_top) / 2.0
+                except Exception:
+                    guard_bottom = bottom
+            else:
+                guard_bottom = bottom
             rows.append({
-                "system_index": int(row["system_index"]),
-                "top_norm": row["top"] / ph if ph else 0.0,
-                "bottom_norm": row["bottom"] / ph if ph else 0.0,
-                "guard_bottom_norm": guard_bottom / ph if ph else 0.0,
-                "left_norm": row["left"] / pw if pw else 0.0,
-                "right_norm": row["right"] / pw if pw else 1.0,
+                'system_index': system_index,
+                'top_norm': max(0.0, min(1.0, top / height)),
+                'bottom_norm': max(0.0, min(1.0, bottom / height)),
+                'guard_bottom_norm': max(0.0, min(1.0, guard_bottom / height)),
+                'left_norm': max(0.0, min(1.0, left / width)),
+                'right_norm': max(0.0, min(1.0, right / width)),
             })
-        by_page[p["page_index"]] = rows
-    return by_page
+        out[page_index] = rows
+    return out
 
 
 def build_normalized_overlay(
-    annotation_zip: str | Path,
-    visual_groups: list[dict],
-    layout_known: bool,
     analysis_result: dict,
-    out_dir: str | Path,
+    omr_slots: list[OmrSlot],
+    omr_meta: dict,
 ) -> dict:
-    """Attach display geometry to an already-complete symbolic analysis.
-
-    Registration is one-way: symbolic attack key -> visual note layout -> PDF display.
-    Waves, pivots, and trees are derived afterward and reuse only those existing
-    anchors.  No PDF object can flow backward into score time or the recursive grid.
-    """
-    pages = read_annotation_pages(annotation_zip)
-    page_outputs, warnings = extract_page_images(
-        annotation_zip, pages, Path(out_dir) / "annotation_pages"
-    )
-    dims = {
-        p["page_index"]: (float(p["width"]), float(p["height"]))
-        for p in page_outputs
-    }
-    expected_counts = _expected_system_counts(visual_groups, layout_known)
-    bounds_by_page = _system_bounds(page_outputs, expected_counts)
-
+    """Attach exact OMR display geometry to an already-complete analysis."""
+    bounds_by_page = _normalized_system_bounds(omr_meta)
+    page_indices = sorted({
+        int(p.get('page_index', 0)) for p in (omr_meta.get('pages', []) or [])
+    })
     per_page = {
         idx: {
-            "page_index": idx,
-            "overlays": [],
-            "layer_anchors": [],
-            "structural_anchors": [],
-            "wave_anchors": [],
-            "pivot_anchors": [],
-            "tree_nodes": [],
-            "tree_branches": [],
-            "system_bounds": bounds_by_page.get(idx, []),
+            'page_index': idx,
+            'overlays': [],
+            'layer_anchors': [],
+            'structural_anchors': [],
+            'wave_anchors': [],
+            'pivot_anchors': [],
+            'tree_nodes': [],
+            'tree_branches': [],
+            'system_bounds': bounds_by_page.get(idx, []),
         }
-        for idx in dims
+        for idx in page_indices
     }
 
     anchors_by_page, structural_by_page, layer_stats, layer_warnings = (
-        build_layer_anchors_from_symbolic_layout(analysis_result, dims)
+        build_layer_anchors_from_exact_omr_slots(analysis_result, omr_slots, omr_meta)
     )
 
     wave_profile = build_wave_profile(analysis_result)
@@ -393,44 +105,50 @@ def build_normalized_overlay(
     layer_stats.update(wave_stats)
     layer_stats.update(pivot_stats)
     layer_stats.update(tree_stats)
-    layer_warnings.extend(wave_warnings)
-    layer_warnings.extend(pivot_warnings)
-    layer_warnings.extend(tree_warnings)
+    warnings = list(omr_meta.get('warnings', []) or [])
+    warnings.extend(layer_warnings)
+    warnings.extend(wave_warnings)
+    warnings.extend(pivot_warnings)
+    warnings.extend(tree_warnings)
 
     for page_idx, anchors in anchors_by_page.items():
         if page_idx in per_page:
-            per_page[page_idx]["layer_anchors"] = anchors
+            per_page[page_idx]['layer_anchors'] = anchors
     for page_idx, anchors in structural_by_page.items():
         if page_idx in per_page:
-            per_page[page_idx]["structural_anchors"] = anchors
+            per_page[page_idx]['structural_anchors'] = anchors
     for page_idx, anchors in wave_by_page.items():
         if page_idx in per_page:
-            per_page[page_idx]["wave_anchors"] = anchors
+            per_page[page_idx]['wave_anchors'] = anchors
     for page_idx, anchors in pivot_by_page.items():
         if page_idx in per_page:
-            per_page[page_idx]["pivot_anchors"] = anchors
+            per_page[page_idx]['pivot_anchors'] = anchors
     for page_idx, anchors in tree_nodes_by_page.items():
         if page_idx in per_page:
-            per_page[page_idx]["tree_nodes"] = anchors
+            per_page[page_idx]['tree_nodes'] = anchors
     for page_idx, branches in tree_branches_by_page.items():
         if page_idx in per_page:
-            per_page[page_idx]["tree_branches"] = branches
+            per_page[page_idx]['tree_branches'] = branches
 
-    warnings.extend(layer_warnings)
     stats = dict(layer_stats)
-    stats["validation_scope"] = (
-        "symbolic-attacks-plus-independent-metric-grid-plus-read-only-wave-pivot-tree-display"
+    stats['validation_scope'] = (
+        'symbolic-attacks-plus-independent-metric-grid-plus-exact-omr-display-slots-'
+        'plus-read-only-wave-pivot-tree-display'
     )
-    stats["active_registration_pipeline"] = (
-        "symbolic-score-time->recursive-levels->symbolic-attack-key->note-layout->pdf-display"
+    stats['active_registration_pipeline'] = (
+        'symbolic-score-time->recursive-levels->exact-measure-offset-omr-slot->pdf-display'
     )
-    stats["physical_geometry_timing_authority"] = False
-    stats["physical_geometry_event_authority"] = False
-    layer_anchor_count = sum(len(page.get("layer_anchors", [])) for page in per_page.values())
+    stats['physical_geometry_timing_authority'] = False
+    stats['physical_geometry_event_authority'] = False
+    stats['musicxml_engraving_coordinates_used'] = False
+    stats['registration_policy'] = (
+        'exact symbolic measure+offset to existing OMR slot; no nearest/time/layout fallback'
+    )
+    layer_anchor_count = sum(len(page.get('layer_anchors', [])) for page in per_page.values())
     return {
-        "available": layer_anchor_count > 0,
-        "pages": [per_page[k] for k in sorted(per_page)],
-        "max_level": int(layer_stats.get("max_layer_level", 0) or 0),
-        "matching": stats,
-        "warnings": warnings,
+        'available': layer_anchor_count > 0,
+        'pages': [per_page[k] for k in sorted(per_page)],
+        'max_level': int(layer_stats.get('max_layer_level', 0) or 0),
+        'matching': stats,
+        'warnings': warnings,
     }
