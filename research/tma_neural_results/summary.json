@@ -27,7 +27,26 @@
         "balanced_accuracy": 0.6698844223569993
       },
       "delta_logloss_extended_minus_baseline": -0.06819991565266104,
-      "delta_auc_extended_minus_baseline": 0.06469732389530991
+      "delta_auc_extended_minus_baseline": 0.06469732389530991,
+      "rich_geometry_plus_tma_regression": {
+        "rmse": 4.173481731285256,
+        "mae": 3.4434208747839286,
+        "r2": -0.3269984492392555
+      },
+      "delta_rmse_tma_beyond_rich_geometry": -0.034223033244063394,
+      "delta_r2_tma_beyond_rich_geometry": 0.021852311641302302,
+      "rich_geometry_cluster_bootstrap_delta_rmse_95ci": [
+        -0.07249059902271515,
+        -0.0012941248817943674
+      ],
+      "rich_geometry_cluster_bootstrap_delta_rmse_mean": -0.03204940362799942,
+      "rich_geometry_plus_tma_fast_slow": {
+        "log_loss": 0.6211588649067054,
+        "auc": 0.7270961730231645,
+        "balanced_accuracy": 0.6938304098347257
+      },
+      "delta_logloss_tma_beyond_rich_geometry": -0.013672153731689729,
+      "delta_auc_tma_beyond_rich_geometry": 0.012329371761128471
     },
     "5": {
       "regression_extended": {
@@ -48,7 +67,26 @@
         "balanced_accuracy": 0.6709797126089161
       },
       "delta_logloss_extended_minus_baseline": -0.07388257668418707,
-      "delta_auc_extended_minus_baseline": 0.06779029278579729
+      "delta_auc_extended_minus_baseline": 0.06779029278579729,
+      "rich_geometry_plus_tma_regression": {
+        "rmse": 4.234364964672573,
+        "mae": 3.5153528446502142,
+        "r2": -0.36599766510886944
+      },
+      "delta_rmse_tma_beyond_rich_geometry": 0.026660200143253654,
+      "delta_r2_tma_beyond_rich_geometry": -0.017146904228311666,
+      "rich_geometry_cluster_bootstrap_delta_rmse_95ci": [
+        -0.006300747755937586,
+        0.06150244753543044
+      ],
+      "rich_geometry_cluster_bootstrap_delta_rmse_mean": 0.024490262399784784,
+      "rich_geometry_plus_tma_fast_slow": {
+        "log_loss": 0.6191392795906765,
+        "auc": 0.728171846136241,
+        "balanced_accuracy": 0.6939808078991679
+      },
+      "delta_logloss_tma_beyond_rich_geometry": -0.01569173904771859,
+      "delta_auc_tma_beyond_rich_geometry": 0.013405044874204908
     },
     "6": {
       "regression_extended": {
@@ -69,7 +107,26 @@
         "balanced_accuracy": 0.6594366611629694
       },
       "delta_logloss_extended_minus_baseline": -0.06968451471226789,
-      "delta_auc_extended_minus_baseline": 0.062205947262591654
+      "delta_auc_extended_minus_baseline": 0.062205947262591654,
+      "rich_geometry_plus_tma_regression": {
+        "rmse": 4.2359055829652466,
+        "mae": 3.515527281960497,
+        "r2": -0.3669918466931752
+      },
+      "delta_rmse_tma_beyond_rich_geometry": 0.028200818435927033,
+      "delta_r2_tma_beyond_rich_geometry": -0.01814108581261742,
+      "rich_geometry_cluster_bootstrap_delta_rmse_95ci": [
+        -0.0005202599142304365,
+        0.05441106834524945
+      ],
+      "rich_geometry_cluster_bootstrap_delta_rmse_mean": 0.026578571678708637,
+      "rich_geometry_plus_tma_fast_slow": {
+        "log_loss": 0.620848528301097,
+        "auc": 0.7260270389563682,
+        "balanced_accuracy": 0.6915433783982606
+      },
+      "delta_logloss_tma_beyond_rich_geometry": -0.013982490337298037,
+      "delta_auc_tma_beyond_rich_geometry": 0.011260237694332154
     }
   },
   "baseline_regression": {
@@ -81,6 +138,16 @@
     "log_loss": 0.7399142980453042,
     "auc": 0.6292753101960079,
     "balanced_accuracy": 0.599411485834791
+  },
+  "rich_geometry_baseline_regression": {
+    "rmse": 4.2077047645293195,
+    "mae": 3.4800362784001604,
+    "r2": -0.3488507608805578
+  },
+  "rich_geometry_baseline_fast_slow_classification": {
+    "log_loss": 0.6348310186383951,
+    "auc": 0.7147668012620361,
+    "balanced_accuracy": 0.6800967778849455
   },
   "phase_rotation_surrogate_d5": {
     "n_windows": 240,
@@ -96,5 +163,19 @@
     "count_preserving_uniform_r_q025": -0.08887421511446195,
     "count_preserving_uniform_r_q975": 0.1449198299686212
   },
-  "runtime_s": 150.87329721450806
+  "rich_geometry_surrogate_d5": {
+    "n_windows": 240,
+    "observed_within_subject_residual_r": 0.060555827802046984,
+    "phase_rotation_abs_tail_p": 0.5422885572139303,
+    "phase_rotation_r_mean": 0.06164022467994587,
+    "phase_rotation_r_sd": 0.021009360772768753,
+    "phase_rotation_r_q025": 0.018270025957013707,
+    "phase_rotation_r_q975": 0.1032927579532802,
+    "count_preserving_uniform_abs_tail_p": 0.34328358208955223,
+    "count_preserving_uniform_r_mean": 0.011327800157197351,
+    "count_preserving_uniform_r_sd": 0.0639141791926853,
+    "count_preserving_uniform_r_q025": -0.09895776200839998,
+    "count_preserving_uniform_r_q975": 0.14292027421369907
+  },
+  "runtime_s": 173.65776133537292
 }
