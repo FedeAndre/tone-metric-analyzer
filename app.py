@@ -203,7 +203,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
             except Exception as exc:
                 (session / "omr-slots-error.txt").write_text(str(exc), encoding="utf-8")
 
-        # Visual registration is downstream of analysis.  It receives the symbolic
+        # Visual registration is downstream of analysis. It receives symbolic
         # MusicXML note-layout groups only after attacks and Levels are complete.
         # The registrar iterates existing attack keys; extra graphical groups are
         # ignored and missing groups remain unmapped rather than manufacturing events.
@@ -220,7 +220,6 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
                     layout_known,
                     result,
                     session / "physical",
-                    omr_path=omr_path,
                 )
                 result["physical_overlay"].setdefault("matching", {})[
                     "registration_policy"
