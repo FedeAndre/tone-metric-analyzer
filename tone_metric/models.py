@@ -40,10 +40,6 @@ class Hit:
     measure_number: str
     offset_in_measure: Fraction
     sources: List[NoteAttack] = field(default_factory=list)
-    # True only for attacks recovered from the saved Audiveris score-time graph.
-    # This provenance lets the recursive engine distinguish exact canonical timing
-    # from generic symbolic spacing when explicit MusicXML tuplet metadata is absent.
-    canonical_recovered: bool = False
 
     def to_dict(self):
         return {
