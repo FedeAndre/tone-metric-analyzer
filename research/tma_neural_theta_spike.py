@@ -50,6 +50,16 @@ BASE_COLS = [
     "phase_sin","phase_cos","phase_R","phase_entropy8","population_isi_cv",
 ]
 
+RICH_COLS = BASE_COLS + [
+    "theta_cycle_duration_sd",
+    "events_per_cycle_q25","events_per_cycle_median","events_per_cycle_q75",
+    "cycle_phase_R_mean","cycle_phase_R_sd",
+    "cycle_phase_entropy8_mean","cycle_phase_entropy8_sd",
+    "cycle_pairdist_mean","cycle_pairdist_sd",
+    "cycle_gap_cv_mean","cycle_gap_cv_sd",
+    "cycle_occ32_mean","cycle_occ32_sd",
+]
+
 def dec(v):
     if isinstance(v, bytes): return v.decode("utf-8","replace")
     return str(v)
@@ -117,6 +127,39 @@ def circ_stats(ph):
     a=2*np.pi*np.mod(ph,1)
     s=float(np.mean(np.sin(a))); c=float(np.mean(np.cos(a)))
     return s,c,float(np.hypot(s,c))
+
+def cycle_geometry_features(ph):
+    ph=np.mod(np.asarray(ph,float),1.0)
+    n=len(ph)
+    if n<2:
+        return (np.nan,np.nan,np.nan,np.nan)
+    _,_,R=circ_stats(ph)
+    ent=entropy8(ph)
+    d=np.abs(ph[:,None]-ph[None,:])
+    d=np.minimum(d,1.0-d)
+    iu=np.triu_indices(n,1)
+    pair=float(np.mean(d[iu])) if len(iu[0]) else np.nan
+    s=np.sort(ph)
+    gaps=np.diff(np.r_[s,s[0]+1.0])
+    gapcv=float(np.std(gaps,ddof=1)/np.mean(gaps)) if n>2 and np.mean(gaps)>0 else 0.0
+    occ=float(len(np.unique(np.floor(ph*32).astype(int)))/n)
+    return R,ent,pair,gapcv,occ
+
+def summarize_cycle_geometry(phase_lists):
+    vals=[cycle_geometry_features(ph) for ph in phase_lists if len(ph)>=2]
+    if not vals:
+        return {k:np.nan for k in [
+            "cycle_phase_R_mean","cycle_phase_R_sd","cycle_phase_entropy8_mean","cycle_phase_entropy8_sd",
+            "cycle_pairdist_mean","cycle_pairdist_sd","cycle_gap_cv_mean","cycle_gap_cv_sd",
+            "cycle_occ32_mean","cycle_occ32_sd"]}
+    a=np.asarray(vals,float)
+    names=["cycle_phase_R","cycle_phase_entropy8","cycle_pairdist","cycle_gap_cv","cycle_occ32"]
+    out={}
+    for j,nm in enumerate(names):
+        z=a[:,j];z=z[np.isfinite(z)]
+        out[nm+"_mean"]=float(np.mean(z)) if len(z) else np.nan
+        out[nm+"_sd"]=float(np.std(z,ddof=1)) if len(z)>1 else 0.0
+    return out
 
 def download(url,path):
     for attempt in range(3):
@@ -267,21 +310,29 @@ def process_session(subject,session,url,tmp):
                 th=theta[la:lb]; am=amp[la:lb]
                 if len(th)<fs*5:
                     wi+=1;continue
+                cycle_counts=cm["counts"][cyc].astype(float)
+                cycle_phases=[cm["phase_map"][int(ci)] for ci in cyc if int(ci) in cm["phase_map"]]
+                geom=summarize_cycle_geometry(cycle_phases)
                 row=dict(
                     row_id=f"{session}:{wi}",subject=subject,session=session,
                     speed_mean=y,
                     theta_power=float(np.mean(th.astype(float)**2)),
                     theta_frequency=float(1/np.mean(cm["duration"][cyc])),
                     theta_amp_cv=float(np.std(am,ddof=1)/np.mean(am)) if np.mean(am)>0 else np.nan,
+                    theta_cycle_duration_sd=float(np.std(cm["duration"][cyc],ddof=1)),
                     raw_firing_rate=float(len(rt)/WINDOW_S),
                     population_event_rate=float(len(pt)/WINDOW_S),
                     active_units=int(len(np.unique(ru))),
-                    events_per_cycle_mean=float(np.mean(cm["counts"][cyc])),
-                    events_per_cycle_sd=float(np.std(cm["counts"][cyc],ddof=1)),
-                    frac_cycles_ge2=float(np.mean(cm["counts"][cyc]>=2)),
+                    events_per_cycle_mean=float(np.mean(cycle_counts)),
+                    events_per_cycle_sd=float(np.std(cycle_counts,ddof=1)),
+                    events_per_cycle_q25=float(np.quantile(cycle_counts,.25)),
+                    events_per_cycle_median=float(np.median(cycle_counts)),
+                    events_per_cycle_q75=float(np.quantile(cycle_counts,.75)),
+                    frac_cycles_ge2=float(np.mean(cycle_counts>=2)),
                     phase_sin=ss,phase_cos=cc,phase_R=RR,
                     phase_entropy8=entropy8(ph),
                     population_isi_cv=isi_cv,
+                    **geom,
                     n_ca1_pyramidal=n_units,n_theta_cycles=len(cyc),n_phase_events=len(ph),
                     lfp_source=lfp_name
                 )
@@ -451,7 +502,18 @@ def main():
     dc,p0c=nested_group_classifier(df,BASE_COLS)
     yc=(dc.speed_mean>=10).astype(int).to_numpy()
     result["baseline_fast_slow_classification"]=clf_metrics(yc,p0c)
-    pred=pd.DataFrame({"row_id":df.row_id,"subject":df.subject,"session":df.session,"speed_mean":df.speed_mean,"speedhat_baseline":p0})
+
+    print("[model] adversarial rich-geometry baseline",flush=True)
+    pr0=nested_group_regression(df,RICH_COLS);mr0=reg_metrics(df.speed_mean,pr0)
+    drc,p0rc=nested_group_classifier(df,RICH_COLS)
+    if not np.array_equal(drc["index"].to_numpy(),dc["index"].to_numpy()):
+        raise RuntimeError("rich classification row mismatch")
+    mrc0=clf_metrics(yc,p0rc)
+    result["rich_geometry_baseline_regression"]=mr0
+    result["rich_geometry_baseline_fast_slow_classification"]=mrc0
+
+    pred=pd.DataFrame({"row_id":df.row_id,"subject":df.subject,"session":df.session,"speed_mean":df.speed_mean,
+                       "speedhat_baseline":p0,"speedhat_rich_geometry_baseline":pr0})
     for d in DEPTHS:
         print(f"[model] TMA depth {d}",flush=True)
         tc=[f"tma_mean_d{d}",f"tma_sd_d{d}"]
@@ -461,6 +523,12 @@ def main():
         if not np.array_equal(dcc["index"].to_numpy(),dc["index"].to_numpy()):
             raise RuntimeError("classification row mismatch")
         cm1=clf_metrics(yc,p1c)
+        pr1=nested_group_regression(df,RICH_COLS+tc);mr1=reg_metrics(df.speed_mean,pr1)
+        rci,rbm=cluster_boot_delta_rmse(df,pr0,pr1)
+        drc1,p1rc=nested_group_classifier(df,RICH_COLS+tc)
+        if not np.array_equal(drc1["index"].to_numpy(),dc["index"].to_numpy()):
+            raise RuntimeError("rich+TMA classification row mismatch")
+        mrc1=clf_metrics(yc,p1rc)
         result["depths"][str(d)]={
             "regression_extended":m1,
             "delta_rmse_extended_minus_baseline":float(m1["rmse"]-m0["rmse"]),
@@ -470,24 +538,38 @@ def main():
             "fast_slow_extended":cm1,
             "delta_logloss_extended_minus_baseline":float(cm1["log_loss"]-result["baseline_fast_slow_classification"]["log_loss"]),
             "delta_auc_extended_minus_baseline":float(cm1["auc"]-result["baseline_fast_slow_classification"]["auc"]),
+            "rich_geometry_plus_tma_regression":mr1,
+            "delta_rmse_tma_beyond_rich_geometry":float(mr1["rmse"]-mr0["rmse"]),
+            "delta_r2_tma_beyond_rich_geometry":float(mr1["r2"]-mr0["r2"]),
+            "rich_geometry_cluster_bootstrap_delta_rmse_95ci":rci,
+            "rich_geometry_cluster_bootstrap_delta_rmse_mean":rbm,
+            "rich_geometry_plus_tma_fast_slow":mrc1,
+            "delta_logloss_tma_beyond_rich_geometry":float(mrc1["log_loss"]-mrc0["log_loss"]),
+            "delta_auc_tma_beyond_rich_geometry":float(mrc1["auc"]-mrc0["auc"]),
         }
         pred[f"speedhat_tma_d{d}"]=p1
+        pred[f"speedhat_rich_plus_tma_d{d}"]=pr1
     pred.to_csv(OUT/"predictions.csv",index=False)
-    print("[surrogate] primary depth 5",flush=True)
+    print("[surrogate] standard baseline residuals depth 5",flush=True)
     result["phase_rotation_surrogate_d5"]=surrogate_control(df,p0,surr,B=200)
+    print("[surrogate] rich-geometry baseline residuals depth 5",flush=True)
+    result["rich_geometry_surrogate_d5"]=surrogate_control(df,pr0,surr,B=200)
     result["runtime_s"]=float(time.time()-t)
     with open(OUT/"summary.json","w") as f:json.dump(result,f,indent=2)
     lines=[
         "# TMA neural theta–spike analysis — DANDI 001695","",
         f"Subjects: {result['n_subjects']}; sessions: {result['n_sessions']}; usable 10-s windows: {result['n_windows']}.",
         f"Baseline speed prediction: RMSE {m0['rmse']:.4f} cm/s; R2 {m0['r2']:.4f}.",
-        f"Baseline fast-vs-slow: log loss {result['baseline_fast_slow_classification']['log_loss']:.6f}; AUC {result['baseline_fast_slow_classification']['auc']:.4f}.",""
+        f"Baseline fast-vs-slow: log loss {result['baseline_fast_slow_classification']['log_loss']:.6f}; AUC {result['baseline_fast_slow_classification']['auc']:.4f}.",
+        f"Rich non-TMA geometry baseline speed: RMSE {mr0['rmse']:.4f}; R2 {mr0['r2']:.4f}.",
+        f"Rich non-TMA geometry fast-vs-slow: log loss {mrc0['log_loss']:.6f}; AUC {mrc0['auc']:.4f}.",""
     ]
     for d in DEPTHS:
         z=result["depths"][str(d)]
-        lines.append(f"- Depth {d}: speed RMSE {z['regression_extended']['rmse']:.4f}, delta {z['delta_rmse_extended_minus_baseline']:+.4f}, R2 {z['regression_extended']['r2']:.4f}, bootstrap 95% CI delta RMSE {z['cluster_bootstrap_delta_rmse_95ci']}; fast/slow delta log loss {z['delta_logloss_extended_minus_baseline']:+.6f}, delta AUC {z['delta_auc_extended_minus_baseline']:+.4f}.")
+        lines.append(f"- Depth {d}: original baseline -> TMA speed delta RMSE {z['delta_rmse_extended_minus_baseline']:+.4f}, delta AUC {z['delta_auc_extended_minus_baseline']:+.4f}; RICH geometry baseline -> +TMA delta RMSE {z['delta_rmse_tma_beyond_rich_geometry']:+.4f}, bootstrap 95% CI {z['rich_geometry_cluster_bootstrap_delta_rmse_95ci']}, delta fast/slow log loss {z['delta_logloss_tma_beyond_rich_geometry']:+.6f}, delta AUC {z['delta_auc_tma_beyond_rich_geometry']:+.4f}.")
     s=result["phase_rotation_surrogate_d5"]
-    lines += ["",f"Depth-5 phase-rotation control: observed within-subject correlation with held-out baseline speed residuals r={s['observed_within_subject_residual_r']:+.4f}; surrogate p={s['phase_rotation_abs_tail_p']:.5g}; surrogate 95% range [{s['phase_rotation_r_q025']:+.4f}, {s['phase_rotation_r_q975']:+.4f}].",f"Depth-5 count-preserving uniform-phase control: surrogate p={s['count_preserving_uniform_abs_tail_p']:.5g}; surrogate 95% range [{s['count_preserving_uniform_r_q025']:+.4f}, {s['count_preserving_uniform_r_q975']:+.4f}]."]
+    sr=result["rich_geometry_surrogate_d5"]
+    lines += ["",f"Depth-5 phase-rotation control (original baseline residuals): observed r={s['observed_within_subject_residual_r']:+.4f}; p={s['phase_rotation_abs_tail_p']:.5g}; 95% range [{s['phase_rotation_r_q025']:+.4f}, {s['phase_rotation_r_q975']:+.4f}].",f"Depth-5 count-preserving uniform-phase control (original baseline): p={s['count_preserving_uniform_abs_tail_p']:.5g}; 95% range [{s['count_preserving_uniform_r_q025']:+.4f}, {s['count_preserving_uniform_r_q975']:+.4f}].",f"Depth-5 controls after rich non-TMA geometry baseline: observed residual r={sr['observed_within_subject_residual_r']:+.4f}; phase-rotation p={sr['phase_rotation_abs_tail_p']:.5g}; count-preserving uniform-phase p={sr['count_preserving_uniform_abs_tail_p']:.5g}."]
     (OUT/"RESULTS.md").write_text("\\n".join(lines)+"\\n")
     print("\\n".join(lines),flush=True)
 
