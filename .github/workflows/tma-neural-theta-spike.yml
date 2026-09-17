@@ -1,0 +1,41 @@
+name: TMA neural theta-spike full analysis
+
+on:
+  push:
+    branches: [tma-neural-analysis-20260917]
+    paths:
+      - 'research/tma_neural_theta_spike.py'
+      - '.github/workflows/tma-neural-theta-spike.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.6,<2' 'h5py>=3.11,<4'
+      - name: Run full theta-spike TMA analysis
+        run: python research/tma_neural_theta_spike.py
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: tma-neural-theta-spike-results
+          path: research/tma_neural_results/
+          if-no-files-found: error
+      - name: Commit results to isolated branch
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_neural_results
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add neural theta-spike TMA results'
+            git push origin HEAD:tma-neural-analysis-20260917
+          fi
