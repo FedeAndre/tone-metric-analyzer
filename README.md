@@ -1,17 +1,5 @@
-# Reconciled Hit Engine
+# Hit-only clean sequence engine
 
-Clean-room hit-only score marker.
+This branch contains one hit pipeline only. Every semantic attacking note/chord enters exactly one staff sequence; tied-right continuations are excluded. Exact semantic BEGIN time groups simultaneous voices within a staff. Staff sequences are reconciled by one-to-one, order-preserving alignment. Recognized untimed attacks remain in the sequence and cannot silently disappear.
 
-The application performs one task: draw one vertical strike for every new global note/chord attack.
-
-Architecture:
-- exact symbolic BEGIN onset establishes timed hit identity;
-- tied continuations are excluded;
-- simultaneous voices/staves at one exact onset are one hit;
-- every recognized sounding semantic chord is independently audited;
-- omitted semantic chords are reconciled only with independent simultaneity evidence;
-- otherwise they become recovered hits;
-- ambiguous evidence fails closed instead of guessing;
-- geometry can position hits but cannot change an already established symbolic hit identity.
-
-No tone-metric levels, waves, trees, or prior analyzer logic are present.
+Every red strike is anchored to the center of an actual attacking notehead. Synthetic/fitted strike positions, isotonic correction, global x-clustering, chord-box-overlap simultaneity, displaced-voice special cases, canonical reconstruction, and legacy analyzer modules are absent and forbidden by the Docker release gate.

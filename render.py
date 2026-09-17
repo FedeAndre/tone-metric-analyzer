@@ -40,7 +40,10 @@ def render_pdf_with_strikes(
             scale_y = image.height / strike.omr_height
             x = round(strike.x * scale_x)
             padding = max(4, round(12 * scale_y))
-            y1 = max(0, round(strike.system_top * scale_y) - padding)
+            y1 = max(
+                0,
+                round(strike.system_top * scale_y) - padding,
+            )
             y2 = min(
                 image.height - 1,
                 round(strike.system_bottom * scale_y) + padding,
