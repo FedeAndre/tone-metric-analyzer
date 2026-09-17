@@ -8,101 +8,104 @@ from core import extract_hit_strikes
 
 def make_omr(xml: str) -> Path:
     td = Path(tempfile.mkdtemp())
-    p = td / 'score.omr'
-    with ZipFile(p, 'w') as zf:
+    path = td / 'score.omr'
+    with ZipFile(path, 'w') as zf:
         zf.writestr('sheet#1/sheet#1.xml', xml)
-    return p
-
-
-BASE_HEAD = '''
-<sheet><picture width="1000" height="800"/><page><system id="1">
-  <stack id="1" left="100" right="900"><slot id="1" x-offset="50" time-offset="0"/></stack>
-  <part id="1"><measure id="1"><voice id="1"><slots>{entries}</slots></voice></measure></part>
-  <staff><line><point x="0" y="100"/><point x="100" y="100"/></line><line><point x="0" y="300"/><point x="100" y="300"/></line></staff>
-</system></page>
-{objects}
-<relations>{relations}</relations>
-</sheet>'''
+    return path
 
 
 def entry(chord: str, key: str = '1', status: str = 'BEGIN') -> str:
     return f'<entry><key>{key}</key><value chord="{chord}" status="{status}"/></entry>'
 
 
-def head(hid: str, x: int, y: int = 180) -> str:
-    return f'<head id="{hid}"><bounds x="{x}" y="{y}" w="20" h="20"/></head>'
+def relation(source: str, target: str, body: str) -> str:
+    return f'<relation source="{source}" target="{target}">{body}</relation>'
 
 
-def chord(cid: str) -> str:
-    return f'<head-chord id="{cid}"/>'
-
-
-def contains(cid: str, hid: str) -> str:
-    return f'<relation source="{cid}" target="{hid}"><containment/></relation>'
+def score(entries_a: str, objects: str, relations: str, entries_b: str = '') -> str:
+    return f'''<sheet>
+      <picture width="1000" height="800"/>
+      <page><system id="1">
+        <stack id="1" left="100" right="400">
+          <slot id="1" x-offset="50" time-offset="0"/>
+          <slot id="2" x-offset="150" time-offset="1/4"/>
+        </stack>
+        <part id="p1"><measure id="1"><voice id="1"><slots>{entries_a}</slots></voice></measure></part>
+        <part id="p2"><measure id="1"><voice id="1"><slots>{entries_b}</slots></voice></measure></part>
+        <staff>
+          <line><point x="0" y="100"/><point x="100" y="100"/></line>
+          <line><point x="0" y="300"/><point x="100" y="300"/></line>
+        </staff>
+      </system></page>
+      {objects}
+      <relations>{relations}</relations>
+    </sheet>'''
 
 
 class HitStrikeTests(unittest.TestCase):
-    def test_strike_uses_notehead_not_slot_x(self):
-        xml = BASE_HEAD.format(
-            entries=entry('c1'),
-            objects=chord('c1') + head('h1', 400),
-            relations=contains('c1', 'h1'),
+    def test_single_new_chord_creates_one_slot_strike(self):
+        xml = score(
+            entry('c1'),
+            '<head-chord id="c1"/><head id="h1"/>',
+            relation('c1', 'h1', '<containment/>'),
         )
         hit_count, strikes = extract_hit_strikes(make_omr(xml))
         self.assertEqual(hit_count, 1)
         self.assertEqual(len(strikes), 1)
-        self.assertEqual(strikes[0].x, 410.0)
-        self.assertNotEqual(strikes[0].x, 150.0)
+        self.assertEqual(strikes[0].x, 150.0)
 
-    def test_rest_or_non_head_chord_is_not_a_hit(self):
-        xml = BASE_HEAD.format(
-            entries=entry('r1'),
-            objects='<rest-chord id="r1"><bounds x="400" y="180" w="20" h="20"/></rest-chord>',
-            relations='',
-        )
-        with self.assertRaisesRegex(ValueError, 'No sounding note attacks'):
-            extract_hit_strikes(make_omr(xml))
-
-    def test_tied_continuation_is_not_a_new_hit(self):
-        xml = BASE_HEAD.format(
-            entries=entry('c1'),
-            objects=chord('c1') + head('h1', 400) + '<slur id="s1" tie="true"/>',
-            relations=contains('c1', 'h1') + '<relation source="s1" target="h1"><slur-head side="RIGHT"/></relation>',
-        )
-        with self.assertRaisesRegex(ValueError, 'No sounding note attacks'):
-            extract_hit_strikes(make_omr(xml))
-
-    def test_mixed_tied_and_new_chord_marks_only_new_attack_column(self):
-        xml = BASE_HEAD.format(
-            entries=entry('c1'),
-            objects=chord('c1') + head('h_tied', 300) + head('h_new', 500) + '<slur id="s1" tie="true"/>',
-            relations=(contains('c1', 'h_tied') + contains('c1', 'h_new') +
-                       '<relation source="s1" target="h_tied"><slur-head side="RIGHT"/></relation>'),
-        )
-        hit_count, strikes = extract_hit_strikes(make_omr(xml))
-        self.assertEqual(hit_count, 1)
-        self.assertEqual([s.x for s in strikes], [510.0])
-
-    def test_simultaneous_visually_separated_attacks_are_all_visible(self):
-        xml = BASE_HEAD.format(
-            entries=entry('c1') + entry('c2'),
-            objects=chord('c1') + head('h1', 300) + chord('c2') + head('h2', 500),
-            relations=contains('c1', 'h1') + contains('c2', 'h2'),
-        )
-        hit_count, strikes = extract_hit_strikes(make_omr(xml))
-        self.assertEqual(hit_count, 1)
-        self.assertEqual([s.x for s in strikes], [310.0, 510.0])
-
-    def test_same_visible_attack_column_is_not_duplicated(self):
-        xml = BASE_HEAD.format(
-            entries=entry('c1') + entry('c2'),
-            objects=chord('c1') + head('h1', 400) + chord('c2') + head('h2', 402),
-            relations=contains('c1', 'h1') + contains('c2', 'h2'),
+    def test_simultaneous_voices_and_staves_merge_to_one_strike(self):
+        xml = score(
+            entry('c1'),
+            '<head-chord id="c1"/><head id="h1"/><head-chord id="c2"/><head id="h2"/>',
+            relation('c1', 'h1', '<containment/>') + relation('c2', 'h2', '<containment/>'),
+            entries_b=entry('c2'),
         )
         hit_count, strikes = extract_hit_strikes(make_omr(xml))
         self.assertEqual(hit_count, 1)
         self.assertEqual(len(strikes), 1)
-        self.assertAlmostEqual(strikes[0].x, 411.0)
+        self.assertEqual(strikes[0].x, 150.0)
+
+    def test_two_different_slots_create_two_strikes(self):
+        xml = score(
+            entry('c1', '1') + entry('c2', '2'),
+            '<head-chord id="c1"/><head id="h1"/><head-chord id="c2"/><head id="h2"/>',
+            relation('c1', 'h1', '<containment/>') + relation('c2', 'h2', '<containment/>'),
+        )
+        hit_count, strikes = extract_hit_strikes(make_omr(xml))
+        self.assertEqual(hit_count, 2)
+        self.assertEqual([s.x for s in strikes], [150.0, 250.0])
+
+    def test_tied_continuation_creates_no_hit(self):
+        xml = score(
+            entry('c1'),
+            '<head-chord id="c1"/><head id="h1"/><slur id="s1" tie="true"/>',
+            relation('c1', 'h1', '<containment/>') +
+            relation('s1', 'h1', '<slur-head side="RIGHT"/>'),
+        )
+        with self.assertRaisesRegex(ValueError, 'No sounding note attacks'):
+            extract_hit_strikes(make_omr(xml))
+
+    def test_mixed_tied_and_new_notes_still_create_one_hit(self):
+        xml = score(
+            entry('c1'),
+            '<head-chord id="c1"/><head id="h1"/><head id="h2"/><slur id="s1" tie="true"/>',
+            relation('c1', 'h1', '<containment/>') +
+            relation('c1', 'h2', '<containment/>') +
+            relation('s1', 'h1', '<slur-head side="RIGHT"/>'),
+        )
+        hit_count, strikes = extract_hit_strikes(make_omr(xml))
+        self.assertEqual(hit_count, 1)
+        self.assertEqual(len(strikes), 1)
+
+    def test_non_head_chord_does_not_create_hit(self):
+        xml = score(
+            entry('r1'),
+            '<rest-chord id="r1"/>',
+            '',
+        )
+        with self.assertRaisesRegex(ValueError, 'No sounding note attacks'):
+            extract_hit_strikes(make_omr(xml))
 
 
 if __name__ == '__main__':
