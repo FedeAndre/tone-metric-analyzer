@@ -1,0 +1,49 @@
+name: TMA physiology Fantasia S3-prefetch
+
+on:
+  push:
+    branches:
+      - tma-physio-analysis-20260917
+    paths:
+      - '.github/workflows/tma-physio-fantasia-s3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install analysis dependencies
+        run: python -m pip install --upgrade pip && pip install 'wfdb>=4.2,<5' 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.6,<2' awscli
+      - name: Download Fantasia once from public PhysioNet S3
+        run: |
+          mkdir -p /tmp/fantasia
+          aws s3 sync --no-sign-request --only-show-errors s3://physionet-open/fantasia/1.0.0/ /tmp/fantasia
+          test -f /tmp/fantasia/f1y01.hea
+          test -f /tmp/fantasia/f1o01.dat
+          test -f /tmp/fantasia/f2y10.ecg
+          echo "FANTASIA_DIR=/tmp/fantasia" >> "$GITHUB_ENV"
+      - name: Run optimized Fantasia TMA analysis
+        run: python research/tma_physio_fantasia.py
+      - name: Upload compact results
+        uses: actions/upload-artifact@v4
+        with:
+          name: tma-physio-fantasia-results-s3
+          path: research/tma_physio_results/
+          if-no-files-found: error
+      - name: Commit compact result tables to analysis branch
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_physio_results
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add S3-prefetch Fantasia TMA physiology results'
+            git push origin HEAD:tma-physio-analysis-20260917
+          fi
