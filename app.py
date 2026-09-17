@@ -18,7 +18,7 @@ from render import render_pdf_with_strikes
 SESSIONS = Path(tempfile.gettempdir()) / "tone_metric_hit_only"
 SESSIONS.mkdir(parents=True, exist_ok=True)
 AUDIVERIS = os.environ.get("AUDIVERIS_CMD", "/opt/audiveris/bin/Audiveris")
-VERSION = "hit-only-internally-validated-v6"
+VERSION = "hit-only-geometry-first-v7"
 
 app = FastAPI(title="Hit-only score marker")
 
@@ -88,8 +88,9 @@ def status():
         "ok": True,
         "version": VERSION,
         "audiveris_found": Path(AUDIVERIS).exists(),
-        "hit_source": "semantic-slots-plus-validated-unvoiced-note-recovery",
+        "hit_source": "semantic-notehead-geometry-with-tie-filtering",
         "musicxml_used_for_hits": False,
+        "rhythmic_slots_used_for_hits": False,
         "one_strike_per_hit": True,
     }
 
