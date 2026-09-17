@@ -85,11 +85,16 @@
   "phase_rotation_surrogate_d5": {
     "n_windows": 240,
     "observed_within_subject_residual_r": 0.15836496749033327,
-    "surrogate_abs_tail_p": 0.42786069651741293,
-    "surrogate_r_mean": 0.15361734774163696,
-    "surrogate_r_sd": 0.02046731272331869,
-    "surrogate_r_q025": 0.11153698082318925,
-    "surrogate_r_q975": 0.19335378894567526
+    "phase_rotation_abs_tail_p": 0.42786069651741293,
+    "phase_rotation_r_mean": 0.15361734774163696,
+    "phase_rotation_r_sd": 0.02046731272331869,
+    "phase_rotation_r_q025": 0.11153698082318925,
+    "phase_rotation_r_q975": 0.19335378894567526,
+    "count_preserving_uniform_abs_tail_p": 0.009950248756218905,
+    "count_preserving_uniform_r_mean": 0.012911266953307115,
+    "count_preserving_uniform_r_sd": 0.062393276884565724,
+    "count_preserving_uniform_r_q025": -0.08887421511446195,
+    "count_preserving_uniform_r_q975": 0.1449198299686212
   },
-  "runtime_s": 111.86626315116882
+  "runtime_s": 150.87329721450806
 }
