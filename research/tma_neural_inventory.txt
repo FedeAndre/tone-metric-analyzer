@@ -1,0 +1,262 @@
+GROUP acquisition
+GROUP analysis
+DSET file_create_date shape=(1,) dtype=object
+GROUP general
+GROUP general/devices
+GROUP general/devices/Neuropixels 2.0
+DSET general/experimenter shape=(1,) dtype=object
+GROUP general/extracellular_ephys
+GROUP general/extracellular_ephys/ElectrodeGroup1
+GROUP general/extracellular_ephys/electrodes
+DSET general/extracellular_ephys/electrodes/filtering shape=(384,) dtype=object
+  ATTR description=Description of hardware filtering.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=a63902a6-9bcb-4d0a-8a26-86c35de5556f
+DSET general/extracellular_ephys/electrodes/group shape=(384,) dtype=object
+  ATTR description=Reference to the ElectrodeGroup.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=0012b3af-5e80-41a1-8549-1540df546ec1
+DSET general/extracellular_ephys/electrodes/group_name shape=(384,) dtype=object
+  ATTR description=Name of the ElectrodeGroup.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=b271086c-f022-4b3b-b2fa-e7081b88a87c
+DSET general/extracellular_ephys/electrodes/id shape=(384,) dtype=int32
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=ElementIdentifiers
+  ATTR object_id=7a1360df-040c-4f71-8323-b6f522baf3a5
+DSET general/extracellular_ephys/electrodes/imp shape=(384,) dtype=float64
+  ATTR description=Impedance of the channel, in ohms.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=e84c9f4b-b28b-4534-8a29-cc0538d24059
+DSET general/extracellular_ephys/electrodes/location shape=(384,) dtype=object
+  ATTR description=Location of the electrode (channel).
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=21ed71a9-f2d1-44f3-85ca-27542b9a856d
+DSET general/extracellular_ephys/electrodes/x shape=(384,) dtype=float64
+  ATTR description=x coordinate of the channel location in the brain.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=78b12bb6-4ea8-47de-8737-e0481411ee43
+DSET general/extracellular_ephys/electrodes/y shape=(384,) dtype=float64
+  ATTR description=y coordinate of the channel location in the brain.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=3bfc4919-b075-479f-bb2c-a76554d6cf37
+DSET general/extracellular_ephys/electrodes/z shape=(384,) dtype=float64
+  ATTR description=z coordinate of the channel location in the brain.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=7910a1e2-845e-4f53-905c-92aa07f0f7b0
+DSET general/institution shape=() dtype=object
+DSET general/lab shape=() dtype=object
+GROUP general/subject
+DSET general/subject/age shape=() dtype=object
+  ATTR reference=birth
+DSET general/subject/description shape=() dtype=object
+DSET general/subject/sex shape=() dtype=object
+DSET general/subject/species shape=() dtype=object
+DSET general/subject/strain shape=() dtype=object
+DSET general/subject/subject_id shape=() dtype=object
+DSET identifier shape=() dtype=object
+GROUP intervals
+GROUP intervals/SleepStates
+DSET intervals/SleepStates/id shape=(2846,) dtype=int32
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=ElementIdentifiers
+  ATTR object_id=9a1fa072-1531-40f1-b540-03b3dcd006c3
+DSET intervals/SleepStates/start_time shape=(2846,) dtype=float64
+  ATTR description=Start time of epoch, in seconds
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=312fa5b6-9125-42b5-923c-a0eb89acfbdf
+DSET intervals/SleepStates/state shape=(2846,) dtype=object
+  ATTR description=The behavioral state or event label.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=ee56209a-dff0-478d-8907-233468f328e5
+DSET intervals/SleepStates/stop_time shape=(2846,) dtype=float64
+  ATTR description=Stop time of epoch, in seconds
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=f9f78f1f-cde8-47d4-a487-375d35fe2329
+GROUP processing
+GROUP processing/behavior
+GROUP processing/behavior/AnimalPosition
+GROUP processing/behavior/AnimalPosition/Position
+DSET processing/behavior/AnimalPosition/Position/data shape=(47270, 2) dtype=float64
+  ATTR conversion=0.01
+  ATTR offset=0.0
+  ATTR resolution=-1.0
+  ATTR unit=centimeters
+DSET processing/behavior/AnimalPosition/Position/reference_frame shape=() dtype=object
+DSET processing/behavior/AnimalPosition/Position/timestamps shape=(47270,) dtype=float64
+  ATTR interval=1
+  ATTR unit=seconds
+GROUP processing/behavior/Speed
+DSET processing/behavior/Speed/data shape=(47270,) dtype=float64
+  ATTR conversion=1.0
+  ATTR offset=0.0
+  ATTR resolution=-1.0
+  ATTR unit=cm/s
+DSET processing/behavior/Speed/timestamps shape=(47270,) dtype=float64
+  ATTR interval=1
+  ATTR unit=seconds
+GROUP processing/ecephys
+GROUP processing/ecephys/LFP
+GROUP processing/ecephys/LFP/Best_Ripple_channel_LFP_CA1
+DSET processing/ecephys/LFP/Best_Ripple_channel_LFP_CA1/data shape=(13797188, 1) dtype=int16
+  ATTR conversion=1e-06
+  ATTR offset=0.0
+  ATTR resolution=-1.0
+  ATTR unit=volts
+DSET processing/ecephys/LFP/Best_Ripple_channel_LFP_CA1/electrodes shape=(1,) dtype=int32
+  ATTR description=Single channel LFP selected based on highest ripple power.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=DynamicTableRegion
+  ATTR object_id=edd75322-0e73-4875-ad6e-1fd9b8f8fa14
+  ATTR table=<HDF5 object reference>
+DSET processing/ecephys/LFP/Best_Ripple_channel_LFP_CA1/starting_time shape=() dtype=float64
+  ATTR rate=1250.0
+  ATTR unit=seconds
+DSET session_description shape=() dtype=object
+DSET session_start_time shape=() dtype=object
+GROUP specifications
+GROUP specifications/core
+GROUP specifications/core/2.9.0
+DSET specifications/core/2.9.0/namespace shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.base shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.behavior shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.device shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.ecephys shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.epoch shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.file shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.icephys shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.image shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.misc shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.ogen shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.ophys shape=() dtype=object
+DSET specifications/core/2.9.0/nwb.retinotopy shape=() dtype=object
+GROUP specifications/hdmf-common
+GROUP specifications/hdmf-common/1.8.0
+DSET specifications/hdmf-common/1.8.0/base shape=() dtype=object
+DSET specifications/hdmf-common/1.8.0/namespace shape=() dtype=object
+DSET specifications/hdmf-common/1.8.0/sparse shape=() dtype=object
+DSET specifications/hdmf-common/1.8.0/table shape=() dtype=object
+GROUP specifications/hdmf-experimental
+GROUP specifications/hdmf-experimental/0.5.0
+DSET specifications/hdmf-experimental/0.5.0/experimental shape=() dtype=object
+DSET specifications/hdmf-experimental/0.5.0/namespace shape=() dtype=object
+DSET specifications/hdmf-experimental/0.5.0/resources shape=() dtype=object
+GROUP stimulus
+GROUP stimulus/presentation
+GROUP stimulus/templates
+DSET timestamps_reference_time shape=() dtype=object
+GROUP units
+DSET units/ab_ratio shape=(110,) dtype=float64
+  ATTR description=Waveform asymmetry; the ratio between the two positive peaks (peakB-peakA)/(peakA+peakB).
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=abb7f8b1-9ea6-481a-9c4a-2499150da567
+DSET units/acg shape=(22110, 1) dtype=float64
+  ATTR description=Autocorrelogram (ACG) of spike times (wide [-1000 ms : 1 ms: 1000 ms]).
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=cff1a8e4-a509-4fb6-8391-9476942e7ea5
+DSET units/acg_index shape=(110,) dtype=uint16
+  ATTR description=Index for VectorData 'acg'
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorIndex
+  ATTR object_id=bf2ba16e-6c15-41cc-b08e-bcf348df0a13
+  ATTR target=<HDF5 object reference>
+DSET units/acg_tau_decay shape=(110,) dtype=float64
+  ATTR description=Decay constant (tau) of the ACG fit.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=74502932-4c4e-45a2-bdf9-fe5ecf6696ee
+DSET units/acg_tau_rise shape=(110,) dtype=float64
+  ATTR description=Rise constant (tau) of the ACG fit.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=20f51aeb-7465-4daa-ab87-aa316a2bc374
+DSET units/burstIndex_Mizuseki2012 shape=(110,) dtype=float64
+  ATTR description=Burst index as defined by Mizuseki et al. 2012.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=00d59ed2-6b65-4178-826b-d1c882758c37
+DSET units/cell_area shape=(110,) dtype=object
+  ATTR description=The brain region or subfield the cell was assigned to (e.g., CA1, CA3, RSC)
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=da7868eb-3799-4b71-9ed7-2ab7a1ae4961
+DSET units/cell_type shape=(110,) dtype=object
+  ATTR description=Cell classification (e.g., Pyramidal, Narrow Interneuron, Wide Interneuron)
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=ba7e7d91-e462-4a8b-918d-9c95334b569c
+DSET units/cv2 shape=(110,) dtype=float64
+  ATTR description=Coefficient of variation (CV_2, 10.1152/jn.1996.75.5.1806).
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=931d2910-bcdb-4dfa-88d1-13669e5a92cd
+DSET units/firing_rate shape=(110,) dtype=float64
+  ATTR description=Firing rate in Hz: Spike count normalized by the interval between the first and the last spike..
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=821584bf-7a83-4ccf-a98b-2e2e3b8a9c7b
+DSET units/id shape=(110,) dtype=int32
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=ElementIdentifiers
+  ATTR object_id=30f28449-f9fa-46ab-9ddd-39f4b8566dac
+DSET units/maxWaveformCh shape=(110,) dtype=uint16
+  ATTR description=Max channel zero-indexed: The channel with the largest amplitude.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=072ad31c-b5e7-4149-8f39-1bff26b02c58
+DSET units/spike_times shape=(3891350,) dtype=float64
+  ATTR description=the spike times for each unit in seconds
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=a9640ba8-d6ae-46d9-bf97-747b5b80b88f
+DSET units/spike_times_index shape=(110,) dtype=uint32
+  ATTR description=Index for VectorData 'spike_times'
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorIndex
+  ATTR object_id=96b232be-9e18-4d03-bdf5-c50126778a1f
+  ATTR target=<HDF5 object reference>
+DSET units/thetaModulationIndex shape=(110,) dtype=float64
+  ATTR description=Theta modulation index. Originally defined in Cacucci et al., JNeuro 2004. Computed as the difference between the theta modulation trough (defined as mean of autocorrelogram bins, 50-70 msec) and the theta modulation peak (mean of autocorrelogram bins, 100-140 msec) over their sum, scaled from -1 to 1.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=f6b06a87-59d2-4960-8e41-341bf0b6aacc
+DSET units/troughToPeak shape=(110,) dtype=float64
+  ATTR description=Trough-to-peak latency is defined from the trough to the following peak of the waveform.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=5b3a4d94-faa8-4527-9355-634db4f28dec
+DSET units/waveforms shape=(5280, 1) dtype=float64
+  ATTR description=Average raw spike waveform from channel with max amplitude.
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=fa679b0d-7778-41e0-8c2c-d92fa259292b
+  ATTR unit=volts
+DSET units/waveforms_index shape=(110,) dtype=uint16
+  ATTR description=Index for VectorData 'waveforms'
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorIndex
+  ATTR object_id=adeadab1-38f3-4c3d-a7b3-61689cc62b24
+  ATTR target=<HDF5 object reference>
+DSET units/x_position_probe shape=(110,) dtype=float64
+  ATTR description=Position along the x-axis for the max amp channel for each cell
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=f1f128ee-06aa-4745-a614-6026de641db3
+DSET units/y_position_probe shape=(110,) dtype=float64
+  ATTR description=Position along the y-axis for the max amp channel for each cell
+  ATTR namespace=hdmf-common
+  ATTR neurodata_type=VectorData
+  ATTR object_id=250ea083-6b72-4986-a03d-a0b06cf6136a
