@@ -18,7 +18,7 @@ from render import render_pdf_with_strikes
 SESSIONS = Path(tempfile.gettempdir()) / "tone_metric_hit_only"
 SESSIONS.mkdir(parents=True, exist_ok=True)
 AUDIVERIS = os.environ.get("AUDIVERIS_CMD", "/opt/audiveris/bin/Audiveris")
-VERSION = "hit-only-notehead-v3"
+VERSION = "hit-only-global-slot-v4"
 
 app = FastAPI(title="Hit-only score marker")
 
@@ -50,8 +50,8 @@ def _find_one(root: Path, suffix: str) -> Path:
 
 
 def _run_audiveris(pdf_path: Path, out_dir: Path) -> Path:
-    # -export deliberately forces Audiveris through the complete transcription
-    # pipeline.  The exported MusicXML is NOT used by the hit extractor.
+    # -export forces Audiveris through the complete transcription pipeline.
+    # The exported MusicXML is not used by the hit extractor.
     cmd = [
         AUDIVERIS,
         "-batch",
@@ -88,8 +88,9 @@ def status():
         "ok": True,
         "version": VERSION,
         "audiveris_found": Path(AUDIVERIS).exists(),
-        "hit_source": "audiveris-omr-semantic-noteheads",
+        "hit_source": "audiveris-global-semantic-rhythmic-slots",
         "musicxml_used_for_hits": False,
+        "one_strike_per_hit": True,
     }
 
 
@@ -119,6 +120,10 @@ async def analyze(file: UploadFile = File(...)):
     try:
         omr_path = _run_audiveris(pdf_path, omr_out)
         logical_hit_count, strikes = extract_hit_strikes(omr_path)
+        if len(strikes) != logical_hit_count:
+            raise RuntimeError(
+                f"Hit invariant failed: {logical_hit_count} hits but {len(strikes)} strikes"
+            )
         pages = render_pdf_with_strikes(pdf_path, strikes, session / "pages")
     except Exception as exc:
         print(f"ANALYZE_ERROR [{VERSION}] {type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
