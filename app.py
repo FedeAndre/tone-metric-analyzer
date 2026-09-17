@@ -18,12 +18,13 @@ from tone_metric.omr import find_audiveris, pdf_to_annotations, pdf_to_musicxml
 from tone_metric.omr_project import omr_slots_debug_rows, read_omr_slots
 from tone_metric.pdfview import render_pdf_pages
 from tone_metric.physical import build_normalized_overlay
+from tone_metric.score_registration import build_symbolic_registration_meta
 
 ROOT = Path(__file__).resolve().parent
 CACHE = ROOT / ".tone_metric_cache"
 CACHE.mkdir(exist_ok=True)
 
-app = FastAPI(title="Tone-Metric Analyzer", version="0.18.0-rc1-symbolic-time")
+app = FastAPI(title="Tone-Metric Analyzer", version="0.18.0-rc2-symbolic-notehead-registration")
 app.mount("/static", StaticFiles(directory=ROOT / "static"), name="static")
 
 
@@ -82,6 +83,8 @@ def status():
         "version": app.version,
         "timing_authority": "musicxml-symbolic-global-onset",
         "omr_recovery": "disabled-fail-closed",
+        "pdf_registration": "exact-symbolic-time-key-to-semantic-omr-notehead",
+        "legacy_canonical_score_path": "absent",
         "audiveris_found": bool(find_audiveris()),
         "audiveris_command": find_audiveris(),
     }
@@ -148,9 +151,9 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
             initial_meter_override=meter_override_tuple,
         )
 
-        # Architectural invariant: the parser's globally merged symbolic hits are
-        # the sole musical-time authority. OMR x-spacing, notehead/chord clustering,
-        # and PDF geometry cannot add, remove, split, merge, or move attacks here.
+        # The parser's globally merged symbolic hits are the sole musical-time
+        # authority. No OMR/PDF geometry can add, remove, split, merge, reorder,
+        # or retime attacks before or after this point.
         result = analyze(hits, measures)
         result["analysis_hit_source"] = "musicxml-symbolic-global-onset"
         result["symbolic_hit_count"] = len(hits)
@@ -173,7 +176,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
         result["parse_warnings"] = list(parse_warnings)
         if suffix == ".pdf":
             result["parse_warnings"].append(
-                "Architectural rebuild: OMR-only attack recovery is disabled until a separate semantic recovery gate is validated. No OMR geometry can create musical attacks or score time."
+                "OMR-only attack recovery remains disabled. OMR is used only to locate already-established symbolic events on the PDF by exact measure/time key and semantic BEGIN-chord/head relations."
             )
         result["session_id"] = session_id
         result["debug_bundle_url"] = f"/api/session/{session_id}/debug"
@@ -187,13 +190,14 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
             "pages": [],
             "warnings": [],
             "matching": {
-                "registration_policy": "symbolic-time-authoritative; canonical-x-time-registration-disabled"
+                "registration_policy": "symbolic-time-authoritative; semantic-omr-geometry-only; no-x-timing"
             },
         }
 
-        # Saved OMR data remains available only as a diagnostic artifact. Reading it
-        # here cannot mutate the event list or the metric grid.
+        registration_meta = None
+        registration_ready = False
         if omr_path is not None:
+            # Keep the raw Audiveris slot dump as an independent audit artifact.
             try:
                 omr_slots, omr_meta = read_omr_slots(omr_path)
                 (session / "omr-slots.json").write_text(
@@ -203,10 +207,39 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
             except Exception as exc:
                 (session / "omr-slots-error.txt").write_text(str(exc), encoding="utf-8")
 
-        # During the architecture rebuild we retain annotation-page extraction and
-        # system geometry, but deliberately disable the old canonical-score timing
-        # registration by passing no OMR timing graph. This is fail-closed: missing
-        # visual anchors are preferable to musically incorrect event reconstruction.
+            # Build a separate semantic geometry graph. It contains no reconstructed
+            # attacks: it can only be joined later to a symbolic event with exactly
+            # the same measure index and score-time offset.
+            try:
+                registration_meta = build_symbolic_registration_meta(omr_path)
+                registration_ready = bool(registration_meta.get("available"))
+                result["_symbolic_registration_meta"] = registration_meta
+                (session / "symbolic-registration.json").write_text(
+                    json.dumps(registration_meta, indent=2), encoding="utf-8"
+                )
+                result["symbolic_registration"] = {
+                    k: registration_meta.get(k)
+                    for k in (
+                        "available",
+                        "architecture",
+                        "timing_authority",
+                        "geometry_source",
+                        "slot_count",
+                        "slots_with_begin_chords",
+                        "slots_with_exact_heads",
+                        "begin_chord_count",
+                        "exact_head_count",
+                        "duplicate_time_keys",
+                        "warnings",
+                    )
+                }
+            except Exception as exc:
+                result["symbolic_registration"] = {
+                    "available": False,
+                    "warnings": [f"Semantic OMR registration graph could not be built: {exc}"],
+                }
+                (session / "symbolic-registration-error.txt").write_text(str(exc), encoding="utf-8")
+
         if suffix == ".pdf" and annotation_archive is not None:
             try:
                 visual_groups, layout_known = extract_visual_groups(
@@ -219,26 +252,45 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
                     layout_known,
                     result,
                     session / "physical",
-                    omr_path=None,
+                    # Non-null merely enables the registration branch in physical.py.
+                    # The actual registration data come exclusively from
+                    # _symbolic_registration_meta; canonical_score.py is absent.
+                    omr_path=omr_path if registration_ready else None,
                 )
-                result["physical_overlay"].setdefault("warnings", []).insert(
-                    0,
-                    "Canonical x-derived attack registration is intentionally disabled in this architecture candidate; PDF attack labels will remain unmapped until symbolic-to-notehead registration is validated.",
+                matching = result["physical_overlay"].setdefault("matching", {})
+                matching.pop("canonical_score_meta", None)
+                matching["registration_policy"] = (
+                    "symbolic-time-authoritative; exact-measure/time-key; "
+                    "voice-BEGIN-chord-contained-notehead; no-x-timing"
                 )
-                result["physical_overlay"].setdefault("matching", {})[
-                    "registration_policy"
-                ] = "symbolic-time-authoritative; canonical-x-time-registration-disabled"
+                matching["active_registration_pipeline"] = (
+                    "musicxml-symbolic-time->recursive-levels->exact-omr-slot-time-key->"
+                    "voice-BEGIN->contained-notehead->pdf"
+                )
+                matching["legacy_canonical_score_path_enabled"] = False
+                matching["omr_only_attack_recovery_enabled"] = False
+                if not registration_ready:
+                    result["physical_overlay"].setdefault("warnings", []).insert(
+                        0,
+                        "Semantic OMR notehead registration was unavailable; PDF event labels were left unmapped rather than guessed.",
+                    )
             except Exception as exc:
                 result["physical_overlay"] = {
                     "available": False,
                     "pages": [],
                     "matching": {
-                        "registration_policy": "symbolic-time-authoritative; canonical-x-time-registration-disabled"
+                        "registration_policy": "symbolic-time-authoritative; semantic-omr-geometry-only; no-x-timing",
+                        "legacy_canonical_score_path_enabled": False,
+                        "omr_only_attack_recovery_enabled": False,
                     },
                     "warnings": [f"Physical annotation extraction could not be built: {exc}"],
                 }
         elif suffix == ".pdf" and annotation_warning:
             result["physical_overlay"]["warnings"].append(annotation_warning)
+
+        # Private geometry graph is never returned as application state; the full
+        # audit copy remains in symbolic-registration.json inside the debug bundle.
+        result.pop("_symbolic_registration_meta", None)
 
         try:
             debug_summary = {
@@ -250,6 +302,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
                 "omr_recovery_policy": result.get("omr_recovery_policy"),
                 "omr_saved": result.get("omr_saved"),
                 "meter_override": result.get("meter_override"),
+                "symbolic_registration": result.get("symbolic_registration", {}),
                 "measures": result.get("measures", []),
                 "segments": [
                     {
