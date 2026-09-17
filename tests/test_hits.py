@@ -7,49 +7,40 @@ from core import extract_hit_strikes
 
 
 def make_omr(xml: str) -> Path:
-    td = Path(tempfile.mkdtemp())
-    path = td / 'score.omr'
+    root = Path(tempfile.mkdtemp())
+    path = root / 'score.omr'
     with ZipFile(path, 'w') as zf:
         zf.writestr('sheet#1/sheet#1.xml', xml)
     return path
 
 
-def head(head_id: str, x: int, y: int = 180, pitch: str = '0') -> str:
+def head(head_id: str, x: float, y: float = 180) -> str:
     return (
-        f'<head id="{head_id}" pitch="{pitch}">'
+        f'<head id="{head_id}">'
         f'<bounds x="{x - 10}" y="{y - 10}" w="20" h="20"/>'
         f'</head>'
     )
 
 
-def chord(chord_id: str, staff: str = '10', x: int = 100, y: int = 150) -> str:
-    return (
-        f'<head-chord id="{chord_id}" staff="{staff}">'
-        f'<bounds x="{x}" y="{y}" w="30" h="80"/>'
-        f'</head-chord>'
-    )
+def chord(chord_id: str, staff: str = '10') -> str:
+    return f'<head-chord id="{chord_id}" staff="{staff}"/>'
 
 
 def relation(source: str, target: str, body: str) -> str:
     return f'<relation source="{source}" target="{target}">{body}</relation>'
 
 
-def entry(chord_id: str, slot_id: str, status: str = 'BEGIN') -> str:
-    return (
-        f'<entry><key>{slot_id}</key>'
-        f'<value chord="{chord_id}" status="{status}"/></entry>'
-    )
-
-
-def score(slots: str, entries: str, objects: str, relations: str, right: int = 500) -> str:
+def score(objects: str, relations: str, stacks: str | None = None) -> str:
+    if stacks is None:
+        stacks = '<stack id="1" left="100" right="500"/>'
     return f'''<sheet>
+      <scale><interline main="20"/></scale>
       <picture width="1000" height="800"/>
       <page><system id="1">
-        <stack id="1" left="100" right="{right}">{slots}</stack>
-        <part id="p1"><measure id="1"><voice id="1"><slots>{entries}</slots></voice></measure></part>
+        {stacks}
         <staff id="10">
-          <line><point x="0" y="100"/></line>
-          <line><point x="0" y="300"/></line>
+          <line><point y="100"/></line>
+          <line><point y="300"/></line>
         </staff>
       </system></page>
       {objects}
@@ -57,136 +48,104 @@ def score(slots: str, entries: str, objects: str, relations: str, right: int = 5
     </sheet>'''
 
 
-class HitStrikeTests(unittest.TestCase):
-    def test_simultaneous_entries_merge_to_one_hit(self):
-        slots = '<slot id="1" x-offset="100" time-offset="0"/>'
-        objects = chord('c1') + head('h1', 200) + chord('c2') + head('h2', 205)
+class GeometryHitTests(unittest.TestCase):
+    def test_one_visible_chord_is_one_hit(self):
+        xml = score(
+            chord('c1') + head('h1', 200),
+            relation('c1', 'h1', '<containment/>'),
+        )
+        count, strikes = extract_hit_strikes(make_omr(xml))
+        self.assertEqual((count, len(strikes)), (1, 1))
+        self.assertEqual(strikes[0].x, 200)
+
+    def test_simultaneous_aligned_chords_merge_globally(self):
+        objects = chord('c1') + head('h1', 200) + chord('c2') + head('h2', 211)
         relations = (
             relation('c1', 'h1', '<containment/>')
             + relation('c2', 'h2', '<containment/>')
         )
-        hit_count, strikes = extract_hit_strikes(
-            make_omr(score(slots, entry('c1', '1') + entry('c2', '1'), objects, relations))
-        )
-        self.assertEqual((hit_count, len(strikes)), (1, 1))
+        count, strikes = extract_hit_strikes(make_omr(score(objects, relations)))
+        self.assertEqual((count, len(strikes)), (1, 1))
 
-    def test_tied_continuation_creates_no_hit(self):
-        slots = '<slot id="1" x-offset="100" time-offset="0"/>'
-        objects = chord('c1') + head('h1', 200) + '<slur id="sl" tie="true"/>'
+    def test_two_separate_visible_attacks_never_merge(self):
+        # Exact class of the Buxtehude m.6 failure: the two attacks are 28px apart.
+        objects = chord('c1') + head('h1', 234) + chord('c2') + head('h2', 262)
         relations = (
             relation('c1', 'h1', '<containment/>')
-            + relation('sl', 'h1', '<slur-head side="RIGHT"/>')
+            + relation('c2', 'h2', '<containment/>')
         )
-        with self.assertRaisesRegex(ValueError, 'No sounding'):
-            extract_hit_strikes(make_omr(score(slots, entry('c1', '1'), objects, relations)))
+        count, strikes = extract_hit_strikes(make_omr(score(objects, relations)))
+        self.assertEqual((count, len(strikes)), (2, 2))
+        self.assertEqual([s.x for s in strikes], [234, 262])
 
-    def test_mixed_tied_and_new_chord_still_creates_one_hit(self):
-        slots = '<slot id="1" x-offset="100" time-offset="0"/>'
+    def test_bogus_rhythmic_slot_data_cannot_merge_visible_attacks(self):
+        stacks = '''<stack id="1" left="100" right="500">
+          <slot id="1" x-offset="100" time-offset="0"/>
+        </stack>
+        <part><measure><voice><slots>
+          <entry><key>1</key><value chord="c1" status="BEGIN"/></entry>
+          <entry><key>1</key><value chord="c2" status="BEGIN"/></entry>
+        </slots></voice></measure></part>'''
+        objects = chord('c1') + head('h1', 234) + chord('c2') + head('h2', 262)
+        relations = (
+            relation('c1', 'h1', '<containment/>')
+            + relation('c2', 'h2', '<containment/>')
+        )
+        count, strikes = extract_hit_strikes(
+            make_omr(score(objects, relations, stacks))
+        )
+        self.assertEqual((count, len(strikes)), (2, 2))
+
+    def test_tied_continuation_is_not_new_hit(self):
+        objects = chord('c1') + head('h1', 200) + '<slur id="s1" tie="true"/>'
+        relations = (
+            relation('c1', 'h1', '<containment/>')
+            + relation('s1', 'h1', '<slur-head side="RIGHT"/>')
+        )
+        with self.assertRaisesRegex(ValueError, 'No sounding note attacks'):
+            extract_hit_strikes(make_omr(score(objects, relations)))
+
+    def test_mixed_tied_and_new_chord_counts_once(self):
         objects = (
-            chord('c1')
-            + head('h1', 200)
-            + head('h2', 220)
-            + '<slur id="sl" tie="true"/>'
+            chord('c1') + head('h1', 200) + head('h2', 205)
+            + '<slur id="s1" tie="true"/>'
         )
         relations = (
             relation('c1', 'h1', '<containment/>')
             + relation('c1', 'h2', '<containment/>')
-            + relation('sl', 'h1', '<slur-head side="RIGHT"/>')
+            + relation('s1', 'h1', '<slur-head side="RIGHT"/>')
         )
-        hit_count, strikes = extract_hit_strikes(
-            make_omr(score(slots, entry('c1', '1'), objects, relations))
-        )
-        self.assertEqual((hit_count, len(strikes)), (1, 1))
+        count, strikes = extract_hit_strikes(make_omr(score(objects, relations)))
+        self.assertEqual((count, len(strikes)), (1, 1))
 
-    def test_unvoiced_real_note_is_recovered(self):
-        slots = '<slot id="1" x-offset="100" time-offset="0"/>'
-        objects = chord('c1') + head('h1', 200) + chord('c2', x=300) + head('h2', 330)
+    def test_measure_partition_prevents_cross_barline_merge(self):
+        stacks = (
+            '<stack id="1" left="100" right="300"/>'
+            '<stack id="2" left="300" right="500"/>'
+        )
+        objects = chord('c1') + head('h1', 296) + chord('c2') + head('h2', 304)
         relations = (
             relation('c1', 'h1', '<containment/>')
             + relation('c2', 'h2', '<containment/>')
         )
-        hit_count, strikes = extract_hit_strikes(
-            make_omr(score(slots, entry('c1', '1'), objects, relations))
+        count, strikes = extract_hit_strikes(
+            make_omr(score(objects, relations, stacks))
         )
-        self.assertEqual((hit_count, len(strikes)), (2, 2))
+        self.assertEqual((count, len(strikes)), (2, 2))
 
-    def test_unvoiced_chord_with_any_shared_head_is_not_doubled(self):
-        slots = '<slot id="1" x-offset="100" time-offset="0"/>'
-        objects = (
-            chord('c1') + head('h1', 250)
-            + chord('c2', x=220) + head('h2a', 220) + head('h2b', 252)
+    def test_dense_but_distinct_attacks_remain_distinct(self):
+        xs = [180, 205, 230, 255]
+        objects = ''.join(
+            chord(f'c{i}') + head(f'h{i}', x)
+            for i, x in enumerate(xs)
         )
-        relations = (
-            relation('c1', 'h1', '<containment/>')
-            + relation('c2', 'h2a', '<containment/>')
-            + relation('c2', 'h2b', '<containment/>')
+        relations = ''.join(
+            relation(f'c{i}', f'h{i}', '<containment/>')
+            for i in range(len(xs))
         )
-        hit_count, strikes = extract_hit_strikes(
-            make_omr(score(slots, entry('c1', '1'), objects, relations))
-        )
-        self.assertEqual((hit_count, len(strikes)), (1, 1))
-
-    def test_inverted_slot_x_is_repaired_without_losing_hits(self):
-        slots = (
-            '<slot id="1" x-offset="100" time-offset="0"/>'
-            '<slot id="2" x-offset="220" time-offset="1/4"/>'
-            '<slot id="3" x-offset="180" time-offset="1/2"/>'
-        )
-        objects = (
-            chord('c1') + head('h1', 200)
-            + chord('c2') + head('h2', 320)
-            + chord('c3') + head('h3', 280)
-        )
-        relations = (
-            relation('c1', 'h1', '<containment/>')
-            + relation('c2', 'h2', '<containment/>')
-            + relation('c3', 'h3', '<containment/>')
-        )
-        hit_count, strikes = extract_hit_strikes(
-            make_omr(
-                score(
-                    slots,
-                    entry('c1', '1') + entry('c2', '2') + entry('c3', '3'),
-                    objects,
-                    relations,
-                )
-            )
-        )
-        xs = [strike.x for strike in strikes]
-        self.assertEqual((hit_count, len(strikes)), (3, 3))
-        self.assertTrue(xs[0] < xs[1] < xs[2])
-        self.assertGreaterEqual(min(b - a for a, b in zip(xs, xs[1:])), 12)
-
-    def test_distinct_times_at_same_engraving_x_remain_distinct(self):
-        slots = (
-            '<slot id="1" x-offset="100" time-offset="0"/>'
-            '<slot id="2" x-offset="102" time-offset="1/4"/>'
-        )
-        objects = chord('c1') + head('h1', 202) + chord('c2') + head('h2', 203)
-        relations = (
-            relation('c1', 'h1', '<containment/>')
-            + relation('c2', 'h2', '<containment/>')
-        )
-        hit_count, strikes = extract_hit_strikes(
-            make_omr(
-                score(
-                    slots,
-                    entry('c1', '1') + entry('c2', '2'),
-                    objects,
-                    relations,
-                    right=400,
-                )
-            )
-        )
-        xs = [strike.x for strike in strikes]
-        self.assertEqual((hit_count, len(strikes)), (2, 2))
-        self.assertGreaterEqual(xs[1] - xs[0], 12)
-
-    def test_rest_chord_does_not_create_hit(self):
-        slots = '<slot id="1" x-offset="100" time-offset="0"/>'
-        objects = '<rest-chord id="r1" staff="10"/>'
-        with self.assertRaisesRegex(ValueError, 'No sounding'):
-            extract_hit_strikes(make_omr(score(slots, entry('r1', '1'), objects, '')))
+        count, strikes = extract_hit_strikes(make_omr(score(objects, relations)))
+        self.assertEqual((count, len(strikes)), (4, 4))
+        self.assertEqual([s.x for s in strikes], xs)
 
 
 if __name__ == '__main__':
