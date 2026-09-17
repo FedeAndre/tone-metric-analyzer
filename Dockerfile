@@ -36,16 +36,15 @@ RUN python3 -m pip install --no-cache-dir --break-system-packages -r /app/requir
 COPY app.py /app/app.py
 COPY tone_metric /app/tone_metric
 COPY static /app/static
-COPY v0152_sha256.txt /app/v0152_sha256.txt
+COPY tests /app/tests
 RUN mkdir -p /app/.tone_metric_cache \
-    && cd /app \
-    && sha256sum -c v0152_sha256.txt \
     && test ! -e /app/validate_release.py \
     && test ! -e /app/tone_metric/omr_exact.py \
     && test ! -e /app/tone_metric/omr_visual_rhythm.py \
     && test ! -e /app/tone_metric/layer_registration.py \
     && test ! -e /app/tone_metric/render.py \
-    && python3 -B -c "import tone_metric; assert tone_metric.__version__ == '0.15.2'" \
-    && python3 -m py_compile /app/app.py /app/tone_metric/*.py
+    && python3 -B -c "import tone_metric; assert tone_metric.__version__ == '0.18.0-rc1'" \
+    && python3 -m py_compile /app/app.py /app/tone_metric/*.py /app/tests/*.py \
+    && python3 -m unittest discover -s /app/tests -p 'test_*.py' -v
 EXPOSE 8080
 CMD ["sh", "-c", "python3 -B -m uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
