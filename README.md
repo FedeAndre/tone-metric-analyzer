@@ -1,18 +1,17 @@
-# Hit-only score marker — clean-room start
+# Reconciled Hit Engine
 
-This branch intentionally contains no Tone-Metric Levels, waves, pivots, trees, metric-grid logic, canonical reconstruction, legacy registration, or previous analyzer modules.
+Clean-room hit-only score marker.
 
-It does one thing only: for an uploaded PDF score, identify every new sounding onset and draw one vertical strike at that score-time position.
+The application performs one task: draw one vertical strike for every new global note/chord attack.
 
-Rules:
-- a new note or chord onset is a hit;
-- simultaneous notes in any voices/staves/parts are one hit;
-- chord members at the same onset are one hit;
-- rests are not hits;
-- grace notes are not hits;
-- a tied continuation is not a new hit;
-- the first note of a tie is a hit;
-- tuplets are ordinary sounding hits;
-- if any symbolic hit cannot be matched exactly to a physical score-time slot, output fails instead of guessing.
+Architecture:
+- exact symbolic BEGIN onset establishes timed hit identity;
+- tied continuations are excluded;
+- simultaneous voices/staves at one exact onset are one hit;
+- every recognized sounding semantic chord is independently audited;
+- omitted semantic chords are reconciled only with independent simultaneity evidence;
+- otherwise they become recovered hits;
+- ambiguous evidence fails closed instead of guessing;
+- geometry can position hits but cannot change an already established symbolic hit identity.
 
-No other analysis is performed.
+No tone-metric levels, waves, trees, or prior analyzer logic are present.
