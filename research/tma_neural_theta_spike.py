@@ -84,6 +84,17 @@ def rotated_tma_batch(ph, shifts, depth=5):
         tr += 1 + np.sum(np.diff(bins,axis=1)!=0,axis=1)
     return tr/expected_trace(len(ph),depth)
 
+def uniform_tma_batch(n, B, depth, rng):
+    if n < 2:
+        return np.full(B, np.nan)
+    q=rng.random((B,n))
+    tr=np.ones(B,float)
+    for l in range(1,depth+1):
+        bins=np.floor(q*(2**l)).astype(np.int16)
+        bins.sort(axis=1)
+        tr += 1 + np.sum(np.diff(bins,axis=1)!=0,axis=1)
+    return tr/expected_trace(n,depth)
+
 def self_test():
     rng=np.random.default_rng(123)
     for n in range(2,15):
@@ -387,11 +398,35 @@ def surrogate_control(df,p0,surr_records,B=200):
         x=center_by_group(vals[:,b],gg)
         rs[b]=np.corrcoef(x,rr)[0,1]
     p=float((1+np.sum(np.abs(rs)>=abs(r_obs)))/(B+1))
+
+    # Stronger null: preserve the number of population events in every theta
+    # cycle, but replace their phases by independent Uniform(0,1) draws.
+    # This destroys within-cycle event geometry as well as absolute theta phase.
+    rng_u=np.random.default_rng(SEED+13)
+    uvals=np.empty((len(keep),B),float)
+    for j,(rid,sub,phases) in enumerate(keep):
+        acc=np.zeros(B);ncy=0
+        for ph in phases:
+            z=uniform_tma_batch(len(ph),B,5,rng_u)
+            if np.all(np.isfinite(z)):
+                acc+=z;ncy+=1
+        uvals[j]=acc/ncy if ncy else np.nan
+        if (j+1)%50==0:print(f"[uniform-null] windows {j+1}/{len(keep)}",flush=True)
+    ur=np.empty(B)
+    for b in range(B):
+        x=center_by_group(uvals[:,b],gg)
+        ur[b]=np.corrcoef(x,rr)[0,1]
+    pu=float((1+np.sum(np.abs(ur)>=abs(r_obs)))/(B+1))
     return {"n_windows":len(keep),"observed_within_subject_residual_r":r_obs,
-            "surrogate_abs_tail_p":p,"surrogate_r_mean":float(np.nanmean(rs)),
-            "surrogate_r_sd":float(np.nanstd(rs,ddof=1)),
-            "surrogate_r_q025":float(np.nanquantile(rs,.025)),
-            "surrogate_r_q975":float(np.nanquantile(rs,.975))}
+            "phase_rotation_abs_tail_p":p,"phase_rotation_r_mean":float(np.nanmean(rs)),
+            "phase_rotation_r_sd":float(np.nanstd(rs,ddof=1)),
+            "phase_rotation_r_q025":float(np.nanquantile(rs,.025)),
+            "phase_rotation_r_q975":float(np.nanquantile(rs,.975)),
+            "count_preserving_uniform_abs_tail_p":pu,
+            "count_preserving_uniform_r_mean":float(np.nanmean(ur)),
+            "count_preserving_uniform_r_sd":float(np.nanstd(ur,ddof=1)),
+            "count_preserving_uniform_r_q025":float(np.nanquantile(ur,.025)),
+            "count_preserving_uniform_r_q975":float(np.nanquantile(ur,.975))}
 
 def main():
     t=time.time();self_test();print("[self-test] passed",flush=True)
@@ -452,7 +487,7 @@ def main():
         z=result["depths"][str(d)]
         lines.append(f"- Depth {d}: speed RMSE {z['regression_extended']['rmse']:.4f}, delta {z['delta_rmse_extended_minus_baseline']:+.4f}, R2 {z['regression_extended']['r2']:.4f}, bootstrap 95% CI delta RMSE {z['cluster_bootstrap_delta_rmse_95ci']}; fast/slow delta log loss {z['delta_logloss_extended_minus_baseline']:+.6f}, delta AUC {z['delta_auc_extended_minus_baseline']:+.4f}.")
     s=result["phase_rotation_surrogate_d5"]
-    lines += ["",f"Depth-5 phase-rotation control: observed within-subject correlation with held-out baseline speed residuals r={s['observed_within_subject_residual_r']:+.4f}; surrogate p={s['surrogate_abs_tail_p']:.5g}; surrogate 95% range [{s['surrogate_r_q025']:+.4f}, {s['surrogate_r_q975']:+.4f}]."]
+    lines += ["",f"Depth-5 phase-rotation control: observed within-subject correlation with held-out baseline speed residuals r={s['observed_within_subject_residual_r']:+.4f}; surrogate p={s['phase_rotation_abs_tail_p']:.5g}; surrogate 95% range [{s['phase_rotation_r_q025']:+.4f}, {s['phase_rotation_r_q975']:+.4f}].",f"Depth-5 count-preserving uniform-phase control: surrogate p={s['count_preserving_uniform_abs_tail_p']:.5g}; surrogate 95% range [{s['count_preserving_uniform_r_q025']:+.4f}, {s['count_preserving_uniform_r_q975']:+.4f}]."]
     (OUT/"RESULTS.md").write_text("\\n".join(lines)+"\\n")
     print("\\n".join(lines),flush=True)
 
