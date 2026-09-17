@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from fractions import Fraction
+from io import BytesIO
 from pathlib import Path, PurePosixPath
 import re
 from zipfile import ZipFile
 
 from lxml import etree
 from PIL import Image
-from io import BytesIO
 
 
 def _local(tag: str) -> str:
@@ -18,11 +18,8 @@ def _local(tag: str) -> str:
 def _frac(value) -> Fraction | None:
     if value is None:
         return None
-    text = str(value).strip()
-    if not text:
-        return None
     try:
-        return Fraction(text)
+        return Fraction(str(value).strip())
     except Exception:
         return None
 
@@ -30,6 +27,13 @@ def _frac(value) -> Fraction | None:
 def _intish(value, default=None):
     try:
         return int(float(str(value)))
+    except Exception:
+        return default
+
+
+def _floatish(value, default=None):
+    try:
+        return float(str(value))
     except Exception:
         return default
 
@@ -70,18 +74,53 @@ def _page_dimensions(zf: ZipFile, sheet_xml_member: str) -> tuple[int, int] | No
     return None
 
 
+def _system_bounds(system, system_index: int) -> dict | None:
+    """Read display-only system bounds from Audiveris staff-line geometry.
+
+    These coordinates never establish musical time or event identity. They are used
+    only after a symbolic event has already been fixed by MusicXML score time.
+    """
+    xs: list[float] = []
+    ys: list[float] = []
+    for staff in system.iter():
+        if _local(staff.tag) != 'staff':
+            continue
+        left = _floatish(staff.get('left'))
+        right = _floatish(staff.get('right'))
+        if left is not None:
+            xs.append(left)
+        if right is not None:
+            xs.append(right)
+        for line in staff.iter():
+            if _local(line.tag) != 'line':
+                continue
+            for point in line:
+                if _local(point.tag) != 'point':
+                    continue
+                x = _floatish(point.get('x'))
+                y = _floatish(point.get('y'))
+                if x is not None:
+                    xs.append(x)
+                if y is not None:
+                    ys.append(y)
+    if not xs or not ys:
+        return None
+    return {
+        'system_index': int(system_index),
+        'left': min(xs),
+        'right': max(xs),
+        'top': min(ys),
+        'bottom': max(ys),
+    }
+
+
 def read_omr_slots(omr_path: str | Path) -> tuple[list[OmrSlot], dict]:
-    """Read Audiveris measure-stack slots directly from a saved .omr project.
+    """Read exact Audiveris rhythmic slots plus display-only system geometry.
 
-    Audiveris persists each measure ``stack`` with absolute ``left``/``right``
-    coordinates, and each rhythmic ``slot`` with both ``time-offset`` and
-    ``x-offset``.  ``x-offset`` is explicitly measured from the stack's left edge.
-    This gives the identity we were missing in earlier builds:
-
-        exact measure time -> Audiveris slot -> exact physical x
-
-    No ordinal note matching, MusicXML default-x interpolation, or nearest-neighbor
-    notehead pairing is involved in this path.
+    The returned slots are not an event source. A caller may use a slot only after an
+    event already exists symbolically and only when ``(measure_index, exact offset)``
+    matches. This prevents OMR geometry from creating, deleting, splitting, merging,
+    or retiming musical attacks.
     """
     path = Path(omr_path)
     slots: list[OmrSlot] = []
@@ -113,16 +152,18 @@ def read_omr_slots(omr_path: str | Path) -> tuple[list[OmrSlot], dict]:
                     meta['warnings'].append(f'Could not parse {member}: {exc}')
                     continue
                 dims = _page_dimensions(zf, member)
-                # Normally one PDF sheet -> one Audiveris page.  The XML model also
-                # permits several <page> nodes per sheet, so preserve their order.
                 pages = [el for el in root.iter() if _local(el.tag) == 'page']
                 if not pages:
                     pages = [root]
                 for page_local_index, page in enumerate(pages):
                     systems = [el for el in page if _local(el.tag) == 'system']
                     if not systems:
-                        # Be tolerant of wrapper elements used by different Audiveris versions.
                         systems = [el for el in page.iter() if _local(el.tag) == 'system']
+                    system_bounds = []
+                    for system_index, system in enumerate(systems):
+                        b = _system_bounds(system, system_index)
+                        if b is not None:
+                            system_bounds.append(b)
                     page_meta = {
                         'page_index': global_page_index,
                         'sheet_member': member,
@@ -130,18 +171,18 @@ def read_omr_slots(omr_path: str | Path) -> tuple[list[OmrSlot], dict]:
                         'width': dims[0] if dims else None,
                         'height': dims[1] if dims else None,
                         'systems': len(systems),
+                        'system_bounds': system_bounds,
                     }
                     meta['pages'].append(page_meta)
                     for system_index, system in enumerate(systems):
                         stacks = [el for el in system.iter() if _local(el.tag) == 'stack']
-                        # Avoid accidentally re-reading nested descendants if a future
-                        # schema wraps stack-like content: document order is sufficient.
                         seen = set()
                         unique_stacks = []
                         for stack in stacks:
                             oid = id(stack)
                             if oid not in seen:
-                                seen.add(oid); unique_stacks.append(stack)
+                                seen.add(oid)
+                                unique_stacks.append(stack)
                         for stack_index, stack in enumerate(unique_stacks):
                             left = _intish(stack.get('left'))
                             right = _intish(stack.get('right'))
@@ -173,7 +214,7 @@ def read_omr_slots(omr_path: str | Path) -> tuple[list[OmrSlot], dict]:
                                     time_offset_quarter=toff * 4,
                                     x_offset=xoff,
                                     x_abs=left + xoff,
-                                    suspicious=str(slot.get('suspicious') or '').lower() in {'true','1','yes'},
+                                    suspicious=str(slot.get('suspicious') or '').lower() in {'true', '1', 'yes'},
                                 ))
                             global_measure_index += 1
                     global_page_index += 1
