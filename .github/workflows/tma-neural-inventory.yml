@@ -1,0 +1,35 @@
+name: TMA neural NWB inventory
+
+on:
+  push:
+    branches: [tma-neural-analysis-20260917]
+    paths:
+      - 'research/tma_neural_inventory.py'
+      - '.github/workflows/tma-neural-inventory.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: pip install h5py numpy
+      - name: Download representative NWB
+        run: wget -q 'https://dandiarchive.s3.amazonaws.com/blobs/e42/58a/e4258ab4-a9cb-45ff-b92e-6aec93d44aca' -O /tmp/session.nwb
+      - name: Inventory
+        run: python research/tma_neural_inventory.py
+      - name: Commit inventory
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_neural_inventory.txt
+          git commit -m 'Add neural NWB inventory'
+          git push origin HEAD:tma-neural-analysis-20260917
