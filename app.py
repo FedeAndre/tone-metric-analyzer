@@ -13,8 +13,8 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from tone_metric.engine import analyze
-from tone_metric.musicxml import extract_visual_groups, parse_musicxml
-from tone_metric.omr import find_audiveris, pdf_to_annotations, pdf_to_musicxml
+from tone_metric.musicxml import parse_musicxml
+from tone_metric.omr import find_audiveris, pdf_to_musicxml
 from tone_metric.omr_project import omr_slots_debug_rows, read_omr_slots
 from tone_metric.pdfview import render_pdf_pages
 from tone_metric.physical import build_normalized_overlay
@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parent
 CACHE = ROOT / ".tone_metric_cache"
 CACHE.mkdir(exist_ok=True)
 
-app = FastAPI(title="Tone-Metric Analyzer", version="0.18.0-rc2-symbolic-registration")
+app = FastAPI(title="Tone-Metric Analyzer", version="0.18.0-rc3-exact-slot-registration")
 app.mount("/static", StaticFiles(directory=ROOT / "static"), name="static")
 
 
@@ -81,8 +81,9 @@ def status():
         "ok": True,
         "version": app.version,
         "timing_authority": "musicxml-symbolic-global-onset",
-        "pdf_registration": "symbolic-attack-key-to-musicxml-note-layout",
+        "pdf_registration": "exact-symbolic-measure-offset-to-audiveris-slot",
         "geometry_can_create_or_retime_attacks": False,
+        "musicxml_layout_coordinates_used_for_pdf_registration": False,
         "omr_recovery": "disabled-fail-closed",
         "audiveris_found": bool(find_audiveris()),
         "audiveris_command": find_audiveris(),
@@ -134,25 +135,15 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
     try:
         page_info = []
         omr_path = None
-        annotation_archive = None
-        annotation_warning = ""
-
         if suffix == ".pdf":
             page_info = render_pdf_pages(inp, session / "pages")
             symbolic, omr_path = pdf_to_musicxml(inp, session / "omr")
-            annotation_archive, annotation_warning = pdf_to_annotations(inp, session / "annotations")
         else:
             symbolic = inp
 
         meter_override_tuple = _meter_override_tuple(meter_override)
-        hits, measures, parse_warnings = parse_musicxml(
-            symbolic,
-            initial_meter_override=meter_override_tuple,
-        )
+        hits, measures, parse_warnings = parse_musicxml(symbolic, initial_meter_override=meter_override_tuple)
 
-        # Architectural invariant: the parser's globally merged symbolic hits are
-        # the sole musical-time authority. OMR x-spacing, notehead/chord clustering,
-        # and PDF geometry cannot add, remove, split, merge, or move attacks here.
         result = analyze(hits, measures)
         result["analysis_hit_source"] = "musicxml-symbolic-global-onset"
         result["symbolic_hit_count"] = len(hits)
@@ -173,7 +164,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
         result["parse_warnings"] = list(parse_warnings)
         if suffix == ".pdf":
             result["parse_warnings"].append(
-                "OMR-only attack recovery remains disabled. PDF geometry may attach a visual position only to an attack already established by symbolic score time; it cannot create or retime events."
+                "OMR is display-only: an existing symbolic attack may be positioned only by an exact Audiveris slot with the same measure and score offset. OMR cannot create or retime attacks."
             )
         result["session_id"] = session_id
         result["debug_bundle_url"] = f"/api/session/{session_id}/debug"
@@ -186,13 +177,11 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
             "available": False,
             "pages": [],
             "warnings": [],
-            "matching": {
-                "registration_policy": "symbolic-attack-key-to-note-layout; geometry-cannot-create-or-retime"
-            },
+            "matching": {"registration_policy": "exact symbolic measure+offset to OMR slot; no fallback"},
         }
 
-        # Saved OMR data remains available only as a diagnostic artifact. Reading it
-        # here cannot mutate the event list or the metric grid.
+        omr_slots = []
+        omr_meta = {"available": False, "pages": [], "warnings": []}
         if omr_path is not None:
             try:
                 omr_slots, omr_meta = read_omr_slots(omr_path)
@@ -203,40 +192,22 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
             except Exception as exc:
                 (session / "omr-slots-error.txt").write_text(str(exc), encoding="utf-8")
 
-        # Visual registration is downstream of analysis. It receives symbolic
-        # MusicXML note-layout groups only after attacks and Levels are complete.
-        # The registrar iterates existing attack keys; extra graphical groups are
-        # ignored and missing groups remain unmapped rather than manufacturing events.
-        if suffix == ".pdf" and annotation_archive is not None:
+        if suffix == ".pdf" and omr_slots and omr_meta.get("available"):
             try:
-                visual_groups, layout_known = extract_visual_groups(
-                    symbolic,
-                    initial_meter_override=meter_override_tuple,
-                )
-                result["_symbolic_visual_groups"] = visual_groups
-                result["physical_overlay"] = build_normalized_overlay(
-                    annotation_archive,
-                    visual_groups,
-                    layout_known,
-                    result,
-                    session / "physical",
-                )
-                result["physical_overlay"].setdefault("matching", {})[
-                    "registration_policy"
-                ] = "symbolic-attack-key-to-note-layout; geometry-cannot-create-or-retime"
+                result["physical_overlay"] = build_normalized_overlay(result, omr_slots, omr_meta)
             except Exception as exc:
                 result["physical_overlay"] = {
                     "available": False,
                     "pages": [],
-                    "matching": {
-                        "registration_policy": "symbolic-attack-key-to-note-layout; geometry-cannot-create-or-retime"
-                    },
-                    "warnings": [f"Physical annotation extraction could not be built: {exc}"],
+                    "matching": {"registration_policy": "exact symbolic measure+offset to OMR slot; no fallback"},
+                    "warnings": [f"Exact PDF registration could not be built: {exc}"],
                 }
-            finally:
-                result.pop("_symbolic_visual_groups", None)
-        elif suffix == ".pdf" and annotation_warning:
-            result["physical_overlay"]["warnings"].append(annotation_warning)
+        elif suffix == ".pdf":
+            result["physical_overlay"]["warnings"].extend(omr_meta.get("warnings", []) or [])
+            if not result["physical_overlay"]["warnings"]:
+                result["physical_overlay"]["warnings"].append(
+                    "Saved Audiveris slot geometry was unavailable; PDF analysis was left unregistered rather than guessed."
+                )
 
         try:
             debug_summary = {
@@ -257,18 +228,10 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
                         "structural_points": seg.get("structural_points", []),
                         "events": [
                             {k: e.get(k) for k in (
-                                "event_index",
-                                "measure_index",
-                                "measure_number",
-                                "offset_in_measure_quarter",
-                                "onset_quarter",
-                                "duration_quarter",
-                                "tone_metric_levels",
-                                "tone_metric_height",
-                                "tone_metric_density",
-                                "lowest_tone_metric_level",
-                                "attack_key",
-                                "pitches",
+                                "event_index", "measure_index", "measure_number",
+                                "offset_in_measure_quarter", "onset_quarter", "duration_quarter",
+                                "tone_metric_levels", "tone_metric_height", "tone_metric_density",
+                                "lowest_tone_metric_level", "attack_key", "pitches",
                             )}
                             for e in seg.get("events", [])
                             if e.get("tone_metric_levels")
@@ -280,8 +243,7 @@ async def analyze_upload(file: UploadFile = File(...), meter_override: str = For
                 "physical_warnings": result.get("physical_overlay", {}).get("warnings", []),
             }
             (session / "debug-summary.json").write_text(
-                json.dumps(debug_summary, indent=2, ensure_ascii=False),
-                encoding="utf-8",
+                json.dumps(debug_summary, indent=2, ensure_ascii=False), encoding="utf-8"
             )
         except Exception:
             pass
