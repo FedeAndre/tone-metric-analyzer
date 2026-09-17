@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
 import time
 from pathlib import Path
@@ -176,15 +177,19 @@ def global_rr_features(r_samples: np.ndarray, fs: float):
 
 
 def load_subject(rec: str):
-    """Download/prepare each Fantasia subject once; reuse for both orientations."""
-    hdr = wfdb.rdheader(rec, pn_dir="fantasia")
+    """Prepare each Fantasia subject once; use local prefetch when available."""
+    data_dir = os.environ.get("FANTASIA_DIR")
+    base = str(Path(data_dir) / rec) if data_dir else rec
+    wfdb_kwargs = {} if data_dir else {"pn_dir": "fantasia"}
+
+    hdr = wfdb.rdheader(base, **wfdb_kwargs)
     age, sex = parse_age_sex(hdr.comments)
     resp_i = [i for i, name in enumerate(hdr.sig_name) if str(name).upper() == "RESP"][0]
-    resp = wfdb.rdrecord(rec, pn_dir="fantasia", channels=[resp_i])
+    resp = wfdb.rdrecord(base, channels=[resp_i], **wfdb_kwargs)
     x = np.asarray(resp.p_signal[:, 0], dtype=float)
     fs = float(resp.fs)
     y = bandpass_resp(x, fs)
-    ann = wfdb.rdann(rec, "ecg", pn_dir="fantasia")
+    ann = wfdb.rdann(base, "ecg", **wfdb_kwargs)
     r_samples = np.asarray(ann.sample, dtype=int)
     symbols = np.asarray(ann.symbol, dtype=object)
     return {
@@ -585,7 +590,7 @@ def main():
     allres = {
         "seed": SEED,
         "dataset": "PhysioNet Fantasia v1.0.0",
-        "implementation": "optimized one-pass loading + exact vectorized phase rotations",
+        "implementation": "optimized one-pass loading + local dataset prefetch when available + exact vectorized phase rotations",
         "hypothesis": (
             "Respiration-anchored recursive topology of heartbeats adds information "
             "beyond conventional HRV, respiratory, and phase-coupling features."
