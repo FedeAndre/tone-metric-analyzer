@@ -8,126 +8,301 @@ from core import extract_hit_strikes
 
 def make_omr(xml: str) -> Path:
     root = Path(tempfile.mkdtemp())
-    path = root / 'score.omr'
-    with ZipFile(path, 'w') as zf:
-        zf.writestr('sheet#1/sheet#1.xml', xml)
+    path = root / "score.omr"
+    with ZipFile(path, "w") as archive:
+        archive.writestr("sheet#1/sheet#1.xml", xml)
     return path
 
 
-def head(head_id: str, x: float, y: float = 180, pitch: int | None = None) -> str:
-    p = '' if pitch is None else f' pitch="{pitch}"'
-    return f'<head id="{head_id}"{p}><bounds x="{x-10}" y="{y-10}" w="20" h="20"/></head>'
+def head(head_id: str, x: float, y: float = 180) -> str:
+    return (
+        f'<head id="{head_id}">'
+        f'<bounds x="{x - 10}" y="{y - 10}" w="20" h="20"/>'
+        f"</head>"
+    )
 
 
-def chord(chord_id: str, staff: str = '10') -> str:
-    return f'<head-chord id="{chord_id}" staff="{staff}"/>'
+def chord(
+    chord_id: str,
+    staff: str,
+    x: float,
+    y: float = 140,
+    w: float = 24,
+    h: float = 80,
+) -> str:
+    return (
+        f'<head-chord id="{chord_id}" staff="{staff}">'
+        f'<bounds x="{x - w / 2}" y="{y}" w="{w}" h="{h}"/>'
+        f"</head-chord>"
+    )
 
 
-def stem(stem_id: str, x: float, y: float, h: float) -> str:
-    return f'<stem id="{stem_id}"><bounds x="{x-2}" y="{y}" w="4" h="{h}"/></stem>'
+def containment(chord_id: str, head_id: str) -> str:
+    return (
+        f'<relation source="{chord_id}" target="{head_id}">'
+        "<containment/>"
+        "</relation>"
+    )
 
 
-def relation(source: str, target: str, body: str) -> str:
-    return f'<relation source="{source}" target="{target}">{body}</relation>'
+def entry(chord_id: str, slot_id: str, status: str = "BEGIN") -> str:
+    return (
+        f"<entry><key>{slot_id}</key>"
+        f'<value chord="{chord_id}" status="{status}"/></entry>'
+    )
 
 
-def entry(chord_id: str, slot: str) -> str:
-    return f'<entry><key>{slot}</key><value chord="{chord_id}" status="BEGIN"/></entry>'
-
-
-def score(objects: str, relations: str, stacks: str | None = None, parts: str = '') -> str:
-    if stacks is None:
-        stacks = '<stack id="1" left="100" right="500"/>'
-    return f'''<sheet>
+def score(
+    *,
+    stacks: str,
+    entries: str,
+    objects: str,
+    relations: str,
+    staffs: tuple[str, ...] = ("10",),
+) -> str:
+    staff_xml = "".join(
+        (
+            f'<staff id="{staff_id}">'
+            '<line><point x="0" y="100"/></line>'
+            '<line><point x="1000" y="300"/></line>'
+            "</staff>"
+        )
+        for staff_id in staffs
+    )
+    return f"""<sheet>
       <scale><interline main="20"/></scale>
       <picture width="1000" height="800"/>
       <page><system id="1">
         {stacks}
-        {parts}
-        <staff id="10">
-          <line><point y="100"/></line><line><point y="300"/></line>
-        </staff>
+        <part id="p1"><measure id="1"><voice id="1"><slots>
+          {entries}
+        </slots></voice></measure></part>
+        {staff_xml}
       </system></page>
-      {objects}<relations>{relations}</relations>
-    </sheet>'''
+      {objects}
+      <relations>{relations}</relations>
+    </sheet>"""
 
 
-def displaced_pair(slot_a=None, slot_b=None):
-    objects = (
-        chord('c1') + head('h1', 200, 220, 5) + stem('s1', 188, 225, 60)
-        + chord('c2') + head('h2', 226, 190, 2) + stem('s2', 238, 120, 65)
-    )
-    relations = (
-        relation('c1','h1','<containment/>') + relation('c1','s1','<chord-stem/>')
-        + relation('c2','h2','<containment/>') + relation('c2','s2','<chord-stem/>')
-    )
-    entries = ''
-    if slot_a is not None:
-        entries += entry('c1', slot_a)
-    if slot_b is not None:
-        entries += entry('c2', slot_b)
-    parts = f'<part><measure><voice><slots>{entries}</slots></voice></measure></part>' if entries else ''
-    return objects, relations, parts
-
-
-class HitTests(unittest.TestCase):
-    def test_visible_chord(self):
-        xml = score(chord('c1') + head('h1', 200), relation('c1','h1','<containment/>'))
-        count, strikes = extract_hit_strikes(make_omr(xml))
+class ReconciledHitEngineTests(unittest.TestCase):
+    def test_one_symbolic_attack_is_one_hit(self):
+        xml = score(
+            stacks=(
+                '<stack id="1" left="100" right="500">'
+                '<slot id="1" x-offset="100" time-offset="0"/>'
+                "</stack>"
+            ),
+            entries=entry("c1", "1"),
+            objects=chord("c1", "10", 200) + head("h1", 200),
+            relations=containment("c1", "h1"),
+        )
+        count, strikes, diagnostics = extract_hit_strikes(make_omr(xml))
         self.assertEqual((count, len(strikes)), (1, 1))
-        self.assertEqual(strikes[0].x, 200)
+        self.assertEqual(diagnostics.base_events, 1)
+        self.assertEqual(diagnostics.recovered_events, 0)
 
-    def test_aligned_chords_merge(self):
-        objects = chord('c1') + head('h1', 200) + chord('c2') + head('h2', 211)
-        relations = relation('c1','h1','<containment/>') + relation('c2','h2','<containment/>')
-        count, strikes = extract_hit_strikes(make_omr(score(objects, relations)))
+    def test_simultaneous_voices_share_one_exact_onset_even_when_displaced(self):
+        xml = score(
+            stacks=(
+                '<stack id="1" left="100" right="500">'
+                '<slot id="1" x-offset="140" time-offset="0"/>'
+                "</stack>"
+            ),
+            entries=entry("c1", "1") + entry("c2", "1"),
+            objects=(
+                chord("c1", "10", 180)
+                + head("h1", 180)
+                + chord("c2", "10", 225)
+                + head("h2", 225)
+            ),
+            relations=containment("c1", "h1") + containment("c2", "h2"),
+        )
+        count, strikes, _ = extract_hit_strikes(make_omr(xml))
         self.assertEqual((count, len(strikes)), (1, 1))
 
-    def test_dense_sequential_stays_separate(self):
-        xs = [180, 205, 230, 255]
-        objects = ''.join(chord(f'c{i}') + head(f'h{i}', x) for i, x in enumerate(xs))
-        relations = ''.join(relation(f'c{i}', f'h{i}', '<containment/>') for i in range(len(xs)))
-        count, strikes = extract_hit_strikes(make_omr(score(objects, relations)))
-        self.assertEqual((count, len(strikes)), (4, 4))
-        self.assertEqual([s.x for s in strikes], xs)
-
-    def test_tied_continuation_removed(self):
-        objects = chord('c1') + head('h1', 200) + '<slur id="sl" tie="true"/>'
-        relations = relation('c1','h1','<containment/>') + relation('sl','h1','<slur-head side="RIGHT"/>')
-        with self.assertRaisesRegex(ValueError, 'No sounding'):
-            extract_hit_strikes(make_omr(score(objects, relations)))
-
-    def test_cross_barline_never_merge(self):
-        stacks = '<stack id="1" left="100" right="300"/><stack id="2" left="300" right="500"/>'
-        objects = chord('c1') + head('h1', 296) + chord('c2') + head('h2', 304)
-        relations = relation('c1','h1','<containment/>') + relation('c2','h2','<containment/>')
-        count, strikes = extract_hit_strikes(make_omr(score(objects, relations, stacks)))
+    def test_distinct_symbolic_times_survive_inverted_engraving(self):
+        xml = score(
+            stacks=(
+                '<stack id="1" left="100" right="500">'
+                '<slot id="1" x-offset="220" time-offset="0"/>'
+                '<slot id="2" x-offset="180" time-offset="1/4"/>'
+                "</stack>"
+            ),
+            entries=entry("c1", "1") + entry("c2", "2"),
+            objects=(
+                chord("c1", "10", 320)
+                + head("h1", 320)
+                + chord("c2", "10", 280)
+                + head("h2", 280)
+            ),
+            relations=containment("c1", "h1") + containment("c2", "h2"),
+        )
+        count, strikes, _ = extract_hit_strikes(make_omr(xml))
         self.assertEqual((count, len(strikes)), (2, 2))
+        self.assertLess(strikes[0].x, strikes[1].x)
 
-    def test_displaced_same_slot_merges(self):
-        objects, relations, parts = displaced_pair('1', '1')
-        count, strikes = extract_hit_strikes(make_omr(score(objects, relations, parts=parts)))
+    def test_tied_continuation_is_not_a_hit(self):
+        xml = score(
+            stacks=(
+                '<stack id="1" left="100" right="500">'
+                '<slot id="1" x-offset="100" time-offset="0"/>'
+                "</stack>"
+            ),
+            entries=entry("c1", "1"),
+            objects=(
+                chord("c1", "10", 200)
+                + head("h1", 200)
+                + '<slur id="s1" tie="true"/>'
+            ),
+            relations=(
+                containment("c1", "h1")
+                + '<relation source="s1" target="h1">'
+                '<slur-head side="RIGHT"/>'
+                "</relation>"
+            ),
+        )
+        with self.assertRaisesRegex(ValueError, "No sounding"):
+            extract_hit_strikes(make_omr(xml))
+
+    def test_mixed_tied_and_new_chord_is_one_hit(self):
+        xml = score(
+            stacks=(
+                '<stack id="1" left="100" right="500">'
+                '<slot id="1" x-offset="100" time-offset="0"/>'
+                "</stack>"
+            ),
+            entries=entry("c1", "1"),
+            objects=(
+                chord("c1", "10", 200)
+                + head("h1", 195)
+                + head("h2", 205)
+                + '<slur id="s1" tie="true"/>'
+            ),
+            relations=(
+                containment("c1", "h1")
+                + containment("c1", "h2")
+                + '<relation source="s1" target="h1">'
+                '<slur-head side="RIGHT"/>'
+                "</relation>"
+            ),
+        )
+        count, strikes, _ = extract_hit_strikes(make_omr(xml))
         self.assertEqual((count, len(strikes)), (1, 1))
-        self.assertEqual(strikes[0].x, 200)
 
-    def test_displaced_unvoiced_pair_merges(self):
-        objects, relations, parts = displaced_pair(None, None)
-        count, strikes = extract_hit_strikes(make_omr(score(objects, relations, parts=parts)))
+    def test_unvoiced_same_staff_dense_notes_are_not_collapsed(self):
+        xml = score(
+            stacks=(
+                '<stack id="1" left="100" right="500">'
+                '<slot id="1" x-offset="80" time-offset="0"/>'
+                "</stack>"
+            ),
+            entries=entry("c1", "1"),
+            objects=(
+                chord("c1", "10", 180)
+                + head("h1", 180)
+                + chord("c2", "10", 250, w=30)
+                + head("h2", 250)
+                + chord("c3", "10", 270, w=30)
+                + head("h3", 270)
+            ),
+            relations=(
+                containment("c1", "h1")
+                + containment("c2", "h2")
+                + containment("c3", "h3")
+            ),
+        )
+        count, strikes, diagnostics = extract_hit_strikes(make_omr(xml))
+        self.assertEqual((count, len(strikes)), (3, 3))
+        self.assertEqual(diagnostics.recovered_events, 2)
+
+    def test_unvoiced_cross_staff_alignment_reconciles_to_existing_hit(self):
+        xml = score(
+            stacks=(
+                '<stack id="1" left="100" right="500">'
+                '<slot id="1" x-offset="100" time-offset="0"/>'
+                "</stack>"
+            ),
+            entries=entry("c1", "1"),
+            objects=(
+                chord("c1", "10", 220)
+                + head("h1", 220)
+                + chord("c2", "11", 224, y=320)
+                + head("h2", 224, y=360)
+            ),
+            relations=containment("c1", "h1") + containment("c2", "h2"),
+            staffs=("10", "11"),
+        )
+        count, strikes, diagnostics = extract_hit_strikes(make_omr(xml))
         self.assertEqual((count, len(strikes)), (1, 1))
-        self.assertEqual(strikes[0].x, 200)
+        self.assertEqual(diagnostics.reconciled_chords, 1)
 
-    def test_displaced_one_unvoiced_merges(self):
-        objects, relations, parts = displaced_pair('1', None)
-        count, strikes = extract_hit_strikes(make_omr(score(objects, relations, parts=parts)))
-        self.assertEqual((count, len(strikes)), (1, 1))
-        self.assertEqual(strikes[0].x, 200)
-
-    def test_displaced_different_explicit_slots_do_not_merge(self):
-        objects, relations, parts = displaced_pair('1', '2')
-        count, strikes = extract_hit_strikes(make_omr(score(objects, relations, parts=parts)))
+    def test_two_unvoiced_cross_staff_chords_form_one_recovered_global_hit(self):
+        xml = score(
+            stacks=(
+                '<stack id="1" left="100" right="500">'
+                '<slot id="1" x-offset="80" time-offset="0"/>'
+                "</stack>"
+            ),
+            entries=entry("c1", "1"),
+            objects=(
+                chord("c1", "10", 180)
+                + head("h1", 180)
+                + chord("c2", "10", 320)
+                + head("h2", 320)
+                + chord("c3", "11", 326, y=320)
+                + head("h3", 326, y=360)
+            ),
+            relations=(
+                containment("c1", "h1")
+                + containment("c2", "h2")
+                + containment("c3", "h3")
+            ),
+            staffs=("10", "11"),
+        )
+        count, strikes, diagnostics = extract_hit_strikes(make_omr(xml))
         self.assertEqual((count, len(strikes)), (2, 2))
-        self.assertEqual([s.x for s in strikes], [200, 226])
+        self.assertEqual(diagnostics.recovered_events, 1)
+
+    def test_cross_barline_chords_are_assigned_to_one_measure_only(self):
+        stacks = (
+            '<stack id="1" left="100" right="300">'
+            '<slot id="1" x-offset="100" time-offset="0"/>'
+            "</stack>"
+            '<stack id="2" left="300" right="500">'
+            '<slot id="1" x-offset="100" time-offset="0"/>'
+            "</stack>"
+        )
+        xml = score(
+            stacks=stacks,
+            entries="",
+            objects=(
+                chord("c1", "10", 296)
+                + head("h1", 296)
+                + chord("c2", "10", 304)
+                + head("h2", 304)
+            ),
+            relations=containment("c1", "h1") + containment("c2", "h2"),
+        )
+        count, strikes, diagnostics = extract_hit_strikes(make_omr(xml))
+        self.assertEqual((count, len(strikes)), (2, 2))
+        self.assertEqual(diagnostics.assigned_chords, 2)
+
+    def test_non_head_graphics_never_create_hits(self):
+        xml = score(
+            stacks='<stack id="1" left="100" right="500"/>',
+            entries="",
+            objects=(
+                '<alter id="a1" staff="10"><bounds x="200" y="150" '
+                'w="20" h="40"/></alter>'
+                '<rest-chord id="r1" staff="10">'
+                '<bounds x="250" y="150" w="20" h="40"/>'
+                "</rest-chord>"
+            ),
+            relations="",
+        )
+        with self.assertRaisesRegex(ValueError, "No sounding"):
+            extract_hit_strikes(make_omr(xml))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
