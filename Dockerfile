@@ -43,7 +43,12 @@ RUN mkdir -p /app/.tone_metric_cache \
     && test ! -e /app/tone_metric/omr_visual_rhythm.py \
     && test ! -e /app/tone_metric/layer_registration.py \
     && test ! -e /app/tone_metric/render.py \
-    && python3 -B -c "import tone_metric; assert tone_metric.__version__ == '0.18.0-rc1'" \
+    && test ! -e /app/tone_metric/canonical_score.py \
+    && ! grep -R "build_hits_from_canonical_score" /app/app.py /app/tone_metric \
+    && ! grep -R "canonical_recovered" /app/app.py /app/tone_metric \
+    && ! grep -R "from .*canonical_score" /app/app.py /app/tone_metric \
+    && ! grep -R "canonical-score-time" /app/app.py /app/tone_metric/engine.py /app/tone_metric/score_registration.py \
+    && python3 -B -c "import tone_metric; assert tone_metric.__version__ == '0.18.0-rc2'" \
     && python3 -m py_compile /app/app.py /app/tone_metric/*.py /app/tests/*.py \
     && python3 -m unittest discover -s /app/tests -p 'test_*.py' -v
 EXPOSE 8080
