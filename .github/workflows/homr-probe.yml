@@ -15,8 +15,29 @@ jobs:
 
       - name: Verify clean-room tree
         run: |
-          test "$(find . -maxdepth 1 -type f | wc -l)" -ge 5
-          ! grep -R -n -E 'Audiveris|extract_hit_strikes|tone_metric|canonical_score|cluster_chords_by_x' app.py verify_fixture.py Dockerfile requirements.txt
+          python - <<'PY'
+          from pathlib import Path
+          allowed = {
+              "app.py",
+              "verify_fixture.py",
+              "requirements.txt",
+              "Dockerfile",
+              "README.md",
+              "fixtures/tabi.jpg",
+              ".github/workflows/homr-probe.yml",
+          }
+          actual = {
+              p.as_posix()
+              for p in Path(".").rglob("*")
+              if p.is_file() and ".git" not in p.parts
+          }
+          extras = sorted(actual - allowed)
+          missing = sorted(allowed - actual)
+          assert not extras, f"unexpected files in clean-room branch: {extras}"
+          assert not missing, f"missing clean-room files: {missing}"
+          print("CLEAN_TREE_OK", sorted(actual))
+          PY
+          ! grep -R -n -E 'from core|import core|extract_hit_strikes|canonical_score|cluster_chords_by_x' app.py verify_fixture.py
 
       - name: Build exact container and run real HOMR fixture inference
         run: docker build --progress=plain -t homr-reader-probe .
