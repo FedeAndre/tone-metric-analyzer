@@ -12,6 +12,6 @@ COPY core.py.part.* ./
 RUN cat core.py.part.* > core.py  && echo "56f74096cb91b29948662b8045cb4498ec974f4bd9086f10e0dbee26fed86f29  core.py" | sha256sum -c -  && rm core.py.part.*
 COPY render.py app.py ./
 COPY tests ./tests
-RUN ! grep -R -n -E '_cluster_chords_by_x|ONSET_CLUSTER_INTERLINE_FRACTION|DISPLACED_MIN_DX|isotonic|PAVA|build_hits_from_canonical|canonical_score|DISPLAY_MIN_GAP' /app/app.py /app/core.py /app/render.py /app/tests  && python3 -m py_compile app.py core.py render.py tests/test_hits.py  && PYTHONPATH=/app python3 -m unittest discover -s /app/tests -v
+RUN ! grep -R -n -E '_cluster_chords_by_x|ONSET_CLUSTER_INTERLINE_FRACTION|DISPLACED_MIN_DX|isotonic|PAVA|build_hits_from_canonical|canonical_score|DISPLAY_MIN_GAP' /app/app.py /app/core.py /app/render.py  && python3 -m py_compile app.py core.py render.py tests/test_hits.py  && PYTHONPATH=/app python3 -m unittest discover -s /app/tests -v
 EXPOSE 8080
 CMD ["sh","-c","python3 -B -m uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
