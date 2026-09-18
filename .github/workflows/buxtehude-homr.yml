@@ -30,11 +30,9 @@ jobs:
 
       - name: Run HOMR on Buxtehude pages
         run: |
-          docker run --rm -v "$PWD:/work" -w /work homr-reader-probe homr /work/buxtehude.pdf
-          ls -lh *.musicxml
-          xml=$(find "$PWD" -maxdepth 1 -name '*merged.musicxml' -print -quit)
-          test -n "$xml"
-          cp "$xml" buxtehude-homr.musicxml
+          docker run --rm -v "$PWD:/work" -w /work homr-reader-probe homr /work/homr_pages
+          ls -lh homr_pages/*.musicxml
+          test "$(find homr_pages -maxdepth 1 -name '*.musicxml' | wc -l)" -eq 2
 
       - name: Emit measure-by-measure attack diagnostics
         run: |
@@ -43,9 +41,7 @@ jobs:
           import xml.etree.ElementTree as ET
           from collections import defaultdict
           from fractions import Fraction
-
-          path='buxtehude-homr.musicxml'
-          root=ET.parse(path).getroot()
+          from pathlib import Path
 
           def tag(e): return e.tag.rsplit('}',1)[-1]
           def child(e,name):
@@ -56,86 +52,92 @@ jobs:
               c=child(e,name)
               return (c.text or default).strip() if c is not None else default
 
-          parts=[e for e in root if tag(e)=='part']
-          events=defaultdict(set)
-          detail=defaultdict(list)
-          note_elements=rests=graces=chord_cont=tie_stops=0
-          max_measure=0
+          def parse_page(path):
+              root=ET.parse(path).getroot()
+              parts=[e for e in root if tag(e)=='part']
+              events=defaultdict(set)
+              note_elements=rests=graces=chord_cont=tie_stops=0
+              max_measure=0
+              for pi,part in enumerate(parts, start=1):
+                  divisions=1
+                  measures=[m for m in part if tag(m)=='measure']
+                  max_measure=max(max_measure,len(measures))
+                  for mi,measure in enumerate(measures,start=1):
+                      cursor=Fraction(0)
+                      previous_start=Fraction(0)
+                      for item in measure:
+                          k=tag(item)
+                          if k=='attributes':
+                              d=ctext(item,'divisions')
+                              if d: divisions=max(1,int(d))
+                              continue
+                          if k=='backup':
+                              cursor-=Fraction(int(ctext(item,'duration','0') or 0),divisions)
+                              continue
+                          if k=='forward':
+                              cursor+=Fraction(int(ctext(item,'duration','0') or 0),divisions)
+                              continue
+                          if k!='note': continue
+                          note_elements+=1
+                          is_chord=child(item,'chord') is not None
+                          is_rest=child(item,'rest') is not None
+                          is_grace=child(item,'grace') is not None
+                          if is_chord: chord_cont+=1
+                          if is_rest: rests+=1
+                          if is_grace: graces+=1
+                          dur_raw=int(ctext(item,'duration','0') or 0)
+                          dur=Fraction(dur_raw,divisions) if dur_raw else Fraction(0)
+                          start=previous_start if is_chord else cursor
+                          if not is_chord: previous_start=start
+                          ties={(c.attrib.get('type') or '').lower() for c in item if tag(c)=='tie'}
+                          tie_stop='stop' in ties
+                          if tie_stop: tie_stops+=1
+                          if not is_rest and not is_grace and not tie_stop:
+                              events[mi].add(start)
+                          if not is_chord and not is_grace:
+                              cursor+=dur
+              rows=[]
+              for mi in range(1,max_measure+1):
+                  offs=sorted(events.get(mi,set()))
+                  rows.append({'local_measure':mi,'count':len(offs),'offsets_quarter_units':[str(x) for x in offs]})
+              return {
+                  'path':str(path),'part_count':len(parts),'measure_count':max_measure,
+                  'note_elements':note_elements,'rests':rests,'grace_notes':graces,
+                  'chord_continuations':chord_cont,'tie_stops_excluded':tie_stops,
+                  'total_attacks':sum(r['count'] for r in rows),'measures':rows
+              }
 
-          for pi,part in enumerate(parts, start=1):
-              divisions=1
-              measures=[m for m in part if tag(m)=='measure']
-              max_measure=max(max_measure,len(measures))
-              for mi,measure in enumerate(measures,start=1):
-                  cursor=Fraction(0)
-                  previous_start=Fraction(0)
-                  for item in measure:
-                      k=tag(item)
-                      if k=='attributes':
-                          d=ctext(item,'divisions')
-                          if d: divisions=max(1,int(d))
-                          continue
-                      if k=='backup':
-                          cursor-=Fraction(int(ctext(item,'duration','0') or 0),divisions)
-                          continue
-                      if k=='forward':
-                          cursor+=Fraction(int(ctext(item,'duration','0') or 0),divisions)
-                          continue
-                      if k!='note':
-                          continue
-                      note_elements+=1
-                      is_chord=child(item,'chord') is not None
-                      is_rest=child(item,'rest') is not None
-                      is_grace=child(item,'grace') is not None
-                      if is_chord: chord_cont+=1
-                      if is_rest: rests+=1
-                      if is_grace: graces+=1
-                      dur_raw=int(ctext(item,'duration','0') or 0)
-                      dur=Fraction(dur_raw,divisions) if dur_raw else Fraction(0)
-                      start=previous_start if is_chord else cursor
-                      if not is_chord: previous_start=start
-                      ties={(c.attrib.get('type') or '').lower() for c in item if tag(c)=='tie'}
-                      tie_stop='stop' in ties
-                      if tie_stop: tie_stops+=1
-                      if not is_rest and not is_grace and not tie_stop:
-                          events[mi].add(start)
-                          detail[mi].append({
-                              'part':pi,'offset':str(start),'voice':ctext(item,'voice','1'),
-                              'type':ctext(item,'type') or None,'chord':is_chord
-                          })
-                      if not is_chord and not is_grace:
-                          cursor+=dur
-
-          rows=[]
-          for mi in range(1,max_measure+1):
-              offs=sorted(events.get(mi,set()))
-              rows.append({
-                  'measure':mi,
-                  'count':len(offs),
-                  'offsets_quarter_units':[str(x) for x in offs],
-              })
+          files=sorted(Path('homr_pages').glob('*.musicxml'))
+          assert len(files)==2, files
+          pages=[parse_page(p) for p in files]
+          physical_counts=[30,19]
+          global_rows=[]
+          for page_index,(page,phys_count) in enumerate(zip(pages,physical_counts),start=1):
+              base=0 if page_index==1 else 30
+              for r in page['measures']:
+                  global_rows.append({
+                      'page':page_index,
+                      'local_measure':r['local_measure'],
+                      'global_measure_assuming_physical_page_split':base+r['local_measure'],
+                      'count':r['count'],
+                      'offsets_quarter_units':r['offsets_quarter_units'],
+                  })
           result={
-              'part_count':len(parts),
-              'measure_count':max_measure,
-              'note_elements':note_elements,
-              'rests':rests,
-              'grace_notes':graces,
-              'chord_continuations':chord_cont,
-              'tie_stops_excluded':tie_stops,
-              'total_global_attacks':sum(r['count'] for r in rows),
-              'measures':rows,
+              'reader':'HOMR 0.7.0',
+              'physical_expected_measures_per_page':physical_counts,
+              'pages':pages,
+              'global_rows':global_rows,
           }
           print('BUX_HOMR_JSON='+json.dumps(result,separators=(',',':')))
           for target in (4,5,46):
-              if target <= len(rows):
-                  r=rows[target-1]
-                  print(f"TARGET m{target}: count={r['count']} offsets={r['offsets_quarter_units']}")
-          open('buxtehude-homr-diagnostics.json','w').write(json.dumps(result,indent=2))
+              rr=[r for r in global_rows if r['global_measure_assuming_physical_page_split']==target]
+              print('TARGET m%d: %s' % (target, rr[0] if rr else 'MISSING'))
+          Path('buxtehude-homr-diagnostics.json').write_text(json.dumps(result,indent=2))
           PY
 
       - uses: actions/upload-artifact@v4
         with:
           name: buxtehude-homr-output
           path: |
-            buxtehude-homr.musicxml
+            homr_pages/*.musicxml
             buxtehude-homr-diagnostics.json
