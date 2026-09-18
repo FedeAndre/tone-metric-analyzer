@@ -1,0 +1,141 @@
+name: HOMR Buxtehude validation
+
+on:
+  push:
+    branches:
+      - homr-buxtehude-validation-20260918
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct exact score pages from public-domain Sibley source
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          curl -L --fail --retry 3 \
+            'https://urresearch.rochester.edu/fileDownloadForInstitutionalItem.action?itemFileId=36184&itemId=15575' \
+            -o full.pdf
+          pdfseparate -f 105 -l 106 full.pdf page-%d.pdf
+          pdfunite page-105.pdf page-106.pdf buxtehude.pdf
+          pdfinfo buxtehude.pdf | grep -E 'Pages|Page size'
+          ls -lh buxtehude.pdf
+
+      - name: Build isolated HOMR reader
+        run: docker build --progress=plain -t homr-reader-probe .
+
+      - name: Run HOMR on Buxtehude pages
+        run: |
+          docker run --rm -v "$PWD:/work" -w /work homr-reader-probe homr /work/buxtehude.pdf
+          ls -lh *.musicxml
+          xml=$(find "$PWD" -maxdepth 1 -name '*merged.musicxml' -print -quit)
+          test -n "$xml"
+          cp "$xml" buxtehude-homr.musicxml
+
+      - name: Emit measure-by-measure attack diagnostics
+        run: |
+          python - <<'PY'
+          import json
+          import xml.etree.ElementTree as ET
+          from collections import defaultdict
+          from fractions import Fraction
+
+          path='buxtehude-homr.musicxml'
+          root=ET.parse(path).getroot()
+
+          def tag(e): return e.tag.rsplit('}',1)[-1]
+          def child(e,name):
+              for c in e:
+                  if tag(c)==name: return c
+              return None
+          def ctext(e,name,default=''):
+              c=child(e,name)
+              return (c.text or default).strip() if c is not None else default
+
+          parts=[e for e in root if tag(e)=='part']
+          events=defaultdict(set)
+          detail=defaultdict(list)
+          note_elements=rests=graces=chord_cont=tie_stops=0
+          max_measure=0
+
+          for pi,part in enumerate(parts, start=1):
+              divisions=1
+              measures=[m for m in part if tag(m)=='measure']
+              max_measure=max(max_measure,len(measures))
+              for mi,measure in enumerate(measures,start=1):
+                  cursor=Fraction(0)
+                  previous_start=Fraction(0)
+                  for item in measure:
+                      k=tag(item)
+                      if k=='attributes':
+                          d=ctext(item,'divisions')
+                          if d: divisions=max(1,int(d))
+                          continue
+                      if k=='backup':
+                          cursor-=Fraction(int(ctext(item,'duration','0') or 0),divisions)
+                          continue
+                      if k=='forward':
+                          cursor+=Fraction(int(ctext(item,'duration','0') or 0),divisions)
+                          continue
+                      if k!='note':
+                          continue
+                      note_elements+=1
+                      is_chord=child(item,'chord') is not None
+                      is_rest=child(item,'rest') is not None
+                      is_grace=child(item,'grace') is not None
+                      if is_chord: chord_cont+=1
+                      if is_rest: rests+=1
+                      if is_grace: graces+=1
+                      dur_raw=int(ctext(item,'duration','0') or 0)
+                      dur=Fraction(dur_raw,divisions) if dur_raw else Fraction(0)
+                      start=previous_start if is_chord else cursor
+                      if not is_chord: previous_start=start
+                      ties={(c.attrib.get('type') or '').lower() for c in item if tag(c)=='tie'}
+                      tie_stop='stop' in ties
+                      if tie_stop: tie_stops+=1
+                      if not is_rest and not is_grace and not tie_stop:
+                          events[mi].add(start)
+                          detail[mi].append({
+                              'part':pi,'offset':str(start),'voice':ctext(item,'voice','1'),
+                              'type':ctext(item,'type') or None,'chord':is_chord
+                          })
+                      if not is_chord and not is_grace:
+                          cursor+=dur
+
+          rows=[]
+          for mi in range(1,max_measure+1):
+              offs=sorted(events.get(mi,set()))
+              rows.append({
+                  'measure':mi,
+                  'count':len(offs),
+                  'offsets_quarter_units':[str(x) for x in offs],
+              })
+          result={
+              'part_count':len(parts),
+              'measure_count':max_measure,
+              'note_elements':note_elements,
+              'rests':rests,
+              'grace_notes':graces,
+              'chord_continuations':chord_cont,
+              'tie_stops_excluded':tie_stops,
+              'total_global_attacks':sum(r['count'] for r in rows),
+              'measures':rows,
+          }
+          print('BUX_HOMR_JSON='+json.dumps(result,separators=(',',':')))
+          for target in (4,5,46):
+              if target <= len(rows):
+                  r=rows[target-1]
+                  print(f"TARGET m{target}: count={r['count']} offsets={r['offsets_quarter_units']}")
+          open('buxtehude-homr-diagnostics.json','w').write(json.dumps(result,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: buxtehude-homr-output
+          path: |
+            buxtehude-homr.musicxml
+            buxtehude-homr-diagnostics.json
