@@ -1,0 +1,51 @@
+name: Visual Buxtehude head audit
+
+on:
+  push:
+    branches:
+      - visual-heads-buxtehude-20260918
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct exact public-domain Buxtehude pages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          curl -L --fail --retry 3 \
+            'https://urresearch.rochester.edu/fileDownloadForInstitutionalItem.action?itemFileId=36184&itemId=15575' \
+            -o full.pdf
+          pdfseparate -f 105 -l 106 full.pdf page-%d.pdf
+          pdfunite page-105.pdf page-106.pdf buxtehude.pdf
+          pdfinfo buxtehude.pdf | grep -E 'Pages|Page size'
+
+      - name: Build exact current Audiveris baseline container
+        run: docker build --progress=plain -t tma-visual-audit .
+
+      - name: Run Audiveris only to recognize notation geometry
+        run: |
+          mkdir -p aud_out visual_heads
+          docker run --rm -v "$PWD:/work" -w /work tma-visual-audit sh -lc '
+            set -eu
+            /opt/audiveris/bin/Audiveris -batch -save -output /work/aud_out /work/buxtehude.pdf
+            omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
+            test -n "$omr"
+            python3 /work/visual_heads.py "$omr"
+          '
+          ls -lh visual_heads
+
+      - name: Commit audit images and geometry
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add visual_heads/
+          git commit -m "[skip ci] add Buxtehude visual-head audit results"
+          git push
