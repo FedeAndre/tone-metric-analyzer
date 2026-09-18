@@ -1,5 +1,10 @@
-# Hit-only constraint voice engine
+# Independent HOMR reader probe
 
-Clean-room hit-only score marker. Musical hit identity is reconstructed from semantic notation, voice sequence, note/rest duration, beams, flags, augmentation dots, and ties. Engraving x-coordinates are never clustered to create hits. Geometry is used only to recover missing notation relations and to anchor the final strike to a real attacking notehead.
+Clean-room experimental score-reading service for the Tone-Metric project.
 
-No Levels, waves, pivots, trees, canonical timing engine, displaced-voice patch layer, or prior tone-metric analysis code is included.
+This branch intentionally contains no Audiveris integration and no Tone-Metric hit engine.
+Its sole purpose is to test HOMR as an independent OMR source and expose normalized
+MusicXML attack diagnostics. The Docker build downloads HOMR's models and must complete
+a real OMR pass over a fixed public score image before the image can build.
+
+Nothing in this branch is wired into the production/development Tone-Metric analyzer.
