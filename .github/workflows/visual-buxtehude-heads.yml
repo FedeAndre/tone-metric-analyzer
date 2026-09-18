@@ -35,7 +35,7 @@ jobs:
           mkdir -p aud_out visual_heads
           docker run --rm -v "$PWD:/work" -w /work tma-visual-audit sh -lc '
             set -eu
-            /opt/audiveris/bin/Audiveris -batch -save -output /work/aud_out /work/buxtehude.pdf
+            /opt/audiveris/bin/Audiveris -batch -save -export -output /work/aud_out /work/buxtehude.pdf
             omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
             test -n "$omr"
             python3 /work/visual_heads.py "$omr"
