@@ -10,7 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # RapidOCR currently pulls the GUI OpenCV wheel even though HOMR itself uses
 # opencv-python-headless. Supply only the shared libraries needed to import it.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      libxcb1 libx11-6 libxext6 libxrender1 libsm6 libgl1 libglib2.0-0 \
+      git libxcb1 libx11-6 libxext6 libxrender1 libsm6 libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt ./
