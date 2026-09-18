@@ -1,0 +1,43 @@
+s():
+                    for cid in pair:
+                        c = chords.get(cid)
+                        if c and c.stem_id:
+                            levels[c.stem_id] = max(levels.get(c.stem_id,0), lv)
+
+                durations = {}
+                for cid, node in by.items():
+                    if loc(node.tag) in ('head-chord','rest-chord'):
+                        d = chord_duration_with_levels(cid, levels)
+                        if d is not None:
+                            durations[cid] = d
+                for c in chords.values():
+                    c.duration = durations.get(c.id)
+
+                for mi, pi, vid, seq in voice_sequences:
+                    t = seq[0][0]
+                    for index, (old, slot_x, cid) in enumerate(seq):
+                        if index == 0:
+                            t = seq[0][0]
+                        else:
+                            prev = seq[index-1][2]
+                            pd = durations.get(prev)
+                            if pd is None:
+                                raise ValueError(f'Unknown duration for {prev}')
+                            t += pd
+                        # Audiveris can report an overfull measure. Use the observed
+                        # voice span for validation; nominal length remains the musical
+                        # boundary for omitted right-edge fragments.
+                        if t < 0 or t >= observed_lengths[mi] + Fraction(1,64):
+                            raise ValueError(f'Voice timeline leaves measure: m{sys_base+mi+1} {cid} -> {t}')
+                        if cid in chords:
+                            c = chords[cid]
+                            c.onset = t
+                            if c.old_onset != t:
+                                retimed += 1
+
+                adj = defaultdict(set)
+                for pair in accepted:
+                    a,b = tuple(pair)
+                    adj[a].add(b)
+                    adj[b].add(a)
+                see

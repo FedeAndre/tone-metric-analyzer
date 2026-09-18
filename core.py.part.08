@@ -1,0 +1,45 @@
+                    if sa and sb:
+                            ta = (sa.cx, sa.y if a.direction == 'up' else sa.y+sa.h, a.direction)
+                            tb = (sb.cx, sb.y if b.direction == 'up' else sb.y+sb.h, b.direction)
+                            lv = _pixel_beam_levels(binary, ta, tb, il)
+                            if lv:
+                                pixel_edges[key] = lv
+
+                padj = defaultdict(set)
+                for pair in pixel_edges:
+                    a,b = tuple(pair)
+                    padj[a].add(b)
+                    padj[b].add(a)
+                orphan_comp = {}
+                seen = set()
+                for seed in padj:
+                    if seed in seen:
+                        continue
+                    comp = []
+                    stack = [seed]
+                    seen.add(seed)
+                    while stack:
+                        q = stack.pop()
+                        comp.append(q)
+                        for n in padj[q]:
+                            if n not in seen:
+                                seen.add(n)
+                                stack.append(n)
+                    has = any(c in chords and not chords[c].referenced for c in comp)
+                    for c in comp:
+                        orphan_comp[c] = has
+
+                accepted = dict(semantic_edges)
+                provisional = {s: len(bs) for s,bs in semantic_beams.items()}
+
+                def chord_duration_with_levels(cid, levels):
+                    node = by[cid]
+                    typ = loc(node.tag)
+                    if typ == 'rest-chord':
+                        rr = by.get(rest_child.get(cid))
+                        return _rest_duration(rr.get('shape') if rr is not None else '')
+                    hs = chord_heads.get(cid, [])
+                    if any(head_is_black.get(h, False) for h in hs):
+                        base = Fraction(1,4)
+                    else:
+                        shapes = [(by[h].get('shape

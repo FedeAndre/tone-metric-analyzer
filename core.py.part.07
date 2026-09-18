@@ -1,0 +1,34 @@
+e in voice.iter() if loc(e.tag) == 'entry']:
+                                key = next((c for c in ent if loc(c.tag) == 'key'), None)
+                                val = next((c for c in ent if loc(c.tag) == 'value'), None)
+                                if key is None or val is None or (val.get('status') or '').upper() != 'BEGIN':
+                                    continue
+                                cid = val.get('chord')
+                                slot = slots.get((key.text or '').strip())
+                                if cid in seen_ids or slot is None or cid not in by:
+                                    continue
+                                seen_ids.add(cid)
+                                seq.append((slot[0], slot[1], cid))
+                                if cid in chords:
+                                    ch = chords[cid]
+                                    ch.referenced = True
+                                    ch.part = pi
+                                    ch.voice = voice.get('id') or '1'
+                                    ch.old_onset = slot[0]
+                            seq.sort(key=lambda q: q[0])
+                            if seq:
+                                voice_sequences.append((mi, pi, voice.get('id') or '1', seq))
+
+                semantic_edges = {}
+                pixel_edges = {}
+                for (mi, staff), arr in by_ms.items():
+                    arr = sorted([c for c in arr if c.stem_id and c.direction], key=lambda c:c.x)
+                    for a,b in zip(arr, arr[1:]):
+                        if a.direction != b.direction:
+                            continue
+                        key = frozenset((a.id,b.id))
+                        common = len(semantic_beams.get(a.stem_id,set()) & semantic_beams.get(b.stem_id,set()))
+                        if common:
+                            semantic_edges[key] = common
+                        sa, sb = get_box(by.get(a.stem_id)), get_box(by.get(b.stem_id))
+    

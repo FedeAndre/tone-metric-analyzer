@@ -1,0 +1,39 @@
+              continue
+                    mis = [i for i,(l,r) in enumerate(bounds) if l <= cb.cx <= r]
+                    if len(mis) != 1:
+                        continue
+                    mi = mis[0]
+                    hs = chord_heads.get(cid, [])
+                    hbs = [get_box(by[h]) for h in hs if get_box(by.get(h))]
+                    if not hbs:
+                        continue
+                    attack = [h for h in hs if h not in tied_right]
+                    ax = [get_box(by[h]).cx for h in attack if get_box(by.get(h))]
+                    allx = [b.cx for b in hbs]
+                    stem = chord_stem.get(cid)
+                    sb = get_box(by.get(stem))
+                    direction = None
+                    if sb:
+                        direction = 'up' if sb.cx >= median(allx) else 'down'
+                    ch = Chord(
+                        cid, page, sy, sys_base+mi+1, node.get('staff') or '', cb,
+                        list(hs), list(attack), list(ax), stem, direction,
+                        float(median(ax or allx)), tie_start=bool(set(hs) & tie_starts),
+                    )
+                    chords[cid] = ch
+                    by_ms[(mi, ch.staff)].append(ch)
+
+                voice_sequences = []
+                for mi, stack_node in enumerate(stacks):
+                    slots = {
+                        s.get('id'): (Fraction(s.get('time-offset') or '0'), float(s.get('x-offset') or 0) + bounds[mi][0])
+                        for s in stack_node if loc(s.tag) == 'slot'
+                    }
+                    for pi, part in enumerate(parts):
+                        measures = [e for e in part if loc(e.tag) == 'measure']
+                        if mi >= len(measures):
+                            continue
+                        for voice in [e for e in measures[mi] if loc(e.tag) == 'voice']:
+                            seq = []
+                            seen_ids = set()
+                            for ent in [e for 

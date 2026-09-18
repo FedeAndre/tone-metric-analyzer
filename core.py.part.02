@@ -1,0 +1,57 @@
+ay(vals)
+        mask = vals >= .60
+        segs = []
+        start = None
+        for i, v in enumerate(mask):
+            if v and start is None:
+                start = i
+            if start is not None and (not v or i == len(mask)-1):
+                end = i if v and i == len(mask)-1 else i-1
+                if end-start+1 >= max(4, int(round(.20*il))) and float(vals[start:end+1].mean()) >= .80:
+                    segs.append((start, end))
+                start = None
+        if not segs or segs[0][0] > .35*il:
+            samples.append(0)
+            continue
+        lv = sum(max(1, int(round((b-a+1)/(.60*il)))) for a,b in segs)
+        samples.append(min(lv, 4))
+    nz = [x for x in samples if x > 0]
+    return int(round(median(nz))) if len(nz) >= 4 else 0
+
+
+def _rest_duration(shape: str) -> Fraction | None:
+    return {
+        'LONG_REST': Fraction(4),
+        'BREVE_REST': Fraction(2),
+        'WHOLE_REST': Fraction(1),
+        'HALF_REST': Fraction(1,2),
+        'QUARTER_REST': Fraction(1,4),
+        'EIGHTH_REST': Fraction(1,8),
+        'ONE_16TH_REST': Fraction(1,16),
+        'ONE_32ND_REST': Fraction(1,32),
+        'ONE_64TH_REST': Fraction(1,64),
+    }.get((shape or '').upper())
+
+
+def extract_hit_strikes(omr_path: str | Path):
+    omr_path = Path(omr_path)
+    hits: dict[tuple[int, Fraction], Hit] = {}
+    all_attack_chords: list[Chord] = []
+    unresolved: list[Chord] = []
+    systems_meta = {}
+    corrected_head_shapes = 0
+    completed_beam_edges = 0
+    retimed = 0
+    global_measure_base = 0
+
+    with ZipFile(omr_path) as archive:
+        members = sorted(
+            [n for n in archive.namelist() if re.search(r'sheet#\d+/sheet#\d+\.xml$', n, re.I)],
+            key=lambda n: (_sheet_number(n), n.lower()),
+        )
+        if not members:
+            raise ValueError('Audiveris project contains no sheet XML')
+
+        for page, member in enumerate(members):
+            root = etree.fromstring(archive.read(member))
+            by = {e.get('id'

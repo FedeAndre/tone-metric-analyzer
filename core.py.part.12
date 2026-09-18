@@ -1,0 +1,41 @@
+           ok = True
+                        for c, tt in zip(cs,ts):
+                            peers = [r for r in existing if r.onset == tt]
+                            if not peers or min(abs(r.x-c.x) for r in peers) > .45*il:
+                                ok = False
+                                break
+                        if ok:
+                            candidates.append(ts)
+                    if len(candidates) == 1:
+                        for c, tt in zip(cs,candidates[0]):
+                            c.onset = tt
+                        continue
+
+                    if bounds[mi][1] - max(c.x for c in cs) <= 2.5*il:
+                        t = nominal_lengths[mi] - sum((c.duration for c in cs), Fraction(0))
+                        for c in cs:
+                            c.onset = t
+                            t += c.duration
+
+                for c in chords.values():
+                    if not c.referenced and c.onset is None and c.attack_head_ids and c.tie_start and c.duration is not None:
+                        mi = c.measure - sys_base - 1
+                        t = nominal_lengths[mi] - c.duration
+                        if t >= 0:
+                            c.onset = t
+
+                for c in chords.values():
+                    if not c.attack_head_ids:
+                        continue
+                    all_attack_chords.append(c)
+                    if c.onset is None:
+                        unresolved.append(c)
+                        continue
+                    key = (c.measure, c.onset)
+                    hit = hits.setdefault(key, Hit(c.measure, c.onset, [], None))
+                    hit.chords.append(c)
+                    if c.referenced and c.old_onset is not None:
+                        mi = c.measure - sys_base - 1
+                        slot_candidates = [
+                            (Fraction(s.get('time-offset') or '0'), float(s.get('x-offset') or 0) + bounds[mi][0])
+                            for s in stacks[mi

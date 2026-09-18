@@ -1,0 +1,58 @@
+   return Box(*(float(b.get(k)) for k in ('x','y','w','h')))
+
+
+def _sheet_number(name: str) -> int:
+    m = re.search(r'sheet#(\d+)', name, re.I)
+    return int(m.group(1)) if m else 10**9
+
+
+def _interline(root) -> float:
+    for sc in (e for e in root.iter() if loc(e.tag) == 'scale'):
+        it = next((c for c in sc if loc(c.tag) == 'interline'), None)
+        if it is not None and it.get('main'):
+            return float(it.get('main'))
+    return 20.0
+
+
+def _system_bounds(system, page_h: float):
+    ys = []
+    for staff in (e for e in system.iter() if loc(e.tag) == 'staff'):
+        for line in (e for e in staff.iter() if loc(e.tag) == 'line'):
+            for p in line:
+                if loc(p.tag) == 'point' and p.get('y') is not None:
+                    ys.append(float(p.get('y')))
+    return (min(ys), max(ys)) if ys else (0.0, page_h)
+
+
+def _head_fill_ratio(binary: np.ndarray, b: Box) -> float:
+    x0 = int(round(b.x + max(2.0, 0.18*b.w)))
+    x1 = int(round(b.x+b.w - max(2.0, 0.18*b.w)))
+    y0 = int(round(b.y + max(2.0, 0.18*b.h)))
+    y1 = int(round(b.y+b.h - max(2.0, 0.18*b.h)))
+    a = binary[max(0,y0):min(binary.shape[0],y1), max(0,x0):min(binary.shape[1],x1)]
+    return float(a.mean()) if a.size else 0.0
+
+
+def _pixel_beam_levels(binary: np.ndarray, tip_a, tip_b, il: float) -> int:
+    x1, y1, d1 = tip_a
+    x2, y2, d2 = tip_b
+    if d1 != d2:
+        return 0
+    if x2 < x1:
+        x1, y1, x2, y2 = x2, y2, x1, y1
+    gap = x2 - x1
+    if gap < 0.45*il or gap > 6.0*il:
+        return 0
+    sign = 1 if d1 == 'up' else -1
+    samples = []
+    for f in np.linspace(.15, .85, 7):
+        x = int(round(x1 + f*(x2-x1)))
+        y0 = y1 + f*(y2-y1)
+        vals = []
+        for off in range(int(round(1.8*il))+1):
+            y = int(round(y0 + sign*off))
+            if 0 <= y < binary.shape[0]:
+                vals.append(float(binary[y, max(0,x-2):min(binary.shape[1],x+3)].mean()))
+            else:
+                vals.append(0.0)
+        vals = np.asarr

@@ -1,0 +1,35 @@
+] if loc(s.tag) == 'slot'
+                        ]
+                        same = [x for o,x in slot_candidates if o == c.old_onset]
+                        if same and hit.slot_x is None:
+                            hit.slot_x = same[0]
+
+                page_measure_base += len(stacks)
+            global_measure_base = page_measure_base
+
+    if unresolved:
+        raise ValueError('Unresolved semantic attacks: ' + ', '.join(f'm{c.measure}:{c.id}' for c in unresolved[:20]))
+
+    strikes = []
+    for _, hit in sorted(hits.items(), key=lambda kv:(kv[0][0], kv[0][1])):
+        xs = [x for c in hit.chords for x in c.attack_head_xs]
+        if not xs:
+            continue
+        target = hit.slot_x if hit.slot_x is not None else median(c.x for c in hit.chords)
+        x = min(xs, key=lambda q:(abs(q-target),q))
+        rep = min(hit.chords, key=lambda c:(abs(c.x-x),c.x))
+        top,bottom,W,H = systems_meta[(rep.page,rep.system)]
+        strikes.append(Strike(rep.page, rep.system, rep.measure, float(x), top, bottom, W, H, any(not c.referenced for c in hit.chords)))
+
+    diag = Diagnostics(
+        total_hits=len(strikes),
+        semantic_attack_chords=len(all_attack_chords),
+        referenced_attack_chords=sum(c.referenced for c in all_attack_chords),
+        recovered_attack_chords=sum(not c.referenced for c in all_attack_chords),
+        retimed_referenced_chords=retimed,
+        corrected_head_shapes=corrected_head_shapes,
+        completed_beam_edges=completed_beam_edges,
+        unresolved_attack_chords=0,
+        synthetic_strike_positions=0,
+    )
+    return len(strikes), strikes, diag, all_attack_chords, hits

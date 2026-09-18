@@ -15,12 +15,12 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from core import extract_hit_strikes
 from render import render_pdf_with_strikes
 
-SESSIONS = Path(tempfile.gettempdir()) / "tone_metric_hit_only"
+SESSIONS = Path(tempfile.gettempdir()) / 'tone_metric_hit_constraint'
 SESSIONS.mkdir(parents=True, exist_ok=True)
-AUDIVERIS = os.environ.get("AUDIVERIS_CMD", "/opt/audiveris/bin/Audiveris")
-VERSION = "hit-only-geometry-first-v7"
+AUDIVERIS = os.environ.get('AUDIVERIS_CMD', '/opt/audiveris/bin/Audiveris')
+VERSION = 'hit-only-constraint-voice-v1'
 
-app = FastAPI(title="Hit-only score marker")
+app = FastAPI(title='Hit-only score marker')
 
 HTML = r'''<!doctype html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -43,108 +43,93 @@ f.addEventListener('submit',async e=>{e.preventDefault();pages.innerHTML='';stat
 
 
 def _find_one(root: Path, suffix: str) -> Path:
-    matches = sorted(root.rglob(f"*{suffix}"))
+    matches = sorted(root.rglob(f'*{suffix}'))
     if not matches:
-        raise RuntimeError(f"Audiveris did not produce {suffix}")
+        raise RuntimeError(f'Audiveris did not produce {suffix}')
     return matches[0]
 
 
 def _run_audiveris(pdf_path: Path, out_dir: Path) -> Path:
-    # -export forces Audiveris through the complete transcription pipeline.
-    # The exported MusicXML is not used by the hit extractor.
-    cmd = [
-        AUDIVERIS,
-        "-batch",
-        "-save",
-        "-export",
-        "-output",
-        str(out_dir),
-        str(pdf_path),
-    ]
-    proc = subprocess.run(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True,
-        timeout=1200,
-    )
+    cmd = [AUDIVERIS, '-batch', '-save', '-export', '-output', str(out_dir), str(pdf_path)]
+    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=1200)
     if proc.returncode != 0:
-        tail = "\n".join(proc.stdout.splitlines()[-80:])
-        raise RuntimeError(f"Audiveris failed with exit code {proc.returncode}.\n{tail}")
-    omr_path = _find_one(out_dir, ".omr")
+        tail = '\n'.join(proc.stdout.splitlines()[-80:])
+        raise RuntimeError(f'Audiveris failed with exit code {proc.returncode}.\n{tail}')
+    omr_path = _find_one(out_dir, '.omr')
     if omr_path.stat().st_size <= 0:
-        raise RuntimeError("Audiveris produced an empty .omr project")
+        raise RuntimeError('Audiveris produced an empty .omr project')
     return omr_path
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get('/', response_class=HTMLResponse)
 def root():
     return HTML
 
 
-@app.get("/api/status")
+@app.get('/api/status')
 def status():
     return {
-        "ok": True,
-        "version": VERSION,
-        "audiveris_found": Path(AUDIVERIS).exists(),
-        "hit_source": "semantic-notehead-geometry-with-tie-filtering",
-        "musicxml_used_for_hits": False,
-        "rhythmic_slots_used_for_hits": False,
-        "one_strike_per_hit": True,
+        'ok': True,
+        'version': VERSION,
+        'audiveris_found': Path(AUDIVERIS).exists(),
+        'event_identity': 'constraint-reconstructed-voice-time',
+        'hit_geometry_authority': False,
+        'x_clustering_used_for_hits': False,
+        'synthetic_strike_positions': False,
+        'one_strike_per_hit': True,
     }
 
 
-@app.post("/api/analyze")
+@app.post('/api/analyze')
 async def analyze(file: UploadFile = File(...)):
-    name = Path(file.filename or "score.pdf").name
-    if Path(name).suffix.lower() != ".pdf":
-        raise HTTPException(400, "Upload a PDF score.")
+    name = Path(file.filename or 'score.pdf').name
+    if Path(name).suffix.lower() != '.pdf':
+        raise HTTPException(400, 'Upload a PDF score.')
 
     session_id = uuid.uuid4().hex
     session = SESSIONS / session_id
     session.mkdir(parents=True, exist_ok=True)
-    pdf_path = session / "score.pdf"
-    with pdf_path.open("wb") as fh:
+    pdf_path = session / 'score.pdf'
+    with pdf_path.open('wb') as fh:
         while True:
-            chunk = await file.read(1024 * 1024)
+            chunk = await file.read(1024*1024)
             if not chunk:
                 break
             fh.write(chunk)
-
     if pdf_path.stat().st_size <= 0:
         shutil.rmtree(session, ignore_errors=True)
-        raise HTTPException(400, "The uploaded PDF is empty.")
+        raise HTTPException(400, 'The uploaded PDF is empty.')
 
-    omr_out = session / "audiveris"
+    omr_out = session / 'audiveris'
     omr_out.mkdir()
     try:
         omr_path = _run_audiveris(pdf_path, omr_out)
-        logical_hit_count, strikes = extract_hit_strikes(omr_path)
-        if len(strikes) != logical_hit_count:
-            raise RuntimeError(
-                f"Hit invariant failed: {logical_hit_count} hits but {len(strikes)} strikes"
-            )
-        pages = render_pdf_with_strikes(pdf_path, strikes, session / "pages")
+        hit_count, strikes, diagnostics, _, _ = extract_hit_strikes(omr_path)
+        if len(strikes) != hit_count:
+            raise RuntimeError(f'Hit invariant failed: {hit_count} hits but {len(strikes)} strikes')
+        if diagnostics.unresolved_attack_chords != 0 or diagnostics.synthetic_strike_positions != 0:
+            raise RuntimeError(f'Constraint invariant failed: {diagnostics}')
+        pages = render_pdf_with_strikes(pdf_path, strikes, session / 'pages')
     except Exception as exc:
-        print(f"ANALYZE_ERROR [{VERSION}] {type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
+        print(f'ANALYZE_ERROR [{VERSION}] {type(exc).__name__}: {exc}', file=sys.stderr, flush=True)
         traceback.print_exc(file=sys.stderr)
         shutil.rmtree(session, ignore_errors=True)
-        raise HTTPException(422, f"{type(exc).__name__}: {exc}") from exc
+        raise HTTPException(422, f'{type(exc).__name__}: {exc}') from exc
 
     return JSONResponse({
-        "version": VERSION,
-        "hit_count": logical_hit_count,
-        "strike_count": len(strikes),
-        "pages": [f"/session/{session_id}/{p.name}" for p in pages],
+        'version': VERSION,
+        'hit_count': hit_count,
+        'strike_count': len(strikes),
+        'diagnostics': diagnostics.__dict__,
+        'pages': [f'/session/{session_id}/{p.name}' for p in pages],
     })
 
 
-@app.get("/session/{session_id}/{filename}")
+@app.get('/session/{session_id}/{filename}')
 def session_page(session_id: str, filename: str):
-    if not session_id.isalnum() or not filename.startswith("page-") or not filename.endswith(".png"):
+    if not session_id.isalnum() or not filename.startswith('page-') or not filename.endswith('.png'):
         raise HTTPException(404)
-    path = SESSIONS / session_id / "pages" / filename
+    path = SESSIONS / session_id / 'pages' / filename
     if not path.exists():
         raise HTTPException(404)
-    return FileResponse(path, media_type="image/png")
+    return FileResponse(path, media_type='image/png')
