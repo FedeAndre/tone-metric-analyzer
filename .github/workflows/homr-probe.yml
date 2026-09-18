@@ -1,0 +1,43 @@
+name: HOMR clean-room validation
+
+on:
+  push:
+    branches:
+      - homr-reader-clean-20260917
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify clean-room tree
+        run: |
+          test "$(find . -maxdepth 1 -type f | wc -l)" -ge 5
+          ! grep -R -n -E 'Audiveris|extract_hit_strikes|tone_metric|canonical_score|cluster_chords_by_x' app.py verify_fixture.py Dockerfile requirements.txt
+
+      - name: Build exact container and run real HOMR fixture inference
+        run: docker build --progress=plain -t homr-reader-probe .
+
+      - name: Boot container and verify health contract
+        run: |
+          cid=$(docker run -d -p 8080:8080 homr-reader-probe)
+          trap 'docker logs "$cid" || true; docker rm -f "$cid" || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/api/status > status.json; then
+              break
+            fi
+            sleep 1
+          done
+          cat status.json
+          python - <<'PY'
+          import json
+          d=json.load(open("status.json"))
+          assert d["ok"] is True
+          assert d["reader"] == "HOMR"
+          assert d["audiveris_used"] is False
+          assert d["tma_code_present"] is False
+          print("HEALTH_CONTRACT_OK")
+          PY
