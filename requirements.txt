@@ -1,4 +1,4 @@
 fastapi>=0.115,<1
 uvicorn[standard]>=0.34,<1
 python-multipart>=0.0.20,<1
-homr[cpu]==0.7.0
+homr[cpu] @ git+https://github.com/liebharc/homr.git@5e51b434b3149286dae1448603527923b62ef9f2
