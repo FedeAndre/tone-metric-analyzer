@@ -1,0 +1,52 @@
+name: Locate Buxtehude pages in public Sibley scan
+
+on:
+  push:
+    branches:
+      - homr-buxtehude-validation-20260918
+  workflow_dispatch:
+
+jobs:
+  locate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download public-domain Sibley volume
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils tesseract-ocr
+          curl -L --fail --retry 3 \
+            'https://urresearch.rochester.edu/fileDownloadForInstitutionalItem.action?itemFileId=36184&itemId=15575' \
+            -o full.pdf
+          ls -lh full.pdf
+          pdfinfo full.pdf | sed -n '1,20p'
+
+      - name: Locate Durch Adams Fall pages
+        run: |
+          mkdir pages
+          total=$(pdfinfo full.pdf | awk '/^Pages:/ {print $2}')
+          start=70
+          end=$total
+          if [ "$end" -gt 115 ]; then end=115; fi
+          pdftoppm -f "$start" -l "$end" -r 120 -gray -jpeg full.pdf pages/p >/dev/null 2>&1
+          found=0
+          for img in pages/*.jpg; do
+            txt=$(tesseract "$img" stdout --psm 6 2>/dev/null || true)
+            if printf '%s' "$txt" | grep -Eqi 'Durch[[:space:]]+Adams|Adams[[:space:]]+Fall|ganz[[:space:]]+verderbt'; then
+              echo "MATCH $img"
+              printf '%s\n' "$txt" | head -20
+              found=1
+            fi
+          done
+          if [ "$found" -ne 1 ]; then
+            echo "No title OCR match; printing pages whose OCR includes page number 85 or 86"
+            for img in pages/*.jpg; do
+              txt=$(tesseract "$img" stdout --psm 6 2>/dev/null || true)
+              if printf '%s' "$txt" | grep -Eq '(^|[^0-9])(85|86)([^0-9]|$)'; then
+                echo "NUMBER_MATCH $img"
+                printf '%s\n' "$txt" | head -12
+              fi
+            done
+          fi
