@@ -1,1 +1,2152 @@
-{}
+{
+  "7": {
+    "page": 1,
+    "system": 2,
+    "bar_bounds_x": [
+      193.0,
+      800.0
+    ],
+    "system_bounds_y": [
+      1007.4,
+      1526.0
+    ],
+    "interline": 21.0,
+    "chords": [
+      {
+        "chord_id": "10756",
+        "staff": "5",
+        "x": 303.0,
+        "x_normalized": 0.181219,
+        "direction": "up",
+        "duration_whole_note_units": "3/8",
+        "duration_quarter_units": "3/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4157",
+            "x": 303.0,
+            "y": 1324.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "5",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10757",
+        "staff": "5",
+        "x": 336.0,
+        "x_normalized": 0.235585,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 0,
+        "heads": [
+          {
+            "id": "4174",
+            "x": 336.0,
+            "y": 1334.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "6",
+            "tied_continuation": true,
+            "tie_start": false,
+            "attack": false
+          }
+        ]
+      },
+      {
+        "chord_id": "10758",
+        "staff": "5",
+        "x": 397.0,
+        "x_normalized": 0.336079,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4182",
+            "x": 397.0,
+            "y": 1347.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "7",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10759",
+        "staff": "5",
+        "x": 441.0,
+        "x_normalized": 0.408567,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4194",
+            "x": 441.0,
+            "y": 1356.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "8",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10760",
+        "staff": "5",
+        "x": 490.0,
+        "x_normalized": 0.489292,
+        "direction": "down",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4186",
+            "x": 490.0,
+            "y": 1347.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "7",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10761",
+        "staff": "5",
+        "x": 521.0,
+        "x_normalized": 0.540362,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4149",
+            "x": 521.0,
+            "y": 1311.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10762",
+        "staff": "5",
+        "x": 553.0,
+        "x_normalized": 0.593081,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 3,
+        "attack_head_count": 3,
+        "heads": [
+          {
+            "id": "3942",
+            "x": 552.0,
+            "y": 1247.5,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          },
+          {
+            "id": "3860",
+            "x": 553.0,
+            "y": 1228.5,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          },
+          {
+            "id": "4135",
+            "x": 554.0,
+            "y": 1301.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10731",
+        "staff": "4",
+        "x": 600.0,
+        "x_normalized": 0.670511,
+        "direction": "up",
+        "duration_whole_note_units": "3/8",
+        "duration_quarter_units": "3/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3782",
+            "x": 600.0,
+            "y": 1085.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10763",
+        "staff": "5",
+        "x": 603.0,
+        "x_normalized": 0.675453,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4153",
+            "x": 603.0,
+            "y": 1311.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10764",
+        "staff": "5",
+        "x": 604.0,
+        "x_normalized": 0.6771,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4190",
+            "x": 604.0,
+            "y": 1333.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "6",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10765",
+        "staff": "5",
+        "x": 652.0,
+        "x_normalized": 0.756178,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3898",
+            "x": 652.0,
+            "y": 1238.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10766",
+        "staff": "5",
+        "x": 653.0,
+        "x_normalized": 0.757825,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4010",
+            "x": 653.0,
+            "y": 1259.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10767",
+        "staff": "5",
+        "x": 702.0,
+        "x_normalized": 0.83855,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3950",
+            "x": 702.0,
+            "y": 1248.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10768",
+        "staff": "5",
+        "x": 703.0,
+        "x_normalized": 0.840198,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4057",
+            "x": 703.0,
+            "y": 1269.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10732",
+        "staff": "4",
+        "x": 747.0,
+        "x_normalized": 0.912685,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3738",
+            "x": 747.0,
+            "y": 1072.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10769",
+        "staff": "5",
+        "x": 752.0,
+        "x_normalized": 0.920923,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4016",
+            "x": 752.0,
+            "y": 1257.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "10770",
+        "staff": "5",
+        "x": 752.0,
+        "x_normalized": 0.920923,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "4097",
+            "x": 752.0,
+            "y": 1279.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      }
+    ]
+  },
+  "28": {
+    "page": 1,
+    "system": 5,
+    "bar_bounds_x": [
+      1441.0,
+      2000.0
+    ],
+    "system_bounds_y": [
+      2968.9,
+      3486.0
+    ],
+    "interline": 21.0,
+    "chords": [
+      {
+        "chord_id": "11010",
+        "staff": "13",
+        "x": 1483.0,
+        "x_normalized": 0.075134,
+        "direction": "up",
+        "duration_whole_note_units": "3/8",
+        "duration_quarter_units": "3/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5426",
+            "x": 1483.0,
+            "y": 3036.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11051",
+        "staff": "14",
+        "x": 1485.0,
+        "x_normalized": 0.078712,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5711",
+            "x": 1485.0,
+            "y": 3270.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11052",
+        "staff": "14",
+        "x": 1487.0,
+        "x_normalized": 0.08229,
+        "direction": "up",
+        "duration_whole_note_units": "3/4",
+        "duration_quarter_units": "3",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5746",
+            "x": 1487.0,
+            "y": 3227.0,
+            "shape": "NOTEHEAD_VOID",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": true,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11089",
+        "staff": "15",
+        "x": 1489.0,
+        "x_normalized": 0.085868,
+        "direction": "up",
+        "duration_whole_note_units": "3/8",
+        "duration_quarter_units": "3/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5846",
+            "x": 1489.0,
+            "y": 3464.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11053",
+        "staff": "14",
+        "x": 1530.0,
+        "x_normalized": 0.159213,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5739",
+            "x": 1530.0,
+            "y": 3305.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "7",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11054",
+        "staff": "14",
+        "x": 1579.0,
+        "x_normalized": 0.246869,
+        "direction": "down",
+        "duration_whole_note_units": "1/2",
+        "duration_quarter_units": "2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5713",
+            "x": 1579.0,
+            "y": 3268.0,
+            "shape": "NOTEHEAD_VOID",
+            "pitch": "4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11011",
+        "staff": "13",
+        "x": 1617.0,
+        "x_normalized": 0.314848,
+        "direction": "up",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5450",
+            "x": 1617.0,
+            "y": 3045.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11090",
+        "staff": "15",
+        "x": 1622.0,
+        "x_normalized": 0.323792,
+        "direction": "up",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5838",
+            "x": 1622.0,
+            "y": 3451.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11012",
+        "staff": "13",
+        "x": 1673.0,
+        "x_normalized": 0.415027,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5430",
+            "x": 1673.0,
+            "y": 3034.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11091",
+        "staff": "15",
+        "x": 1684.0,
+        "x_normalized": 0.434705,
+        "direction": "up",
+        "duration_whole_note_units": "1/2",
+        "duration_quarter_units": "2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5826",
+            "x": 1684.0,
+            "y": 3440.0,
+            "shape": "NOTEHEAD_VOID",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11013",
+        "staff": "13",
+        "x": 1703.0,
+        "x_normalized": 0.468694,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5404",
+            "x": 1703.0,
+            "y": 3013.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11014",
+        "staff": "13",
+        "x": 1757.0,
+        "x_normalized": 0.565295,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5416",
+            "x": 1757.0,
+            "y": 3022.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11015",
+        "staff": "13",
+        "x": 1789.0,
+        "x_normalized": 0.62254,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5434",
+            "x": 1789.0,
+            "y": 3032.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11016",
+        "staff": "13",
+        "x": 1833.0,
+        "x_normalized": 0.701252,
+        "direction": "up",
+        "duration_whole_note_units": "3/16",
+        "duration_quarter_units": "3/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5458",
+            "x": 1833.0,
+            "y": 3042.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11055",
+        "staff": "14",
+        "x": 1835.0,
+        "x_normalized": 0.70483,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 0,
+        "heads": [
+          {
+            "id": "5609",
+            "x": 1835.0,
+            "y": 3223.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": true,
+            "tie_start": false,
+            "attack": false
+          }
+        ]
+      },
+      {
+        "chord_id": "11056",
+        "staff": "14",
+        "x": 1837.0,
+        "x_normalized": 0.708408,
+        "direction": "down",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5727",
+            "x": 1837.0,
+            "y": 3276.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "5",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11057",
+        "staff": "14",
+        "x": 1894.0,
+        "x_normalized": 0.810376,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5633",
+            "x": 1894.0,
+            "y": 3233.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11017",
+        "staff": "13",
+        "x": 1924.0,
+        "x_normalized": 0.864043,
+        "direction": "up",
+        "duration_whole_note_units": "1/32",
+        "duration_quarter_units": "1/8",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5436",
+            "x": 1924.0,
+            "y": 3030.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "11018",
+        "staff": "13",
+        "x": 1953.0,
+        "x_normalized": 0.915921,
+        "direction": "up",
+        "duration_whole_note_units": "1/32",
+        "duration_quarter_units": "1/8",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "5464",
+            "x": 1953.0,
+            "y": 3040.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      }
+    ]
+  },
+  "34": {
+    "page": 2,
+    "system": 1,
+    "bar_bounds_x": [
+      1924.0,
+      2660.0
+    ],
+    "system_bounds_y": [
+      272.5,
+      766.1
+    ],
+    "interline": 21.0,
+    "chords": [
+      {
+        "chord_id": "8437",
+        "staff": "3",
+        "x": 1971.0,
+        "x_normalized": 0.063859,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3061",
+            "x": 1971.0,
+            "y": 724.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8382",
+        "staff": "1",
+        "x": 1972.0,
+        "x_normalized": 0.065217,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2786",
+            "x": 1972.0,
+            "y": 348.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8421",
+        "staff": "2",
+        "x": 1973.0,
+        "x_normalized": 0.066576,
+        "direction": "down",
+        "duration_whole_note_units": "3/8",
+        "duration_quarter_units": "3/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2897",
+            "x": 1973.0,
+            "y": 510.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8383",
+        "staff": "1",
+        "x": 2013.0,
+        "x_normalized": 0.120924,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2758",
+            "x": 2013.0,
+            "y": 327.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8384",
+        "staff": "1",
+        "x": 2069.0,
+        "x_normalized": 0.197011,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2736",
+            "x": 2069.0,
+            "y": 317.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8438",
+        "staff": "3",
+        "x": 2069.0,
+        "x_normalized": 0.197011,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3067",
+            "x": 2069.0,
+            "y": 734.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8385",
+        "staff": "1",
+        "x": 2107.0,
+        "x_normalized": 0.248641,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2716",
+            "x": 2107.0,
+            "y": 306.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8439",
+        "staff": "3",
+        "x": 2159.0,
+        "x_normalized": 0.319293,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3071",
+            "x": 2159.0,
+            "y": 745.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8386",
+        "staff": "1",
+        "x": 2160.0,
+        "x_normalized": 0.320652,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2704",
+            "x": 2160.0,
+            "y": 295.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8387",
+        "staff": "1",
+        "x": 2203.0,
+        "x_normalized": 0.379076,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2790",
+            "x": 2203.0,
+            "y": 348.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8440",
+        "staff": "3",
+        "x": 2241.0,
+        "x_normalized": 0.430707,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3077",
+            "x": 2241.0,
+            "y": 755.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8388",
+        "staff": "1",
+        "x": 2243.0,
+        "x_normalized": 0.433424,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2782",
+            "x": 2243.0,
+            "y": 337.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8422",
+        "staff": "2",
+        "x": 2243.0,
+        "x_normalized": 0.433424,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2911",
+            "x": 2243.0,
+            "y": 520.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8389",
+        "staff": "1",
+        "x": 2281.0,
+        "x_normalized": 0.485054,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2794",
+            "x": 2281.0,
+            "y": 348.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8441",
+        "staff": "3",
+        "x": 2331.0,
+        "x_normalized": 0.552989,
+        "direction": "up",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3085",
+            "x": 2331.0,
+            "y": 765.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8390",
+        "staff": "1",
+        "x": 2332.0,
+        "x_normalized": 0.554348,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2806",
+            "x": 2332.0,
+            "y": 358.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8423",
+        "staff": "2",
+        "x": 2332.0,
+        "x_normalized": 0.554348,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2925",
+            "x": 2332.0,
+            "y": 532.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8391",
+        "staff": "1",
+        "x": 2375.0,
+        "x_normalized": 0.612772,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2798",
+            "x": 2375.0,
+            "y": 347.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8424",
+        "staff": "2",
+        "x": 2415.0,
+        "x_normalized": 0.66712,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2929",
+            "x": 2415.0,
+            "y": 532.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8425",
+        "staff": "2",
+        "x": 2415.0,
+        "x_normalized": 0.66712,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2969",
+            "x": 2415.0,
+            "y": 552.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8392",
+        "staff": "1",
+        "x": 2417.0,
+        "x_normalized": 0.669837,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2810",
+            "x": 2417.0,
+            "y": 358.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8393",
+        "staff": "1",
+        "x": 2456.0,
+        "x_normalized": 0.722826,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2814",
+            "x": 2456.0,
+            "y": 370.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "5",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8442",
+        "staff": "3",
+        "x": 2504.0,
+        "x_normalized": 0.788043,
+        "direction": "up",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3081",
+            "x": 2504.0,
+            "y": 756.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8426",
+        "staff": "2",
+        "x": 2508.0,
+        "x_normalized": 0.793478,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2991",
+            "x": 2508.0,
+            "y": 562.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8394",
+        "staff": "1",
+        "x": 2509.0,
+        "x_normalized": 0.794837,
+        "direction": "up",
+        "duration_whole_note_units": "3/16",
+        "duration_quarter_units": "3/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2818",
+            "x": 2509.0,
+            "y": 369.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "5",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8427",
+        "staff": "2",
+        "x": 2509.0,
+        "x_normalized": 0.794837,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2951",
+            "x": 2509.0,
+            "y": 540.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8428",
+        "staff": "2",
+        "x": 2568.0,
+        "x_normalized": 0.875,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2975",
+            "x": 2568.0,
+            "y": 552.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8429",
+        "staff": "2",
+        "x": 2569.0,
+        "x_normalized": 0.876359,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3003",
+            "x": 2569.0,
+            "y": 573.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "5",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8395",
+        "staff": "1",
+        "x": 2610.0,
+        "x_normalized": 0.932065,
+        "direction": "up",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "2824",
+            "x": 2610.0,
+            "y": 380.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "6",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      }
+    ]
+  },
+  "39": {
+    "page": 2,
+    "system": 3,
+    "bar_bounds_x": [
+      170.0,
+      958.0
+    ],
+    "system_bounds_y": [
+      1632.5,
+      2124.8
+    ],
+    "interline": 21.0,
+    "chords": [
+      {
+        "chord_id": "8586",
+        "staff": "9",
+        "x": 297.0,
+        "x_normalized": 0.161168,
+        "direction": "up",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3890",
+            "x": 297.0,
+            "y": 2113.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8512",
+        "staff": "7",
+        "x": 299.0,
+        "x_normalized": 0.163706,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3531",
+            "x": 299.0,
+            "y": 1685.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8537",
+        "staff": "8",
+        "x": 299.0,
+        "x_normalized": 0.163706,
+        "direction": "down",
+        "duration_whole_note_units": "3/8",
+        "duration_quarter_units": "3/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3702",
+            "x": 299.0,
+            "y": 1879.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8513",
+        "staff": "7",
+        "x": 359.0,
+        "x_normalized": 0.239848,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3551",
+            "x": 359.0,
+            "y": 1609.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-6",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8514",
+        "staff": "7",
+        "x": 401.0,
+        "x_normalized": 0.293147,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3435",
+            "x": 401.0,
+            "y": 1621.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-5",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8515",
+        "staff": "7",
+        "x": 448.0,
+        "x_normalized": 0.352792,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3441",
+            "x": 448.0,
+            "y": 1632.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8587",
+        "staff": "9",
+        "x": 450.0,
+        "x_normalized": 0.35533,
+        "direction": "down",
+        "duration_whole_note_units": "1/2",
+        "duration_quarter_units": "2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3858",
+            "x": 450.0,
+            "y": 2040.0,
+            "shape": "NOTEHEAD_VOID",
+            "pitch": "-4",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8516",
+        "staff": "7",
+        "x": 489.0,
+        "x_normalized": 0.404822,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3445",
+            "x": 489.0,
+            "y": 1643.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8517",
+        "staff": "7",
+        "x": 527.0,
+        "x_normalized": 0.453046,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3459",
+            "x": 527.0,
+            "y": 1653.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8538",
+        "staff": "8",
+        "x": 527.0,
+        "x_normalized": 0.453046,
+        "direction": "up",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3561",
+            "x": 527.0,
+            "y": 1827.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-5",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8539",
+        "staff": "8",
+        "x": 527.0,
+        "x_normalized": 0.453046,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3591",
+            "x": 527.0,
+            "y": 1849.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8518",
+        "staff": "7",
+        "x": 569.0,
+        "x_normalized": 0.506345,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3479",
+            "x": 569.0,
+            "y": 1664.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8519",
+        "staff": "7",
+        "x": 617.0,
+        "x_normalized": 0.567259,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3503",
+            "x": 617.0,
+            "y": 1674.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8540",
+        "staff": "8",
+        "x": 619.0,
+        "x_normalized": 0.569797,
+        "direction": "up",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3593",
+            "x": 619.0,
+            "y": 1848.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8541",
+        "staff": "8",
+        "x": 619.0,
+        "x_normalized": 0.569797,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3660",
+            "x": 619.0,
+            "y": 1870.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8520",
+        "staff": "7",
+        "x": 680.0,
+        "x_normalized": 0.647208,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3483",
+            "x": 680.0,
+            "y": 1665.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8542",
+        "staff": "8",
+        "x": 681.0,
+        "x_normalized": 0.648477,
+        "direction": "down",
+        "duration_whole_note_units": "1/8",
+        "duration_quarter_units": "1/2",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3708",
+            "x": 681.0,
+            "y": 1879.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8521",
+        "staff": "7",
+        "x": 722.0,
+        "x_normalized": 0.700508,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3463",
+            "x": 722.0,
+            "y": 1655.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8543",
+        "staff": "8",
+        "x": 772.0,
+        "x_normalized": 0.763959,
+        "direction": "up",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3628",
+            "x": 772.0,
+            "y": 1860.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-2",
+            "tied_continuation": false,
+            "tie_start": true,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8544",
+        "staff": "8",
+        "x": 772.0,
+        "x_normalized": 0.763959,
+        "direction": "down",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3765",
+            "x": 772.0,
+            "y": 1891.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "1",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8588",
+        "staff": "9",
+        "x": 772.0,
+        "x_normalized": 0.763959,
+        "direction": "down",
+        "duration_whole_note_units": "1/4",
+        "duration_quarter_units": "1",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3870",
+            "x": 772.0,
+            "y": 2052.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8522",
+        "staff": "7",
+        "x": 774.0,
+        "x_normalized": 0.766497,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3449",
+            "x": 774.0,
+            "y": 1645.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8523",
+        "staff": "7",
+        "x": 813.0,
+        "x_normalized": 0.81599,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3469",
+            "x": 813.0,
+            "y": 1655.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-2",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8524",
+        "staff": "7",
+        "x": 851.0,
+        "x_normalized": 0.864213,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3453",
+            "x": 851.0,
+            "y": 1645.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "-3",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      },
+      {
+        "chord_id": "8525",
+        "staff": "7",
+        "x": 890.0,
+        "x_normalized": 0.913706,
+        "direction": "down",
+        "duration_whole_note_units": "1/16",
+        "duration_quarter_units": "1/4",
+        "head_count": 1,
+        "attack_head_count": 1,
+        "heads": [
+          {
+            "id": "3509",
+            "x": 890.0,
+            "y": 1676.0,
+            "shape": "NOTEHEAD_BLACK",
+            "pitch": "0",
+            "tied_continuation": false,
+            "tie_start": false,
+            "attack": true
+          }
+        ]
+      }
+    ]
+  }
+}
