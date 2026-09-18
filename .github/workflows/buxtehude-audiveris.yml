@@ -1,0 +1,86 @@
+name: Audiveris Buxtehude baseline validation
+
+on:
+  push:
+    branches:
+      - audiveris-buxtehude-validation-20260918
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct exact score pages from public-domain Sibley source
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          curl -L --fail --retry 3 \
+            'https://urresearch.rochester.edu/fileDownloadForInstitutionalItem.action?itemFileId=36184&itemId=15575' \
+            -o full.pdf
+          pdfseparate -f 105 -l 106 full.pdf page-%d.pdf
+          pdfunite page-105.pdf page-106.pdf buxtehude.pdf
+          pdfinfo buxtehude.pdf | grep -E 'Pages|Page size'
+          ls -lh buxtehude.pdf
+
+      - name: Build exact current Audiveris constraint baseline
+        run: docker build --progress=plain -t tma-audiveris-baseline .
+
+      - name: Create diagnostic script
+        run: |
+          cat > aud_diag.py <<'PY'
+          import json, sys
+          from fractions import Fraction
+          sys.path.insert(0, '/app')
+          from core import extract_hit_strikes
+
+          omr = sys.argv[1]
+          hit_count, strikes, diag, chords, hits = extract_hit_strikes(omr)
+          by = {}
+          for (measure, onset), hit in hits.items():
+              by.setdefault(int(measure), set()).add(onset)
+
+          max_measure = max(by) if by else 0
+          rows = []
+          for m in range(1, max_measure + 1):
+              offs = sorted(by.get(m, set()))
+              rows.append({
+                  'measure': m,
+                  'count': len(offs),
+                  'offsets_internal_units': [str(x) for x in offs],
+              })
+
+          result = {
+              'hit_count': hit_count,
+              'strike_count': len(strikes),
+              'measure_count': max_measure,
+              'diagnostics': diag.__dict__,
+              'measures': rows,
+          }
+          print('BUX_AUD_JSON=' + json.dumps(result, separators=(',', ':')))
+          for target in (4, 5, 46):
+              if target <= max_measure:
+                  r = rows[target - 1]
+                  print(f"TARGET m{target}: count={r['count']} offsets={r['offsets_internal_units']}")
+          open('/work/buxtehude-audiveris-diagnostics.json', 'w').write(json.dumps(result, indent=2))
+          PY
+
+      - name: Run Audiveris and current hit engine
+        run: |
+          docker run --rm -v "$PWD:/work" -w /work tma-audiveris-baseline sh -lc '
+            set -eu
+            mkdir -p /work/aud_out
+            /opt/audiveris/bin/Audiveris -batch -save -export -output /work/aud_out /work/buxtehude.pdf
+            omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
+            test -n "$omr"
+            python /work/aud_diag.py "$omr"
+          '
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: buxtehude-audiveris-output
+          path: |
+            buxtehude-audiveris-diagnostics.json
+            aud_out/**/*.omr
