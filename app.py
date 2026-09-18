@@ -150,7 +150,7 @@ def analyze_musicxml(path: Path) -> dict:
 
 def run_homr(input_path: Path, cwd: Path) -> Path:
     before = set(cwd.glob("*.musicxml"))
-    cmd = ["homr", "--no-title", str(input_path)]
+    cmd = ["homr", str(input_path)]
     proc = subprocess.run(
         cmd,
         cwd=cwd,
