@@ -23,7 +23,9 @@ jobs:
           pdfseparate -f 105 -l 106 full.pdf page-%d.pdf
           pdfunite page-105.pdf page-106.pdf buxtehude.pdf
           pdfinfo buxtehude.pdf | grep -E 'Pages|Page size'
-          ls -lh buxtehude.pdf
+          mkdir -p homr_pages
+          pdftoppm -r 300 -png buxtehude.pdf homr_pages/bux-page >/dev/null 2>&1
+          ls -lh buxtehude.pdf homr_pages/*.png
 
       - name: Build isolated HOMR reader
         run: docker build --progress=plain -t homr-reader-probe .
@@ -36,7 +38,7 @@ jobs:
 
       - name: Emit measure-by-measure attack diagnostics
         run: |
-          python - <<'PY'
+          python3 - <<'PY'
           import json
           import xml.etree.ElementTree as ET
           from collections import defaultdict
