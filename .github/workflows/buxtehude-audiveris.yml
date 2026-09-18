@@ -75,7 +75,7 @@ jobs:
             /opt/audiveris/bin/Audiveris -batch -save -export -output /work/aud_out /work/buxtehude.pdf
             omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
             test -n "$omr"
-            python /work/aud_diag.py "$omr"
+            python3 /work/aud_diag.py "$omr"
           '
 
       - uses: actions/upload-artifact@v4
