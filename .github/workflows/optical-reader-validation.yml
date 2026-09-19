@@ -68,8 +68,9 @@ jobs:
           import json
           s=json.load(open("status.json"))
           assert s["ok"] is True
-          assert s["version"] == "tma-optical-reader-clean-v1"
-          assert s["rhythmic_attacks_ready"] is False
+          assert s["version"] == "tma-clean-product-v1"
+          assert s["stage"] == "optical->exact-rhythm->tone-metric"
+          assert s["x_position_used_as_time"] is False
           print("DOCKER_HEALTH_OK")
           PY
 
@@ -102,7 +103,8 @@ jobs:
 
           curl --fail --show-error --max-time 30 \
             -F "file=@buxtehude.pdf;type=application/pdf" \
-            http://127.0.0.1:8081/api/optical/read \
+            -F "meter=4/4" \
+            http://127.0.0.1:8081/api/analyze \
             -o submitted.json
 
           job_id=$(python - <<'PY'
@@ -117,7 +119,7 @@ jobs:
           completed=0
           for i in $(seq 1 360); do
             curl --fail --show-error --max-time 20 \
-              "http://127.0.0.1:8081/api/optical/jobs/$job_id" \
+              "http://127.0.0.1:8081/api/jobs/$job_id" \
               -o job.json
             state=$(python - <<'PY'
           import json
@@ -147,12 +149,15 @@ jobs:
           import json
           d=json.load(open("job.json"))
           r=d["result"]
-          assert r["engine"]=="tma-optical-reader-clean-v1"
+          assert r["version"]=="tma-clean-product-v1"
           assert r["semantic_timing_used"] is False
-          assert r["totals"]["measures"]==49, r["totals"]
-          assert r["totals"]["noteheads"]>=400, r["totals"]
+          assert r["x_position_used_as_time"] is False
+          assert r["optical"]["totals"]["measures"]==49, r["optical"]["totals"]
+          assert r["optical"]["totals"]["noteheads"]>=400, r["optical"]["totals"]
           print("ASYNC_LOW_MEMORY_FULL_API_OK")
-          print(json.dumps(r["totals"], indent=2))
+          print("PRODUCT_READY", r["ready"])
+          print("RHYTHM_STATS", json.dumps(r["rhythm"]["stats"], sort_keys=True))
+          print(json.dumps(r["optical"]["totals"], indent=2))
           PY
 
           docker inspect --format 'status={{.State.Status}} oom={{.State.OOMKilled}} exit={{.State.ExitCode}}' "$cid"
@@ -175,6 +180,19 @@ jobs:
           print(json.dumps(d['totals'], indent=2))
           PY
 
+      - name: Audit Buxtehude exact-rhythm reconstruction
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from rhythm_reconstructor import reconstruct_attacks
+          d=json.load(open('optical_audit/notation_graph.json'))
+          r=reconstruct_attacks(d,meter=(4,4))
+          print("BUX_RHYTHM_STATS="+json.dumps(r["stats"],sort_keys=True))
+          print("BUX_READY="+str(r["rhythmic_attacks_ready"]))
+          json.dump(r,open('optical_audit/rhythm_audit.json','w'),indent=2)
+          PY
+
       - name: Upload optical audit
         if: always()
         uses: actions/upload-artifact@v4
@@ -184,6 +202,7 @@ jobs:
             optical_audit/notation_graph.json
             optical_audit/page_01_optical_overlay.png
             optical_audit/page_02_optical_overlay.png
+            optical_audit/rhythm_audit.json
             optical_cache/page_01.npz
             optical_cache/page_02.npz
             buxtehude.pdf
