@@ -1406,61 +1406,60 @@ def _recover_pixel_stem(
     vertical_ink: np.ndarray,
     spacing: float,
 ) -> tuple[str, int, int, int] | None:
-    """
-    Recover a stem directly from raster ink adjoining a notehead.
+    """Recover a visually attached stem from original raster ink.
 
-    The search is local to the two notehead edges and therefore cannot use
-    inferred voice/timing information. A candidate must overlap the notehead
-    vertically and extend by more than one staff spacing in a valid stem
-    direction.
+    Up-stems attach to the right side of a notehead and down-stems to the
+    left. Enforcing that written-notation rule prevents nearby accidentals,
+    rest strokes, and other vertical glyphs from being borrowed as stems.
     """
     h, w = vertical_ink.shape
     best: tuple[float, str, int, int, int] | None = None
 
-    for edge_x in (nh.x1, nh.x2):
+    for direction in ("up", "down"):
+        edge_x = nh.x2 if direction == "up" else nh.x1
         xa = max(0, int(round(edge_x - 0.50 * spacing)))
         xb = min(w, int(round(edge_x + 0.50 * spacing)) + 1)
 
-        for direction in ("up", "down"):
-            if direction == "up":
-                ya = max(0, int(round(nh.cy - 4.7 * spacing)))
-                yb = min(h, int(round(nh.cy + 0.45 * spacing)) + 1)
-            else:
-                ya = max(0, int(round(nh.cy - 0.45 * spacing)))
-                yb = min(h, int(round(nh.cy + 4.7 * spacing)) + 1)
+        if direction == "up":
+            ya = max(0, int(round(nh.cy - 4.7 * spacing)))
+            yb = min(h, int(round(nh.cy + 0.45 * spacing)) + 1)
+        else:
+            ya = max(0, int(round(nh.cy - 0.45 * spacing)))
+            yb = min(h, int(round(nh.cy + 4.7 * spacing)) + 1)
 
-            region = vertical_ink[ya:yb, xa:xb]
-            for j in range(region.shape[1]):
-                run, a, b = _longest_vertical_run(region[:, j])
-                if a is None or b is None:
-                    continue
-                if run < 1.15 * spacing or run > 5.15 * spacing:
-                    continue
+        region = vertical_ink[ya:yb, xa:xb]
+        for j in range(region.shape[1]):
+            run, a, b = _longest_vertical_run(region[:, j])
+            if a is None or b is None:
+                continue
+            if run < 1.15 * spacing or run > 5.15 * spacing:
+                continue
 
-                gy1 = ya + a
-                gy2 = ya + b
-                if not (
-                    gy1 <= nh.cy + 0.60 * spacing
-                    and gy2 >= nh.cy - 0.60 * spacing
-                ):
-                    continue
-                if direction == "up" and gy1 >= nh.cy - 0.75 * spacing:
-                    continue
-                if direction == "down" and gy2 <= nh.cy + 0.75 * spacing:
-                    continue
+            gy1 = ya + a
+            gy2 = ya + b
+            if not (
+                gy1 <= nh.cy + 0.60 * spacing
+                and gy2 >= nh.cy - 0.60 * spacing
+            ):
+                continue
+            if direction == "up" and gy1 >= nh.cy - 0.75 * spacing:
+                continue
+            if direction == "down" and gy2 <= nh.cy + 0.75 * spacing:
+                continue
 
-                x = xa + j
-                edge_distance = min(abs(x - nh.x1), abs(x - nh.x2))
-                score = float(run) - 1.5 * float(edge_distance)
-                candidate = (score, direction, x, gy1, gy2)
-                if best is None or candidate[0] > best[0]:
-                    best = candidate
+            x = xa + j
+            edge_distance = abs(x - edge_x)
+            if edge_distance > 0.42 * spacing:
+                continue
+            score = float(run) - 1.5 * float(edge_distance)
+            candidate = (score, direction, x, gy1, gy2)
+            if best is None or candidate[0] > best[0]:
+                best = candidate
 
     if best is None:
         return None
     _score, direction, x, y1, y2 = best
     return direction, x, y1, y2
-
 
 def link_noteheads_stems(
     noteheads: list[Notehead],
@@ -1488,30 +1487,27 @@ def link_noteheads_stems(
                 and nh.staff_id != st.staff_id
             ):
                 continue
-            dx = min(
-                abs(st.cx - nh.x1),
-                abs(st.cx - nh.x2),
-                abs(st.cx - nh.cx),
-            )
+            direction = "up" if st.cy < nh.cy else "down"
+            edge_x = nh.x2 if direction == "up" else nh.x1
+            dx = abs(st.cx - edge_x)
             y_ok = (
                 st.y1 <= nh.cy + 0.55 * sp
                 and st.y2 >= nh.cy - 0.55 * sp
             )
             if y_ok and dx <= 0.58 * sp:
-                candidates.append((dx, abs(st.cy - nh.cy), st))
+                candidates.append(
+                    (dx, abs(st.cy - nh.cy), direction, st)
+                )
 
         if candidates:
-            _, _, st = min(
+            _, _, direction, st = min(
                 candidates,
-                key=lambda z: (z[0], z[1], z[2].id),
+                key=lambda z: (z[0], z[1], z[3].id),
             )
             nh.stem_id = st.id
             nh.stem_source = "component"
             component_links += 1
-            if st.cy < nh.cy:
-                st.direction = "up"
-            elif st.cy > nh.cy:
-                st.direction = "down"
+            st.direction = direction
 
     # Independent raster evidence for noteheads whose stem was fragmented or
     # omitted by the low-level stem segmentation.
@@ -1950,7 +1946,23 @@ def detect_rests(
         }:
             continue
 
+        # Once the classifier identifies the flagged-rest family, the number
+        # of hooks is reflected by vertical glyph extent.  A single-hook
+        # eighth rest is substantially shorter than a two-hook sixteenth rest.
+        # This geometric check fixes systematic one-level overclassification
+        # without consulting score timing or meter.
+        if label in {"rest_16th", "rest_32nd", "rest_64th"}:
+            normalized_height = h / max(float(staff.spacing), 1.0)
+            if normalized_height < 2.10:
+                label = "rest_8th"
+            elif label in {"rest_32nd", "rest_64th"} and normalized_height < 2.75:
+                label = "rest_16th"
+            elif label == "rest_64th" and normalized_height < 3.35:
+                label = "rest_32nd"
+
         system_id, measure_id = locate(staff, cx)
+        if measure_id is None:
+            continue
         rests.append(
             Rest(
                 id=len(rests),
@@ -2036,6 +2048,8 @@ def detect_rests(
 
         rest_type = "rest_whole" if whole_dist < half_dist else "rest_half"
         system_id, measure_id = locate(staff, cx)
+        if measure_id is None:
+            continue
         rests.append(
             Rest(
                 id=len(rests),
