@@ -28,6 +28,12 @@ jobs:
         with:
           path: bwv661_cache
           key: bwv661-oemer-dbe2a933d630d0f74805d717960eb259473f5978-300dpi-v1
+      - name: Install validation-only LilyPond oracle tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lilypond
+          pip install mido
+
       - name: Run cached exact BWV 661 tie and rhythm audit
         run: |
           curl -fL --retry 4 --retry-delay 2 -o bwv661.pdf \
@@ -50,4 +56,48 @@ jobs:
           print('BWV_RHYTHM_STATS='+json.dumps(r['stats'],sort_keys=True))
           print('BWV_READY='+str(r['rhythmic_attacks_ready']))
           print('BWV_UNRESOLVED_REASONS='+json.dumps(Counter(x['reason'] for x in r['unresolved']),sort_keys=True))
+          PY
+
+      - name: Compare optical hits with independent Mutopia source oracle
+        run: |
+          curl -fL --retry 4 --retry-delay 2 -o bwv661.ly \
+            'https://raw.githubusercontent.com/MutopiaProject/MutopiaProject/master/ftp/BachJS/BWV661/bwv661/bwv661.ly'
+          convert-ly -e bwv661.ly
+          lilypond -dno-point-and-click -o bwv_oracle bwv661.ly >/tmp/bwv_lilypond.log 2>&1 || {
+            cat /tmp/bwv_lilypond.log
+            exit 1
+          }
+          cat /tmp/bwv_lilypond.log | tail -60
+          python - <<'PY'
+          import glob, json
+          from fractions import Fraction
+          import mido
+          from rhythm_reconstructor import reconstruct_attacks
+
+          midi_paths=glob.glob('bwv_oracle*.midi')+glob.glob('bwv_oracle*.mid')
+          assert midi_paths, 'No MIDI oracle generated'
+          mid=mido.MidiFile(midi_paths[0])
+          oracle=set()
+          for track in mid.tracks:
+              tick=0
+              for msg in track:
+                  tick += msg.time
+                  if msg.type=='note_on' and getattr(msg,'velocity',0)>0:
+                      oracle.add(Fraction(tick,mid.ticks_per_beat))
+
+          graph=json.load(open('bwv_audit/notation_graph.json'))
+          rhythm=reconstruct_attacks(graph,meter=(2,2))
+          observed={Fraction(str(h['onset_quarter'])) for h in rhythm['hits']}
+          tp=oracle & observed
+          fp=observed-oracle
+          fn=oracle-observed
+          print('BWV_ORACLE_ATTACKS='+str(len(oracle)))
+          print('BWV_OBSERVED_ATTACKS='+str(len(observed)))
+          print('BWV_ATTACK_TP='+str(len(tp)))
+          print('BWV_ATTACK_FP='+str(len(fp)))
+          print('BWV_ATTACK_FN='+str(len(fn)))
+          print('BWV_ATTACK_PRECISION='+f'{len(tp)/len(observed):.8f}' if observed else 'BWV_ATTACK_PRECISION=0')
+          print('BWV_ATTACK_RECALL='+f'{len(tp)/len(oracle):.8f}' if oracle else 'BWV_ATTACK_RECALL=0')
+          print('BWV_FIRST_FP='+','.join(str(x) for x in sorted(fp)[:80]))
+          print('BWV_FIRST_FN='+','.join(str(x) for x in sorted(fn)[:80]))
           PY
