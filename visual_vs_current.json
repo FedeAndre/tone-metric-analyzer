@@ -1,0 +1,763 @@
+[
+  {
+    "measure": 1,
+    "visual_ok": true,
+    "visual_count": 4,
+    "current_count": 4,
+    "visual_onsets": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "current_onsets": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 2,
+    "visual_ok": true,
+    "visual_count": 6,
+    "current_count": 6,
+    "visual_onsets": [
+      "0",
+      "1",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 3,
+    "visual_ok": false,
+    "current_count": 5
+  },
+  {
+    "measure": 4,
+    "visual_ok": false,
+    "current_count": 5
+  },
+  {
+    "measure": 5,
+    "visual_ok": false,
+    "current_count": 9
+  },
+  {
+    "measure": 6,
+    "visual_ok": false,
+    "current_count": 9
+  },
+  {
+    "measure": 7,
+    "visual_ok": false,
+    "current_count": 11
+  },
+  {
+    "measure": 8,
+    "visual_ok": true,
+    "visual_count": 8,
+    "current_count": 8,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 9,
+    "visual_ok": false,
+    "current_count": 13
+  },
+  {
+    "measure": 10,
+    "visual_ok": false,
+    "current_count": 11
+  },
+  {
+    "measure": 11,
+    "visual_ok": true,
+    "visual_count": 6,
+    "current_count": 6,
+    "visual_onsets": [
+      "0",
+      "1",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 12,
+    "visual_ok": true,
+    "visual_count": 8,
+    "current_count": 8,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 13,
+    "visual_ok": true,
+    "visual_count": 10,
+    "current_count": 10,
+    "visual_onsets": [
+      "0",
+      "1/4",
+      "1/2",
+      "3/4",
+      "1",
+      "5/4",
+      "3/2",
+      "7/4",
+      "2",
+      "3"
+    ],
+    "current_onsets": [
+      "0",
+      "1/4",
+      "1/2",
+      "3/4",
+      "1",
+      "5/4",
+      "3/2",
+      "7/4",
+      "2",
+      "3"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 14,
+    "visual_ok": false,
+    "current_count": 4
+  },
+  {
+    "measure": 15,
+    "visual_ok": false,
+    "current_count": 6
+  },
+  {
+    "measure": 16,
+    "visual_ok": false,
+    "current_count": 6
+  },
+  {
+    "measure": 17,
+    "visual_ok": false,
+    "current_count": 7
+  },
+  {
+    "measure": 18,
+    "visual_ok": true,
+    "visual_count": 8,
+    "current_count": 8,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 19,
+    "visual_ok": true,
+    "visual_count": 7,
+    "current_count": 7,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 20,
+    "visual_ok": false,
+    "current_count": 8
+  },
+  {
+    "measure": 21,
+    "visual_ok": true,
+    "visual_count": 8,
+    "current_count": 8,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 22,
+    "visual_ok": true,
+    "visual_count": 11,
+    "current_count": 11,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "9/4",
+      "5/2",
+      "11/4",
+      "3",
+      "15/4",
+      "31/8"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "9/4",
+      "5/2",
+      "11/4",
+      "3",
+      "15/4",
+      "31/8"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 23,
+    "visual_ok": false,
+    "current_count": 7
+  },
+  {
+    "measure": 24,
+    "visual_ok": true,
+    "visual_count": 8,
+    "current_count": 8,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 25,
+    "visual_ok": false,
+    "current_count": 5
+  },
+  {
+    "measure": 26,
+    "visual_ok": true,
+    "visual_count": 8,
+    "current_count": 8,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 27,
+    "visual_ok": false,
+    "current_count": 7
+  },
+  {
+    "measure": 28,
+    "visual_ok": false,
+    "current_count": 11
+  },
+  {
+    "measure": 29,
+    "visual_ok": false,
+    "current_count": 5
+  },
+  {
+    "measure": 30,
+    "visual_ok": false,
+    "current_count": 7
+  },
+  {
+    "measure": 31,
+    "visual_ok": false,
+    "current_count": 7
+  },
+  {
+    "measure": 32,
+    "visual_ok": false,
+    "current_count": 7
+  },
+  {
+    "measure": 33,
+    "visual_ok": true,
+    "visual_count": 13,
+    "current_count": 13,
+    "visual_onsets": [
+      "0",
+      "1",
+      "5/4",
+      "3/2",
+      "7/4",
+      "2",
+      "9/4",
+      "5/2",
+      "11/4",
+      "3",
+      "13/4",
+      "7/2",
+      "15/4"
+    ],
+    "current_onsets": [
+      "0",
+      "1",
+      "5/4",
+      "3/2",
+      "7/4",
+      "2",
+      "9/4",
+      "5/2",
+      "11/4",
+      "3",
+      "13/4",
+      "7/2",
+      "15/4"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 34,
+    "visual_ok": false,
+    "current_count": 16
+  },
+  {
+    "measure": 35,
+    "visual_ok": true,
+    "visual_count": 7,
+    "current_count": 7,
+    "visual_onsets": [
+      "0",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 36,
+    "visual_ok": true,
+    "visual_count": 8,
+    "current_count": 8,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "15/4"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "3",
+      "15/4"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 37,
+    "visual_ok": false,
+    "current_count": 6
+  },
+  {
+    "measure": 38,
+    "visual_ok": false,
+    "current_count": 11
+  },
+  {
+    "measure": 39,
+    "visual_ok": false,
+    "current_count": 14
+  },
+  {
+    "measure": 40,
+    "visual_ok": true,
+    "visual_count": 13,
+    "current_count": 13,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "3/4",
+      "1",
+      "5/4",
+      "3/2",
+      "7/4",
+      "2",
+      "5/2",
+      "11/4",
+      "3",
+      "7/2",
+      "15/4"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "3/4",
+      "1",
+      "5/4",
+      "3/2",
+      "7/4",
+      "2",
+      "5/2",
+      "11/4",
+      "3",
+      "7/2",
+      "15/4"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 41,
+    "visual_ok": true,
+    "visual_count": 6,
+    "current_count": 6,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "3"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "2",
+      "3"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 42,
+    "visual_ok": true,
+    "visual_count": 10,
+    "current_count": 10,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "3/4",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "11/4",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "3/4",
+      "1",
+      "3/2",
+      "2",
+      "5/2",
+      "11/4",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 43,
+    "visual_ok": false,
+    "current_count": 13
+  },
+  {
+    "measure": 44,
+    "visual_ok": false,
+    "current_count": 13
+  },
+  {
+    "measure": 45,
+    "visual_ok": false,
+    "current_count": 13
+  },
+  {
+    "measure": 46,
+    "visual_ok": true,
+    "visual_count": 11,
+    "current_count": 11,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "3/4",
+      "1",
+      "3/2",
+      "7/4",
+      "2",
+      "5/2",
+      "11/4",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "3/4",
+      "1",
+      "3/2",
+      "7/4",
+      "2",
+      "5/2",
+      "11/4",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 47,
+    "visual_ok": true,
+    "visual_count": 9,
+    "current_count": 9,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "7/4",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "1",
+      "3/2",
+      "7/4",
+      "2",
+      "5/2",
+      "3",
+      "7/2"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 48,
+    "visual_ok": true,
+    "visual_count": 13,
+    "current_count": 13,
+    "visual_onsets": [
+      "0",
+      "1/2",
+      "3/4",
+      "1",
+      "3/2",
+      "2",
+      "9/4",
+      "5/2",
+      "11/4",
+      "3",
+      "13/4",
+      "7/2",
+      "15/4"
+    ],
+    "current_onsets": [
+      "0",
+      "1/2",
+      "3/4",
+      "1",
+      "3/2",
+      "2",
+      "9/4",
+      "5/2",
+      "11/4",
+      "3",
+      "13/4",
+      "7/2",
+      "15/4"
+    ],
+    "exact_match": true
+  },
+  {
+    "measure": 49,
+    "visual_ok": true,
+    "visual_count": 10,
+    "current_count": 10,
+    "visual_onsets": [
+      "0",
+      "1/4",
+      "1/2",
+      "3/4",
+      "1",
+      "5/4",
+      "3/2",
+      "7/4",
+      "15/8",
+      "2"
+    ],
+    "current_onsets": [
+      "0",
+      "1/4",
+      "1/2",
+      "3/4",
+      "1",
+      "5/4",
+      "3/2",
+      "7/4",
+      "15/8",
+      "2"
+    ],
+    "exact_match": true
+  }
+]
