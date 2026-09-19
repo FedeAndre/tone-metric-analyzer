@@ -1663,10 +1663,10 @@ def _pixel_beam_levels(
         if not segments or segments[0][0] > 0.35 * spacing:
             samples.append(0)
             continue
-        level = sum(
-            max(1, int(round((end - start + 1) / (0.60 * spacing))))
-            for start, end in segments
-        )
+        # Each separated ink band is one beam layer. Beam thickness varies
+        # substantially with scan resolution and engraving, so thickness must
+        # never be converted into multiple rhythmic beams.
+        level = len(segments)
         samples.append(min(level, 4))
 
     positive = [value for value in samples if value > 0]
