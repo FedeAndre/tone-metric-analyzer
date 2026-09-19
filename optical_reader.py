@@ -2331,15 +2331,15 @@ def tie_confidence(
         for i in range(1, n):
             _x, _y, w, h, area = [int(v) for v in stats[i]]
             span = w / max(1, x2 - x1)
-            if span < 0.42 or h > 1.35 * sp:
+            if span < 0.60 or h > 0.95 * sp:
                 continue
             density = area / max(1, w * h)
-            if density > 0.55:
+            if density > 0.32:
                 continue
             conf = min(
                 1.0,
-                0.52 * span
-                + 0.48 * (1.0 - min(1.0, density / 0.55)),
+                0.58 * span
+                + 0.42 * (1.0 - min(1.0, density / 0.32)),
             )
             if conf > best[1]:
                 best = (side, float(conf))
@@ -2370,7 +2370,10 @@ def tie_confidence(
                 patch = stafffree[ya:yb, xa:xb]
                 density = float(patch.mean()) if patch.size else 0.0
                 densities.append(density)
-                hits.append(density >= 0.06)
+                # A tie/slur stroke is thin. Thick beams, stems, noteheads,
+                # and text can intersect the predicted corridor but must not
+                # count as positive curve samples.
+                hits.append(0.04 <= density <= 0.42)
 
             hit_fraction = sum(hits) / max(1, len(hits))
             longest = 0
@@ -2392,10 +2395,16 @@ def tie_confidence(
                 + 0.25 * continuity
                 + 0.20 * end_support
             )
-            # Long gaps encounter more unrelated notation, so require slightly
-            # stronger evidence rather than forbidding them outright.
-            required = 0.48 if gap <= 8.0 * sp else 0.56
-            if curve_score >= required and curve_score > best[1]:
+            # Require a majority of the actual thin curve, not just a weighted
+            # score assembled from isolated intersections.
+            required = 0.60 if gap <= 8.0 * sp else 0.66
+            if (
+                hit_fraction >= 0.52
+                and continuity >= 0.24
+                and end_support >= 0.44
+                and curve_score >= required
+                and curve_score > best[1]
+            ):
                 best = (side, float(min(1.0, curve_score)))
 
     return best
