@@ -122,6 +122,8 @@ class Stem:
     system_id: int | None = None
     measure_local: int | None = None
     direction: str | None = None
+    beam_level: int = 0
+    beam_source: str | None = None
 
 
 @dataclass
@@ -1225,6 +1227,140 @@ def detect_beams(symbols: np.ndarray, staff: np.ndarray, note: np.ndarray, stems
     return beams
 
 
+
+def _pixel_beam_levels(
+    binary: np.ndarray,
+    tip_a: tuple[float, float, str],
+    tip_b: tuple[float, float, str],
+    spacing: float,
+) -> int:
+    """Count beam/flag layers directly between neighboring stem tips.
+
+    This uses raster evidence only: no voice, slot, onset, duration, or
+    horizontal-spacing-as-time information is consulted.
+    """
+    x1, y1, d1 = tip_a
+    x2, y2, d2 = tip_b
+    if d1 != d2:
+        return 0
+    if x2 < x1:
+        x1, y1, x2, y2 = x2, y2, x1, y1
+    gap = x2 - x1
+    if gap < 0.45 * spacing or gap > 6.0 * spacing:
+        return 0
+
+    scan_sign = 1 if d1 == "up" else -1
+    samples: list[int] = []
+    for fraction in np.linspace(0.15, 0.85, 7):
+        x = int(round(x1 + fraction * (x2 - x1)))
+        y0 = y1 + fraction * (y2 - y1)
+        density = []
+        for offset in range(int(round(1.8 * spacing)) + 1):
+            y = int(round(y0 + scan_sign * offset))
+            if 0 <= y < binary.shape[0]:
+                density.append(float(binary[y, max(0, x - 2):min(binary.shape[1], x + 3)].mean()))
+            else:
+                density.append(0.0)
+
+        values = np.asarray(density)
+        mask = values >= 0.60
+        segments: list[tuple[int, int]] = []
+        start = None
+        for i, active in enumerate(mask):
+            if active and start is None:
+                start = i
+            if start is not None and ((not active) or i == len(mask) - 1):
+                end = i if active and i == len(mask) - 1 else i - 1
+                minimum_thickness = max(4, int(round(0.20 * spacing)))
+                if (
+                    end - start + 1 >= minimum_thickness
+                    and float(values[start:end + 1].mean()) >= 0.80
+                ):
+                    segments.append((start, end))
+                start = None
+
+        if not segments or segments[0][0] > 0.35 * spacing:
+            samples.append(0)
+            continue
+        level = sum(
+            max(1, int(round((end - start + 1) / (0.60 * spacing))))
+            for start, end in segments
+        )
+        samples.append(min(level, 4))
+
+    positive = [value for value in samples if value > 0]
+    if len(positive) < 4:
+        return 0
+    return int(round(float(np.median(positive))))
+
+
+def complete_beam_levels_from_pixels(
+    gray: np.ndarray,
+    noteheads: list[Notehead],
+    stems: list[Stem],
+    beams: list[Beam],
+    staves: list[Staff],
+) -> tuple[int, int]:
+    """Complete per-stem beam levels from polygons plus direct raster ink."""
+    stem_by_id = {stem.id: stem for stem in stems}
+    heads_by_stem: dict[int, list[Notehead]] = {}
+    for head in noteheads:
+        if head.stem_id is not None:
+            heads_by_stem.setdefault(head.stem_id, []).append(head)
+
+    for beam in beams:
+        for stem_id in beam.stem_ids:
+            stem = stem_by_id.get(stem_id)
+            if stem is None:
+                continue
+            stem.beam_level += 1
+            stem.beam_source = "component"
+
+    binary = (gray < 128).astype(np.uint8)
+    by_staff_measure: dict[tuple[int, int], list[Stem]] = {}
+    for stem_id in heads_by_stem:
+        stem = stem_by_id.get(stem_id)
+        if (
+            stem is None
+            or stem.staff_id is None
+            or stem.measure_local is None
+            or stem.direction not in {"up", "down"}
+        ):
+            continue
+        by_staff_measure.setdefault((stem.staff_id, stem.measure_local), []).append(stem)
+
+    staff_by_id = {staff.id: staff for staff in staves}
+    supported_edges = 0
+    upgraded_stems: set[int] = set()
+    for (staff_id, _measure), local_stems in by_staff_measure.items():
+        spacing = staff_by_id[staff_id].spacing
+        ordered = sorted(local_stems, key=lambda stem: stem.cx)
+        for left, right in zip(ordered, ordered[1:]):
+            if left.direction != right.direction:
+                continue
+            left_tip = (
+                left.cx,
+                left.y1 if left.direction == "up" else left.y2,
+                left.direction,
+            )
+            right_tip = (
+                right.cx,
+                right.y1 if right.direction == "up" else right.y2,
+                right.direction,
+            )
+            level = _pixel_beam_levels(binary, left_tip, right_tip, spacing)
+            if level <= 0:
+                continue
+            supported_edges += 1
+            for stem in (left, right):
+                if level > stem.beam_level:
+                    stem.beam_level = level
+                    stem.beam_source = "pixel"
+                    upgraded_stems.add(stem.id)
+
+    return supported_edges, len(upgraded_stems)
+
+
 _SKLEARN_SYMBOL_MODELS: dict[str, dict] = {}
 
 
@@ -1690,6 +1826,9 @@ def process_page(
     )
     assign_regions(noteheads, stems, systems, measures)
     beams=detect_beams(symbols,staff_mask,note_mask,stems_rests,stems,staves)
+    pixel_beam_edges, pixel_beam_stem_upgrades = complete_beam_levels_from_pixels(
+        gray, noteheads, stems, beams, staves
+    )
     rests=detect_rests(
         stems_rests,
         noteheads,
@@ -1747,6 +1886,14 @@ def process_page(
         "unlinked_filled_noteheads":unlinked_filled,
         "stem_count":len(stems),
         "beam_count":len(beams),
+        "pixel_beam_edges":pixel_beam_edges,
+        "pixel_beam_stem_upgrades":pixel_beam_stem_upgrades,
+        "stem_beam_levels":{
+            "level_0":sum(1 for stem in stems if stem.beam_level == 0),
+            "level_1":sum(1 for stem in stems if stem.beam_level == 1),
+            "level_2":sum(1 for stem in stems if stem.beam_level == 2),
+            "level_3_plus":sum(1 for stem in stems if stem.beam_level >= 3),
+        },
         "rest_count":len(rests),
         "dot_count":len(dots),
         "tie_candidate_count":len(ties),
@@ -1803,6 +1950,8 @@ def analyze_input(
         "unlinked_filled_noteheads": sum(x["unlinked_filled_noteheads"] for x in result["pages"]),
         "stems": sum(x["stem_count"] for x in result["pages"]),
         "beams": sum(x["beam_count"] for x in result["pages"]),
+        "pixel_beam_edges": sum(x["pixel_beam_edges"] for x in result["pages"]),
+        "pixel_beam_stem_upgrades": sum(x["pixel_beam_stem_upgrades"] for x in result["pages"]),
         "rests": sum(x["rest_count"] for x in result["pages"]),
         "dots": sum(x["dot_count"] for x in result["pages"]),
         "tie_candidates": sum(x["tie_candidate_count"] for x in result["pages"]),
