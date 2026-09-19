@@ -31,7 +31,9 @@ jobs:
           find . -maxdepth 2 -type f ! -path './.git/*' | sort
 
       - name: Install clean optical reader
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install --no-deps 'git+https://github.com/BreezeWhite/oemer@dbe2a933d630d0f74805d717960eb259473f5978'
 
       - name: Reconstruct exact Buxtehude regression pages
         run: |
