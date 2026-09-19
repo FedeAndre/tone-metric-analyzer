@@ -441,7 +441,7 @@ def main(omr_path: str):
                                 if cid in seen_ids or cid not in chords:
                                     continue
                                 seen_ids.add(cid)
-                                x = slot_x.get(sid, chords[cid]["x"])
+                                x = chords[cid]["x"]
                                 seq.append((x, cid))
                             seq.sort(key=lambda q: (q[0], chords[q[1]]["x"], q[1]))
                             if seq:
@@ -600,10 +600,21 @@ def main(omr_path: str):
                         c["id"] for c in chords.values()
                         if c["measure"] == gm and c["kind"] == "note" and c["attack_heads"] and c["onset"] is None
                     ]
-                    if unresolved_voices:
-                        unresolved_reasons.append("unresolved-voices:" + ",".join(unresolved_voices))
+                    # Recompute final diagnostics after all visual repairs/rescues.
+                    # Earlier provisional overfull states must not survive after a
+                    # successful meter repair.
+                    final_reasons = [r for r in unresolved_reasons if ":unknown-duration" in r]
+                    for vr in voice_records:
+                        if not vr["valid"]:
+                            continue
+                        if vr["start"] is None:
+                            if vr["span"] > meter:
+                                final_reasons.append(f"{vr['key']}:overfull:{vr['span']}>{meter}")
+                            else:
+                                final_reasons.append(f"{vr['key']}:unresolved")
                     if unresolved_notes:
-                        unresolved_reasons.append("unresolved-attacks:" + ",".join(unresolved_notes))
+                        final_reasons.append("unresolved-attacks:" + ",".join(unresolved_notes))
+                    unresolved_reasons = final_reasons
 
                     measure_chords = [c for c in chords.values() if c["measure"] == gm]
                     hits = cluster_hit_chords(measure_chords, il)
