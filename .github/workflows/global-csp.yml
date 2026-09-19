@@ -40,6 +40,7 @@ jobs:
             test -n "$omr"
             PYTHONPATH=/app python3 /work/visual_attack_fullscore.py "$omr" --json /work/global_symbol_graph.json
             python3 /work/global_csp_solver.py /work/global_symbol_graph.json /work/global_csp_solved.json
+            python3 /work/global_voice_csp.py /work/global_symbol_graph.json /work/global_voice_solved.json
           '
 
       - name: Structural invariant audit
@@ -63,6 +64,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add global_symbol_graph.json global_csp_solved.json
+          git add global_symbol_graph.json global_csp_solved.json global_voice_solved.json
           git commit -m "[skip ci] add global CSP score-reader diagnostics"
           git push
