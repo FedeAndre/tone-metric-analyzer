@@ -2215,15 +2215,15 @@ def tie_confidence(
         for i in range(1, n):
             _x, _y, w, h, area = [int(v) for v in stats[i]]
             span = w / max(1, x2 - x1)
-            if span < 0.60 or h > 0.95 * sp:
+            if span < 0.55 or h > 1.15 * sp:
                 continue
             density = area / max(1, w * h)
-            if density > 0.32:
+            if density > 0.45:
                 continue
             conf = min(
                 1.0,
-                0.58 * span
-                + 0.42 * (1.0 - min(1.0, density / 0.32)),
+                0.56 * span
+                + 0.44 * (1.0 - min(1.0, density / 0.45)),
             )
             if conf > best[1]:
                 best = (side, float(conf))
@@ -2257,7 +2257,7 @@ def tie_confidence(
                 # A tie/slur stroke is thin. Thick beams, stems, noteheads,
                 # and text can intersect the predicted corridor but must not
                 # count as positive curve samples.
-                hits.append(0.04 <= density <= 0.42)
+                hits.append(0.03 <= density <= 0.65)
 
             hit_fraction = sum(hits) / max(1, len(hits))
             longest = 0
@@ -2281,11 +2281,11 @@ def tie_confidence(
             )
             # Require a majority of the actual thin curve, not just a weighted
             # score assembled from isolated intersections.
-            required = 0.60 if gap <= 8.0 * sp else 0.66
+            required = 0.52 if gap <= 8.0 * sp else 0.60
             if (
-                hit_fraction >= 0.52
-                and continuity >= 0.24
-                and end_support >= 0.44
+                hit_fraction >= 0.45
+                and continuity >= 0.18
+                and end_support >= 0.36
                 and curve_score >= required
                 and curve_score > best[1]
             ):
