@@ -34,6 +34,37 @@ class Staff:
 
 
 @dataclass
+class SystemRegion:
+    id: int
+    staff_ids: list[int]
+    top: float
+    bottom: float
+    left: float
+    right: float
+
+
+@dataclass
+class Barline:
+    id: int
+    system_id: int
+    x: float
+    top: float
+    bottom: float
+    line_count: int = 1
+
+
+@dataclass
+class MeasureRegion:
+    id: int
+    system_id: int
+    measure_in_system: int
+    left: float
+    right: float
+    top: float
+    bottom: float
+
+
+@dataclass
 class Notehead:
     id: int
     x1: int
@@ -44,6 +75,8 @@ class Notehead:
     cy: float
     staff_id: int | None
     staff_pos_halfspaces: int | None
+    system_id: int | None = None
+    measure_local: int | None = None
     fill_ratio: float
     head_type: str
     stem_id: int | None = None
@@ -63,6 +96,8 @@ class Stem:
     height: float
     width: float
     staff_id: int | None
+    system_id: int | None = None
+    measure_local: int | None = None
     direction: str | None = None
 
 
@@ -334,6 +369,244 @@ def nearest_staff(y: float, staves: list[Staff]) -> Staff | None:
 def global_spacing(staves: list[Staff]) -> float:
     vals = [s.spacing for s in staves if s.spacing > 0]
     return float(np.median(vals)) if vals else 18.0
+
+
+def detect_systems(
+    gray: np.ndarray,
+    staves: list[Staff],
+) -> list[SystemRegion]:
+    """
+    Group staves into systems from repeated inter-staff spacing and the actual
+    horizontal staff-line span. No expected number of staves/system is used.
+    """
+    if not staves:
+        return []
+
+    ordered = sorted(staves, key=lambda s: float(np.mean(s.lines_y)))
+    if len(ordered) == 1:
+        groups = [ordered]
+    else:
+        centers = np.array(
+            [float(np.mean(s.lines_y)) for s in ordered],
+            dtype=float,
+        )
+        gaps = np.diff(centers)
+        med = float(np.median(gaps))
+        mad = float(np.median(np.abs(gaps - med)))
+        sp = float(np.median([s.spacing for s in ordered]))
+        break_threshold = med + max(2.0 * mad, 1.5 * sp)
+
+        groups: list[list[Staff]] = []
+        current = [ordered[0]]
+        for i, gap in enumerate(gaps):
+            if float(gap) > break_threshold:
+                groups.append(current)
+                current = [ordered[i + 1]]
+            else:
+                current.append(ordered[i + 1])
+        groups.append(current)
+
+    ink = (gray < 185).astype(np.uint8)
+    sp_global = global_spacing(staves)
+    horizontal = cv2.morphologyEx(
+        ink,
+        cv2.MORPH_OPEN,
+        np.ones((1, max(20, int(round(3.0 * sp_global)))), np.uint8),
+    )
+
+    systems: list[SystemRegion] = []
+    for group in groups:
+        xs: list[int] = []
+        for staff in group:
+            for y in staff.lines_y:
+                yi = int(round(y))
+                y0 = max(0, yi - 2)
+                y1 = min(gray.shape[0], yi + 3)
+                cols = np.flatnonzero(
+                    np.any(horizontal[y0:y1, :] > 0, axis=0)
+                )
+                if len(cols):
+                    xs.extend(int(x) for x in cols)
+
+        left = float(min(xs)) if xs else 0.0
+        right = float(max(xs)) if xs else float(gray.shape[1] - 1)
+        sp = float(np.median([s.spacing for s in group]))
+        systems.append(
+            SystemRegion(
+                id=len(systems),
+                staff_ids=[s.id for s in group],
+                top=max(0.0, group[0].lines_y[0] - sp),
+                bottom=min(
+                    float(gray.shape[0] - 1),
+                    group[-1].lines_y[-1] + sp,
+                ),
+                left=left,
+                right=right,
+            )
+        )
+    return systems
+
+
+def _merge_close_x(values: list[float], tolerance: float) -> list[tuple[float, int]]:
+    if not values:
+        return []
+    values = sorted(values)
+    groups: list[list[float]] = [[values[0]]]
+    for value in values[1:]:
+        if value - groups[-1][-1] <= tolerance:
+            groups[-1].append(value)
+        else:
+            groups.append([value])
+    return [
+        (float(np.mean(group)), len(group))
+        for group in groups
+    ]
+
+
+def _longest_ink_run(column: np.ndarray) -> int:
+    data = cv2.morphologyEx(
+        (column > 0).astype(np.uint8).reshape(-1, 1),
+        cv2.MORPH_CLOSE,
+        np.ones((3, 1), np.uint8),
+    ).ravel()
+    best = 0
+    current = 0
+    for value in data:
+        if value:
+            current += 1
+            best = max(best, current)
+        else:
+            current = 0
+    return best
+
+
+def detect_barlines_and_measures(
+    gray: np.ndarray,
+    staves: list[Staff],
+    systems: list[SystemRegion],
+) -> tuple[list[Barline], list[MeasureRegion]]:
+    """
+    Detect measure boundaries as nearly continuous vertical raster strokes
+    spanning a system. This rejects coincident note stems on multiple staves:
+    summed vertical ink is insufficient unless a single continuous run crosses
+    most of the system height.
+    """
+    if not systems:
+        return [], []
+
+    sp = global_spacing(staves)
+    ink = (gray < 185).astype(np.uint8)
+    ink = cv2.dilate(ink, np.ones((1, 2), np.uint8))
+
+    barlines: list[Barline] = []
+    measures: list[MeasureRegion] = []
+
+    for system in systems:
+        top = max(0, int(round(system.top)))
+        bottom = min(gray.shape[0], int(round(system.bottom)))
+        height = max(1, bottom - top)
+        region = ink[top:bottom, :]
+
+        candidates: list[float] = []
+        for x in range(region.shape[1]):
+            run = _longest_ink_run(region[:, x])
+            if run >= 0.72 * height:
+                candidates.append(float(x))
+
+        # Convert adjacent ink columns into line centers, then merge double/final
+        # barlines into one temporal boundary while retaining line_count.
+        runs = contiguous_runs(
+            np.isin(
+                np.arange(gray.shape[1]),
+                np.array(candidates, dtype=int),
+            )
+        )
+        line_centers = [
+            (a + b) / 2.0
+            for a, b in runs
+            if (b - a + 1) <= 1.2 * sp
+        ]
+        merged = _merge_close_x(line_centers, 0.75 * sp)
+
+        # At a continuation system the left boundary can be represented by the
+        # system edge/brace rather than a full vertical barline. Add that edge
+        # only when the first detected internal bar is well to its right.
+        if not merged or merged[0][0] - system.left > 6.0 * sp:
+            merged.insert(0, (system.left, 1))
+
+        if system.right - merged[-1][0] > 6.0 * sp:
+            merged.append((system.right, 1))
+
+        # Restrict to the observed staff span and enforce strictly increasing
+        # temporal boundaries.
+        merged = [
+            item for item in merged
+            if system.left - sp <= item[0] <= system.right + sp
+        ]
+        merged.sort(key=lambda item: item[0])
+
+        sys_bars: list[Barline] = []
+        for x, line_count in merged:
+            bar = Barline(
+                id=len(barlines),
+                system_id=system.id,
+                x=float(x),
+                top=float(top),
+                bottom=float(bottom),
+                line_count=line_count,
+            )
+            barlines.append(bar)
+            sys_bars.append(bar)
+
+        for mi, (left_bar, right_bar) in enumerate(
+            zip(sys_bars, sys_bars[1:]),
+            start=1,
+        ):
+            if right_bar.x - left_bar.x < 2.0 * sp:
+                continue
+            measures.append(
+                MeasureRegion(
+                    id=len(measures) + 1,
+                    system_id=system.id,
+                    measure_in_system=mi,
+                    left=left_bar.x,
+                    right=right_bar.x,
+                    top=float(top),
+                    bottom=float(bottom),
+                )
+            )
+
+    return barlines, measures
+
+
+def assign_regions(
+    noteheads: list[Notehead],
+    stems: list[Stem],
+    systems: list[SystemRegion],
+    measures: list[MeasureRegion],
+) -> None:
+    staff_to_system = {
+        staff_id: system.id
+        for system in systems
+        for staff_id in system.staff_ids
+    }
+    by_system: dict[int, list[MeasureRegion]] = {}
+    for measure in measures:
+        by_system.setdefault(measure.system_id, []).append(measure)
+
+    def locate(staff_id: int | None, x: float) -> tuple[int | None, int | None]:
+        system_id = staff_to_system.get(staff_id) if staff_id is not None else None
+        if system_id is None:
+            return None, None
+        for measure in by_system.get(system_id, []):
+            if measure.left <= x <= measure.right:
+                return system_id, measure.id
+        return system_id, None
+
+    for nh in noteheads:
+        nh.system_id, nh.measure_local = locate(nh.staff_id, nh.cx)
+    for stem in stems:
+        stem.system_id, stem.measure_local = locate(stem.staff_id, stem.cx)
 
 
 def comp_stats(binary: np.ndarray) -> list[tuple[int, int, int, int, int]]:
@@ -733,6 +1006,23 @@ def detect_beams(symbols: np.ndarray, staff: np.ndarray, note: np.ndarray, stems
         if length/max(thick,1e-6) < 2.2:
             continue
         pts=cv2.boxPoints(rect)
+
+        edges = []
+        for i in range(4):
+            p1 = pts[i]
+            p2 = pts[(i + 1) % 4]
+            dx = float(p2[0] - p1[0])
+            dy = float(p2[1] - p1[1])
+            edges.append((math.hypot(dx, dy), dx, dy))
+        _, long_dx, long_dy = max(edges, key=lambda item: item[0])
+        beam_angle = math.degrees(math.atan2(long_dy, long_dx))
+        while beam_angle > 90.0:
+            beam_angle -= 180.0
+        while beam_angle < -90.0:
+            beam_angle += 180.0
+        if abs(beam_angle) > 35.0:
+            continue
+
         x1,y1=np.min(pts,axis=0); x2,y2=np.max(pts,axis=0)
         linked=[]
         margin=0.55*sp
@@ -894,6 +1184,11 @@ def process_page(
     component_stem_links, pixel_stem_links = link_noteheads_stems(
         noteheads, stems, staves, gray
     )
+    systems = detect_systems(gray, staves)
+    barlines, measures = detect_barlines_and_measures(
+        gray, staves, systems
+    )
+    assign_regions(noteheads, stems, systems, measures)
     beams=detect_beams(symbols,staff_mask,note_mask,stems_rests,stems,staves)
     dots=detect_dots(gray,staff_mask,noteheads,stems,beams,staves)
     ties=detect_tie_candidates(gray,staff_mask,noteheads,staves)
@@ -906,6 +1201,8 @@ def process_page(
         "page": page_index,
         "skew_degrees": round(skew_degrees, 4),
         "staves": len(staves),
+        "systems": len(systems),
+        "measures": len(measures),
         "noteheads": len(noteheads),
         "stems": len(stems),
         "beams": len(beams),
@@ -921,7 +1218,12 @@ def process_page(
         "skew_degrees":round(skew_degrees,4),
         "image_size":[int(gray.shape[1]),int(gray.shape[0])],
         "staff_count":len(staves),
+        "system_count":len(systems),
+        "measure_count":len(measures),
         "staves":[asdict(x) for x in staves],
+        "systems":[asdict(x) for x in systems],
+        "barlines":[asdict(x) for x in barlines],
+        "measures":[asdict(x) for x in measures],
         "notehead_count":len(noteheads),
         "filled_notehead_count":sum(n.head_type=="filled" for n in noteheads),
         "hollow_notehead_count":sum(n.head_type=="hollow" for n in noteheads),
@@ -970,6 +1272,8 @@ def main() -> None:
     result["totals"]={
         "pages":len(result["pages"]),
         "staves":sum(x["staff_count"] for x in result["pages"]),
+        "systems":sum(x["system_count"] for x in result["pages"]),
+        "measures":sum(x["measure_count"] for x in result["pages"]),
         "noteheads":sum(x["notehead_count"] for x in result["pages"]),
         "filled_noteheads":sum(x["filled_notehead_count"] for x in result["pages"]),
         "hollow_noteheads":sum(x["hollow_notehead_count"] for x in result["pages"]),
