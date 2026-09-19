@@ -10,6 +10,7 @@ ALLOWED_TOP = {
     "app.py",
     "rhythm_reconstructor.py",
     "tma_analysis.py",
+    "analyzer.py",
     "tone_metric",
     "Dockerfile",
     "tests",
