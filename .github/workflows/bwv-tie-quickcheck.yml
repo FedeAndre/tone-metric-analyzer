@@ -1,0 +1,53 @@
+name: BWV tie and rhythm quickcheck
+
+on:
+  push:
+    branches:
+      - tma-optical-reader-clean-20260919
+
+permissions:
+  contents: read
+
+jobs:
+  bwv-tie:
+    if: "!contains(github.event.head_commit.message, '[skip tieq]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install --no-deps 'git+https://github.com/BreezeWhite/oemer@dbe2a933d630d0f74805d717960eb259473f5978'
+      - uses: actions/cache@v4
+        with:
+          path: bwv661_cache
+          key: bwv661-oemer-dbe2a933d630d0f74805d717960eb259473f5978-300dpi-v1
+      - name: Run cached exact BWV 661 tie and rhythm audit
+        run: |
+          curl -fL --retry 4 --retry-delay 2 -o bwv661.pdf \
+            'https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf'
+          echo 'd50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661.pdf' | sha256sum -c -
+          python optical_reader.py bwv661.pdf --out bwv_audit --dpi 300 --cache-dir bwv661_cache
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from rhythm_reconstructor import reconstruct_attacks
+          d=json.load(open('bwv_audit/notation_graph.json'))
+          ties=[]
+          for p in d['pages']:
+              for t in p.get('tie_candidates',[]):
+                  ties.append((p['page'],t))
+          print('BWV_TIE_COUNT='+str(len(ties)))
+          print('BWV_TIE_CONF='+json.dumps(Counter(round(float(t[1]['confidence']),1) for t in ties),sort_keys=True))
+          print('BWV_TIES='+json.dumps(ties[:80],sort_keys=True))
+          r=reconstruct_attacks(d,meter=(2,2))
+          print('BWV_RHYTHM_STATS='+json.dumps(r['stats'],sort_keys=True))
+          print('BWV_READY='+str(r['rhythmic_attacks_ready']))
+          print('BWV_UNRESOLVED_REASONS='+json.dumps(Counter(x['reason'] for x in r['unresolved']),sort_keys=True))
+          PY
