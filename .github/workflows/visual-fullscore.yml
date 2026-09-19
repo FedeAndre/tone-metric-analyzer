@@ -1,0 +1,113 @@
+name: Full-score visual attack validation
+
+on:
+  push:
+    branches:
+      - visual-attacks-fullscore-20260919
+
+permissions:
+  contents: write
+
+jobs:
+  validate-buxtehude:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct exact Buxtehude pages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          curl -L --fail --retry 3 \
+            'https://urresearch.rochester.edu/fileDownloadForInstitutionalItem.action?itemFileId=36184&itemId=15575' \
+            -o full.pdf
+          pdfseparate -f 105 -l 106 full.pdf page-%d.pdf
+          pdfunite page-105.pdf page-106.pdf buxtehude.pdf
+          pdfinfo buxtehude.pdf | grep -E 'Pages|Page size'
+
+      - name: Build frozen analyzer image
+        run: docker build --progress=plain -t tma-visual-full .
+
+      - name: Produce OMR geometry only
+        run: |
+          mkdir -p aud_out visual_attacks
+          docker run --rm -v "$PWD:/work" -w /work tma-visual-full sh -lc '
+            set -eu
+            /opt/audiveris/bin/Audiveris -batch -save -export -output /work/aud_out /work/buxtehude.pdf
+            omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
+            test -n "$omr"
+            python3 /work/visual_attack_extractor.py "$omr"
+          '
+
+      - name: Validate visually audited target measures
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open("visual_attacks/visual_attack_diagnostics.json"))
+          expected={
+            "7":["0","1/2","3/4","1","3/2","7/4","2","5/2","3","7/2"],
+            "28":["0","1/2","1","3/2","2","9/4","5/2","11/4","3","7/2","15/4","31/8"],
+            "34":["0","1/4","1/2","3/4","1","5/4","3/2","7/4","2","9/4","5/2","11/4","3","7/2","15/4"],
+            "39":["0","1/2","3/4","1","5/4","3/2","7/4","2","5/2","11/4","3","13/4","7/2","15/4"],
+          }
+          for m,want in expected.items():
+              got=[x["onset_quarter_units"] for x in d["measures"][m]["hits"]]
+              print("CHECK",m,"complete=",d["measures"][m]["complete"],"got=",got)
+              assert d["measures"][m]["complete"], (m,d["measures"][m]["unresolved_reasons"])
+              assert got==want,(m,got,want)
+          print("TARGET_VISUAL_REGRESSION_OK")
+          PY
+
+      - name: Compare against frozen current hit engine
+        run: |
+          cat > compare_current.py <<'PY'
+          import json,sys
+          from fractions import Fraction
+          sys.path.insert(0,"/app")
+          from core import extract_hit_strikes
+
+          omr=sys.argv[1]
+          _,_,_,_,hits=extract_hit_strikes(omr)
+          current={}
+          for (m,o),h in hits.items():
+              current.setdefault(int(m),[]).append(str(o*4))
+          for m in current:
+              current[m]=sorted(current[m],key=lambda s: Fraction(s))
+
+          visual=json.load(open("/work/visual_attacks/visual_attack_diagnostics.json"))
+          rows=[]
+          for sm,v in visual["measures"].items():
+              m=int(sm)
+              vis=[h["onset_quarter_units"] for h in v["hits"]] if v["complete"] else None
+              cur=current.get(m,[])
+              rows.append({
+                  "measure":m,
+                  "visual_complete":v["complete"],
+                  "visual":vis,
+                  "current":cur,
+                  "match": bool(v["complete"] and vis==cur),
+              })
+          out={"rows":rows}
+          open("/work/visual_attacks/current_vs_visual.json","w").write(json.dumps(out,indent=2))
+          complete=[r for r in rows if r["visual_complete"]]
+          matches=[r for r in complete if r["match"]]
+          print("COMPARISON_SUMMARY="+json.dumps({
+              "visual_complete":len(complete),
+              "matches":len(matches),
+              "disagreements":[r["measure"] for r in complete if not r["match"]],
+          },separators=(",",":")))
+          PY
+          docker run --rm -v "$PWD:/work" -w /work tma-visual-full sh -lc '
+            omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
+            python3 /work/compare_current.py "$omr"
+          '
+
+      - name: Commit visual audit outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add visual_attacks/
+          git commit -m "[skip ci] add full-score visual attack audit"
+          git push
