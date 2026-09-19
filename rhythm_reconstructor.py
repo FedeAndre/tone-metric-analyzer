@@ -517,6 +517,122 @@ def _solve_unique_duration_chain_columns(
         times[column] = value
     return len(valid[0])
 
+
+def _resolve_geometric_grid_intervals(
+    times: dict[int, Fraction],
+    columns: list[list[VisualEvent]],
+    events: list[VisualEvent],
+    capacity: Fraction,
+) -> int:
+    """Resolve rational-grid ambiguity from engraving geometry conservatively.
+
+    Durations and measure capacity define the only legal rational time slots.
+    Horizontal engraving is used *only* to choose among those already legal
+    slots, and only inside an interval bounded by two exact timing anchors.
+    A solution is accepted when its normalized spacing closely matches the
+    visual spacing and is distinctly better than the next legal assignment.
+    """
+    if not columns or len(times) < 2:
+        return 0
+
+    positive = [
+        event.duration
+        for event in events
+        if event.duration > 0 and event.kind != "measure_rest"
+    ]
+    quantum = _fraction_gcd([capacity] + positive)
+    if quantum <= 0:
+        return 0
+
+    column_x = {
+        index: float(median([event.x for event in column]))
+        for index, column in enumerate(columns)
+        if column
+    }
+    added = 0
+    changed = True
+    while changed:
+        changed = False
+        anchors = sorted(
+            (column, value)
+            for column, value in times.items()
+            if column in column_x
+        )
+        for (left_col, left_time), (right_col, right_time) in zip(
+            anchors,
+            anchors[1:],
+        ):
+            unresolved = [
+                col
+                for col in range(left_col + 1, right_col)
+                if col not in times and col in column_x
+            ]
+            if not unresolved or right_time <= left_time:
+                continue
+
+            slots: list[Fraction] = []
+            value = left_time + quantum
+            while value < right_time:
+                slots.append(value)
+                value += quantum
+            if len(slots) < len(unresolved):
+                continue
+
+            # Exact combinatorial enumeration is tiny for engraved measures and
+            # preserves strict left-to-right ordering.
+            if len(slots) > 16 or len(unresolved) > 8:
+                continue
+
+            x0 = column_x[left_col]
+            x1 = column_x[right_col]
+            if x1 <= x0:
+                continue
+            span_t = right_time - left_time
+            visual = [
+                (column_x[col] - x0) / (x1 - x0)
+                for col in unresolved
+            ]
+
+            scored: list[tuple[float, float, tuple[Fraction, ...]]] = []
+            for choice in combinations(slots, len(unresolved)):
+                temporal = [
+                    float((slot - left_time) / span_t)
+                    for slot in choice
+                ]
+                errors = [
+                    abs(v - t)
+                    for v, t in zip(visual, temporal)
+                ]
+                max_error = max(errors, default=0.0)
+                mean_sq = (
+                    sum(error * error for error in errors) / len(errors)
+                    if errors else 0.0
+                )
+                scored.append((mean_sq, max_error, choice))
+
+            scored.sort(key=lambda row: (row[0], row[1], row[2]))
+            if not scored:
+                continue
+            best = scored[0]
+            second = scored[1] if len(scored) > 1 else None
+
+            # The selected rational assignment must agree well with the visual
+            # proportions and be meaningfully separated from the runner-up.
+            if best[1] > 0.18:
+                continue
+            if second is not None:
+                improvement = second[0] - best[0]
+                if improvement < 0.006:
+                    continue
+
+            for col, value in zip(unresolved, best[2]):
+                times[col] = value
+                added += 1
+            changed = True
+            break
+
+    return added
+
 def _build_measure_events(
     page: dict,
     measure: dict,
@@ -792,6 +908,7 @@ def reconstruct_attacks(
     attacks_out: list[dict] = []
     unresolved_out: list[dict] = []
     diagnostics_out: list[dict] = []
+    geometric_columns_total = 0
     global_measure_index = 0
     absolute_measure_start = Fraction(0)
 
@@ -1062,6 +1179,18 @@ def reconstruct_attacks(
                 temporal_events,
                 capacity,
             )
+            geometric_columns_total += _resolve_geometric_grid_intervals(
+                times,
+                columns,
+                temporal_events,
+                capacity,
+            )
+            _fill_uniquely_forced_grid_columns(
+                times,
+                columns,
+                temporal_events,
+                capacity,
+            )
 
             # Opening incomplete measure: if no complete voice exists and the
             # longest explicitly notated voice has a unique shared duration,
@@ -1229,7 +1358,8 @@ def reconstruct_attacks(
     return {
         "engine": "tma-optical-rhythm-constraints-v1",
         "semantic_timing_used": False,
-        "x_position_used_as_time": False,
+        "x_position_used_as_time": bool(geometric_columns_total),
+        "geometric_quantized_columns": geometric_columns_total,
         "meter": {
             "numerator": meter[0],
             "denominator": meter[1],
@@ -1247,6 +1377,7 @@ def reconstruct_attacks(
             "unresolved_items": len(unresolved_out),
             "constraint_conflicts": conflicts_total,
             "nonblocking_diagnostics": len(diagnostics_out),
+            "geometric_quantized_columns": geometric_columns_total,
         },
         "rhythmic_attacks_ready": ready,
     }
