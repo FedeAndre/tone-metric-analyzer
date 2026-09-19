@@ -106,6 +106,38 @@ jobs:
           print('BWV_ATTACK_RECALL='+f'{len(tp)/len(oracle):.8f}' if oracle else 'BWV_ATTACK_RECALL=0')
           print('BWV_FIRST_FP='+','.join(str(x) for x in sorted(fp)[:80]))
           print('BWV_FIRST_FN='+','.join(str(x) for x in sorted(fn)[:80]))
+
+          # Diagnostic only: measure how tie-candidate acceptance affects the
+          # exact sonic attack set. This does not alter the production graph.
+          import copy
+          for threshold in [None,0.65,0.70,0.75,0.80,0.85,0.90,1.01]:
+              g=copy.deepcopy(graph)
+              for p in g['pages']:
+                  if threshold is None:
+                      pass
+                  elif threshold>1.0:
+                      p['tie_candidates']=[]
+                  else:
+                      p['tie_candidates']=[
+                          t for t in p.get('tie_candidates',[])
+                          if float(t.get('confidence',0))>=threshold
+                      ]
+              rr=reconstruct_attacks(g,meter=(2,2))
+              oo={Fraction(str(h['onset_quarter'])) for h in rr['hits']}
+              tt=oracle & oo
+              ff=oo-oracle
+              nn=oracle-oo
+              label='all' if threshold is None else ('none' if threshold>1.0 else f'{threshold:.2f}')
+              print('BWV_TIE_POLICY='+json.dumps({
+                  'policy':label,
+                  'observed':len(oo),
+                  'tp':len(tt),
+                  'fp':len(ff),
+                  'fn':len(nn),
+                  'precision':len(tt)/len(oo) if oo else 0,
+                  'recall':len(tt)/len(oracle) if oracle else 0,
+                  'unresolved':rr['stats']['unresolved_items'],
+              },sort_keys=True))
           PY
 
       - name: Upload BWV quickcheck audit
