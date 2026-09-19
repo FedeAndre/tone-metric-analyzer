@@ -529,7 +529,10 @@ def _build_measure_events(
     tie_right = {
         int(tie["right_notehead_id"])
         for tie in page.get("tie_candidates", [])
-        if float(tie.get("confidence", 0.0)) >= 0.80
+        # Explicit/synthetic ties without a confidence field are treated as
+        # certain. Raster-detected ties carry confidence and must pass the
+        # conservative visual gate.
+        if float(tie.get("confidence", 1.0)) >= 0.80
     }
 
     local_heads = [
