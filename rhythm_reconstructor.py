@@ -1025,6 +1025,37 @@ def reconstruct_attacks(
                                 cursor += event.duration
                         _propagate_edges(times, active_edges, conflicts)
 
+            # If the opening bar did not prove an anacrusis, it is an ordinary
+            # full measure: its first temporal notation column is exactly zero.
+            # Re-run only exact duration/grid propagation after establishing
+            # that boundary.  This avoids treating every unanchored first bar
+            # as a pickup while still preserving genuine incomplete openings.
+            if (
+                global_measure_index == 0
+                and pickup_shift == 0
+                and columns
+            ):
+                times[0] = Fraction(0)
+                _propagate_edges(times, active_edges, conflicts)
+                _fill_uniquely_forced_grid_columns(
+                    times,
+                    columns,
+                    temporal_events,
+                    capacity,
+                )
+                _solve_unique_duration_chain_columns(
+                    times,
+                    columns,
+                    temporal_events,
+                    capacity,
+                )
+                _fill_uniquely_forced_grid_columns(
+                    times,
+                    columns,
+                    temporal_events,
+                    capacity,
+                )
+
             for event in events:
                 if event.column is not None and int(event.column) in times:
                     value = times[int(event.column)]
