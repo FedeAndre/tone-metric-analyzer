@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import ctypes
 import gc
 import json
 import math
@@ -24,6 +25,26 @@ CHECKPOINTS = {
     "unet_big/model.onnx": "https://github.com/BreezeWhite/oemer/releases/download/checkpoints/1st_model.onnx",
     "seg_net/model.onnx": "https://github.com/BreezeWhite/oemer/releases/download/checkpoints/2nd_model.onnx",
 }
+
+
+def _trim_process_memory() -> None:
+    """
+    Release Python objects and return freed native heap pages to the OS.
+
+    ONNX Runtime repeatedly allocates large convolution workspaces. Even after
+    a session is destroyed, glibc may retain those pages in the process heap.
+    Small Railway containers then begin the next page with the previous page's
+    high-water mark still resident. malloc_trim is a general process-memory
+    cleanup, not a score-specific workaround.
+    """
+    gc.collect()
+    if os.name != "posix":
+        return
+    try:
+        libc = ctypes.CDLL("libc.so.6")
+        libc.malloc_trim(0)
+    except (OSError, AttributeError):
+        pass
 
 
 @dataclass
@@ -298,8 +319,8 @@ def _low_memory_inference(
 
             del pred, labels, batch, patch, take
 
-    del best_weight, patch_weight, edge_distance, session
-    gc.collect()
+    del best_weight, patch_weight, edge_distance, session, image
+    _trim_process_memory()
     return class_map
 
 def run_segmentation(
@@ -324,7 +345,7 @@ def run_segmentation(
     staff = (first == 1).astype(np.uint8)
     symbols = (first == 2).astype(np.uint8)
     del first
-    gc.collect()
+    _trim_process_memory()
 
     second = _low_memory_inference(
         Path(MODULE_PATH) / "checkpoints" / "seg_net",
@@ -334,7 +355,7 @@ def run_segmentation(
     noteheads = (second == 2).astype(np.uint8)
     clefs_keys = (second == 3).astype(np.uint8)
     del second
-    gc.collect()
+    _trim_process_memory()
 
     src = cv2.cvtColor(source_bgr, cv2.COLOR_BGR2GRAY)
     src = cv2.resize(
@@ -343,7 +364,7 @@ def run_segmentation(
         interpolation=cv2.INTER_AREA,
     )
     del source_bgr
-    gc.collect()
+    _trim_process_memory()
 
     if cache_path is not None:
         cache_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1691,7 +1712,7 @@ def process_page(
     # them prevents page-1 classifier memory from accumulating with page-2 ONNX
     # inference inside small Railway containers.
     _SKLEARN_SYMBOL_MODELS.clear()
-    gc.collect()
+    _trim_process_memory()
 
     return {
         "page":page_index,
