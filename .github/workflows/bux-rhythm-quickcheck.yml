@@ -44,6 +44,7 @@ jobs:
           from rhythm_reconstructor import reconstruct_attacks
           d=json.load(open('bux_audit/notation_graph.json'))
           r=reconstruct_attacks(d,meter=(4,4))
+          json.dump(r,open('bux_audit/rhythm_audit.json','w'),indent=2)
           print("BUX_RHYTHM_STATS="+json.dumps(r["stats"],sort_keys=True))
           print("BUX_READY="+str(r["rhythmic_attacks_ready"]))
           print("BUX_CONFLICT_MEASURES="+str(sum(bool(m["conflicts"]) for m in r["measures"])))
@@ -67,3 +68,14 @@ jobs:
                   },sort_keys=True))
           print("BUX_PROBLEM_MEASURES_END")
           PY
+
+      - name: Upload Buxtehude rhythm audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buxtehude-rhythm-quickcheck
+          path: |
+            bux_audit/notation_graph.json
+            bux_audit/rhythm_audit.json
+            bux_audit/page_*_optical_overlay.png
+          retention-days: 7
