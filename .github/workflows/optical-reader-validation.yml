@@ -85,15 +85,43 @@ jobs:
       - name: Validate full PDF API under 512 MB container limit
         run: |
           cid=$(docker run -d --memory=512m --memory-swap=512m -p 8081:8080 tma-optical-reader-clean)
-          trap 'docker rm -f "$cid" >/dev/null 2>&1 || true' EXIT
+          cleanup() {
+            kill "${monpid:-}" >/dev/null 2>&1 || true
+            docker rm -f "$cid" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:8081/api/status >/dev/null; then
               break
             fi
             sleep 1
           done
+
+          (
+            while docker inspect "$cid" >/dev/null 2>&1; do
+              docker stats --no-stream --format '{{.MemUsage}} {{.MemPerc}} {{.CPUPerc}}' "$cid" >> container-stats.log 2>/dev/null || true
+              sleep 2
+            done
+          ) &
+          monpid=$!
+
+          set +e
           curl --fail --show-error --max-time 600             -F "file=@buxtehude.pdf;type=application/pdf"             http://127.0.0.1:8081/api/optical/read             -o api-result.json
-          docker stats --no-stream "$cid"
+          curl_rc=$?
+          set -e
+
+          kill "$monpid" >/dev/null 2>&1 || true
+          echo "CONTAINER_STATE:"
+          docker inspect --format 'status={{.State.Status}} oom={{.State.OOMKilled}} exit={{.State.ExitCode}} error={{.State.Error}}' "$cid" || true
+          echo "PEAK_SAMPLES:"
+          tail -n 30 container-stats.log || true
+          echo "CONTAINER_LOGS:"
+          docker logs --tail 250 "$cid" || true
+
+          if [ "$curl_rc" -ne 0 ]; then
+            exit "$curl_rc"
+          fi
+
           python - <<'PY'
           import json
           d=json.load(open("api-result.json"))
