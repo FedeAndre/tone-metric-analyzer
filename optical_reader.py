@@ -152,41 +152,67 @@ def contiguous_runs(mask: np.ndarray) -> list[tuple[int, int]]:
     return runs
 
 
-def detect_staves(staff_mask: np.ndarray) -> list[Staff]:
-    h, w = staff_mask.shape
-    proj = staff_mask.sum(axis=1).astype(np.float32)
+def _staves_from_line_mask(line_mask: np.ndarray, threshold_fraction: float) -> list[Staff]:
+    h, w = line_mask.shape
+    proj = line_mask.sum(axis=1).astype(np.float32)
     smooth = np.convolve(proj, np.ones(3, dtype=np.float32) / 3.0, mode="same")
-    threshold = max(18.0, float(w) * 0.055)
+    threshold = max(10.0, float(w) * threshold_fraction)
     rows = smooth >= threshold
     centers = [0.5 * (a + b) for a, b in contiguous_runs(rows)]
 
-    # Merge detections that are fragments of the same physical staff line.
     merged = []
-    for c in centers:
-        if merged and c - merged[-1] <= 3.0:
-            merged[-1] = 0.5 * (merged[-1] + c)
+    for center in centers:
+        if merged and center - merged[-1] <= 3.0:
+            merged[-1] = 0.5 * (merged[-1] + center)
         else:
-            merged.append(c)
+            merged.append(center)
 
+    # A page can contain stray long rules/text underlines. Five-line periodicity,
+    # rather than an assumed staff count, determines valid staves.
     out: list[Staff] = []
-    i = 0
-    while i + 4 < len(merged):
+    used_until = -1
+    for i in range(max(0, len(merged) - 4)):
         window = merged[i:i+5]
         gaps = np.diff(window)
         med = float(np.median(gaps))
-        if 5.0 <= med <= 45.0 and np.max(np.abs(gaps - med)) <= max(2.5, 0.28 * med):
-            sid = len(out)
-            out.append(Staff(
-                id=sid,
-                lines_y=[round(float(x), 3) for x in window],
-                spacing=med,
-                top=float(window[0] - 2.6 * med),
-                bottom=float(window[-1] + 2.6 * med),
-            ))
-            i += 5
-        else:
-            i += 1
+        if not (5.0 <= med <= 45.0):
+            continue
+        if np.max(np.abs(gaps - med)) > max(3.0, 0.32 * med):
+            continue
+        if window[0] <= used_until:
+            continue
+        sid = len(out)
+        out.append(Staff(
+            id=sid,
+            lines_y=[round(float(x), 3) for x in window],
+            spacing=med,
+            top=float(window[0] - 2.6 * med),
+            bottom=float(window[-1] + 2.6 * med),
+        ))
+        used_until = window[-1] + 0.5 * med
     return out
+
+
+def detect_staves(gray: np.ndarray, staff_mask: np.ndarray) -> list[Staff]:
+    # Two independent visual observations of the same page are evaluated:
+    # (1) the neural staff-line segmentation and (2) long horizontal ink in the
+    # original raster. No semantic OMR structure is used.
+    neural = _staves_from_line_mask(staff_mask, threshold_fraction=0.022)
+
+    ink = (gray < 185).astype(np.uint8)
+    w = gray.shape[1]
+    kernel_w = max(35, int(round(w * 0.045)))
+    horizontal = cv2.morphologyEx(
+        ink, cv2.MORPH_OPEN, np.ones((1, kernel_w), np.uint8)
+    )
+    horizontal = cv2.dilate(horizontal, np.ones((1, 5), np.uint8))
+    raster = _staves_from_line_mask(horizontal, threshold_fraction=0.050)
+
+    # Select the internally more complete periodic staff interpretation. This is
+    # page-agnostic and uses no expected staff count.
+    if len(raster) > len(neural):
+        return raster
+    return neural
 
 
 def nearest_staff(y: float, staves: list[Staff]) -> Staff | None:
@@ -485,7 +511,7 @@ def overlay(gray: np.ndarray, staves: list[Staff], noteheads: list[Notehead], st
 
 def process_page(page: Path, out_dir: Path, page_index: int) -> dict:
     gray, staff_mask, symbols, stems_rests, note_mask, clefs_keys = run_segmentation(page)
-    staves=detect_staves(staff_mask)
+    staves=detect_staves(gray,staff_mask)
     noteheads=detect_noteheads(gray,note_mask,staves)
     stems=vertical_components(stems_rests,staves)
     link_noteheads_stems(noteheads,stems,staves)
@@ -497,6 +523,17 @@ def process_page(page: Path, out_dir: Path, page_index: int) -> dict:
     overlay(gray,staves,noteheads,stems,beams,dots,ties,overlay_path)
 
     unlinked_filled=sum(1 for n in noteheads if n.head_type=="filled" and n.stem_id is None)
+    print("OPTICAL_PAGE=" + json.dumps({
+        "page": page_index,
+        "staves": len(staves),
+        "noteheads": len(noteheads),
+        "stems": len(stems),
+        "beams": len(beams),
+        "dots": len(dots),
+        "ties": len(ties),
+        "unlinked_filled": unlinked_filled,
+    }, separators=(",", ":")))
+
     return {
         "page":page_index,
         "image_size":[int(gray.shape[1]),int(gray.shape[0])],
