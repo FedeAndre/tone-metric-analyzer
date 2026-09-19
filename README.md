@@ -19,3 +19,8 @@ Validation target in CI:
 No production deployment is performed from this branch.
 
 Validation branch initialized from a source-clean tree.
+
+
+## Clean product pipeline
+
+The validation branch runs a one-way pipeline: independent optical notation extraction → exact rational rhythmic-attack reconstruction → validated Tone-Metric Levels, wave, pivots, and trees. Horizontal engraving spacing is never converted proportionally into score time; unresolved timing blocks final TMA rather than invoking a legacy fallback.
