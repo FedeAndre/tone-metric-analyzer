@@ -1,0 +1,85 @@
+name: Full-score visual attack validation
+
+on:
+  push:
+    branches:
+      - visual-attack-fullscore-20260919
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct exact public-domain Buxtehude pages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          curl -L --fail --retry 3             'https://urresearch.rochester.edu/fileDownloadForInstitutionalItem.action?itemFileId=36184&itemId=15575'             -o full.pdf
+          pdfseparate -f 105 -l 106 full.pdf page-%d.pdf
+          pdfunite page-105.pdf page-106.pdf buxtehude.pdf
+          pdfinfo buxtehude.pdf | grep -E 'Pages|Page size'
+
+      - name: Build exact current baseline container
+        run: docker build --progress=plain -t tma-visual-fullscore .
+
+      - name: Run Audiveris for notation objects only
+        run: |
+          mkdir -p aud_out
+          docker run --rm -v "$PWD:/work" -w /work tma-visual-fullscore sh -lc '
+            set -eu
+            /opt/audiveris/bin/Audiveris -batch -save -export -output /work/aud_out /work/buxtehude.pdf
+            omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
+            test -n "$omr"
+            python3 /work/visual_attack_fullscore.py "$omr" --json /work/visual_attack_fullscore.json
+          '
+
+      - name: Compare with current hit engine
+        run: |
+          cat > compare_current.py <<'PY'
+          import json, sys
+          sys.path.insert(0, '/app')
+          from core import extract_hit_strikes
+          omr=sys.argv[1]
+          _, _, _, _, hits=extract_hit_strikes(omr)
+          by={}
+          for (m,onset), hit in hits.items():
+              by.setdefault(int(m), []).append(str(onset*4))
+          for m in by:
+              by[m]=sorted(by[m], key=lambda s: float(eval(s)) if '/' not in s else float(eval(s)))
+          data=json.load(open('visual_attack_fullscore.json'))
+          rows=[]
+          for ms,r in data.items():
+              m=int(ms)
+              if not r['ok']:
+                  rows.append({'measure':m,'visual_ok':False,'current_count':len(by.get(m,[]))})
+                  continue
+              vis=[a['onset_quarter_units'] for a in r['attacks']]
+              rows.append({
+                  'measure':m,'visual_ok':True,
+                  'visual_count':len(vis),'current_count':len(by.get(m,[])),
+                  'visual_onsets':vis,'current_onsets':by.get(m,[]),
+                  'exact_match':vis==by.get(m,[])
+              })
+          json.dump(rows, open('visual_vs_current.json','w'), indent=2)
+          print('VISUAL_COMPARE exact_matches=',sum(1 for r in rows if r.get('exact_match')),
+                'validated_measures=',sum(1 for r in rows if r.get('visual_ok')),
+                'unresolved=',sum(1 for r in rows if not r.get('visual_ok')))
+          for m in (7,28,34,39):
+              print('COMPARE_TARGET',m,next(r for r in rows if r['measure']==m))
+          PY
+          omr=$(find aud_out -type f -name "*.omr" -print -quit)
+          docker run --rm -v "$PWD:/work" -w /work tma-visual-fullscore python3 /work/compare_current.py "$omr"
+
+      - name: Commit diagnostics
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add visual_attack_fullscore.json visual_vs_current.json
+          git commit -m "[skip ci] add full-score visual attack diagnostics"
+          git push
