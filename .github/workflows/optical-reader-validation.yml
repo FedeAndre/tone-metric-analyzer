@@ -35,6 +35,12 @@ jobs:
           pip install -r requirements.txt
           pip install --no-deps 'git+https://github.com/BreezeWhite/oemer@dbe2a933d630d0f74805d717960eb259473f5978'
 
+      - name: Cache low-level optical segmentation
+        uses: actions/cache@v4
+        with:
+          path: optical_cache
+          key: buxtehude-oemer-dbe2a933d630d0f74805d717960eb259473f5978-300dpi-v1
+
       - name: Reconstruct exact Buxtehude regression pages
         run: |
           sudo apt-get update -qq
@@ -46,7 +52,7 @@ jobs:
 
       - name: Run independent image-to-notation graph
         run: |
-          python optical_reader.py buxtehude.pdf --out optical_audit --dpi 300
+          python optical_reader.py buxtehude.pdf --out optical_audit --dpi 300 --cache-dir optical_cache
           python - <<'PY'
           import json
           d=json.load(open('optical_audit/notation_graph.json'))
