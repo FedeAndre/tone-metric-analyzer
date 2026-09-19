@@ -11,15 +11,15 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse
 
 
-APP_VERSION = "tma-optical-reader-clean-v1"
+APP_VERSION = "tma-clean-product-v1"
 JOB_ROOT = Path(tempfile.gettempdir()) / "tma-optical-jobs"
 JOB_ROOT.mkdir(parents=True, exist_ok=True)
 
-app = FastAPI(title="TMA Optical Attack Reader", version=APP_VERSION)
+app = FastAPI(title="Tone-Metric Analyzer", version=APP_VERSION)
 _executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="tma-optical")
 _jobs: dict[str, dict] = {}
 _jobs_lock = threading.Lock()
@@ -39,7 +39,7 @@ def _set_job(job_id: str, **changes) -> None:
             _jobs[job_id].update(changes)
 
 
-def _run_job(job_id: str, src: Path, out_dir: Path) -> None:
+def _run_job(job_id: str, src: Path, out_dir: Path, meter: str) -> None:
     """Run each score analysis in a disposable child process.
 
     The API process deliberately does not import ONNX Runtime or the optical
@@ -52,10 +52,12 @@ def _run_job(job_id: str, src: Path, out_dir: Path) -> None:
         app_root = Path(__file__).resolve().parent
         command = [
             sys.executable,
-            str(app_root / "optical_reader.py"),
+            str(app_root / "analyzer.py"),
             str(src),
             "--out",
             str(out_dir),
+            "--meter",
+            meter,
             "--dpi",
             "300",
         ]
@@ -75,10 +77,10 @@ def _run_job(job_id: str, src: Path, out_dir: Path) -> None:
                 f"reader subprocess exited {completed.returncode}.\n{tail}"
             )
 
-        result_path = out_dir / "notation_graph.json"
+        result_path = out_dir / "analysis.json"
         if not result_path.exists():
             raise RuntimeError(
-                "reader subprocess completed without notation_graph.json"
+                "analyzer subprocess completed without analysis.json"
             )
         result = json.loads(result_path.read_text())
         _set_job(
@@ -112,7 +114,7 @@ def home() -> str:
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TMA Optical Attack Reader</title>
+<title>Tone-Metric Analyzer</title>
 <style>
   :root{color-scheme:dark}
   body{margin:0;background:#0b0f14;color:#e8eef5;font-family:Arial,Helvetica,sans-serif}
@@ -130,12 +132,14 @@ def home() -> str:
 </head>
 <body>
 <div class="wrap">
-  <h1>TMA Optical Attack Reader</h1>
-  <p class="sub">Independent optical score reader. Upload a PDF or score image to generate the current notation graph. This build does not yet produce final TMA rhythmic attacks.</p>
+  <h1>Tone-Metric Analyzer</h1>
+  <p class="sub">Upload a score and provide its notated meter. The clean pipeline reads the score optically, proves the exact rhythmic attack timeline, then computes Tone-Metric Levels, wave, pivots, and trees. If exact timing cannot be proved, analysis stops instead of inventing timing.</p>
   <div class="card">
     <form id="form">
       <label for="file"><strong>Score file</strong></label>
       <input id="file" name="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.tif,.tiff" required>
+      <label for="meter"><strong>Notated meter</strong></label>
+      <input id="meter" name="meter" type="text" value="4/4" pattern="[0-9]+/[0-9]+" required style="display:block;margin:12px 0 18px;padding:9px;border-radius:7px;border:1px solid #334155;background:#0b0f14;color:#e8eef5">
       <button id="submit" type="submit">Analyze score</button>
       <div id="status" class="status">Ready.</div>
     </form>
@@ -169,9 +173,9 @@ form.addEventListener('submit',async(e)=>{
   status.className='status';
   status.textContent='Uploading score…';
   result.textContent='Queued…';
-  const body=new FormData(); body.append('file',file);
+  const body=new FormData(); body.append('file',file); body.append('meter',document.getElementById('meter').value);
   try{
-    const submitResponse=await fetch('/api/optical/read',{method:'POST',body});
+    const submitResponse=await fetch('/api/analyze',{method:'POST',body});
     const submitted=await readJson(submitResponse);
     const jobId=submitted.job_id;
     status.textContent='Analysis queued. The page will keep checking until it finishes.';
@@ -216,21 +220,30 @@ def status() -> dict:
         "ok": True,
         "version": APP_VERSION,
         "reader": "independent-optical",
-        "stage": "optical_notation_graph",
+        "stage": "optical->exact-rhythm->tone-metric",
         "semantic_timing_used": False,
-        "rhythmic_attacks_ready": False,
+        "x_position_used_as_time": False,
         "job_mode": "asynchronous",
     }
 
 
-@app.post("/api/optical/read", status_code=202)
-async def optical_read(file: UploadFile = File(...)) -> JSONResponse:
+@app.post("/api/analyze", status_code=202)
+async def analyze_score_endpoint(
+    file: UploadFile = File(...),
+    meter: str = Form(...),
+) -> JSONResponse:
     suffix = Path(file.filename or "").suffix.lower()
     if suffix not in {".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff"}:
         raise HTTPException(
             status_code=415,
             detail="Supported inputs: PDF, PNG, JPG/JPEG, TIFF.",
         )
+
+    try:
+        from rhythm_reconstructor import parse_meter
+        parse_meter(meter)
+    except Exception as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
 
     job_id = uuid.uuid4().hex
     root = JOB_ROOT / job_id
@@ -250,9 +263,10 @@ async def optical_read(file: UploadFile = File(...)) -> JSONResponse:
             "status": "queued",
             "created_at": time.time(),
             "filename": file.filename,
+            "meter": meter,
         }
 
-    _executor.submit(_run_job, job_id, src, out_dir)
+    _executor.submit(_run_job, job_id, src, out_dir, meter)
     return JSONResponse(
         status_code=202,
         content={
