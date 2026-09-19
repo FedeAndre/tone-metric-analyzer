@@ -221,8 +221,10 @@ def extract_visual_attacks(omr_path: str | Path):
                         "staff": node.get("staff") or "",
                         "box": cb,
                         "x": cb.cx,
+                        "y": cb.cy,
                         "heads": list(hs),
                         "attack_heads": [h for h in hs if h not in tied_right],
+                        "tied_heads": [h for h in hs if h in tied_right],
                         "stem": stem,
                         "direction": direction,
                     }
@@ -290,6 +292,7 @@ def extract_visual_attacks(omr_path: str | Path):
                 # No slot/time-offset values are read.
                 voices_by_measure = defaultdict(list)
                 referenced = set()
+                voice_hints_by_measure = defaultdict(list)
 
                 for pi, part in enumerate(parts):
                     measures = [e for e in part if loc(e.tag) == "measure"]
@@ -308,10 +311,16 @@ def extract_visual_attacks(omr_path: str | Path):
                             ids.sort(key=lambda cid: (chord_meta[cid]["x"], cid))
                             if ids:
                                 referenced.update(ids)
-                                voices_by_measure[mi].append({
+                                hint = {
                                     "part": pi,
                                     "voice": voice.get("id") or "1",
                                     "ids": ids,
+                                }
+                                voices_by_measure[mi].append(hint)
+                                voice_hints_by_measure[mi].append({
+                                    "part": pi,
+                                    "voice": voice.get("id") or "1",
+                                    "ids": list(ids),
                                 })
 
                 # Recover unreferenced beam-linked chords into a uniquely matching voice.
@@ -436,15 +445,79 @@ def extract_visual_attacks(omr_path: str | Path):
                         for t, cids in sorted(attacks.items())
                     ]
 
+                    event_rows = []
+                    for ec in sorted(
+                        [q for q in chord_meta.values() if q["measure_local"] == mi],
+                        key=lambda q: (q["x"], q["staff"], q["id"])
+                    ):
+                        hs = ec.get("heads", [])
+                        fill_ratios = []
+                        head_shapes = []
+                        dot_count = 0
+                        for hid in hs:
+                            hb = get_box(by.get(hid))
+                            if hb is not None:
+                                fill_ratios.append(round(_head_fill_ratio(binary, hb), 4))
+                            hn = by.get(hid)
+                            if hn is not None:
+                                head_shapes.append(hn.get("shape") or "")
+                            dot_count = max(dot_count, dots.get(hid, 0))
+                        rest_shape = None
+                        if ec["type"] == "rest-chord":
+                            rr = by.get(rest_child.get(ec["id"]))
+                            rest_shape = rr.get("shape") if rr is not None else None
+                            dot_count = max(dot_count, dots.get(rest_child.get(ec["id"]) or "", 0))
+                        st = ec.get("stem")
+                        event_rows.append({
+                            "id": ec["id"],
+                            "kind": "note" if ec["type"] == "head-chord" else "rest",
+                            "staff": ec["staff"],
+                            "x": round(float(ec["x"]), 3),
+                            "y": round(float(ec["y"]), 3),
+                            "direction": ec.get("direction"),
+                            "duration_whole_units": None if ec.get("duration") is None else _fraction_text(ec["duration"]),
+                            "attack": bool(ec.get("attack_heads")),
+                            "head_count": len(hs),
+                            "attack_head_count": len(ec.get("attack_heads", [])),
+                            "tied_head_count": len(ec.get("tied_heads", [])),
+                            "head_shapes": head_shapes,
+                            "head_fill_ratios": fill_ratios,
+                            "stem_present": bool(st),
+                            "semantic_beam_level": len(semantic_beams.get(st or "", set())),
+                            "resolved_beam_level": levels.get(st or "", 0),
+                            "flag_level": flags.get(st or "", 0),
+                            "dot_count": dot_count,
+                            "rest_shape": rest_shape,
+                        })
+
+                    measure_ids = {e["id"] for e in event_rows}
+                    beam_edges = []
+                    seen_beam_edges = set()
+                    for a in sorted(measure_ids):
+                        for b in sorted(beam_adj.get(a, set())):
+                            if b not in measure_ids or a == b:
+                                continue
+                            k = tuple(sorted((a, b)))
+                            if k in seen_beam_edges:
+                                continue
+                            seen_beam_edges.add(k)
+                            beam_edges.append(list(k))
+
                     measures_out[global_m] = {
                         "measure": global_m,
                         "page": page_index + 1,
                         "system": sy + 1,
                         "nominal_whole_units": _fraction_text(nominal),
+                        "bar_left_x": bounds[mi][0],
+                        "bar_right_x": bounds[mi][1],
+                        "interline": il,
                         "ok": measure_ok,
                         "attack_count": len(attack_rows) if measure_ok else None,
                         "attacks": attack_rows if measure_ok else [],
                         "voices": voice_rows,
+                        "voice_hints": voice_hints_by_measure.get(mi, []),
+                        "events": event_rows,
+                        "beam_edges": beam_edges,
                         "unresolved": unresolved,
                     }
 
