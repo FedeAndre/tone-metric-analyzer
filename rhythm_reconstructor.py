@@ -340,6 +340,183 @@ def _fill_uniquely_forced_grid_columns(
                 break
     return added
 
+
+def _solve_unique_duration_chain_columns(
+    times: dict[int, Fraction],
+    columns: list[list[VisualEvent]],
+    events: list[VisualEvent],
+    capacity: Fraction,
+    *,
+    max_assignments: int = 50000,
+) -> int:
+    """Solve unresolved columns by unique notated-duration chain continuity.
+
+    This is a finite exact search over the rational grid; x supplies column
+    order only.  A candidate assignment is admissible only when every event in
+    an unresolved column can be embedded in a same-staff duration chain: it is
+    preceded by an event ending exactly at its onset (or starts at the
+    measure boundary) and followed by an event beginning exactly at its end
+    (or ends at the measure boundary).  Times are committed only if exactly
+    one complete assignment satisfies those constraints.
+    """
+    unresolved_columns = [
+        column for column in range(len(columns)) if column not in times
+    ]
+    if not unresolved_columns:
+        return 0
+
+    quantum = _fraction_gcd(
+        [capacity] + [
+            event.duration
+            for event in events
+            if event.kind != "measure_rest" and event.duration > 0
+        ]
+    )
+    if quantum <= 0:
+        return 0
+
+    known_sorted = sorted(times.items())
+    candidate_map: dict[int, list[Fraction]] = {}
+    for column in unresolved_columns:
+        left_time = Fraction(0)
+        right_time = capacity
+        for known_col, known_time in known_sorted:
+            if known_col < column:
+                left_time = max(left_time, known_time)
+            elif known_col > column:
+                right_time = min(right_time, known_time)
+                break
+        values: list[Fraction] = []
+        value = left_time + quantum
+        while value < right_time:
+            values.append(value)
+            value += quantum
+        if not values:
+            return 0
+        candidate_map[column] = values
+
+    events_by_staff: dict[int, list[VisualEvent]] = {}
+    for event in events:
+        if event.kind == "measure_rest" or event.column is None:
+            continue
+        events_by_staff.setdefault(event.staff_id, []).append(event)
+
+    unresolved_set = set(unresolved_columns)
+    target_events = [
+        event for event in events
+        if event.column is not None
+        and int(event.column) in unresolved_set
+        and event.kind != "measure_rest"
+    ]
+
+    valid: list[dict[int, Fraction]] = []
+    assignment: dict[int, Fraction] = {}
+    explored = 0
+
+    def event_time(
+        event: VisualEvent,
+        all_times: dict[int, Fraction],
+    ) -> Fraction | None:
+        if event.column is None:
+            return None
+        return all_times.get(int(event.column))
+
+    def assignment_valid(all_times: dict[int, Fraction]) -> bool:
+        for event in target_events:
+            onset = event_time(event, all_times)
+            if onset is None:
+                return False
+            end = onset + event.duration
+            if onset < 0 or end > capacity:
+                return False
+
+            local = events_by_staff.get(event.staff_id, [])
+            pred_ok = onset == 0
+            succ_ok = end == capacity
+
+            if not pred_ok:
+                for other in local:
+                    if (
+                        other is event
+                        or other.column is None
+                        or int(other.column) >= int(event.column)
+                    ):
+                        continue
+                    other_onset = event_time(other, all_times)
+                    if (
+                        other_onset is not None
+                        and other_onset + other.duration == onset
+                    ):
+                        pred_ok = True
+                        break
+
+            if not succ_ok:
+                for other in local:
+                    if (
+                        other is event
+                        or other.column is None
+                        or int(other.column) <= int(event.column)
+                    ):
+                        continue
+                    other_onset = event_time(other, all_times)
+                    if other_onset == end:
+                        succ_ok = True
+                        break
+
+            if not (pred_ok and succ_ok):
+                return False
+        return True
+
+    ordered = unresolved_columns
+
+    def search(index: int, previous_time: Fraction) -> None:
+        nonlocal explored
+        if len(valid) > 1 or explored >= max_assignments:
+            return
+        if index >= len(ordered):
+            explored += 1
+            all_times = dict(times)
+            all_times.update(assignment)
+            if assignment_valid(all_times):
+                valid.append(dict(assignment))
+            return
+
+        column = ordered[index]
+        # Respect any fixed time to the right while preserving strict notation
+        # order.  Simultaneous objects are already in the same column.
+        next_known_time = capacity
+        for known_col, known_time in known_sorted:
+            if known_col > column:
+                next_known_time = known_time
+                break
+
+        for value in candidate_map[column]:
+            if value <= previous_time or value >= next_known_time:
+                continue
+            assignment[column] = value
+            search(index + 1, value)
+            assignment.pop(column, None)
+            if len(valid) > 1 or explored >= max_assignments:
+                return
+
+    # The first unresolved column must occur after the closest known column to
+    # its left; use -quantum when the measure begins unresolved so zero remains
+    # available only through an explicit column-0 anchor set elsewhere.
+    first = ordered[0]
+    previous = Fraction(-1)
+    for known_col, known_time in known_sorted:
+        if known_col < first:
+            previous = known_time
+        else:
+            break
+    search(0, previous)
+
+    if len(valid) != 1:
+        return 0
+    for column, value in valid[0].items():
+        times[column] = value
+    return len(valid[0])
+
 def _build_measure_events(
     page: dict,
     measure: dict,
@@ -781,6 +958,18 @@ def reconstruct_attacks(
             # Resolve any remaining binary-grid columns only where the
             # rational subdivision and notation order leave exactly one
             # possible assignment.
+            _fill_uniquely_forced_grid_columns(
+                times,
+                columns,
+                temporal_events,
+                capacity,
+            )
+            _solve_unique_duration_chain_columns(
+                times,
+                columns,
+                temporal_events,
+                capacity,
+            )
             _fill_uniquely_forced_grid_columns(
                 times,
                 columns,
