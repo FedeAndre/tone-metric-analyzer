@@ -1,0 +1,52 @@
+name: Full-score visual attack audit
+
+on:
+  push:
+    branches:
+      - visual-attack-extractor-fullscore-20260919
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct exact public-domain Buxtehude score pages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          curl -L --fail --retry 3 \
+            'https://urresearch.rochester.edu/fileDownloadForInstitutionalItem.action?itemFileId=36184&itemId=15575' \
+            -o full.pdf
+          pdfseparate -f 105 -l 106 full.pdf page-%d.pdf
+          pdfunite page-105.pdf page-106.pdf buxtehude.pdf
+          test "$(pdfinfo buxtehude.pdf | awk '/^Pages:/ {print $2}')" -eq 2
+
+      - name: Build exact current recognition container
+        run: docker build --progress=plain -t tma-visual-full .
+
+      - name: Recognize score geometry and run visual attack extractor
+        run: |
+          mkdir -p aud_out visual_attack_audit
+          docker run --rm -v "$PWD:/work" -w /work tma-visual-full sh -lc '
+            set -eu
+            /opt/audiveris/bin/Audiveris -batch -save -export -output /work/aud_out /work/buxtehude.pdf
+            omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
+            test -n "$omr"
+            python3 /work/visual_attack_extractor.py "$omr"
+          '
+          test -f visual_attack_audit/full_score_visual_attacks.json
+          test "$(find visual_attack_audit -name 'measure_*.png' | wc -l)" -eq 49
+
+      - name: Commit full-score audit artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add visual_attack_audit/
+          git commit -m "[skip ci] add full-score visual attack audit"
+          git push
