@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import gc
 import json
 import math
 import os
@@ -13,10 +14,10 @@ from typing import Iterable
 import cv2
 import fitz
 import numpy as np
+import onnxruntime as ort
 from PIL import Image, ImageDraw
 
 from oemer import MODULE_PATH
-from oemer.inference import inference
 
 
 CHECKPOINTS = {
@@ -172,30 +173,160 @@ def render_pdf(pdf_path: Path, out_dir: Path, dpi: int = 300) -> list[Path]:
     return pages
 
 
+def _resize_for_optical_model(image: np.ndarray) -> np.ndarray:
+    """
+    Match the pretrained segmentation model's intended page scale without
+    retaining duplicate PIL/cv2 copies. The target is the geometric midpoint
+    of the model's documented 3.0M-4.35M pixel operating range.
+    """
+    h, w = image.shape[:2]
+    pixels = h * w
+    if 3_000_000 <= pixels <= 4_350_000:
+        return image
+    target_pixels = (3_000_000 + 4_350_000) / 2.0
+    ratio = math.sqrt(target_pixels / float(max(1, pixels)))
+    target_w = max(1, int(round(w * ratio)))
+    target_h = max(1, int(round(h * ratio)))
+    print(f"Optical model raster: {target_w} {target_h}")
+    return cv2.resize(
+        image,
+        (target_w, target_h),
+        interpolation=cv2.INTER_AREA if ratio < 1.0 else cv2.INTER_CUBIC,
+    )
+
+
+def _low_memory_inference(
+    model_dir: Path,
+    image_bgr: np.ndarray,
+    step_size: int = 128,
+) -> np.ndarray:
+    """
+    Run only the pretrained low-level segmentation network with bounded memory.
+
+    The upstream inference helper keeps every image patch and every prediction
+    tensor resident until the page is complete. That is unnecessary for TMA and
+    can exceed small-container memory limits. This implementation streams one
+    patch at a time into a single page accumulator, uses CPU explicitly, and
+    disables ONNX Runtime's CPU arena/memory-pattern caches.
+
+    No semantic OMR, rhythm, voice, slot, or timing information is involved.
+    """
+    metadata_path = model_dir / "metadata.pkl"
+    model_path = model_dir / "model.onnx"
+    with metadata_path.open("rb") as fh:
+        metadata = pickle.load(fh)
+
+    input_shape = metadata["input_shape"]
+    output_shape = metadata["output_shape"]
+    win_size = int(input_shape[1])
+    channels = int(output_shape[-1])
+
+    image = _resize_for_optical_model(image_bgr)
+    h, w = image.shape[:2]
+
+    y_positions = []
+    for y in range(0, h, step_size):
+        yy = y
+        if yy + win_size > h:
+            yy = h - win_size
+        if not y_positions or yy != y_positions[-1]:
+            y_positions.append(yy)
+
+    x_positions = []
+    for x in range(0, w, step_size):
+        xx = x
+        if xx + win_size > w:
+            xx = w - win_size
+        if not x_positions or xx != x_positions[-1]:
+            x_positions.append(xx)
+
+    options = ort.SessionOptions()
+    options.enable_cpu_mem_arena = False
+    options.enable_mem_pattern = False
+    options.execution_mode = ort.ExecutionMode.ORT_SEQUENTIAL
+    options.intra_op_num_threads = 1
+    options.inter_op_num_threads = 1
+
+    session = ort.InferenceSession(
+        str(model_path),
+        sess_options=options,
+        providers=["CPUExecutionProvider"],
+    )
+    input_name = session.get_inputs()[0].name
+    output_name = session.get_outputs()[0].name
+
+    # One float32 probability accumulator plus one uint16 overlap counter.
+    # This is substantially smaller than retaining all patch predictions.
+    accumulator = np.zeros((h, w, channels), dtype=np.float32)
+    overlap = np.zeros((h, w), dtype=np.uint16)
+
+    total = len(y_positions) * len(x_positions)
+    index = 0
+    for y in y_positions:
+        for x in x_positions:
+            index += 1
+            if index == 1 or index % 25 == 0 or index == total:
+                print(f"Optical patch {index}/{total}")
+            patch = np.ascontiguousarray(
+                image[y:y + win_size, x:x + win_size]
+            )
+            batch = patch[np.newaxis, ...]
+            pred = session.run([output_name], {input_name: batch})[0][0]
+            accumulator[y:y + win_size, x:x + win_size] += pred
+            overlap[y:y + win_size, x:x + win_size] += 1
+            del pred, batch, patch
+
+    overlap_safe = np.maximum(overlap, 1)
+    accumulator /= overlap_safe[..., np.newaxis]
+    class_map = np.argmax(accumulator, axis=-1).astype(np.uint8)
+
+    del accumulator, overlap, overlap_safe, session
+    gc.collect()
+    return class_map
+
+
 def run_segmentation(
     img_path: Path,
     cache_path: Path | None = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     if cache_path is not None and cache_path.exists():
-        z = np.load(cache_path)
-        return (
-            z["gray"], z["staff"], z["symbols"],
-            z["stems_rests"], z["noteheads"], z["clefs_keys"],
-        )
+        with np.load(cache_path) as z:
+            return (
+                z["gray"], z["staff"], z["symbols"],
+                z["stems_rests"], z["noteheads"], z["clefs_keys"],
+            )
 
-    first, _ = inference(str(Path(MODULE_PATH) / "checkpoints" / "unet_big"), str(img_path), use_tf=False)
+    source_bgr = cv2.imread(str(img_path), cv2.IMREAD_COLOR)
+    if source_bgr is None:
+        raise RuntimeError(f"Cannot load {img_path}")
+
+    first = _low_memory_inference(
+        Path(MODULE_PATH) / "checkpoints" / "unet_big",
+        source_bgr,
+    )
     staff = (first == 1).astype(np.uint8)
     symbols = (first == 2).astype(np.uint8)
+    del first
+    gc.collect()
 
-    second, _ = inference(str(Path(MODULE_PATH) / "checkpoints" / "seg_net"), str(img_path), use_tf=False)
+    second = _low_memory_inference(
+        Path(MODULE_PATH) / "checkpoints" / "seg_net",
+        source_bgr,
+    )
     stems_rests = (second == 1).astype(np.uint8)
     noteheads = (second == 2).astype(np.uint8)
     clefs_keys = (second == 3).astype(np.uint8)
+    del second
+    gc.collect()
 
-    src = cv2.imread(str(img_path), cv2.IMREAD_GRAYSCALE)
-    if src is None:
-        raise RuntimeError(f"Cannot load {img_path}")
-    src = cv2.resize(src, (staff.shape[1], staff.shape[0]), interpolation=cv2.INTER_AREA)
+    src = cv2.cvtColor(source_bgr, cv2.COLOR_BGR2GRAY)
+    src = cv2.resize(
+        src,
+        (staff.shape[1], staff.shape[0]),
+        interpolation=cv2.INTER_AREA,
+    )
+    del source_bgr
+    gc.collect()
 
     if cache_path is not None:
         cache_path.parent.mkdir(parents=True, exist_ok=True)
@@ -209,7 +340,6 @@ def run_segmentation(
             clefs_keys=clefs_keys,
         )
     return src, staff, symbols, stems_rests, noteheads, clefs_keys
-
 
 def estimate_page_skew(gray: np.ndarray) -> float:
     """Estimate global staff-line skew from long near-horizontal raster segments."""
