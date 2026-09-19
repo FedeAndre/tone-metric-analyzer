@@ -28,6 +28,12 @@ jobs:
           pip install -r requirements.txt
           pip install --no-deps 'git+https://github.com/BreezeWhite/oemer@dbe2a933d630d0f74805d717960eb259473f5978'
 
+      - name: Cache exact BWV 661 low-level segmentation
+        uses: actions/cache@v4
+        with:
+          path: bwv661_cache
+          key: bwv661-oemer-dbe2a933d630d0f74805d717960eb259473f5978-300dpi-v1
+
       - name: Download byte-identical BWV 661 regression score
         run: |
           curl -fL --retry 4 --retry-delay 2 -o bwv661.pdf 'https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf'
