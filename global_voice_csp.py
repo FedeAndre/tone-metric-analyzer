@@ -120,10 +120,23 @@ def solve_measure(row, check_ambiguity=True):
     for i in by:
         opt.add(t[i] % quantum == 0)
 
-    ordered=sorted(events,key=lambda e:(float(e["x"]),e["id"]))
+    def is_full_measure_rest(e):
+        return (
+            e.get("kind")=="rest"
+            and e.get("duration_whole_units")
+            and to_ticks(F(e["duration_whole_units"]))==meter
+        )
 
-    # Earliest visible glyph defines bar onset.  All events in its very tight
-    # visual column are onset 0; this works for notes, rests and tied continuations.
+    # Whole-measure rests are conventionally centered in the bar, so their printed
+    # x-position carries no onset-order information.  They remain hard-anchored to
+    # time 0 below, but are excluded from horizontal temporal ordering.
+    ordered_all=sorted(events,key=lambda e:(float(e["x"]),e["id"]))
+    ordered=[e for e in ordered_all if not is_full_measure_rest(e)]
+    if not ordered:
+        ordered=ordered_all
+
+    # Earliest non-whole-rest glyph defines bar onset. All events in its tight
+    # visual column are onset 0. This is a notation convention, not a score patch.
     minx=float(ordered[0]["x"])
     firstcol=[e for e in ordered if float(e["x"])-minx<=0.18*il]
     for e in firstcol:
@@ -167,7 +180,7 @@ def solve_measure(row, check_ambiguity=True):
     # Segment-edge evidence.  Left-edge starts and right-edge completions are
     # general engraving cues and are weighted rather than patched.
     left=float(row.get("bar_left_x") or minx)
-    right=float(row.get("bar_right_x") or max(float(e["x"]) for e in ordered))
+    right=float(row.get("bar_right_x") or max(float(e["x"]) for e in ordered_all))
     for s in segs:
         ids=s["ids"]; first=by[ids[0]]; last=by[ids[-1]]
         sx=float(first["x"]); lx=float(last["x"])
