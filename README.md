@@ -17,3 +17,5 @@ Validation target in CI:
 - source-tree independence gate runs before analysis.
 
 No production deployment is performed from this branch.
+
+Validation branch initialized from a source-clean tree.
