@@ -158,6 +158,7 @@ jobs:
           docker inspect --format 'status={{.State.Status}} oom={{.State.OOMKilled}} exit={{.State.ExitCode}}' "$cid"
 
       - name: Run independent image-to-notation graph
+        if: always()
         run: |
           python optical_reader.py buxtehude.pdf --out optical_audit --dpi 300 --cache-dir optical_cache
           python - <<'PY'
@@ -185,4 +186,5 @@ jobs:
             optical_audit/page_02_optical_overlay.png
             optical_cache/page_01.npz
             optical_cache/page_02.npz
+            buxtehude.pdf
           retention-days: 14
