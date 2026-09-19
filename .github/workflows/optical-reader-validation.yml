@@ -76,4 +76,6 @@ jobs:
             optical_audit/notation_graph.json
             optical_audit/page_01_optical_overlay.png
             optical_audit/page_02_optical_overlay.png
+            optical_cache/page_01.npz
+            optical_cache/page_02.npz
           retention-days: 14
