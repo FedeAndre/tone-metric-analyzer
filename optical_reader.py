@@ -199,14 +199,15 @@ def _low_memory_inference(
     model_dir: Path,
     image_bgr: np.ndarray,
     step_size: int = 128,
+    batch_size: int = 4,
 ) -> np.ndarray:
     """
     Run only the pretrained low-level segmentation network with bounded memory.
 
     The upstream inference helper keeps every image patch and every prediction
     tensor resident until the page is complete. That is unnecessary for TMA and
-    can exceed small-container memory limits. This implementation streams one
-    patch at a time into a single page accumulator, uses CPU explicitly, and
+    can exceed small-container memory limits. This implementation streams a
+    small fixed batch into a single page accumulator, uses CPU explicitly, and
     disables ONNX Runtime's CPU arena/memory-pattern caches.
 
     No semantic OMR, rhythm, voice, slot, or timing information is involved.
@@ -260,21 +261,36 @@ def _low_memory_inference(
     accumulator = np.zeros((h, w, channels), dtype=np.float32)
     overlap = np.zeros((h, w), dtype=np.uint16)
 
-    total = len(y_positions) * len(x_positions)
-    index = 0
-    for y in y_positions:
-        for x in x_positions:
-            index += 1
-            if index == 1 or index % 25 == 0 or index == total:
-                print(f"Optical patch {index}/{total}")
-            patch = np.ascontiguousarray(
+    positions = [
+        (y, x)
+        for y in y_positions
+        for x in x_positions
+    ]
+    total = len(positions)
+
+    for batch_start in range(0, total, batch_size):
+        batch_positions = positions[batch_start:batch_start + batch_size]
+        patches = [
+            np.ascontiguousarray(
                 image[y:y + win_size, x:x + win_size]
             )
-            batch = patch[np.newaxis, ...]
-            pred = session.run([output_name], {input_name: batch})[0][0]
-            accumulator[y:y + win_size, x:x + win_size] += pred
+            for y, x in batch_positions
+        ]
+        batch = np.stack(patches, axis=0)
+        pred_batch = session.run(
+            [output_name],
+            {input_name: batch},
+        )[0]
+
+        for local_index, (y, x) in enumerate(batch_positions):
+            accumulator[y:y + win_size, x:x + win_size] += pred_batch[local_index]
             overlap[y:y + win_size, x:x + win_size] += 1
-            del pred, batch, patch
+
+        completed = min(batch_start + len(batch_positions), total)
+        if batch_start == 0 or completed % 25 < batch_size or completed == total:
+            print(f"Optical patch {completed}/{total}")
+
+        del pred_batch, batch, patches
 
     overlap_safe = np.maximum(overlap, 1)
     accumulator /= overlap_safe[..., np.newaxis]
