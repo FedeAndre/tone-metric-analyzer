@@ -11,31 +11,31 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10723"
+          "10810"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10725",
-          "10726"
+          "10812",
+          "10813"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10727",
-          "10728"
+          "10814",
+          "10815"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10729",
-          "10730"
+          "10816",
+          "10817"
         ]
       }
     ],
@@ -48,6 +48,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -59,6 +61,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -70,6 +74,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -87,49 +93,49 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10715",
-          "10731",
-          "10732"
+          "10802",
+          "10818",
+          "10819"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10733",
-          "10734",
-          "10776"
+          "10820",
+          "10821",
+          "10863"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10716",
-          "10735",
-          "10736",
-          "10777"
+          "10803",
+          "10822",
+          "10823",
+          "10864"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "10737"
+          "10824"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10738"
+          "10825"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "10739"
+          "10826"
         ]
       }
     ],
@@ -142,6 +148,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -153,6 +161,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -164,6 +174,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -175,6 +187,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -192,38 +206,38 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10717",
-          "10741"
+          "10804",
+          "10828"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10742",
-          "10743"
+          "10829",
+          "10830"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10718"
+          "10805"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10719",
-          "10745"
+          "10806",
+          "10832"
         ]
       },
       {
         "onset_whole_units": "15/16",
         "onset_quarter_units": "15/4",
         "chords": [
-          "10720"
+          "10807"
         ]
       }
     ],
@@ -236,6 +250,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -247,6 +263,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -258,6 +276,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -269,6 +289,8 @@
         "offset": "3/4",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 0.0
       }
@@ -286,41 +308,41 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10721"
+          "10808"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10746",
-          "10747",
-          "10778"
+          "10833",
+          "10834",
+          "10865"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10722",
-          "10748",
-          "10779"
+          "10809",
+          "10835",
+          "10866"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10749",
-          "10750",
-          "10780"
+          "10836",
+          "10837",
+          "10867"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "10751"
+          "10838"
         ]
       }
     ],
@@ -333,6 +355,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -344,6 +368,8 @@
         "offset": "1/4",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 2,
         "anchor_best_px": 1.0
       },
@@ -355,6 +381,8 @@
         "offset": "1/4",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 3,
         "anchor_best_px": 3.0
       },
@@ -366,6 +394,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -383,53 +413,53 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10724",
-          "10752",
-          "10753",
-          "10781"
+          "10811",
+          "10839",
+          "10840",
+          "10868"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "10754"
+          "10841"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10755",
-          "10756"
+          "10842",
+          "10843"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10757"
+          "10844"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "10758"
+          "10845"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10759"
+          "10846"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10760"
+          "10847"
         ]
       }
     ],
@@ -442,6 +472,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -453,6 +485,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 2,
         "anchor_best_px": 0.0
       },
@@ -464,6 +498,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -475,6 +511,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -493,10 +531,12 @@
         "part": 1,
         "voice": "1",
         "span": "1/2",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "ambiguous-offset",
+        "resolved": true,
+        "offset": "0",
+        "method": "left-edge-seed",
+        "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -508,6 +548,8 @@
         "offset": null,
         "method": null,
         "reason": "ambiguous-offset",
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -519,6 +561,8 @@
         "offset": null,
         "method": null,
         "reason": "ambiguous-offset",
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -529,9 +573,86 @@
     "page": 1,
     "system": 2,
     "nominal_whole_units": "1",
-    "ok": false,
-    "attack_count": null,
-    "attacks": [],
+    "ok": true,
+    "attack_count": 10,
+    "attacks": [
+      {
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "chords": [
+          "10894"
+        ]
+      },
+      {
+        "onset_whole_units": "1/8",
+        "onset_quarter_units": "1/2",
+        "chords": [
+          "10896"
+        ]
+      },
+      {
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "chords": [
+          "10897"
+        ]
+      },
+      {
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "chords": [
+          "10898"
+        ]
+      },
+      {
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "chords": [
+          "10899"
+        ]
+      },
+      {
+        "onset_whole_units": "7/16",
+        "onset_quarter_units": "7/4",
+        "chords": [
+          "10900"
+        ]
+      },
+      {
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "chords": [
+          "10869",
+          "10901",
+          "10902"
+        ]
+      },
+      {
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "chords": [
+          "10903",
+          "10904"
+        ]
+      },
+      {
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "chords": [
+          "10905",
+          "10906"
+        ]
+      },
+      {
+        "onset_whole_units": "7/8",
+        "onset_quarter_units": "7/2",
+        "chords": [
+          "10870",
+          "10907",
+          "10908"
+        ]
+      }
+    ],
     "voices": [
       {
         "part": 0,
@@ -541,6 +662,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -552,6 +675,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -559,12 +684,14 @@
         "part": 1,
         "voice": "2",
         "span": "1/2",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "ambiguous-offset",
-        "anchor_count": null,
-        "anchor_best_px": null
+        "resolved": true,
+        "offset": "0",
+        "method": "x-anchor",
+        "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
+        "anchor_count": 1,
+        "anchor_best_px": 4.5
       },
       {
         "part": 1,
@@ -574,6 +701,8 @@
         "offset": "1/2",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 4,
         "anchor_best_px": 0.0
       }
@@ -591,59 +720,59 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10784",
-          "10822",
-          "10823"
+          "10871",
+          "10909",
+          "10910"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "10824"
+          "10911"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10825"
+          "10912"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10826"
+          "10913"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10785",
-          "10828"
+          "10872",
+          "10915"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "10829"
+          "10916"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10830"
+          "10917"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "10831"
+          "10918"
         ]
       }
     ],
@@ -656,6 +785,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -667,6 +798,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -678,6 +811,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -688,9 +823,106 @@
     "page": 1,
     "system": 2,
     "nominal_whole_units": "1",
-    "ok": false,
-    "attack_count": null,
-    "attacks": [],
+    "ok": true,
+    "attack_count": 13,
+    "attacks": [
+      {
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "chords": [
+          "10873",
+          "10920"
+        ]
+      },
+      {
+        "onset_whole_units": "1/8",
+        "onset_quarter_units": "1/2",
+        "chords": [
+          "10921"
+        ]
+      },
+      {
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "chords": [
+          "10922"
+        ]
+      },
+      {
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "chords": [
+          "10923",
+          "10924"
+        ]
+      },
+      {
+        "onset_whole_units": "5/16",
+        "onset_quarter_units": "5/4",
+        "chords": [
+          "10875"
+        ]
+      },
+      {
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "chords": [
+          "10876"
+        ]
+      },
+      {
+        "onset_whole_units": "7/16",
+        "onset_quarter_units": "7/4",
+        "chords": [
+          "10877"
+        ]
+      },
+      {
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "chords": [
+          "10878"
+        ]
+      },
+      {
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "chords": [
+          "10925",
+          "10926",
+          "10927"
+        ]
+      },
+      {
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "chords": [
+          "10928",
+          "10929"
+        ]
+      },
+      {
+        "onset_whole_units": "13/16",
+        "onset_quarter_units": "13/4",
+        "chords": [
+          "10880"
+        ]
+      },
+      {
+        "onset_whole_units": "7/8",
+        "onset_quarter_units": "7/2",
+        "chords": [
+          "10881"
+        ]
+      },
+      {
+        "onset_whole_units": "15/16",
+        "onset_quarter_units": "15/4",
+        "chords": [
+          "10882"
+        ]
+      }
+    ],
     "voices": [
       {
         "part": 0,
@@ -700,19 +932,23 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
       {
         "part": 1,
         "voice": "1",
-        "span": "9/8",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "overfull",
-        "anchor_count": null,
-        "anchor_best_px": null
+        "span": "1",
+        "resolved": true,
+        "offset": "0",
+        "method": "constraint-repair",
+        "reason": null,
+        "repair_cost": 1.1,
+        "repair_changes": 1,
+        "anchor_count": 3,
+        "anchor_best_px": 1.0
       },
       {
         "part": 1,
@@ -722,6 +958,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -733,6 +971,8 @@
         "offset": "5/8",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 2,
         "anchor_best_px": 0.0
       }
@@ -750,83 +990,83 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10796"
+          "10883"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "10843",
-          "10844"
+          "10930",
+          "10931"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10845",
-          "10846"
+          "10932",
+          "10933"
         ]
       },
       {
         "onset_whole_units": "5/16",
         "onset_quarter_units": "5/4",
         "chords": [
-          "10798"
+          "10885"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10799"
+          "10886"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "10800"
+          "10887"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10801",
-          "10848"
+          "10888",
+          "10935"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "10802",
-          "10849"
+          "10889",
+          "10936"
         ]
       },
       {
         "onset_whole_units": "11/16",
         "onset_quarter_units": "11/4",
         "chords": [
-          "10803"
+          "10890"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10804",
-          "10850",
-          "10851"
+          "10891",
+          "10937",
+          "10938"
         ]
       },
       {
         "onset_whole_units": "27/32",
         "onset_quarter_units": "27/8",
         "chords": [
-          "10805"
+          "10892"
         ]
       }
     ],
@@ -839,6 +1079,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 5,
         "anchor_best_px": 0.5
       },
@@ -850,6 +1092,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -861,6 +1105,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -878,50 +1124,50 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10806",
-          "10852",
-          "10853"
+          "10893",
+          "10939",
+          "10940"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10854",
-          "10855",
-          "10864"
+          "10941",
+          "10942",
+          "10951"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10865"
+          "10952"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "10858",
-          "10859"
+          "10945",
+          "10946"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10860",
-          "10861",
-          "10866"
+          "10947",
+          "10948",
+          "10953"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "10862",
-          "10863"
+          "10949",
+          "10950"
         ]
       }
     ],
@@ -934,6 +1180,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -945,6 +1193,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -956,6 +1206,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -967,6 +1219,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -984,62 +1238,62 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10883",
-          "10884",
-          "10938"
+          "10970",
+          "10971",
+          "11025"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "10885"
+          "10972"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10886",
-          "10887",
-          "10939"
+          "10973",
+          "10974",
+          "11026"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10888"
+          "10975"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10890",
-          "10940"
+          "10977",
+          "11027"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "10891"
+          "10978"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10892",
-          "10941"
+          "10979",
+          "11028"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "10893"
+          "10980"
         ]
       }
     ],
@@ -1052,6 +1306,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1063,6 +1319,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1074,6 +1332,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -1091,73 +1351,73 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10894",
-          "10895",
-          "10942"
+          "10981",
+          "10982",
+          "11029"
         ]
       },
       {
         "onset_whole_units": "1/16",
         "onset_quarter_units": "1/4",
         "chords": [
-          "10867"
+          "10954"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "10868"
+          "10955"
         ]
       },
       {
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "chords": [
-          "10869"
+          "10956"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10870"
+          "10957"
         ]
       },
       {
         "onset_whole_units": "5/16",
         "onset_quarter_units": "5/4",
         "chords": [
-          "10871"
+          "10958"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10872"
+          "10959"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "10873"
+          "10960"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10874"
+          "10961"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10896",
-          "10897"
+          "10983",
+          "10984"
         ]
       }
     ],
@@ -1170,6 +1430,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1181,6 +1443,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1192,6 +1456,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1203,6 +1469,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -1220,41 +1488,41 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10875",
-          "10898",
-          "10899"
+          "10962",
+          "10985",
+          "10986"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10900",
-          "10943"
+          "10987",
+          "11030"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10876",
-          "10901",
-          "10902",
-          "10944"
+          "10963",
+          "10988",
+          "10989",
+          "11031"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10945"
+          "11032"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "10903"
+          "10990"
         ]
       }
     ],
@@ -1267,6 +1535,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1278,6 +1548,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1289,6 +1561,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1300,6 +1574,8 @@
         "offset": "1/4",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 2,
         "anchor_best_px": 0.5
       }
@@ -1317,49 +1593,49 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10877",
-          "10904",
-          "10905",
-          "10946"
+          "10964",
+          "10991",
+          "10992",
+          "11033"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10906",
-          "10947"
+          "10993",
+          "11034"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10907",
-          "10948"
+          "10994",
+          "11035"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10878",
-          "10908"
+          "10965",
+          "10995"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10909",
-          "10910"
+          "10996",
+          "10997"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "10879"
+          "10966"
         ]
       }
     ],
@@ -1372,6 +1648,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1383,6 +1661,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1394,6 +1674,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1405,6 +1687,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 2,
         "anchor_best_px": 0.0
       }
@@ -1422,41 +1706,41 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10880",
-          "10911",
-          "10912",
-          "10949"
+          "10967",
+          "10998",
+          "10999",
+          "11036"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10913",
-          "10914"
+          "11000",
+          "11001"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10916"
+          "11003"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10881",
-          "10915"
+          "10968",
+          "11002"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10917",
-          "10918"
+          "11004",
+          "11005"
         ]
       }
     ],
@@ -1469,6 +1753,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1480,6 +1766,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 3.0
       },
@@ -1491,6 +1779,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 3.0
       },
@@ -1502,6 +1792,8 @@
         "offset": "1/2",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 1.0
       },
@@ -1513,6 +1805,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -1523,9 +1817,62 @@
     "page": 1,
     "system": 3,
     "nominal_whole_units": "1",
-    "ok": false,
-    "attack_count": null,
-    "attacks": [],
+    "ok": true,
+    "attack_count": 7,
+    "attacks": [
+      {
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "chords": [
+          "10969",
+          "11006",
+          "11007"
+        ]
+      },
+      {
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "chords": [
+          "11008"
+        ]
+      },
+      {
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "chords": [
+          "11037"
+        ]
+      },
+      {
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "chords": [
+          "11010"
+        ]
+      },
+      {
+        "onset_whole_units": "11/16",
+        "onset_quarter_units": "11/4",
+        "chords": [
+          "11011"
+        ]
+      },
+      {
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "chords": [
+          "11012"
+        ]
+      },
+      {
+        "onset_whole_units": "7/8",
+        "onset_quarter_units": "7/2",
+        "chords": [
+          "11013",
+          "11038"
+        ]
+      }
+    ],
     "voices": [
       {
         "part": 0,
@@ -1535,6 +1882,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1542,12 +1891,14 @@
         "part": 1,
         "voice": "1",
         "span": "1/2",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "ambiguous-offset",
-        "anchor_count": null,
-        "anchor_best_px": null
+        "resolved": true,
+        "offset": "0",
+        "method": "x-anchor",
+        "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
+        "anchor_count": 1,
+        "anchor_best_px": 4.0
       },
       {
         "part": 1,
@@ -1557,6 +1908,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1568,6 +1921,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -1585,63 +1940,63 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10927",
-          "10952"
+          "11014",
+          "11039"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "10928"
+          "11015"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10929",
-          "10930",
-          "10953"
+          "11016",
+          "11017",
+          "11040"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10931"
+          "11018"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10932",
-          "10933",
-          "10954"
+          "11019",
+          "11020",
+          "11041"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "10934"
+          "11021"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10935",
-          "10936",
-          "10955"
+          "11022",
+          "11023",
+          "11042"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "10937"
+          "11024"
         ]
       }
     ],
@@ -1654,6 +2009,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1665,6 +2022,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1676,6 +2035,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -1693,54 +2054,54 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10974",
-          "10975",
-          "11028"
+          "11061",
+          "11062",
+          "11115"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "10976"
+          "11063"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10977",
-          "11029"
+          "11064",
+          "11116"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10978"
+          "11065"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10979",
-          "10980",
-          "11030"
+          "11066",
+          "11067",
+          "11117"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10956"
+          "11043"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "10957"
+          "11044"
         ]
       }
     ],
@@ -1753,6 +2114,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1764,6 +2127,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1775,6 +2140,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1786,6 +2153,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -1803,62 +2172,62 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10958"
+          "11045"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10981",
-          "10982",
-          "11031"
+          "11068",
+          "11069",
+          "11118"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10983"
+          "11070"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10959",
-          "10984",
-          "10986",
-          "11032"
+          "11046",
+          "11071",
+          "11073",
+          "11119"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "10987"
+          "11074"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10988",
-          "11033"
+          "11075",
+          "11120"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "10960"
+          "11047"
         ]
       },
       {
         "onset_whole_units": "15/16",
         "onset_quarter_units": "15/4",
         "chords": [
-          "10961"
+          "11048"
         ]
       }
     ],
@@ -1871,6 +2240,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -1882,6 +2253,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 1.5
       },
@@ -1893,6 +2266,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 1.0
       },
@@ -1904,6 +2279,8 @@
         "offset": "1/4",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 3,
         "anchor_best_px": 2.0
       },
@@ -1915,6 +2292,8 @@
         "offset": "1/2",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 3.0
       },
@@ -1926,6 +2305,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -1943,64 +2324,64 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10962",
-          "10990",
-          "11034"
+          "11049",
+          "11077",
+          "11121"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "10991"
+          "11078"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10992",
-          "10993",
-          "11035"
+          "11079",
+          "11080",
+          "11122"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10994"
+          "11081"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "10963",
-          "10995",
-          "11036"
+          "11050",
+          "11082",
+          "11123"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "10997"
+          "11084"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "10998",
-          "10999",
-          "11037"
+          "11085",
+          "11086",
+          "11124"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "11000"
+          "11087"
         ]
       }
     ],
@@ -2013,6 +2394,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2024,6 +2407,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2035,6 +2420,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2046,6 +2433,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -2063,86 +2452,86 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "10964",
-          "11001",
-          "11038"
+          "11051",
+          "11088",
+          "11125"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "11002"
+          "11089"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "10965",
-          "11003",
-          "11004",
-          "11039"
+          "11052",
+          "11090",
+          "11091",
+          "11126"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "10966",
-          "11005"
+          "11053",
+          "11092"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "11006",
-          "11040"
+          "11093",
+          "11127"
         ]
       },
       {
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "chords": [
-          "10967"
+          "11054"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "10968"
+          "11055"
         ]
       },
       {
         "onset_whole_units": "11/16",
         "onset_quarter_units": "11/4",
         "chords": [
-          "10969"
+          "11056"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "11007",
-          "11008",
-          "11041"
+          "11094",
+          "11095",
+          "11128"
         ]
       },
       {
         "onset_whole_units": "15/16",
         "onset_quarter_units": "15/4",
         "chords": [
-          "10971"
+          "11058"
         ]
       },
       {
         "onset_whole_units": "31/32",
         "onset_quarter_units": "31/8",
         "chords": [
-          "10972"
+          "11059"
         ]
       }
     ],
@@ -2155,6 +2544,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2166,6 +2557,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2177,6 +2570,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2188,6 +2583,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -2198,9 +2595,67 @@
     "page": 1,
     "system": 4,
     "nominal_whole_units": "1",
-    "ok": false,
-    "attack_count": null,
-    "attacks": [],
+    "ok": true,
+    "attack_count": 7,
+    "attacks": [
+      {
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "chords": [
+          "11060",
+          "11096",
+          "11097",
+          "11129"
+        ]
+      },
+      {
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "chords": [
+          "11130"
+        ]
+      },
+      {
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "chords": [
+          "11098",
+          "11099"
+        ]
+      },
+      {
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "chords": [
+          "11100",
+          "11101"
+        ]
+      },
+      {
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "chords": [
+          "11132"
+        ]
+      },
+      {
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "chords": [
+          "11102",
+          "11103",
+          "11133"
+        ]
+      },
+      {
+        "onset_whole_units": "7/8",
+        "onset_quarter_units": "7/2",
+        "chords": [
+          "11104",
+          "11105"
+        ]
+      }
+    ],
     "voices": [
       {
         "part": 0,
@@ -2210,6 +2665,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2221,6 +2678,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2232,19 +2691,23 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
       {
         "part": 1,
         "voice": "3",
-        "span": "1/4",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "ambiguous-offset",
-        "anchor_count": null,
-        "anchor_best_px": null
+        "span": "1/8",
+        "resolved": true,
+        "offset": "7/8",
+        "method": "constraint-repair",
+        "reason": null,
+        "repair_cost": 1.0,
+        "repair_changes": 1,
+        "anchor_count": 1,
+        "anchor_best_px": 1.0
       },
       {
         "part": 2,
@@ -2254,6 +2717,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -2271,62 +2736,62 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "11019",
-          "11020"
+          "11106",
+          "11107"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "11048"
+          "11135"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "11049"
+          "11136"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "11021",
-          "11022"
+          "11108",
+          "11109"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "11023",
-          "11024",
-          "11050"
+          "11110",
+          "11111",
+          "11137"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "11051"
+          "11138"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "11025",
-          "11026",
-          "11052"
+          "11112",
+          "11113",
+          "11139"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "11027"
+          "11114"
         ]
       }
     ],
@@ -2339,6 +2804,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2350,6 +2817,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2361,6 +2830,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -2378,48 +2849,48 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "11071"
+          "11158"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "11073",
-          "11074"
+          "11160",
+          "11161"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "11075",
-          "11076"
+          "11162",
+          "11163"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "11077",
-          "11078"
+          "11164",
+          "11165"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "11053",
-          "11079",
-          "11080",
-          "11127"
+          "11140",
+          "11166",
+          "11167",
+          "11214"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "11128"
+          "11215"
         ]
       }
     ],
@@ -2432,6 +2903,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2443,6 +2916,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2454,6 +2929,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2465,6 +2942,8 @@
         "offset": "1/2",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 1.0
       }
@@ -2482,63 +2961,63 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "11054"
+          "11141"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "11130"
+          "11217"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "11083",
-          "11084",
-          "11131"
+          "11170",
+          "11171",
+          "11218"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "11085"
+          "11172"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "11055",
-          "11086"
+          "11142",
+          "11173"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "11088",
-          "11089",
-          "11133"
+          "11175",
+          "11176",
+          "11220"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "11090",
-          "11091",
-          "11134"
+          "11177",
+          "11178",
+          "11221"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "11056"
+          "11143"
         ]
       }
     ],
@@ -2551,6 +3030,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2562,6 +3043,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2573,6 +3056,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2584,6 +3069,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -2601,58 +3088,58 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "11057"
+          "11144"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "11094",
-          "11136"
+          "11181",
+          "11223"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "11095",
-          "11137"
+          "11182",
+          "11224"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "11058",
-          "11096",
-          "11097",
-          "11138"
+          "11145",
+          "11183",
+          "11184",
+          "11225"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "11059",
-          "11098",
-          "11099",
-          "11139"
+          "11146",
+          "11185",
+          "11186",
+          "11226"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "11100"
+          "11187"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "11060",
-          "11101"
+          "11147",
+          "11188"
         ]
       }
     ],
@@ -2665,6 +3152,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2676,6 +3165,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 2,
         "anchor_best_px": 0.0
       },
@@ -2687,6 +3178,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2698,6 +3191,8 @@
         "offset": "1/2",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 2.0
       },
@@ -2709,6 +3204,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 2,
         "anchor_best_px": 3.0
       }
@@ -2719,20 +3216,113 @@
     "page": 1,
     "system": 5,
     "nominal_whole_units": "1",
-    "ok": false,
-    "attack_count": null,
-    "attacks": [],
+    "ok": true,
+    "attack_count": 12,
+    "attacks": [
+      {
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "chords": [
+          "11148",
+          "11189",
+          "11190",
+          "11227"
+        ]
+      },
+      {
+        "onset_whole_units": "1/8",
+        "onset_quarter_units": "1/2",
+        "chords": [
+          "11191"
+        ]
+      },
+      {
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "chords": [
+          "11192"
+        ]
+      },
+      {
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "chords": [
+          "11149",
+          "11228"
+        ]
+      },
+      {
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "chords": [
+          "11150",
+          "11229"
+        ]
+      },
+      {
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "chords": [
+          "11151"
+        ]
+      },
+      {
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "chords": [
+          "11152"
+        ]
+      },
+      {
+        "onset_whole_units": "11/16",
+        "onset_quarter_units": "11/4",
+        "chords": [
+          "11153"
+        ]
+      },
+      {
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "chords": [
+          "11154",
+          "11194"
+        ]
+      },
+      {
+        "onset_whole_units": "7/8",
+        "onset_quarter_units": "7/2",
+        "chords": [
+          "11195"
+        ]
+      },
+      {
+        "onset_whole_units": "15/16",
+        "onset_quarter_units": "15/4",
+        "chords": [
+          "11155"
+        ]
+      },
+      {
+        "onset_whole_units": "31/32",
+        "onset_quarter_units": "31/8",
+        "chords": [
+          "11156"
+        ]
+      }
+    ],
     "voices": [
       {
         "part": 0,
         "voice": "1",
-        "span": "9/8",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "overfull",
-        "anchor_count": null,
-        "anchor_best_px": null
+        "span": "1",
+        "resolved": true,
+        "offset": "0",
+        "method": "constraint-repair",
+        "reason": null,
+        "repair_cost": 1.0,
+        "repair_changes": 1,
+        "anchor_count": 2,
+        "anchor_best_px": 2.0
       },
       {
         "part": 1,
@@ -2742,6 +3332,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2753,19 +3345,23 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
       {
         "part": 2,
         "voice": "1",
-        "span": "9/8",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "overfull",
-        "anchor_count": null,
-        "anchor_best_px": null
+        "span": "1",
+        "resolved": true,
+        "offset": "0",
+        "method": "constraint-repair",
+        "reason": null,
+        "repair_cost": 1.0,
+        "repair_changes": 1,
+        "anchor_count": 2,
+        "anchor_best_px": 2.0
       }
     ]
   },
@@ -2781,40 +3377,40 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "11070",
-          "11109",
-          "11110",
-          "11150"
+          "11157",
+          "11196",
+          "11197",
+          "11237"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "11111",
-          "11112"
+          "11198",
+          "11199"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "11113",
-          "11114"
+          "11200",
+          "11201"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "11115"
+          "11202"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "11116"
+          "11203"
         ]
       }
     ],
@@ -2827,6 +3423,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2838,6 +3436,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2849,6 +3449,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 3,
         "anchor_best_px": 0.0
       },
@@ -2860,6 +3462,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -2877,55 +3481,55 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "11117"
+          "11204"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "11144"
+          "11231"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "11145"
+          "11232"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "11121",
-          "11146"
+          "11208",
+          "11233"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "11122",
-          "11147"
+          "11209",
+          "11234"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "11123",
-          "11124",
-          "11148"
+          "11210",
+          "11211",
+          "11235"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "11125",
-          "11126",
-          "11149"
+          "11212",
+          "11213",
+          "11236"
         ]
       }
     ],
@@ -2938,6 +3542,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -2949,6 +3555,8 @@
         "offset": "1/2",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 0.5
       },
@@ -2960,6 +3568,8 @@
         "offset": "3/4",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 2,
         "anchor_best_px": 0.5
       },
@@ -2971,6 +3581,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -2988,54 +3600,54 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8403",
-          "8404",
-          "8450"
+          "8469",
+          "8470",
+          "8516"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8405"
+          "8471"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8406"
+          "8472"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8373",
-          "8407"
+          "8439",
+          "8473"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8408"
+          "8474"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8409",
-          "8410"
+          "8475",
+          "8476"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8411",
-          "8412"
+          "8477",
+          "8478"
         ]
       }
     ],
@@ -3048,6 +3660,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3059,6 +3673,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3070,6 +3686,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 2.0
       },
@@ -3081,6 +3699,8 @@
         "offset": "3/4",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 2,
         "anchor_best_px": 0.0
       },
@@ -3092,6 +3712,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -3109,64 +3731,64 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8374",
-          "8413",
-          "8414"
+          "8440",
+          "8479",
+          "8480"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8415",
-          "8416"
+          "8481",
+          "8482"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8417",
-          "8418"
+          "8483",
+          "8484"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8375",
-          "8419",
-          "8420"
+          "8441",
+          "8485",
+          "8486"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8421",
-          "8422"
+          "8487",
+          "8488"
         ]
       },
       {
         "onset_whole_units": "11/16",
         "onset_quarter_units": "11/4",
         "chords": [
-          "8423"
+          "8489"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8424",
-          "8426"
+          "8490",
+          "8492"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8425"
+          "8491"
         ]
       }
     ],
@@ -3179,6 +3801,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3190,6 +3814,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 5,
         "anchor_best_px": 0.0
       },
@@ -3201,6 +3827,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -3218,98 +3846,98 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8376",
-          "8427",
-          "8437"
+          "8442",
+          "8493",
+          "8503"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8438"
+          "8504"
         ]
       },
       {
         "onset_whole_units": "5/16",
         "onset_quarter_units": "5/4",
         "chords": [
-          "8378"
+          "8444"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8379",
-          "8439"
+          "8445",
+          "8505"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "8380"
+          "8446"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8381",
-          "8440"
+          "8447",
+          "8506"
         ]
       },
       {
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "chords": [
-          "8382"
+          "8448"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8383",
-          "8441"
+          "8449",
+          "8507"
         ]
       },
       {
         "onset_whole_units": "11/16",
         "onset_quarter_units": "11/4",
         "chords": [
-          "8384"
+          "8450"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8385",
-          "8442"
+          "8451",
+          "8508"
         ]
       },
       {
         "onset_whole_units": "13/16",
         "onset_quarter_units": "13/4",
         "chords": [
-          "8386"
+          "8452"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8387",
-          "8443"
+          "8453",
+          "8509"
         ]
       },
       {
         "onset_whole_units": "15/16",
         "onset_quarter_units": "15/4",
         "chords": [
-          "8388"
+          "8454"
         ]
       }
     ],
@@ -3322,6 +3950,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3333,6 +3963,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3344,6 +3976,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3355,6 +3989,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -3365,9 +4001,129 @@
     "page": 2,
     "system": 1,
     "nominal_whole_units": "1",
-    "ok": false,
-    "attack_count": null,
-    "attacks": [],
+    "ok": true,
+    "attack_count": 15,
+    "attacks": [
+      {
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "chords": [
+          "8455",
+          "8494"
+        ]
+      },
+      {
+        "onset_whole_units": "1/16",
+        "onset_quarter_units": "1/4",
+        "chords": [
+          "8456"
+        ]
+      },
+      {
+        "onset_whole_units": "1/8",
+        "onset_quarter_units": "1/2",
+        "chords": [
+          "8457",
+          "8510"
+        ]
+      },
+      {
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "chords": [
+          "8458"
+        ]
+      },
+      {
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "chords": [
+          "8459",
+          "8511"
+        ]
+      },
+      {
+        "onset_whole_units": "5/16",
+        "onset_quarter_units": "5/4",
+        "chords": [
+          "8460",
+          "8512"
+        ]
+      },
+      {
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "chords": [
+          "8461",
+          "8495",
+          "8513"
+        ]
+      },
+      {
+        "onset_whole_units": "7/16",
+        "onset_quarter_units": "7/4",
+        "chords": [
+          "8462"
+        ]
+      },
+      {
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "chords": [
+          "8463",
+          "8496",
+          "8514"
+        ]
+      },
+      {
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "chords": [
+          "8464"
+        ]
+      },
+      {
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "chords": [
+          "8465",
+          "8497",
+          "8498"
+        ]
+      },
+      {
+        "onset_whole_units": "11/16",
+        "onset_quarter_units": "11/4",
+        "chords": [
+          "8466"
+        ]
+      },
+      {
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "chords": [
+          "8467",
+          "8499",
+          "8500",
+          "8515"
+        ]
+      },
+      {
+        "onset_whole_units": "7/8",
+        "onset_quarter_units": "7/2",
+        "chords": [
+          "8501",
+          "8502"
+        ]
+      },
+      {
+        "onset_whole_units": "15/16",
+        "onset_quarter_units": "15/4",
+        "chords": [
+          "8468"
+        ]
+      }
+    ],
     "voices": [
       {
         "part": 0,
@@ -3377,19 +4133,23 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
       {
         "part": 1,
         "voice": "1",
-        "span": "9/8",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "overfull",
-        "anchor_count": null,
-        "anchor_best_px": null
+        "span": "1",
+        "resolved": true,
+        "offset": "0",
+        "method": "constraint-repair",
+        "reason": null,
+        "repair_cost": 1.85,
+        "repair_changes": 1,
+        "anchor_count": 6,
+        "anchor_best_px": 0.0
       },
       {
         "part": 1,
@@ -3399,6 +4159,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 1.0
       },
@@ -3410,6 +4172,8 @@
         "offset": "1/2",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 3,
         "anchor_best_px": 0.0
       },
@@ -3421,6 +4185,8 @@
         "offset": "1/8",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 3,
         "anchor_best_px": 1.0
       }
@@ -3438,59 +4204,59 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8459",
-          "8460",
-          "8461",
-          "8509"
+          "8525",
+          "8526",
+          "8527",
+          "8575"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8462",
-          "8463"
+          "8528",
+          "8529"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8464",
-          "8465"
+          "8530",
+          "8531"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8466",
-          "8467"
+          "8532",
+          "8533"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8468",
-          "8469"
+          "8534",
+          "8535"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8470",
-          "8471",
-          "8510"
+          "8536",
+          "8537",
+          "8576"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8472",
-          "8473"
+          "8538",
+          "8539"
         ]
       }
     ],
@@ -3503,6 +4269,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3514,6 +4282,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3525,6 +4295,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3536,6 +4308,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -3553,64 +4327,64 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8474",
-          "8475",
-          "8511"
+          "8540",
+          "8541",
+          "8577"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8476",
-          "8477"
+          "8542",
+          "8543"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8478",
-          "8479"
+          "8544",
+          "8545"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8480",
-          "8481"
+          "8546",
+          "8547"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8482",
-          "8483",
-          "8512"
+          "8548",
+          "8549",
+          "8578"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8484"
+          "8550"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8485",
-          "8486"
+          "8551",
+          "8552"
         ]
       },
       {
         "onset_whole_units": "15/16",
         "onset_quarter_units": "15/4",
         "chords": [
-          "8487"
+          "8553"
         ]
       }
     ],
@@ -3623,6 +4397,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3634,6 +4410,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3645,6 +4423,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -3662,48 +4442,48 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8488",
-          "8513"
+          "8554",
+          "8579"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8490"
+          "8556"
         ]
       },
       {
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "chords": [
-          "8491"
+          "8557"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8492",
-          "8493"
+          "8558",
+          "8559"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "8494",
-          "8495"
+          "8560",
+          "8561"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8451",
-          "8496",
-          "8497",
-          "8514"
+          "8517",
+          "8562",
+          "8563",
+          "8580"
         ]
       }
     ],
@@ -3716,6 +4496,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3727,6 +4509,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3738,6 +4522,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3749,6 +4535,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 1,
         "anchor_best_px": 0.0
       }
@@ -3766,83 +4554,83 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8452",
-          "8515"
+          "8518",
+          "8581"
         ]
       },
       {
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "chords": [
-          "8499"
+          "8565"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8516"
+          "8582"
         ]
       },
       {
         "onset_whole_units": "5/16",
         "onset_quarter_units": "5/4",
         "chords": [
-          "8454",
-          "8501"
+          "8520",
+          "8567"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8455",
-          "8502"
+          "8521",
+          "8568"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "8456",
-          "8503"
+          "8522",
+          "8569"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8457",
-          "8517"
+          "8523",
+          "8583"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8505"
+          "8571"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8518"
+          "8584"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8458",
-          "8507"
+          "8524",
+          "8573"
         ]
       },
       {
         "onset_whole_units": "15/16",
         "onset_quarter_units": "15/4",
         "chords": [
-          "8508"
+          "8574"
         ]
       }
     ],
@@ -3855,6 +4643,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -3866,6 +4656,8 @@
         "offset": "1/8",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 7,
         "anchor_best_px": 0.0
       },
@@ -3877,6 +4669,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -3894,109 +4688,109 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8519",
-          "8544",
-          "8593"
+          "8585",
+          "8610",
+          "8659"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8520"
+          "8586"
         ]
       },
       {
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "chords": [
-          "8521"
+          "8587"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8522",
-          "8594"
+          "8588",
+          "8660"
         ]
       },
       {
         "onset_whole_units": "5/16",
         "onset_quarter_units": "5/4",
         "chords": [
-          "8523"
+          "8589"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8524",
-          "8545",
-          "8546"
+          "8590",
+          "8611",
+          "8612"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "8525"
+          "8591"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8526",
-          "8547",
-          "8548"
+          "8592",
+          "8613",
+          "8614"
         ]
       },
       {
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "chords": [
-          "8527"
+          "8593"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8528",
-          "8549"
+          "8594",
+          "8615"
         ]
       },
       {
         "onset_whole_units": "11/16",
         "onset_quarter_units": "11/4",
         "chords": [
-          "8529"
+          "8595"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8530",
-          "8550",
-          "8551",
-          "8595"
+          "8596",
+          "8616",
+          "8617",
+          "8661"
         ]
       },
       {
         "onset_whole_units": "13/16",
         "onset_quarter_units": "13/4",
         "chords": [
-          "8531"
+          "8597"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8532"
+          "8598"
         ]
       }
     ],
@@ -4009,6 +4803,8 @@
         "offset": "0",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 4,
         "anchor_best_px": 0.0
       },
@@ -4020,6 +4816,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4031,6 +4829,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4042,6 +4842,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -4059,101 +4861,101 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8533",
-          "8553",
-          "8596"
+          "8599",
+          "8619",
+          "8662"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8554"
+          "8620"
         ]
       },
       {
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "chords": [
-          "8555"
+          "8621"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8556",
-          "8557",
-          "8597"
+          "8622",
+          "8623",
+          "8663"
         ]
       },
       {
         "onset_whole_units": "5/16",
         "onset_quarter_units": "5/4",
         "chords": [
-          "8535"
+          "8601"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8536"
+          "8602"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "8537"
+          "8603"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8538",
-          "8559",
-          "8598"
+          "8604",
+          "8625",
+          "8664"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8539",
-          "8599"
+          "8605",
+          "8665"
         ]
       },
       {
         "onset_whole_units": "11/16",
         "onset_quarter_units": "11/4",
         "chords": [
-          "8540"
+          "8606"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8541",
-          "8560",
-          "8600"
+          "8607",
+          "8626",
+          "8666"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8561",
-          "8562"
+          "8627",
+          "8628"
         ]
       },
       {
         "onset_whole_units": "15/16",
         "onset_quarter_units": "15/4",
         "chords": [
-          "8542"
+          "8608"
         ]
       }
     ],
@@ -4166,6 +4968,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4177,6 +4981,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4188,6 +4994,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4199,6 +5007,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -4216,50 +5026,50 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8543",
-          "8563",
-          "8564",
-          "8601"
+          "8609",
+          "8629",
+          "8630",
+          "8667"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8565",
-          "8566"
+          "8631",
+          "8632"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8567",
-          "8568"
+          "8633",
+          "8634"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8569",
-          "8570"
+          "8635",
+          "8636"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8571",
-          "8572"
+          "8637",
+          "8638"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8573",
-          "8574"
+          "8639",
+          "8640"
         ]
       }
     ],
@@ -4272,6 +5082,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4283,6 +5095,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4294,6 +5108,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4305,6 +5121,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -4322,78 +5140,78 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8575",
-          "8576"
+          "8641",
+          "8642"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8577"
+          "8643"
         ]
       },
       {
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "chords": [
-          "8578"
+          "8644"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8579",
-          "8580"
+          "8645",
+          "8646"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8581",
-          "8582"
+          "8647",
+          "8648"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8583",
-          "8584"
+          "8649",
+          "8650"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8585",
-          "8586"
+          "8651",
+          "8652"
         ]
       },
       {
         "onset_whole_units": "11/16",
         "onset_quarter_units": "11/4",
         "chords": [
-          "8587",
-          "8588"
+          "8653",
+          "8654"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8589",
-          "8590"
+          "8655",
+          "8656"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8591",
-          "8592"
+          "8657",
+          "8658"
         ]
       }
     ],
@@ -4406,6 +5224,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4417,6 +5237,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -4427,18 +5249,116 @@
     "page": 2,
     "system": 4,
     "nominal_whole_units": "1",
-    "ok": false,
-    "attack_count": null,
-    "attacks": [],
+    "ok": true,
+    "attack_count": 13,
+    "attacks": [
+      {
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "chords": [
+          "8699",
+          "8700"
+        ]
+      },
+      {
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "chords": [
+          "8701"
+        ]
+      },
+      {
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "chords": [
+          "8702",
+          "8703"
+        ]
+      },
+      {
+        "onset_whole_units": "5/16",
+        "onset_quarter_units": "5/4",
+        "chords": [
+          "8668"
+        ]
+      },
+      {
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "chords": [
+          "8669"
+        ]
+      },
+      {
+        "onset_whole_units": "7/16",
+        "onset_quarter_units": "7/4",
+        "chords": [
+          "8670"
+        ]
+      },
+      {
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "chords": [
+          "8671",
+          "8704",
+          "8705"
+        ]
+      },
+      {
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "chords": [
+          "8672"
+        ]
+      },
+      {
+        "onset_whole_units": "21/32",
+        "onset_quarter_units": "21/8",
+        "chords": [
+          "8673"
+        ]
+      },
+      {
+        "onset_whole_units": "11/16",
+        "onset_quarter_units": "11/4",
+        "chords": [
+          "8674"
+        ]
+      },
+      {
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "chords": [
+          "8675"
+        ]
+      },
+      {
+        "onset_whole_units": "27/32",
+        "onset_quarter_units": "27/8",
+        "chords": [
+          "8676"
+        ]
+      },
+      {
+        "onset_whole_units": "7/8",
+        "onset_quarter_units": "7/2",
+        "chords": [
+          "8677"
+        ]
+      }
+    ],
     "voices": [
       {
         "part": 0,
         "voice": "1",
         "span": "29/32",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "ambiguous-offset",
+        "resolved": true,
+        "offset": "0",
+        "method": "left-edge-seed",
+        "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4446,10 +5366,12 @@
         "part": 1,
         "voice": "1",
         "span": "3/4",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "ambiguous-offset",
+        "resolved": true,
+        "offset": "0",
+        "method": "left-edge-seed",
+        "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4457,10 +5379,12 @@
         "part": 1,
         "voice": "2",
         "span": "3/4",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "ambiguous-offset",
+        "resolved": true,
+        "offset": "0",
+        "method": "left-edge-seed",
+        "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4468,12 +5392,14 @@
         "part": 1,
         "voice": "3",
         "span": "1/4",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "ambiguous-offset",
-        "anchor_count": null,
-        "anchor_best_px": null
+        "resolved": true,
+        "offset": "1/2",
+        "method": "x-anchor",
+        "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
+        "anchor_count": 1,
+        "anchor_best_px": 0.0
       }
     ]
   },
@@ -4489,99 +5415,99 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8612",
-          "8640"
+          "8678",
+          "8706"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8656"
+          "8722"
         ]
       },
       {
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "chords": [
-          "8613"
+          "8679"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8614",
-          "8657"
+          "8680",
+          "8723"
         ]
       },
       {
         "onset_whole_units": "5/16",
         "onset_quarter_units": "5/4",
         "chords": [
-          "8615"
+          "8681"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8616",
-          "8658"
+          "8682",
+          "8724"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "8617",
-          "8659"
+          "8683",
+          "8725"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8618",
-          "8641",
-          "8660"
+          "8684",
+          "8707",
+          "8726"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8661"
+          "8727"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8642",
-          "8662"
+          "8708",
+          "8728"
         ]
       },
       {
         "onset_whole_units": "13/16",
         "onset_quarter_units": "13/4",
         "chords": [
-          "8620"
+          "8686"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8621",
-          "8663"
+          "8687",
+          "8729"
         ]
       },
       {
         "onset_whole_units": "15/16",
         "onset_quarter_units": "15/4",
         "chords": [
-          "8622"
+          "8688"
         ]
       }
     ],
@@ -4594,6 +5520,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4605,6 +5533,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4616,6 +5546,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4627,6 +5559,8 @@
         "offset": "1/8",
         "method": "x-anchor",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": 3,
         "anchor_best_px": 0.0
       }
@@ -4637,9 +5571,114 @@
     "page": 2,
     "system": 4,
     "nominal_whole_units": "1",
-    "ok": false,
-    "attack_count": null,
-    "attacks": [],
+    "ok": true,
+    "attack_count": 13,
+    "attacks": [
+      {
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "chords": [
+          "8689",
+          "8730"
+        ]
+      },
+      {
+        "onset_whole_units": "1/8",
+        "onset_quarter_units": "1/2",
+        "chords": [
+          "8711",
+          "8712"
+        ]
+      },
+      {
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "chords": [
+          "8713"
+        ]
+      },
+      {
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "chords": [
+          "8714",
+          "8715"
+        ]
+      },
+      {
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "chords": [
+          "8690",
+          "8716",
+          "8731"
+        ]
+      },
+      {
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "chords": [
+          "8691",
+          "8717",
+          "8718",
+          "8732"
+        ]
+      },
+      {
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "chords": [
+          "8692"
+        ]
+      },
+      {
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "chords": [
+          "8693",
+          "8733"
+        ]
+      },
+      {
+        "onset_whole_units": "11/16",
+        "onset_quarter_units": "11/4",
+        "chords": [
+          "8694"
+        ]
+      },
+      {
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "chords": [
+          "8695",
+          "8734"
+        ]
+      },
+      {
+        "onset_whole_units": "13/16",
+        "onset_quarter_units": "13/4",
+        "chords": [
+          "8696"
+        ]
+      },
+      {
+        "onset_whole_units": "7/8",
+        "onset_quarter_units": "7/2",
+        "chords": [
+          "8697",
+          "8719",
+          "8735"
+        ]
+      },
+      {
+        "onset_whole_units": "15/16",
+        "onset_quarter_units": "15/4",
+        "chords": [
+          "8698",
+          "8720"
+        ]
+      }
+    ],
     "voices": [
       {
         "part": 0,
@@ -4649,30 +5688,36 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
       {
         "part": 1,
         "voice": "3",
-        "span": "9/8",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "overfull",
-        "anchor_count": null,
-        "anchor_best_px": null
+        "span": "1",
+        "resolved": true,
+        "offset": "0",
+        "method": "constraint-repair",
+        "reason": null,
+        "repair_cost": 1.0,
+        "repair_changes": 1,
+        "anchor_count": 4,
+        "anchor_best_px": 0.0
       },
       {
         "part": 1,
         "voice": "2",
-        "span": "9/8",
-        "resolved": false,
-        "offset": null,
-        "method": null,
-        "reason": "overfull",
-        "anchor_count": null,
-        "anchor_best_px": null
+        "span": "1",
+        "resolved": true,
+        "offset": "0",
+        "method": "constraint-repair",
+        "reason": null,
+        "repair_cost": 4.2224,
+        "repair_changes": 2,
+        "anchor_count": 5,
+        "anchor_best_px": 0.0
       },
       {
         "part": 2,
@@ -4682,6 +5727,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -4699,88 +5746,88 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8670",
-          "8701",
-          "8702",
-          "8734"
+          "8736",
+          "8767",
+          "8768",
+          "8800"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8671"
+          "8737"
         ]
       },
       {
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "chords": [
-          "8672"
+          "8738"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8673",
-          "8703"
+          "8739",
+          "8769"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8674",
-          "8704"
+          "8740",
+          "8770"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "8675",
-          "8705"
+          "8741",
+          "8771"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8676",
-          "8706"
+          "8742",
+          "8772"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8677",
-          "8707"
+          "8743",
+          "8773"
         ]
       },
       {
         "onset_whole_units": "11/16",
         "onset_quarter_units": "11/4",
         "chords": [
-          "8678"
+          "8744"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8679",
-          "8708",
-          "8709"
+          "8745",
+          "8774",
+          "8775"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8680",
-          "8710"
+          "8746",
+          "8776"
         ]
       }
     ],
@@ -4793,6 +5840,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4804,6 +5853,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4815,6 +5866,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4826,6 +5879,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -4843,68 +5898,68 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8700",
-          "8711",
-          "8712",
-          "8735"
+          "8766",
+          "8777",
+          "8778",
+          "8801"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8713"
+          "8779"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8714",
-          "8715"
+          "8780",
+          "8781"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8716"
+          "8782"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "8717"
+          "8783"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8718"
+          "8784"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8719"
+          "8785"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8720",
-          "8721"
+          "8786",
+          "8787"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8722"
+          "8788"
         ]
       }
     ],
@@ -4917,6 +5972,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4928,6 +5985,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4939,6 +5998,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -4950,6 +6011,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -4967,95 +6030,95 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8723",
-          "8724"
+          "8789",
+          "8790"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8725"
+          "8791"
         ]
       },
       {
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "chords": [
-          "8726"
+          "8792"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8727",
-          "8728"
+          "8793",
+          "8794"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8729",
-          "8730"
+          "8795",
+          "8796"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8731",
-          "8732"
+          "8797",
+          "8798"
         ]
       },
       {
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "chords": [
-          "8683"
+          "8749"
         ]
       },
       {
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "chords": [
-          "8684"
+          "8750"
         ]
       },
       {
         "onset_whole_units": "11/16",
         "onset_quarter_units": "11/4",
         "chords": [
-          "8685"
+          "8751"
         ]
       },
       {
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "chords": [
-          "8686"
+          "8752"
         ]
       },
       {
         "onset_whole_units": "13/16",
         "onset_quarter_units": "13/4",
         "chords": [
-          "8687"
+          "8753"
         ]
       },
       {
         "onset_whole_units": "7/8",
         "onset_quarter_units": "7/2",
         "chords": [
-          "8688"
+          "8754"
         ]
       },
       {
         "onset_whole_units": "15/16",
         "onset_quarter_units": "15/4",
         "chords": [
-          "8689"
+          "8755"
         ]
       }
     ],
@@ -5068,6 +6131,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -5079,6 +6144,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -5090,6 +6157,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -5101,6 +6170,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
@@ -5118,70 +6189,70 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "chords": [
-          "8690"
+          "8756"
         ]
       },
       {
         "onset_whole_units": "1/16",
         "onset_quarter_units": "1/4",
         "chords": [
-          "8691"
+          "8757"
         ]
       },
       {
         "onset_whole_units": "1/8",
         "onset_quarter_units": "1/2",
         "chords": [
-          "8692"
+          "8758"
         ]
       },
       {
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "chords": [
-          "8693"
+          "8759"
         ]
       },
       {
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "chords": [
-          "8694"
+          "8760"
         ]
       },
       {
         "onset_whole_units": "5/16",
         "onset_quarter_units": "5/4",
         "chords": [
-          "8695"
+          "8761"
         ]
       },
       {
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "chords": [
-          "8696"
+          "8762"
         ]
       },
       {
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "chords": [
-          "8697"
+          "8763"
         ]
       },
       {
         "onset_whole_units": "15/32",
         "onset_quarter_units": "15/8",
         "chords": [
-          "8698"
+          "8764"
         ]
       },
       {
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "chords": [
-          "8699"
+          "8765"
         ]
       }
     ],
@@ -5194,6 +6265,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       },
@@ -5205,6 +6278,8 @@
         "offset": "0",
         "method": "full-span",
         "reason": null,
+        "repair_cost": null,
+        "repair_changes": null,
         "anchor_count": null,
         "anchor_best_px": null
       }
