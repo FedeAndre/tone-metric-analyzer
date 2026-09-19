@@ -1,0 +1,68 @@
+name: Global CSP score-reader validation
+
+on:
+  push:
+    branches:
+      - global-csp-score-reader-20260919
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct exact Buxtehude pages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          curl -L --fail --retry 3 \
+            'https://urresearch.rochester.edu/fileDownloadForInstitutionalItem.action?itemFileId=36184&itemId=15575' \
+            -o full.pdf
+          pdfseparate -f 105 -l 106 full.pdf page-%d.pdf
+          pdfunite page-105.pdf page-106.pdf buxtehude.pdf
+          test "$(pdfinfo buxtehude.pdf | awk '/^Pages:/ {print $2}')" -eq 2
+
+      - name: Build recognition container
+        run: docker build --progress=plain -t tma-global-csp .
+
+      - name: Extract visual symbol graph and solve globally
+        run: |
+          mkdir -p aud_out
+          docker run --rm -v "$PWD:/work" -w /work tma-global-csp sh -lc '
+            set -eu
+            /opt/audiveris/bin/Audiveris -batch -save -export -output /work/aud_out /work/buxtehude.pdf
+            omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
+            test -n "$omr"
+            PYTHONPATH=/app python3 /work/visual_attack_fullscore.py "$omr" --json /work/global_symbol_graph.json
+            python3 /work/global_csp_solver.py /work/global_symbol_graph.json /work/global_csp_solved.json
+          '
+
+      - name: Structural invariant audit
+        run: |
+          python3 - <<'PY'
+          import json
+          from fractions import Fraction
+          d=json.load(open('global_csp_solved.json'))
+          assert len(d)==49, len(d)
+          for ms,r in d.items():
+              meter=r.get('meter_ticks')
+              for e in r.get('events',[]):
+                  assert 0 <= e['onset_ticks'] < meter
+                  assert e['onset_ticks'] + e['duration_ticks'] <= meter
+              qs=[Fraction(a['onset_quarter_units']) for a in r.get('attacks',[])]
+              assert qs==sorted(set(qs))
+          print('GLOBAL_CSP_INVARIANTS_OK')
+          PY
+
+      - name: Commit global solver diagnostics
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add global_symbol_graph.json global_csp_solved.json
+          git commit -m "[skip ci] add global CSP score-reader diagnostics"
+          git push
