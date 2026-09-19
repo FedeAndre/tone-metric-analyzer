@@ -25,4 +25,4 @@ Validation branch initialized from a source-clean tree.
 
 The validation branch runs a one-way pipeline: independent optical notation extraction → exact rational rhythmic-attack reconstruction → validated Tone-Metric Levels, wave, pivots, and trees. Horizontal engraving spacing is never converted proportionally into score time; unresolved timing blocks final TMA rather than invoking a legacy fallback.
 
-<!-- targeted-regression-trigger: baseline-columns-current-optical -->
+<!-- targeted-regression-trigger: onset-only-heads-065-columns -->
