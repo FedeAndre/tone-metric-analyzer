@@ -71,17 +71,20 @@ def _run_job(job_id: str, src: Path, out_dir: Path, meter: str) -> None:
             check=False,
         )
         log_text = completed.stdout or ""
-        if completed.returncode != 0:
+        result_path = out_dir / "analysis.json"
+        if completed.returncode != 0 and not result_path.exists():
             tail = log_text[-12000:]
             raise RuntimeError(
-                f"reader subprocess exited {completed.returncode}.\n{tail}"
+                f"analyzer subprocess exited {completed.returncode}.\n{tail}"
             )
-
-        result_path = out_dir / "analysis.json"
         if not result_path.exists():
             raise RuntimeError(
                 "analyzer subprocess completed without analysis.json"
             )
+        # Exit code 2 means the conservative rhythm proof was incomplete.
+        # That is a valid analysis result, not a server failure: return the
+        # structured unresolved diagnostics instead of converting them into a
+        # transport error.
         result = json.loads(result_path.read_text())
         _set_job(
             job_id,
@@ -182,7 +185,7 @@ form.addEventListener('submit',async(e)=>{
 
     while(true){
       await sleep(2000);
-      const pollResponse=await fetch('/api/optical/jobs/'+encodeURIComponent(jobId),{cache:'no-store'});
+      const pollResponse=await fetch('/api/jobs/'+encodeURIComponent(jobId),{cache:'no-store'});
       const job=await readJson(pollResponse);
       if(job.status==='queued'){
         status.textContent='Waiting for the optical reader…';
@@ -272,12 +275,12 @@ async def analyze_score_endpoint(
         content={
             "job_id": job_id,
             "status": "queued",
-            "status_url": f"/api/optical/jobs/{job_id}",
+            "status_url": f"/api/jobs/{job_id}",
         },
     )
 
 
-@app.get("/api/optical/jobs/{job_id}")
+@app.get("/api/jobs/{job_id}")
 def optical_job(job_id: str) -> dict:
     job = _safe_job(job_id)
     payload = {
