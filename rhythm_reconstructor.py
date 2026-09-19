@@ -736,6 +736,7 @@ def reconstruct_attacks(
     measures_out: list[dict] = []
     attacks_out: list[dict] = []
     unresolved_out: list[dict] = []
+    diagnostics_out: list[dict] = []
     global_measure_index = 0
     absolute_measure_start = Fraction(0)
 
@@ -756,6 +757,25 @@ def reconstruct_attacks(
 
         for measure in measures:
             events = _build_measure_events(page, measure)
+
+            # A filled notehead without a linked stem has an unknown written
+            # rhythmic value.  Never let it disappear silently from the score:
+            # it is a blocking optical/rhythmic uncertainty until the visual
+            # stem/flag evidence is recovered.
+            for head in page.get("noteheads", []):
+                if (
+                    head.get("measure_local") == int(measure["id"])
+                    and head.get("head_type") == "filled"
+                    and head.get("stem_id") is None
+                ):
+                    unresolved_out.append({
+                        "page": int(page["page"]),
+                        "measure_index": global_measure_index,
+                        "event_id": f"p{page['page']}:m{measure['id']}:h{head['id']}",
+                        "staff_id": head.get("staff_id"),
+                        "reason": "filled-note-stem-unresolved",
+                    })
+
             temporal_events = [
                 event for event in events
                 if event.kind != "measure_rest"
@@ -798,11 +818,12 @@ def reconstruct_attacks(
                 elif not keys:
                     voices[(staff_id, "neutral")] = list(rests)
                 else:
-                    unresolved_out.extend({
+                    diagnostics_out.extend({
                         "page": int(page["page"]),
                         "measure_index": global_measure_index,
                         "event_id": rest.id,
                         "reason": "centered-rest-voice-ambiguous",
+                        "blocking": False,
                     } for rest in rests)
 
             solutions: list[VoiceSolution] = []
@@ -1122,12 +1143,14 @@ def reconstruct_attacks(
         "attacks": attacks_out,
         "hits": hit_rows,
         "unresolved": unresolved_out,
+        "diagnostics": diagnostics_out,
         "stats": {
             "measures": len(measures_out),
             "exact_attacks": len(attacks_out),
             "sonic_hits": len(hit_rows),
             "unresolved_items": len(unresolved_out),
             "constraint_conflicts": conflicts_total,
+            "nonblocking_diagnostics": len(diagnostics_out),
         },
         "rhythmic_attacks_ready": ready,
     }
