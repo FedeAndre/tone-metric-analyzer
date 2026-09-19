@@ -17,6 +17,10 @@ RUN pip install --no-cache-dir -r requirements.txt \
 
 COPY optical_reader.py app.py ./
 
+# Bake the low-level optical checkpoints into the image so requests never
+# download model weights into a live Railway container.
+RUN python -c "from optical_reader import ensure_checkpoints; ensure_checkpoints()"
+
 EXPOSE 8080
 
 CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
