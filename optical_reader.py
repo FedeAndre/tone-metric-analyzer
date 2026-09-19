@@ -836,6 +836,7 @@ def _longest_ink_run(column: np.ndarray) -> int:
 
 def _system_consensus_barlines(
     gray: np.ndarray,
+    note_mask: np.ndarray,
     staves: list[Staff],
     system: SystemRegion,
 ) -> list[tuple[float, int]]:
@@ -896,23 +897,58 @@ def _system_consensus_barlines(
                 "staff_ids": {staff_id},
             })
 
-    minimum_support = max(
+    strict_support = max(
         2,
         int(math.ceil(0.67 * len(system_staves))),
     )
-    supported = [
-        (
-            float(np.mean(cluster["xs"])),
-            len(cluster["staff_ids"]),
-        )
-        for cluster in clusters
-        if len(cluster["staff_ids"]) >= minimum_support
-    ]
+    recovery_support = max(
+        2,
+        int(math.ceil(0.50 * len(system_staves))),
+    )
 
-    # Collapse double/final barline pairs to one temporal boundary.
+    def notehead_overlap(x: float) -> int:
+        """Count low-level notehead pixels at a proposed barline x.
+
+        True barlines can be missed on one staff by the raw-ink detector, but
+        an aligned set of note stems can masquerade as a barline.  The
+        segmentation model gives an independent visual discriminator: a
+        candidate passing through notehead pixels is stem-like, whereas an
+        unobstructed barline has no notehead body attached to it.
+        """
+        xi = int(round(x))
+        half_width = max(2, int(round(0.18 * spacing)))
+        x0 = max(0, xi - half_width)
+        x1 = min(note_mask.shape[1], xi + half_width + 1)
+        total = 0
+        for staff in system_staves:
+            y0 = max(0, int(round(staff.lines_y[0])))
+            y1 = min(
+                note_mask.shape[0],
+                int(round(staff.lines_y[-1])) + 1,
+            )
+            total += int(note_mask[y0:y1, x0:x1].sum())
+        return total
+
+    supported: list[tuple[float, int]] = []
+    for cluster in clusters:
+        x = float(np.mean(cluster["xs"]))
+        support = len(cluster["staff_ids"])
+        overlap = notehead_overlap(x)
+        if support >= strict_support and overlap == 0:
+            supported.append((x, support))
+            continue
+        # Recover a barline obscured on one staff only when two independent
+        # staves show the full-height stroke and the notehead mask is entirely
+        # clear at that x.  This rescued genuine partially obscured barlines
+        # without admitting coincident note stems in the regression scores.
+        if support >= recovery_support and overlap == 0:
+            supported.append((x, support))
+
+    # Collapse braces/double/final barline pairs to one temporal boundary.
+    # Their component lines can be about one staff spacing apart in scans.
     merged: list[tuple[float, int]] = []
     for x, support in supported:
-        if merged and x - merged[-1][0] <= 0.75 * spacing:
+        if merged and x - merged[-1][0] <= 1.50 * spacing:
             previous_x, previous_support = merged[-1]
             total = previous_support + support
             merged[-1] = (
@@ -926,6 +962,7 @@ def _system_consensus_barlines(
 
 def detect_barlines_and_measures(
     gray: np.ndarray,
+    note_mask: np.ndarray,
     staves: list[Staff],
     systems: list[SystemRegion],
 ) -> tuple[list[Barline], list[MeasureRegion]]:
@@ -957,6 +994,7 @@ def detect_barlines_and_measures(
 
         merged = _system_consensus_barlines(
             gray,
+            note_mask,
             staves,
             system,
         )
@@ -2067,7 +2105,7 @@ def process_page(
     )
     systems = detect_systems(gray, staves)
     barlines, measures = detect_barlines_and_measures(
-        gray, staves, systems
+        gray, note_mask, staves, systems
     )
     assign_regions(noteheads, stems, systems, measures)
     beams=detect_beams(symbols,staff_mask,note_mask,stems_rests,stems,staves)
