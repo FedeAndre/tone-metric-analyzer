@@ -559,47 +559,213 @@ def global_spacing(staves: list[Staff]) -> float:
     return float(np.median(vals)) if vals else 18.0
 
 
+def _staff_barline_candidates(
+    gray: np.ndarray,
+    staff: Staff,
+) -> list[float]:
+    """Return full-height vertical strokes crossing one five-line staff.
+
+    A genuine barline crosses essentially the whole distance from the first
+    staff line to the fifth.  Most note stems do not.  This local geometric
+    test is intentionally independent of notes, voices, durations, and score
+    timing.
+    """
+    y0 = max(0, int(round(staff.lines_y[0])) - 1)
+    y1 = min(gray.shape[0], int(round(staff.lines_y[-1])) + 2)
+    if y1 - y0 < 5:
+        return []
+
+    region = (gray[y0:y1, :] < 175).astype(np.uint8)
+    staff_height = max(1, int(round(staff.lines_y[-1] - staff.lines_y[0] + 1)))
+    kernel_h = max(5, int(round(0.85 * staff_height)))
+    vertical = cv2.morphologyEx(
+        region,
+        cv2.MORPH_OPEN,
+        np.ones((kernel_h, 1), np.uint8),
+    )
+    column_ink = vertical.sum(axis=0)
+    xs = np.flatnonzero(column_ink >= 0.85 * kernel_h)
+
+    groups: list[list[int]] = []
+    join_tolerance = max(2, int(round(0.12 * staff.spacing)))
+    for value in xs:
+        x = int(value)
+        if groups and x - groups[-1][-1] <= join_tolerance:
+            groups[-1].append(x)
+        else:
+            groups.append([x])
+
+    return [
+        float(np.mean(group))
+        for group in groups
+        if group[-1] - group[0] + 1 <= 1.1 * staff.spacing
+    ]
+
+
+def _match_vertical_positions(
+    left: list[float],
+    right: list[float],
+    tolerance: float,
+) -> int:
+    """Greedily count one-to-one x matches between two staff signatures."""
+    used: set[int] = set()
+    matches = 0
+    for x in sorted(left):
+        candidates = [
+            (abs(x - y), index)
+            for index, y in enumerate(right)
+            if index not in used and abs(x - y) <= tolerance
+        ]
+        if not candidates:
+            continue
+        _, index = min(candidates)
+        used.add(index)
+        matches += 1
+    return matches
+
+
+def _barline_similarity(
+    left: list[float],
+    right: list[float],
+    tolerance: float,
+) -> float:
+    denominator = min(len(left), len(right))
+    if denominator <= 0:
+        return 0.0
+    return _match_vertical_positions(left, right, tolerance) / float(denominator)
+
+
+def _periodic_system_size(
+    gray: np.ndarray,
+    ordered: list[Staff],
+) -> int | None:
+    """Infer a repeated multi-staff system size from shared barline geometry.
+
+    The method considers only non-trivial divisors of the number of detected
+    staves.  For each candidate group size it compares adjacent-staff barline
+    agreement inside the proposed systems with agreement at proposed system
+    boundaries.  This handles pages where inter-system vertical spacing is
+    similar to an inter-staff spacing, as in many organ engravings.
+    """
+    count = len(ordered)
+    if count < 4:
+        return None
+
+    signatures = [
+        _staff_barline_candidates(gray, staff)
+        for staff in ordered
+    ]
+    similarities: list[float] = []
+    for index in range(count - 1):
+        tolerance = 0.35 * min(
+            ordered[index].spacing,
+            ordered[index + 1].spacing,
+        )
+        similarities.append(
+            _barline_similarity(
+                signatures[index],
+                signatures[index + 1],
+                tolerance,
+            )
+        )
+
+    candidates: list[tuple[float, int, float, float]] = []
+    for group_size in range(2, min(8, count - 1) + 1):
+        if count % group_size != 0 or count // group_size < 2:
+            continue
+        boundary_indices = [
+            index
+            for index in range(count - 1)
+            if (index + 1) % group_size == 0
+        ]
+        inside_indices = [
+            index
+            for index in range(count - 1)
+            if index not in boundary_indices
+        ]
+        if not boundary_indices or not inside_indices:
+            continue
+
+        inside_mean = float(np.mean([
+            similarities[index] for index in inside_indices
+        ]))
+        boundary_mean = float(np.mean([
+            similarities[index] for index in boundary_indices
+        ]))
+        separation = inside_mean - boundary_mean
+        candidates.append(
+            (separation, group_size, inside_mean, boundary_mean)
+        )
+
+    if not candidates:
+        return None
+
+    separation, group_size, inside_mean, boundary_mean = max(candidates)
+    if (
+        separation >= 0.12
+        and inside_mean >= 0.32
+        and boundary_mean <= inside_mean - 0.12
+    ):
+        return group_size
+    return None
+
+
 def detect_systems(
     gray: np.ndarray,
     staves: list[Staff],
 ) -> list[SystemRegion]:
     """
-    Group staves into systems from repeated inter-staff spacing and the actual
-    horizontal staff-line span. No expected number of staves/system is used.
+    Group staves into systems from two independent geometric cues:
+
+      1. repeated barline alignment across adjacent staves; and
+      2. unusually large vertical gaps when no reliable repetition exists.
+
+    No expected staff count, measure count, note timing, voice, or score-specific
+    answer is supplied.
     """
     if not staves:
         return []
 
-    ordered = sorted(staves, key=lambda s: float(np.mean(s.lines_y)))
-    if len(ordered) == 1:
+    ordered = sorted(staves, key=lambda staff: float(np.mean(staff.lines_y)))
+    repeated_size = _periodic_system_size(gray, ordered)
+
+    if repeated_size is not None:
+        groups = [
+            ordered[index:index + repeated_size]
+            for index in range(0, len(ordered), repeated_size)
+        ]
+    elif len(ordered) == 1:
         groups = [ordered]
     else:
         centers = np.array(
-            [float(np.mean(s.lines_y)) for s in ordered],
+            [float(np.mean(staff.lines_y)) for staff in ordered],
             dtype=float,
         )
         gaps = np.diff(centers)
-        med = float(np.median(gaps))
-        mad = float(np.median(np.abs(gaps - med)))
-        sp = float(np.median([s.spacing for s in ordered]))
-        break_threshold = med + max(2.0 * mad, 1.5 * sp)
+        median_gap = float(np.median(gaps))
+        mad = float(np.median(np.abs(gaps - median_gap)))
+        spacing = float(np.median([staff.spacing for staff in ordered]))
+        break_threshold = median_gap + max(2.0 * mad, 1.5 * spacing)
 
         groups: list[list[Staff]] = []
         current = [ordered[0]]
-        for i, gap in enumerate(gaps):
+        for index, gap in enumerate(gaps):
             if float(gap) > break_threshold:
                 groups.append(current)
-                current = [ordered[i + 1]]
+                current = [ordered[index + 1]]
             else:
-                current.append(ordered[i + 1])
+                current.append(ordered[index + 1])
         groups.append(current)
 
     ink = (gray < 185).astype(np.uint8)
-    sp_global = global_spacing(staves)
+    spacing_global = global_spacing(staves)
     horizontal = cv2.morphologyEx(
         ink,
         cv2.MORPH_OPEN,
-        np.ones((1, max(20, int(round(3.0 * sp_global)))), np.uint8),
+        np.ones(
+            (1, max(20, int(round(3.0 * spacing_global)))),
+            np.uint8,
+        ),
     )
 
     systems: list[SystemRegion] = []
@@ -610,23 +776,23 @@ def detect_systems(
                 yi = int(round(y))
                 y0 = max(0, yi - 2)
                 y1 = min(gray.shape[0], yi + 3)
-                cols = np.flatnonzero(
+                columns = np.flatnonzero(
                     np.any(horizontal[y0:y1, :] > 0, axis=0)
                 )
-                if len(cols):
-                    xs.extend(int(x) for x in cols)
+                if len(columns):
+                    xs.extend(int(x) for x in columns)
 
         left = float(min(xs)) if xs else 0.0
         right = float(max(xs)) if xs else float(gray.shape[1] - 1)
-        sp = float(np.median([s.spacing for s in group]))
+        spacing = float(np.median([staff.spacing for staff in group]))
         systems.append(
             SystemRegion(
                 id=len(systems),
-                staff_ids=[s.id for s in group],
-                top=max(0.0, group[0].lines_y[0] - sp),
+                staff_ids=[staff.id for staff in group],
+                top=max(0.0, group[0].lines_y[0] - spacing),
                 bottom=min(
                     float(gray.shape[0] - 1),
-                    group[-1].lines_y[-1] + sp,
+                    group[-1].lines_y[-1] + spacing,
                 ),
                 left=left,
                 right=right,
@@ -668,41 +834,35 @@ def _longest_ink_run(column: np.ndarray) -> int:
     return best
 
 
-def detect_barlines_and_measures(
+def _system_consensus_barlines(
     gray: np.ndarray,
     staves: list[Staff],
-    systems: list[SystemRegion],
-) -> tuple[list[Barline], list[MeasureRegion]]:
-    """
-    Detect measure boundaries as nearly continuous vertical raster strokes
-    spanning a system. This rejects coincident note stems on multiple staves:
-    summed vertical ink is insufficient unless a single continuous run crosses
-    most of the system height.
-    """
-    if not systems:
-        return [], []
+    system: SystemRegion,
+) -> list[tuple[float, int]]:
+    """Find barlines supported by the staves belonging to one system."""
+    system_staves = [
+        staff for staff in staves
+        if staff.id in set(system.staff_ids)
+    ]
+    if not system_staves:
+        return []
 
-    sp = global_spacing(staves)
-    ink = (gray < 185).astype(np.uint8)
-    ink = cv2.dilate(ink, np.ones((1, 2), np.uint8))
-
-    barlines: list[Barline] = []
-    measures: list[MeasureRegion] = []
-
-    for system in systems:
+    spacing = float(np.median([staff.spacing for staff in system_staves]))
+    if len(system_staves) == 1:
+        # For a single-staff system the existing continuous-run criterion is
+        # the strongest available barline discriminator.
         top = max(0, int(round(system.top)))
         bottom = min(gray.shape[0], int(round(system.bottom)))
+        region = cv2.dilate(
+            (gray[top:bottom, :] < 185).astype(np.uint8),
+            np.ones((1, 2), np.uint8),
+        )
         height = max(1, bottom - top)
-        region = ink[top:bottom, :]
-
-        candidates: list[float] = []
-        for x in range(region.shape[1]):
-            run = _longest_ink_run(region[:, x])
-            if run >= 0.72 * height:
-                candidates.append(float(x))
-
-        # Convert adjacent ink columns into line centers, then merge double/final
-        # barlines into one temporal boundary while retaining line_count.
+        candidates = [
+            float(x)
+            for x in range(region.shape[1])
+            if _longest_ink_run(region[:, x]) >= 0.72 * height
+        ]
         runs = contiguous_runs(
             np.isin(
                 np.arange(gray.shape[1]),
@@ -712,24 +872,107 @@ def detect_barlines_and_measures(
         line_centers = [
             (a + b) / 2.0
             for a, b in runs
-            if (b - a + 1) <= 1.2 * sp
+            if (b - a + 1) <= 1.2 * spacing
         ]
-        merged = _merge_close_x(line_centers, 0.75 * sp)
+        return _merge_close_x(line_centers, 0.75 * spacing)
 
-        # At a continuation system the left boundary can be represented by the
-        # system edge/brace rather than a full vertical barline. Add that edge
-        # only when the first detected internal bar is well to its right.
-        if not merged or merged[0][0] - system.left > 6.0 * sp:
+    points: list[tuple[float, int]] = []
+    for staff in system_staves:
+        for x in _staff_barline_candidates(gray, staff):
+            points.append((x, staff.id))
+    points.sort(key=lambda item: item[0])
+
+    clusters: list[dict] = []
+    for x, staff_id in points:
+        if (
+            clusters
+            and x - clusters[-1]["xs"][-1] <= 0.35 * spacing
+        ):
+            clusters[-1]["xs"].append(x)
+            clusters[-1]["staff_ids"].add(staff_id)
+        else:
+            clusters.append({
+                "xs": [x],
+                "staff_ids": {staff_id},
+            })
+
+    minimum_support = max(
+        2,
+        int(math.ceil(0.67 * len(system_staves))),
+    )
+    supported = [
+        (
+            float(np.mean(cluster["xs"])),
+            len(cluster["staff_ids"]),
+        )
+        for cluster in clusters
+        if len(cluster["staff_ids"]) >= minimum_support
+    ]
+
+    # Collapse double/final barline pairs to one temporal boundary.
+    merged: list[tuple[float, int]] = []
+    for x, support in supported:
+        if merged and x - merged[-1][0] <= 0.75 * spacing:
+            previous_x, previous_support = merged[-1]
+            total = previous_support + support
+            merged[-1] = (
+                (previous_x * previous_support + x * support) / total,
+                max(previous_support, support),
+            )
+        else:
+            merged.append((x, support))
+    return merged
+
+
+def detect_barlines_and_measures(
+    gray: np.ndarray,
+    staves: list[Staff],
+    systems: list[SystemRegion],
+) -> tuple[list[Barline], list[MeasureRegion]]:
+    """
+    Detect measure boundaries from full-staff vertical strokes agreed across
+    the staves of each system.
+
+    This replaces a page-layout assumption that required one continuous
+    vertical barline through the entire system height.  That assumption fails
+    when manual and pedal staves have separate barline segments.  Consensus
+    across individual five-line staves remains purely visual and does not use
+    musical timing.
+    """
+    if not systems:
+        return [], []
+
+    spacing_global = global_spacing(staves)
+    barlines: list[Barline] = []
+    measures: list[MeasureRegion] = []
+
+    for system in systems:
+        top = max(0, int(round(system.top)))
+        bottom = min(gray.shape[0], int(round(system.bottom)))
+        spacing = float(np.median([
+            staff.spacing
+            for staff in staves
+            if staff.id in set(system.staff_ids)
+        ])) if system.staff_ids else spacing_global
+
+        merged = _system_consensus_barlines(
+            gray,
+            staves,
+            system,
+        )
+
+        # System edges are legitimate temporal boundaries when the engraved
+        # barline itself is represented by the brace/edge rather than a
+        # separately detected vertical stroke.
+        if not merged or merged[0][0] - system.left > 4.0 * spacing:
             merged.insert(0, (system.left, 1))
-
-        if system.right - merged[-1][0] > 6.0 * sp:
+        if not merged or system.right - merged[-1][0] > 4.0 * spacing:
             merged.append((system.right, 1))
 
-        # Restrict to the observed staff span and enforce strictly increasing
-        # temporal boundaries.
         merged = [
-            item for item in merged
-            if system.left - sp <= item[0] <= system.right + sp
+            item
+            for item in merged
+            if system.left - spacing <= item[0] <= system.right + spacing
         ]
         merged.sort(key=lambda item: item[0])
 
@@ -741,22 +984,22 @@ def detect_barlines_and_measures(
                 x=float(x),
                 top=float(top),
                 bottom=float(bottom),
-                line_count=line_count,
+                line_count=int(line_count),
             )
             barlines.append(bar)
             sys_bars.append(bar)
 
-        for mi, (left_bar, right_bar) in enumerate(
+        for measure_in_system, (left_bar, right_bar) in enumerate(
             zip(sys_bars, sys_bars[1:]),
             start=1,
         ):
-            if right_bar.x - left_bar.x < 2.0 * sp:
+            if right_bar.x - left_bar.x < 2.0 * spacing:
                 continue
             measures.append(
                 MeasureRegion(
                     id=len(measures) + 1,
                     system_id=system.id,
-                    measure_in_system=mi,
+                    measure_in_system=measure_in_system,
                     left=left_bar.x,
                     right=right_bar.x,
                     top=float(top),
