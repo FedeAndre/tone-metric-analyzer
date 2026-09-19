@@ -118,7 +118,17 @@ def render_pdf(pdf_path: Path, out_dir: Path, dpi: int = 300) -> list[Path]:
     return pages
 
 
-def run_segmentation(img_path: Path) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def run_segmentation(
+    img_path: Path,
+    cache_path: Path | None = None,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    if cache_path is not None and cache_path.exists():
+        z = np.load(cache_path)
+        return (
+            z["gray"], z["staff"], z["symbols"],
+            z["stems_rests"], z["noteheads"], z["clefs_keys"],
+        )
+
     first, _ = inference(str(Path(MODULE_PATH) / "checkpoints" / "unet_big"), str(img_path), use_tf=False)
     staff = (first == 1).astype(np.uint8)
     symbols = (first == 2).astype(np.uint8)
@@ -132,7 +142,100 @@ def run_segmentation(img_path: Path) -> tuple[np.ndarray, np.ndarray, np.ndarray
     if src is None:
         raise RuntimeError(f"Cannot load {img_path}")
     src = cv2.resize(src, (staff.shape[1], staff.shape[0]), interpolation=cv2.INTER_AREA)
+
+    if cache_path is not None:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(
+            cache_path,
+            gray=src,
+            staff=staff,
+            symbols=symbols,
+            stems_rests=stems_rests,
+            noteheads=noteheads,
+            clefs_keys=clefs_keys,
+        )
     return src, staff, symbols, stems_rests, noteheads, clefs_keys
+
+
+def estimate_page_skew(gray: np.ndarray) -> float:
+    """Estimate global staff-line skew from long near-horizontal raster segments."""
+    h, w = gray.shape
+    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+    lines = cv2.HoughLinesP(
+        edges,
+        1,
+        np.pi / 1800.0,
+        threshold=max(50, int(round(w * 0.045))),
+        minLineLength=max(80, int(round(w * 0.25))),
+        maxLineGap=max(8, int(round(w * 0.03))),
+    )
+    if lines is None:
+        return 0.0
+
+    weighted: list[tuple[float, float]] = []
+    for line in lines[:, 0]:
+        x1, y1, x2, y2 = [int(v) for v in line]
+        dx = x2 - x1
+        dy = y2 - y1
+        if dx == 0:
+            continue
+        angle = math.degrees(math.atan2(dy, dx))
+        length = math.hypot(dx, dy)
+        if abs(angle) <= 3.0 and length >= 0.25 * w:
+            weighted.append((angle, length))
+    if not weighted:
+        return 0.0
+
+    weighted.sort(key=lambda z: z[0])
+    half = 0.5 * sum(weight for _, weight in weighted)
+    acc = 0.0
+    for angle, weight in weighted:
+        acc += weight
+        if acc >= half:
+            return float(angle)
+    return float(weighted[-1][0])
+
+
+def deskew_layers(
+    gray: np.ndarray,
+    staff: np.ndarray,
+    symbols: np.ndarray,
+    stems_rests: np.ndarray,
+    noteheads: np.ndarray,
+    clefs_keys: np.ndarray,
+) -> tuple[float, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    angle = estimate_page_skew(gray)
+    if abs(angle) < 0.08:
+        return angle, gray, staff, symbols, stems_rests, noteheads, clefs_keys
+
+    h, w = gray.shape
+    matrix = cv2.getRotationMatrix2D((w / 2.0, h / 2.0), angle, 1.0)
+
+    def rot_gray(a: np.ndarray) -> np.ndarray:
+        return cv2.warpAffine(
+            a, matrix, (w, h),
+            flags=cv2.INTER_LINEAR,
+            borderMode=cv2.BORDER_CONSTANT,
+            borderValue=255,
+        )
+
+    def rot_mask(a: np.ndarray) -> np.ndarray:
+        return cv2.warpAffine(
+            a, matrix, (w, h),
+            flags=cv2.INTER_NEAREST,
+            borderMode=cv2.BORDER_CONSTANT,
+            borderValue=0,
+        ).astype(np.uint8)
+
+    return (
+        angle,
+        rot_gray(gray),
+        rot_mask(staff),
+        rot_mask(symbols),
+        rot_mask(stems_rests),
+        rot_mask(noteheads),
+        rot_mask(clefs_keys),
+    )
 
 
 def contiguous_runs(mask: np.ndarray) -> list[tuple[int, int]]:
@@ -509,8 +612,24 @@ def overlay(gray: np.ndarray, staves: list[Staff], noteheads: list[Notehead], st
     img.save(out_path)
 
 
-def process_page(page: Path, out_dir: Path, page_index: int) -> dict:
-    gray, staff_mask, symbols, stems_rests, note_mask, clefs_keys = run_segmentation(page)
+def process_page(
+    page: Path,
+    out_dir: Path,
+    page_index: int,
+    cache_dir: Path | None = None,
+) -> dict:
+    cache_path = None if cache_dir is None else cache_dir / f"page_{page_index:02d}.npz"
+    gray, staff_mask, symbols, stems_rests, note_mask, clefs_keys = run_segmentation(page, cache_path)
+    (
+        skew_degrees,
+        gray,
+        staff_mask,
+        symbols,
+        stems_rests,
+        note_mask,
+        clefs_keys,
+    ) = deskew_layers(gray, staff_mask, symbols, stems_rests, note_mask, clefs_keys)
+
     staves=detect_staves(gray,staff_mask)
     noteheads=detect_noteheads(gray,note_mask,staves)
     stems=vertical_components(stems_rests,staves)
@@ -525,6 +644,7 @@ def process_page(page: Path, out_dir: Path, page_index: int) -> dict:
     unlinked_filled=sum(1 for n in noteheads if n.head_type=="filled" and n.stem_id is None)
     print("OPTICAL_PAGE=" + json.dumps({
         "page": page_index,
+        "skew_degrees": round(skew_degrees, 4),
         "staves": len(staves),
         "noteheads": len(noteheads),
         "stems": len(stems),
@@ -536,6 +656,7 @@ def process_page(page: Path, out_dir: Path, page_index: int) -> dict:
 
     return {
         "page":page_index,
+        "skew_degrees":round(skew_degrees,4),
         "image_size":[int(gray.shape[1]),int(gray.shape[0])],
         "staff_count":len(staves),
         "staves":[asdict(x) for x in staves],
@@ -561,6 +682,7 @@ def main() -> None:
     ap.add_argument("input",type=Path)
     ap.add_argument("--out",type=Path,default=Path("optical_audit"))
     ap.add_argument("--dpi",type=int,default=300)
+    ap.add_argument("--cache-dir",type=Path,default=None)
     args=ap.parse_args()
 
     ensure_checkpoints()
@@ -579,7 +701,7 @@ def main() -> None:
     }
     for i,p in enumerate(pages,1):
         print(f"Processing optical page {i}/{len(pages)}")
-        result["pages"].append(process_page(p,args.out,i))
+        result["pages"].append(process_page(p,args.out,i,args.cache_dir))
 
     result["totals"]={
         "pages":len(result["pages"]),
