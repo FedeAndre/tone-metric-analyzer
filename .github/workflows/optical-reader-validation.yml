@@ -41,6 +41,38 @@ jobs:
           path: optical_cache
           key: buxtehude-oemer-dbe2a933d630d0f74805d717960eb259473f5978-300dpi-v1
 
+      - name: Validate standalone API import
+        run: |
+          python - <<'PY'
+          from app import status
+          s = status()
+          assert s["ok"] is True
+          assert s["reader"] == "independent-optical"
+          assert s["semantic_timing_used"] is False
+          print("API_IMPORT_OK")
+          PY
+
+      - name: Validate Railway Docker image and health endpoint
+        run: |
+          docker build -t tma-optical-reader-clean .
+          cid=$(docker run -d -p 8080:8080 tma-optical-reader-clean)
+          trap 'docker rm -f "$cid" >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/api/status > status.json; then
+              break
+            fi
+            sleep 1
+          done
+          cat status.json
+          python - <<'PY'
+          import json
+          s=json.load(open("status.json"))
+          assert s["ok"] is True
+          assert s["version"] == "tma-optical-reader-clean-v1"
+          assert s["rhythmic_attacks_ready"] is False
+          print("DOCKER_HEALTH_OK")
+          PY
+
       - name: Reconstruct exact Buxtehude regression pages
         run: |
           sudo apt-get update -qq
