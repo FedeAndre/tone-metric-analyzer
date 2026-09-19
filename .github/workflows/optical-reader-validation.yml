@@ -82,6 +82,29 @@ jobs:
           pdfunite page-105.pdf page-106.pdf buxtehude.pdf
           test "$(pdfinfo buxtehude.pdf | awk '/^Pages:/ {print $2}')" -eq 2
 
+      - name: Validate full PDF API under 512 MB container limit
+        run: |
+          cid=$(docker run -d --memory=512m --memory-swap=512m -p 8081:8080 tma-optical-reader-clean)
+          trap 'docker rm -f "$cid" >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8081/api/status >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --show-error --max-time 600             -F "file=@buxtehude.pdf;type=application/pdf"             http://127.0.0.1:8081/api/optical/read             -o api-result.json
+          docker stats --no-stream "$cid"
+          python - <<'PY'
+          import json
+          d=json.load(open("api-result.json"))
+          assert d["engine"]=="tma-optical-reader-clean-v1"
+          assert d["semantic_timing_used"] is False
+          assert d["totals"]["measures"]==49, d["totals"]
+          assert d["totals"]["noteheads"]>=400, d["totals"]
+          print("LOW_MEMORY_FULL_API_OK")
+          print(json.dumps(d["totals"], indent=2))
+          PY
+
       - name: Run independent image-to-notation graph
         run: |
           python optical_reader.py buxtehude.pdf --out optical_audit --dpi 300 --cache-dir optical_cache
