@@ -590,8 +590,10 @@ def _build_measure_events(
             )
         )
 
-    # Unstemmed hollow heads are whole-note events.  Heads at the same x form
-    # one chord.  Filled unstemmed heads are intentionally left unresolved.
+    # Unstemmed hollow heads are whole-note events. Heads at the same x form
+    # one chord. Unstemmed filled heads retain their attack identity with
+    # unknown duration; they may contribute a hit only if their onset is
+    # independently proven by the rest of the notation.
     remaining = sorted(
         [head for head in unstemmed if head.get("head_type") == "hollow"],
         key=lambda head: float(head["cx"]),
@@ -639,6 +641,58 @@ def _build_measure_events(
                 notehead_ids=head_ids,
                 stem_id=None,
                 dot_confidence=dot_conf,
+                tie_continuation=tied,
+            )
+        )
+
+    # A filled head whose stem could not be recovered has unknown duration,
+    # but its visible head is still a real attack candidate.  Keep it out of
+    # all duration equations and accept it only when its temporal column is
+    # proven independently.  This is safer than either silently dropping the
+    # note or inventing a quarter-note duration.
+    unknown_filled = sorted(
+        [head for head in unstemmed if head.get("head_type") == "filled"],
+        key=lambda head: (int(head.get("staff_id")), float(head["cx"])),
+    )
+    while unknown_filled:
+        first = unknown_filled.pop(0)
+        staff_id = int(first.get("staff_id"))
+        spacing = float(
+            staves.get(staff_id, {}).get("spacing", 18.0) or 18.0
+        )
+        group = [first]
+        keep = []
+        for head in unknown_filled:
+            if (
+                int(head.get("staff_id")) == staff_id
+                and abs(float(head["cx"]) - float(first["cx"]))
+                <= 0.45 * spacing
+            ):
+                group.append(head)
+            else:
+                keep.append(head)
+        unknown_filled = keep
+        head_ids = [int(head["id"]) for head in group]
+        tied = bool(set(head_ids) & tie_right)
+        events.append(
+            VisualEvent(
+                id=f"p{page['page']}:m{measure_id}:u{head_ids[0]}",
+                page=int(page["page"]),
+                measure_local=measure_id,
+                staff_id=staff_id,
+                x=float(median([
+                    float(head["cx"]) for head in group
+                ])),
+                y=float(median([
+                    float(head["cy"]) for head in group
+                ])),
+                kind="note_unknown_duration",
+                voice="unknown",
+                base_duration=Fraction(0),
+                duration=Fraction(0),
+                attacks=not tied,
+                notehead_ids=head_ids,
+                stem_id=None,
                 tie_continuation=tied,
             )
         )
@@ -759,24 +813,6 @@ def reconstruct_attacks(
         for measure in measures:
             events = _build_measure_events(page, measure)
 
-            # A filled notehead without a linked stem has an unknown written
-            # rhythmic value.  Never let it disappear silently from the score:
-            # it is a blocking optical/rhythmic uncertainty until the visual
-            # stem/flag evidence is recovered.
-            for head in page.get("noteheads", []):
-                if (
-                    head.get("measure_local") == int(measure["id"])
-                    and head.get("head_type") == "filled"
-                    and head.get("stem_id") is None
-                ):
-                    unresolved_out.append({
-                        "page": int(page["page"]),
-                        "measure_index": global_measure_index,
-                        "event_id": f"p{page['page']}:m{measure['id']}:h{head['id']}",
-                        "staff_id": head.get("staff_id"),
-                        "reason": "filled-note-stem-unresolved",
-                    })
-
             temporal_events = [
                 event for event in events
                 if event.kind != "measure_rest"
@@ -788,11 +824,15 @@ def reconstruct_attacks(
                 if staff_id in staves
             ]
             spacing = float(median(spacings)) if spacings else 18.0
-            columns = _cluster_columns(temporal_events, 0.60 * spacing)
+            columns = _cluster_columns(temporal_events, 0.65 * spacing)
 
             voices: dict[tuple[int, str], list[VisualEvent]] = {}
             neutral_rests: dict[int, list[VisualEvent]] = {}
             for event in events:
+                if event.kind == "note_unknown_duration":
+                    # Onset-only visual evidence: never enters duration/voice
+                    # constraints.
+                    continue
                 if event.kind == "measure_rest":
                     event.base_duration = capacity
                     event.duration = capacity
