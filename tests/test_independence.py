@@ -38,7 +38,9 @@ def test_no_legacy_reader_imports_or_timing_paths():
 
 def test_external_omr_is_used_only_for_low_level_inference():
     src = (ROOT / "optical_reader.py").read_text()
-    assert "from oemer.inference import inference" in src
+    assert "from oemer import MODULE_PATH" in src
+    assert "import onnxruntime as ort" in src
+    assert "from oemer.inference import inference" not in src
     forbidden = [
         "MusicXMLBuilder",
         "rhythm_extract",
