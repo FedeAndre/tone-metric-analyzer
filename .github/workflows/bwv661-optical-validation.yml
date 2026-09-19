@@ -55,6 +55,18 @@ jobs:
           print(json.dumps(d['totals'], indent=2))
           PY
 
+      - name: Audit exact BWV 661 rhythmic reconstruction
+        run: |
+          python - <<'PY'
+          import json
+          from rhythm_reconstructor import reconstruct_attacks
+          d=json.load(open('bwv661_optical/notation_graph.json'))
+          r=reconstruct_attacks(d,meter=(2,2))
+          print("BWV661_RHYTHM_STATS="+json.dumps(r["stats"],sort_keys=True))
+          print("BWV661_READY="+str(r["rhythmic_attacks_ready"]))
+          json.dump(r,open('bwv661_optical/rhythm_audit.json','w'),indent=2)
+          PY
+
       - name: Upload exact BWV 661 optical audit
         if: always()
         uses: actions/upload-artifact@v4
@@ -63,6 +75,7 @@ jobs:
           path: |
             bwv661_optical/notation_graph.json
             bwv661_optical/page_*_optical_overlay.png
+            bwv661_optical/rhythm_audit.json
             bwv661_cache/page_*.npz
             bwv661.pdf
           retention-days: 14
