@@ -1,0 +1,25 @@
+name: Clean core unit validation
+
+on:
+  push:
+    branches:
+      - tma-optical-reader-clean-20260919
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    if: "!contains(github.event.head_commit.message, '[skip unit]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Run clean architecture and rhythm/TMA unit tests
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          pytest -q tests
