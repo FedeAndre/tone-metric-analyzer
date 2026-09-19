@@ -1552,6 +1552,199 @@ def link_noteheads_stems(
 
     return component_links, pixel_links
 
+
+def recover_filled_noteheads_from_orphan_stems(
+    gray: np.ndarray,
+    noteheads: list[Notehead],
+    stems: list[Stem],
+    staves: list[Staff],
+    measures: list[MeasureRegion],
+) -> int:
+    """Recover a filled notehead omitted by the notehead segmentation.
+
+    The recovery starts from an already detected vertical stem that has no
+    linked notehead.  It accepts a new head only when raw raster ink forms a
+    compact oval at the notationally correct stem endpoint/side.  Measure-edge
+    strokes, duplicate stems beside an existing head, and long staff/bar lines
+    are rejected before a head is materialized.
+    """
+    linked = {
+        int(head.stem_id)
+        for head in noteheads
+        if head.stem_id is not None
+    }
+    staff_by_id = {staff.id: staff for staff in staves}
+    measure_by_id = {measure.id: measure for measure in measures}
+    recovered = 0
+
+    for stem in stems:
+        if (
+            stem.id in linked
+            or stem.staff_id is None
+            or stem.measure_local is None
+        ):
+            continue
+        staff = staff_by_id.get(stem.staff_id)
+        measure = measure_by_id.get(stem.measure_local)
+        if staff is None or measure is None:
+            continue
+        sp = float(staff.spacing)
+        # Barline fragments are the dominant orphan vertical components.
+        if min(
+            abs(stem.cx - float(measure.left)),
+            abs(float(measure.right) - stem.cx),
+        ) < 0.85 * sp:
+            continue
+
+        best: tuple[
+            float, str, tuple[int, int, int, int], float, float
+        ] | None = None
+
+        for direction in ("up", "down"):
+            if direction == "up":
+                endpoint_y = float(stem.y2)
+                expected_x = float(stem.cx) - 0.38 * sp
+                expected_y = endpoint_y - 0.10 * sp
+            else:
+                endpoint_y = float(stem.y1)
+                expected_x = float(stem.cx) + 0.38 * sp
+                expected_y = endpoint_y + 0.10 * sp
+
+            # Do not recover another head on top of an already accepted one.
+            if any(
+                head.staff_id == stem.staff_id
+                and math.hypot(
+                    float(head.cx) - expected_x,
+                    float(head.cy) - expected_y,
+                ) < 0.85 * sp
+                for head in noteheads
+            ):
+                continue
+
+            x0 = max(0, int(round(expected_x - 0.85 * sp)))
+            x1 = min(gray.shape[1], int(round(expected_x + 0.85 * sp)) + 1)
+            y0 = max(0, int(round(expected_y - 0.65 * sp)))
+            y1 = min(gray.shape[0], int(round(expected_y + 0.65 * sp)) + 1)
+            if x1 <= x0 or y1 <= y0:
+                continue
+
+            patch = (gray[y0:y1, x0:x1] < 170).astype(np.uint8)
+            # Remove long horizontal staff/ledger strokes while retaining the
+            # shorter notehead body.
+            horizontal = cv2.morphologyEx(
+                patch,
+                cv2.MORPH_OPEN,
+                np.ones(
+                    (1, max(5, int(round(1.60 * sp)))),
+                    np.uint8,
+                ),
+            )
+            patch = np.where(horizontal > 0, 0, patch).astype(np.uint8)
+
+            # Remove the known vertical stem itself.  A genuine head remains
+            # as a compact oval attached beside this stripe.
+            local_stem_x = int(round(stem.cx)) - x0
+            half_stem = max(1, int(round(0.10 * sp)))
+            xa = max(0, local_stem_x - half_stem)
+            xb = min(patch.shape[1], local_stem_x + half_stem + 1)
+            patch[:, xa:xb] = 0
+            patch = cv2.morphologyEx(
+                patch,
+                cv2.MORPH_CLOSE,
+                np.ones((3, 3), np.uint8),
+            )
+
+            n, _labels, stats, centers = cv2.connectedComponentsWithStats(
+                patch,
+                8,
+            )
+            for component in range(1, n):
+                x, y, w, h, area = [
+                    int(value) for value in stats[component]
+                ]
+                if not (0.40 * sp <= w <= 1.45 * sp):
+                    continue
+                if not (0.30 * sp <= h <= 1.20 * sp):
+                    continue
+                if not (0.12 * sp * sp <= area <= 1.05 * sp * sp):
+                    continue
+                aspect = w / max(float(h), 1.0)
+                if not (0.75 <= aspect <= 2.5):
+                    continue
+
+                cx = x0 + float(centers[component][0])
+                cy = y0 + float(centers[component][1])
+                # Stem-side geometry is independent evidence of note identity.
+                if direction == "up" and cx >= stem.cx + 0.10 * sp:
+                    continue
+                if direction == "down" and cx <= stem.cx - 0.10 * sp:
+                    continue
+                if abs(cy - expected_y) > 0.50 * sp:
+                    continue
+
+                bx1 = max(0, x0 + x - 1)
+                by1 = max(0, y0 + y - 1)
+                bx2 = min(gray.shape[1], x0 + x + w + 1)
+                by2 = min(gray.shape[0], y0 + y + h + 1)
+                overall, central = estimate_head_fill(
+                    gray,
+                    (bx1, by1, bx2 - bx1, by2 - by1),
+                )
+                if max(overall, central) < 0.58:
+                    continue
+
+                distance = math.hypot(cx - expected_x, cy - expected_y)
+                score = (
+                    2.0 * max(overall, central)
+                    + area / max(sp * sp, 1.0)
+                    - distance / max(sp, 1.0)
+                )
+                candidate = (
+                    float(score),
+                    direction,
+                    (bx1, by1, bx2, by2),
+                    cx,
+                    cy,
+                )
+                if best is None or candidate[0] > best[0]:
+                    best = candidate
+
+        if best is None:
+            continue
+
+        _score, direction, box, cx, cy = best
+        x1, y1, x2, y2 = box
+        overall, central = estimate_head_fill(
+            gray,
+            (x1, y1, x2 - x1, y2 - y1),
+        )
+        position = int(round(
+            (staff.lines_y[-1] - cy) / (staff.spacing / 2.0)
+        ))
+        head = Notehead(
+            id=len(noteheads),
+            x1=x1,
+            y1=y1,
+            x2=x2,
+            y2=y2,
+            cx=cx,
+            cy=cy,
+            staff_id=staff.id,
+            staff_pos_halfspaces=position,
+            fill_ratio=round(max(overall, central), 4),
+            head_type="filled",
+            stem_id=stem.id,
+            stem_source="orphan-stem-raster",
+            system_id=stem.system_id,
+            measure_local=stem.measure_local,
+        )
+        noteheads.append(head)
+        stem.direction = direction
+        linked.add(stem.id)
+        recovered += 1
+
+    return recovered
+
 def detect_beams(symbols: np.ndarray, staff: np.ndarray, note: np.ndarray, stems_rests: np.ndarray,
                  stems: list[Stem], staves: list[Staff]) -> list[Beam]:
     sp = global_spacing(staves)
@@ -2449,6 +2642,13 @@ def process_page(
         gray, note_mask, staves, systems
     )
     assign_regions(noteheads, stems, systems, measures)
+    orphan_head_recoveries = recover_filled_noteheads_from_orphan_stems(
+        gray,
+        noteheads,
+        stems,
+        staves,
+        measures,
+    )
     beams=detect_beams(symbols,staff_mask,note_mask,stems_rests,stems,staves)
     pixel_beam_edges, pixel_beam_stem_upgrades = complete_beam_levels_from_pixels(
         gray, noteheads, stems, beams, staves
@@ -2486,6 +2686,7 @@ def process_page(
         "ties": len(ties),
         "component_stem_links": component_stem_links,
         "pixel_stem_links": pixel_stem_links,
+        "orphan_head_recoveries": orphan_head_recoveries,
         "unlinked_filled": unlinked_filled,
     }, separators=(",", ":")))
 
