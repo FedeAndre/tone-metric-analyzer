@@ -542,9 +542,17 @@ def reconstruct_attacks(
                     } for rest in rests)
 
             solutions: list[VoiceSolution] = []
-            edges: list[tuple[int, int, Fraction, str]] = []
+            # Voice identity is visually inferred and therefore soft evidence.
+            # Only a self-consistent complete voice may anchor exact score time.
+            # Other inferred voice chains contribute duration edges only when
+            # they agree with already established exact anchors.
             times: dict[int, Fraction] = {}
             conflicts: list[str] = []
+            soft_edges: list[tuple[int, int, Fraction, str]] = []
+
+            complete_candidates: list[
+                tuple[VoiceSolution, dict[int, Fraction]]
+            ] = []
 
             for key, voice_events in voices.items():
                 voice_events.sort(key=lambda event: (event.x, event.y))
@@ -563,27 +571,26 @@ def reconstruct_attacks(
                     if total < capacity
                     else "overfull"
                 )
-                solutions.append(
-                    VoiceSolution(
-                        key=key,
-                        events=voice_events,
-                        duration_sum=total,
-                        complete=complete,
-                        status=status,
-                    )
+                solution = VoiceSolution(
+                    key=key,
+                    events=voice_events,
+                    duration_sum=total,
+                    complete=complete,
+                    status=status,
                 )
+                solutions.append(solution)
 
+                # Build a soft succession hypothesis from this inferred voice.
                 for left, right in zip(voice_events, voice_events[1:]):
                     if (
                         left.kind == "measure_rest"
                         or right.kind == "measure_rest"
                         or left.column is None
                         or right.column is None
+                        or left.column == right.column
                     ):
                         continue
-                    if left.column == right.column:
-                        continue
-                    edges.append(
+                    soft_edges.append(
                         (
                             int(left.column),
                             int(right.column),
@@ -593,53 +600,102 @@ def reconstruct_attacks(
                     )
 
                 if complete and voice_events and key[1] != "measure_rest":
-                    first = voice_events[0]
-                    if first.column is not None:
-                        _set_time(
-                            times,
-                            int(first.column),
-                            Fraction(0),
-                            conflicts,
-                            f"complete voice {key}",
-                        )
+                    proposals: dict[int, Fraction] = {}
                     cursor = Fraction(0)
+                    internally_valid = True
                     for event in voice_events:
                         if event.column is not None:
-                            _set_time(
-                                times,
-                                int(event.column),
-                                cursor,
-                                conflicts,
-                                f"complete voice {key}",
-                            )
+                            column = int(event.column)
+                            if (
+                                column in proposals
+                                and proposals[column] != cursor
+                            ):
+                                internally_valid = False
+                                break
+                            proposals[column] = cursor
                         cursor += event.duration
-                    if cursor != capacity:
-                        conflicts.append(
-                            f"complete voice {key} ended at "
-                            f"{frac_text(cursor)} not {frac_text(capacity)}"
-                        )
+                    if cursor == capacity and internally_valid:
+                        complete_candidates.append((solution, proposals))
 
-            # In every complete measure the earliest temporal notation column is
-            # the start of the measure.  Centered whole-measure rests were
-            # removed from the column graph above, so they cannot corrupt this
-            # anchor.  This uses only notation order, never proportional x
-            # spacing.  The opening measure may later be shifted if it proves
-            # to be an anacrusis.
-            if columns:
-                _set_time(
-                    times,
-                    0,
-                    Fraction(0),
-                    conflicts,
-                    "measure-leading-column",
-                )
-            _propagate_edges(times, edges, conflicts)
+            # Prefer complete voices that constrain more distinct columns.
+            # A candidate is accepted only if every proposed time agrees with
+            # previously accepted anchors.  Conflicting candidates are simply
+            # rejected as bad visual voice hypotheses; they are not notation
+            # conflicts.
+            complete_candidates.sort(
+                key=lambda item: len(item[1]),
+                reverse=True,
+            )
+            accepted_complete = 0
+            for solution, proposals in complete_candidates:
+                if any(
+                    column in times and times[column] != value
+                    for column, value in proposals.items()
+                ):
+                    solution.status = "rejected-voice-hypothesis"
+                    solution.complete = False
+                    continue
+                for column, value in proposals.items():
+                    times[column] = value
+                solution.status = "complete-anchor"
+                accepted_complete += 1
+
+            # Every non-pickup measure begins at the first temporal notation
+            # column.  For the opening bar this is provisional and can be
+            # replaced by the pickup rule below.
+            if columns and global_measure_index != 0:
+                if 0 in times and times[0] != Fraction(0):
+                    # A complete candidate that starts later than the first
+                    # visible column is not a valid measure anchor.
+                    bad = times[0]
+                    times = {
+                        column: value
+                        for column, value in times.items()
+                        if not (column == 0 and value == bad)
+                    }
+                times[0] = Fraction(0)
+
+            # Accept soft duration edges only when they are compatible with
+            # exact anchors.  This is the key distinction from the old solver:
+            # stem direction / inferred voice never gets to overrule score
+            # time established by a self-consistent complete path.
+            active_edges = list(soft_edges)
+            changed = True
+            while changed:
+                changed = False
+                next_edges: list[tuple[int, int, Fraction, str]] = []
+                for left, right, duration, source in active_edges:
+                    if left in times and right in times:
+                        if times[right] - times[left] == duration:
+                            next_edges.append((left, right, duration, source))
+                        continue
+                    if left in times and right not in times:
+                        proposed = times[left] + duration
+                        if Fraction(0) <= proposed < capacity:
+                            times[right] = proposed
+                            changed = True
+                            next_edges.append((left, right, duration, source))
+                        continue
+                    if right in times and left not in times:
+                        proposed = times[right] - duration
+                        if Fraction(0) <= proposed < capacity:
+                            times[left] = proposed
+                            changed = True
+                            next_edges.append((left, right, duration, source))
+                        continue
+                    next_edges.append((left, right, duration, source))
+                active_edges = next_edges
+
+            # A first column with no accepted complete anchor is still a hard
+            # notational boundary for ordinary (non-opening) measures.
+            if columns and global_measure_index != 0 and 0 not in times:
+                times[0] = Fraction(0)
 
             # Opening incomplete measure: if no complete voice exists and the
             # longest explicitly notated voice has a unique shared duration,
             # position it as a pickup at the end of a full measure.
             pickup_shift = Fraction(0)
-            if global_measure_index == 0 and not any(s.complete for s in solutions):
+            if global_measure_index == 0 and accepted_complete == 0:
                 positive = [s.duration_sum for s in solutions if s.duration_sum > 0]
                 if positive:
                     actual = max(positive)
@@ -660,7 +716,7 @@ def reconstruct_attacks(
                                         "opening pickup",
                                     )
                                 cursor += event.duration
-                        _propagate_edges(times, edges, conflicts)
+                        _propagate_edges(times, active_edges, conflicts)
 
             for event in events:
                 if event.column is not None and int(event.column) in times:
