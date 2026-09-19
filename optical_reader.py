@@ -7,6 +7,9 @@ import json
 import math
 import os
 import pickle
+import subprocess
+import sys
+import tempfile
 import urllib.request
 from dataclasses import dataclass, asdict
 from pathlib import Path
@@ -327,6 +330,60 @@ def _low_memory_inference(
     _trim_process_memory()
     return class_map
 
+def _run_low_level_model_process(
+    img_path: Path,
+    model_name: str,
+    output_path: Path,
+) -> None:
+    """Run one ONNX segmentation network in a disposable process.
+
+    ONNX Runtime can retain native allocator pages after a session is deleted.
+    Executing each network in a separate process gives the operating system a
+    hard reclamation boundary between model 1 and model 2.
+    """
+    command = [
+        sys.executable,
+        str(Path(__file__).resolve()),
+        "--low-level-infer",
+        model_name,
+        str(img_path),
+        str(output_path),
+    ]
+    completed = subprocess.run(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        check=False,
+        timeout=20 * 60,
+    )
+    if completed.stdout:
+        print(completed.stdout, end="")
+    if completed.returncode != 0:
+        raise RuntimeError(
+            f"Low-level model {model_name} failed with exit code "
+            f"{completed.returncode}"
+        )
+    if not output_path.exists():
+        raise RuntimeError(
+            f"Low-level model {model_name} produced no class map."
+        )
+
+
+def _low_level_infer_file(
+    model_name: str,
+    img_path: Path,
+    output_path: Path,
+) -> None:
+    model_dir = Path(MODULE_PATH) / "checkpoints" / model_name
+    source_bgr = cv2.imread(str(img_path), cv2.IMREAD_COLOR)
+    if source_bgr is None:
+        raise RuntimeError(f"Cannot load {img_path}")
+    class_map = _low_memory_inference(model_dir, source_bgr)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    np.save(output_path, class_map, allow_pickle=False)
+
+
 def run_segmentation(
     img_path: Path,
     cache_path: Path | None = None,
@@ -338,33 +395,47 @@ def run_segmentation(
                 z["stems_rests"], z["noteheads"], z["clefs_keys"],
             )
 
+    # Keep the parent free of an image copy while each model is resident.
+    # Class maps are uint8 and are loaded only after the corresponding model
+    # process has exited.
+    with tempfile.TemporaryDirectory(prefix="tma-low-level-") as tmp:
+        tmp_dir = Path(tmp)
+        first_path = tmp_dir / "unet_big.npy"
+        second_path = tmp_dir / "seg_net.npy"
+
+        _run_low_level_model_process(
+            img_path,
+            "unet_big",
+            first_path,
+        )
+        first = np.load(first_path, allow_pickle=False)
+        staff = (first == 1).astype(np.uint8)
+        symbols = (first == 2).astype(np.uint8)
+        target_shape = first.shape
+        del first
+        first_path.unlink(missing_ok=True)
+        _trim_process_memory()
+
+        _run_low_level_model_process(
+            img_path,
+            "seg_net",
+            second_path,
+        )
+        second = np.load(second_path, allow_pickle=False)
+        stems_rests = (second == 1).astype(np.uint8)
+        noteheads = (second == 2).astype(np.uint8)
+        clefs_keys = (second == 3).astype(np.uint8)
+        del second
+        second_path.unlink(missing_ok=True)
+        _trim_process_memory()
+
     source_bgr = cv2.imread(str(img_path), cv2.IMREAD_COLOR)
     if source_bgr is None:
         raise RuntimeError(f"Cannot load {img_path}")
-
-    first = _low_memory_inference(
-        Path(MODULE_PATH) / "checkpoints" / "unet_big",
-        source_bgr,
-    )
-    staff = (first == 1).astype(np.uint8)
-    symbols = (first == 2).astype(np.uint8)
-    del first
-    _trim_process_memory()
-
-    second = _low_memory_inference(
-        Path(MODULE_PATH) / "checkpoints" / "seg_net",
-        source_bgr,
-    )
-    stems_rests = (second == 1).astype(np.uint8)
-    noteheads = (second == 2).astype(np.uint8)
-    clefs_keys = (second == 3).astype(np.uint8)
-    del second
-    _trim_process_memory()
-
     src = cv2.cvtColor(source_bgr, cv2.COLOR_BGR2GRAY)
     src = cv2.resize(
         src,
-        (staff.shape[1], staff.shape[0]),
+        (target_shape[1], target_shape[0]),
         interpolation=cv2.INTER_AREA,
     )
     del source_bgr
@@ -2348,6 +2419,21 @@ def analyze_input(
 
 
 def main() -> None:
+    # Internal child-process entry point.  It is intentionally not an API and
+    # returns only a low-level class map.
+    if len(sys.argv) >= 2 and sys.argv[1] == "--low-level-infer":
+        if len(sys.argv) != 5:
+            raise SystemExit(
+                "usage: optical_reader.py --low-level-infer MODEL INPUT OUTPUT"
+            )
+        ensure_checkpoints()
+        _low_level_infer_file(
+            sys.argv[2],
+            Path(sys.argv[3]),
+            Path(sys.argv[4]),
+        )
+        return
+
     ap=argparse.ArgumentParser()
     ap.add_argument("input",type=Path)
     ap.add_argument("--out",type=Path,default=Path("optical_audit"))
