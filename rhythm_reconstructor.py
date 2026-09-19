@@ -391,6 +391,7 @@ def _build_measure_events(
             staff,
             active_by_staff.get(staff_id, set()),
         )
+        is_measure_rest = str(rest.get("rest_type", "")) == "rest_whole"
         events.append(
             VisualEvent(
                 id=f"p{page['page']}:m{measure_id}:r{rest['id']}",
@@ -399,14 +400,62 @@ def _build_measure_events(
                 staff_id=staff_id,
                 x=float(rest["cx"]),
                 y=float(rest["cy"]),
-                kind="rest",
-                voice=voice,
+                kind="measure_rest" if is_measure_rest else "rest",
+                voice="measure_rest" if is_measure_rest else voice,
                 base_duration=duration,
                 duration=duration,
                 attacks=False,
             )
         )
-    return events
+
+    # A chord normally shares one stem and is already grouped above.  Raster
+    # fragmentation can occasionally give two nearly coincident noteheads
+    # separate stems.  Merge only same-staff, same-direction note events whose
+    # x positions are within one quarter staff spacing.  This is a graphical
+    # chord repair, not a timing inference.
+    merged: list[VisualEvent] = []
+    by_staff = {int(staff["id"]): staff for staff in page.get("staves", [])}
+    for event in sorted(events, key=lambda item: (item.staff_id, item.x, item.y)):
+        if event.kind != "note" or event.voice not in {"up", "down"}:
+            merged.append(event)
+            continue
+        spacing = float(by_staff.get(event.staff_id, {}).get("spacing", 18.0) or 18.0)
+        candidate = None
+        for prior in reversed(merged):
+            if prior.kind != "note":
+                continue
+            if prior.staff_id != event.staff_id or prior.voice != event.voice:
+                continue
+            if event.x - prior.x > 0.25 * spacing:
+                break
+            if abs(event.x - prior.x) <= 0.25 * spacing:
+                candidate = prior
+                break
+        if candidate is None:
+            merged.append(event)
+            continue
+
+        candidate.notehead_ids = sorted(
+            set(candidate.notehead_ids + event.notehead_ids)
+        )
+        candidate.x = float((candidate.x + event.x) / 2.0)
+        candidate.y = float((candidate.y + event.y) / 2.0)
+        # Mixed filled/hollow evidence at the same stem column is a common
+        # fragmentation artifact.  The shorter visually supported value is the
+        # conservative rhythmic value for the shared attack.
+        if event.base_duration < candidate.base_duration:
+            candidate.base_duration = event.base_duration
+            candidate.duration = event.duration
+            candidate.stem_id = event.stem_id
+        candidate.dot_confidence = max(
+            candidate.dot_confidence or 0.0,
+            event.dot_confidence or 0.0,
+        ) or None
+        candidate.attacks = candidate.attacks or event.attacks
+        candidate.tie_continuation = (
+            candidate.tie_continuation and event.tie_continuation
+        )
+    return merged
 
 
 def reconstruct_attacks(
@@ -443,6 +492,10 @@ def reconstruct_attacks(
 
         for measure in measures:
             events = _build_measure_events(page, measure)
+            temporal_events = [
+                event for event in events
+                if event.kind != "measure_rest"
+            ]
             system = systems.get(int(measure.get("system_id", 0)), {})
             spacings = [
                 float(staves[staff_id].get("spacing", 18.0) or 18.0)
@@ -450,11 +503,19 @@ def reconstruct_attacks(
                 if staff_id in staves
             ]
             spacing = float(median(spacings)) if spacings else 18.0
-            columns = _cluster_columns(events, 0.60 * spacing)
+            columns = _cluster_columns(temporal_events, 0.60 * spacing)
 
             voices: dict[tuple[int, str], list[VisualEvent]] = {}
             neutral_rests: dict[int, list[VisualEvent]] = {}
             for event in events:
+                if event.kind == "measure_rest":
+                    event.base_duration = capacity
+                    event.duration = capacity
+                    voices.setdefault(
+                        (event.staff_id, "measure_rest"),
+                        [],
+                    ).append(event)
+                    continue
                 if event.voice == "neutral" and event.kind == "rest":
                     neutral_rests.setdefault(event.staff_id, []).append(event)
                     continue
@@ -513,7 +574,12 @@ def reconstruct_attacks(
                 )
 
                 for left, right in zip(voice_events, voice_events[1:]):
-                    if left.column is None or right.column is None:
+                    if (
+                        left.kind == "measure_rest"
+                        or right.kind == "measure_rest"
+                        or left.column is None
+                        or right.column is None
+                    ):
                         continue
                     if left.column == right.column:
                         continue
@@ -526,7 +592,7 @@ def reconstruct_attacks(
                         )
                     )
 
-                if complete and voice_events:
+                if complete and voice_events and key[1] != "measure_rest":
                     first = voice_events[0]
                     if first.column is not None:
                         _set_time(
@@ -553,6 +619,20 @@ def reconstruct_attacks(
                             f"{frac_text(cursor)} not {frac_text(capacity)}"
                         )
 
+            # In every complete measure the earliest temporal notation column is
+            # the start of the measure.  Centered whole-measure rests were
+            # removed from the column graph above, so they cannot corrupt this
+            # anchor.  This uses only notation order, never proportional x
+            # spacing.  The opening measure may later be shifted if it proves
+            # to be an anacrusis.
+            if columns:
+                _set_time(
+                    times,
+                    0,
+                    Fraction(0),
+                    conflicts,
+                    "measure-leading-column",
+                )
             _propagate_edges(times, edges, conflicts)
 
             # Opening incomplete measure: if no complete voice exists and the
