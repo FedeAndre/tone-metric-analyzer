@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import shutil
 import tempfile
 from pathlib import Path
@@ -119,7 +120,13 @@ async def optical_read(file: UploadFile = File(...)) -> dict:
 
         out_dir = root / "audit"
         try:
-            result = analyze_input(src, out_dir, dpi=300, cache_dir=None)
+            result = await asyncio.to_thread(
+                analyze_input,
+                src,
+                out_dir,
+                300,
+                None,
+            )
         except Exception as exc:
             raise HTTPException(
                 status_code=422,
