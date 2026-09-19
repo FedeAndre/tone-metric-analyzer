@@ -8,6 +8,7 @@ ALLOWED_TOP = {
     "requirements.txt",
     "optical_reader.py",
     "app.py",
+    "rhythm_reconstructor.py",
     "Dockerfile",
     "tests",
 }
