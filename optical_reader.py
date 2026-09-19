@@ -198,17 +198,16 @@ def _resize_for_optical_model(image: np.ndarray) -> np.ndarray:
 def _low_memory_inference(
     model_dir: Path,
     image_bgr: np.ndarray,
-    step_size: int = 128,
-    batch_size: int = 4,
+    step_size: int = 192,
 ) -> np.ndarray:
     """
-    Run only the pretrained low-level segmentation network with bounded memory.
+    Run the pretrained low-level segmentation network with a strict memory bound.
 
-    The upstream inference helper keeps every image patch and every prediction
-    tensor resident until the page is complete. That is unnecessary for TMA and
-    can exceed small-container memory limits. This implementation streams a
-    small fixed batch into a single page accumulator, uses CPU explicitly, and
-    disables ONNX Runtime's CPU arena/memory-pattern caches.
+    The upstream helper retains every patch prediction and also builds a full
+    floating-point page probability tensor. Here each patch is classified
+    immediately and merged by a center-priority overlap mask. Only two uint8
+    page maps plus one 256x256 prediction are resident, while a 64-pixel overlap
+    prevents hard tile seams.
 
     No semantic OMR, rhythm, voice, slot, or timing information is involved.
     """
@@ -218,28 +217,23 @@ def _low_memory_inference(
         metadata = pickle.load(fh)
 
     input_shape = metadata["input_shape"]
-    output_shape = metadata["output_shape"]
     win_size = int(input_shape[1])
-    channels = int(output_shape[-1])
 
     image = _resize_for_optical_model(image_bgr)
     h, w = image.shape[:2]
 
-    y_positions = []
-    for y in range(0, h, step_size):
-        yy = y
-        if yy + win_size > h:
-            yy = h - win_size
-        if not y_positions or yy != y_positions[-1]:
-            y_positions.append(yy)
+    def positions(length: int) -> list[int]:
+        out: list[int] = []
+        for value in range(0, length, step_size):
+            pos = value
+            if pos + win_size > length:
+                pos = length - win_size
+            if not out or pos != out[-1]:
+                out.append(pos)
+        return out
 
-    x_positions = []
-    for x in range(0, w, step_size):
-        xx = x
-        if xx + win_size > w:
-            xx = w - win_size
-        if not x_positions or xx != x_positions[-1]:
-            x_positions.append(xx)
+    y_positions = positions(h)
+    x_positions = positions(w)
 
     options = ort.SessionOptions()
     options.enable_cpu_mem_arena = False
@@ -256,50 +250,57 @@ def _low_memory_inference(
     input_name = session.get_inputs()[0].name
     output_name = session.get_outputs()[0].name
 
-    # One float32 probability accumulator plus one uint16 overlap counter.
-    # This is substantially smaller than retaining all patch predictions.
-    accumulator = np.zeros((h, w, channels), dtype=np.float32)
-    overlap = np.zeros((h, w), dtype=np.uint16)
+    class_map = np.zeros((h, w), dtype=np.uint8)
+    best_weight = np.zeros((h, w), dtype=np.uint8)
 
-    positions = [
-        (y, x)
-        for y in y_positions
-        for x in x_positions
-    ]
-    total = len(positions)
+    # Center-priority blend mask. A pixel is taken from whichever overlapping
+    # tile sees it furthest from a tile edge.
+    yy, xx = np.indices((win_size, win_size))
+    edge_distance = np.minimum.reduce(
+        [
+            yy + 1,
+            xx + 1,
+            win_size - yy,
+            win_size - xx,
+        ]
+    )
+    patch_weight = np.clip(edge_distance, 1, 255).astype(np.uint8)
 
-    for batch_start in range(0, total, batch_size):
-        batch_positions = positions[batch_start:batch_start + batch_size]
-        patches = [
-            np.ascontiguousarray(
+    total = len(y_positions) * len(x_positions)
+    index = 0
+    for y in y_positions:
+        for x in x_positions:
+            index += 1
+            if index == 1 or index % 20 == 0 or index == total:
+                print(f"Optical patch {index}/{total}")
+
+            patch = np.ascontiguousarray(
                 image[y:y + win_size, x:x + win_size]
             )
-            for y, x in batch_positions
-        ]
-        batch = np.stack(patches, axis=0)
-        pred_batch = session.run(
-            [output_name],
-            {input_name: batch},
-        )[0]
+            batch = patch[np.newaxis, ...]
+            pred = session.run(
+                [output_name],
+                {input_name: batch},
+            )[0][0]
+            labels = np.argmax(pred, axis=-1).astype(np.uint8)
 
-        for local_index, (y, x) in enumerate(batch_positions):
-            accumulator[y:y + win_size, x:x + win_size] += pred_batch[local_index]
-            overlap[y:y + win_size, x:x + win_size] += 1
+            region_weight = best_weight[
+                y:y + win_size,
+                x:x + win_size,
+            ]
+            take = patch_weight > region_weight
+            region_class = class_map[
+                y:y + win_size,
+                x:x + win_size,
+            ]
+            region_class[take] = labels[take]
+            region_weight[take] = patch_weight[take]
 
-        completed = min(batch_start + len(batch_positions), total)
-        if batch_start == 0 or completed % 25 < batch_size or completed == total:
-            print(f"Optical patch {completed}/{total}")
+            del pred, labels, batch, patch, take
 
-        del pred_batch, batch, patches
-
-    overlap_safe = np.maximum(overlap, 1)
-    accumulator /= overlap_safe[..., np.newaxis]
-    class_map = np.argmax(accumulator, axis=-1).astype(np.uint8)
-
-    del accumulator, overlap, overlap_safe, session
+    del best_weight, patch_weight, edge_distance, session
     gc.collect()
     return class_map
-
 
 def run_segmentation(
     img_path: Path,
@@ -1685,6 +1686,12 @@ def process_page(
         "pixel_stem_links": pixel_stem_links,
         "unlinked_filled": unlinked_filled,
     }, separators=(",", ":")))
+
+    # Rest classifiers are only needed while processing this page. Releasing
+    # them prevents page-1 classifier memory from accumulating with page-2 ONNX
+    # inference inside small Railway containers.
+    _SKLEARN_SYMBOL_MODELS.clear()
+    gc.collect()
 
     return {
         "page":page_index,
