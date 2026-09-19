@@ -9,6 +9,7 @@ ALLOWED_TOP = {
     "optical_reader.py",
     "app.py",
     "rhythm_reconstructor.py",
+    "tma_analysis.py",
     "tone_metric",
     "Dockerfile",
     "tests",
