@@ -529,6 +529,7 @@ def _build_measure_events(
     tie_right = {
         int(tie["right_notehead_id"])
         for tie in page.get("tie_candidates", [])
+        if float(tie.get("confidence", 0.0)) >= 0.80
     }
 
     local_heads = [
@@ -575,7 +576,12 @@ def _build_measure_events(
                 page=int(page["page"]),
                 measure_local=measure_id,
                 staff_id=staff_id,
-                x=float(median([float(head["cx"]) for head in heads])),
+                # Stem x is the graphical attack column.  Averaging displaced
+                # chord-head centers (especially seconds) can create a false
+                # extra temporal column even though the notes share one stem.
+                x=float(stem.get("cx", median([
+                    float(head["cx"]) for head in heads
+                ]))),
                 y=float(median([float(head["cy"]) for head in heads])),
                 kind="note",
                 voice=direction,
