@@ -1,0 +1,8037 @@
+{
+  "1": {
+    "measure": 1,
+    "page": 1,
+    "system": 1,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 52,
+    "meter_ticks": 128,
+    "attack_count": 3,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10806",
+          "10808",
+          "10809"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "10810",
+          "10811"
+        ]
+      },
+      {
+        "onset_ticks": 64,
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "events": [
+          "10812",
+          "10813"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/2",
+      "2"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "12699",
+        "kind": "rest",
+        "attack": false,
+        "staff": "2",
+        "x": 450.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10813"
+      },
+      {
+        "id": "12700",
+        "kind": "rest",
+        "attack": false,
+        "staff": "2",
+        "x": 450.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10812"
+      },
+      {
+        "id": "10806",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 451.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10808",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 512.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10810"
+      },
+      {
+        "id": "10809",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 512.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10811"
+      },
+      {
+        "id": "12701",
+        "kind": "rest",
+        "attack": false,
+        "staff": "3",
+        "x": 563.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10810",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 579.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10808",
+        "succ": null
+      },
+      {
+        "id": "10811",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 581.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10809",
+        "succ": null
+      },
+      {
+        "id": "10812",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 642.0,
+        "onset_ticks": 64,
+        "onset_quarter_units": "2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "12700",
+        "succ": null
+      },
+      {
+        "id": "10813",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 644.0,
+        "onset_ticks": 64,
+        "onset_quarter_units": "2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "12699",
+        "succ": null
+      }
+    ]
+  },
+  "2": {
+    "measure": 2,
+    "page": 1,
+    "system": 1,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 76,
+    "meter_ticks": 128,
+    "attack_count": 4,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10798",
+          "10799",
+          "10814",
+          "10815",
+          "10816",
+          "10817",
+          "10818",
+          "10819",
+          "10859",
+          "10860"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "10820"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "10821"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "10822"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "3/2",
+      "9/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "10798",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 749.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10814",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 749.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10815",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 749.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "12702",
+        "kind": "rest",
+        "attack": false,
+        "staff": "3",
+        "x": 751.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10816",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 814.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10817",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 815.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10859",
+        "kind": "note",
+        "attack": true,
+        "staff": "3",
+        "x": 818.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10818",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 873.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10799",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 880.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10819",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 880.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10820"
+      },
+      {
+        "id": "10860",
+        "kind": "note",
+        "attack": true,
+        "staff": "3",
+        "x": 883.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10820",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 929.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10819",
+        "succ": "10821"
+      },
+      {
+        "id": "10821",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 976.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10820",
+        "succ": "10822"
+      },
+      {
+        "id": "10822",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1035.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10821",
+        "succ": null
+      }
+    ]
+  },
+  "3": {
+    "measure": 3,
+    "page": 1,
+    "system": 1,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 52,
+    "meter_ticks": 128,
+    "attack_count": 3,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10800",
+          "10801",
+          "10824",
+          "10825",
+          "10826"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "10802",
+          "10828"
+        ]
+      },
+      {
+        "onset_ticks": 84,
+        "onset_whole_units": "21/32",
+        "onset_quarter_units": "21/8",
+        "events": [
+          "10803"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/2",
+      "21/8"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "10823",
+        "kind": "note",
+        "attack": false,
+        "staff": "2",
+        "x": 1127.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10827"
+      },
+      {
+        "id": "10800",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 1128.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10824",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1129.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10828"
+      },
+      {
+        "id": "10825",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1190.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 96,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10826",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1193.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10801",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 1217.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10802"
+      },
+      {
+        "id": "12703",
+        "kind": "rest",
+        "attack": false,
+        "staff": "3",
+        "x": 1232.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10802",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 1276.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 36,
+        "duration_quarter_units": "9/8",
+        "duration_source": {
+          "ticks": 24,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10801",
+        "succ": "10803"
+      },
+      {
+        "id": "10827",
+        "kind": "note",
+        "attack": false,
+        "staff": "2",
+        "x": 1279.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10823",
+        "succ": null
+      },
+      {
+        "id": "10828",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1279.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10824",
+        "succ": null
+      },
+      {
+        "id": "10803",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 1335.0,
+        "onset_ticks": 84,
+        "onset_quarter_units": "21/8",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10802",
+        "succ": null
+      }
+    ]
+  },
+  "4": {
+    "measure": 4,
+    "page": 1,
+    "system": 1,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 60,
+    "meter_ticks": 128,
+    "attack_count": 3,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10804",
+          "10805",
+          "10829",
+          "10830",
+          "10831",
+          "10861",
+          "10862"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "10832",
+          "10833",
+          "10863"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "10834"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/2",
+      "9/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "10804",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 1431.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "12705",
+        "kind": "rest",
+        "attack": false,
+        "staff": "3",
+        "x": 1434.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10829",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1492.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10832"
+      },
+      {
+        "id": "10830",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1495.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10861",
+        "kind": "note",
+        "attack": true,
+        "staff": "3",
+        "x": 1496.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10805",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 1553.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10831",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1556.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10833"
+      },
+      {
+        "id": "10862",
+        "kind": "note",
+        "attack": true,
+        "staff": "3",
+        "x": 1559.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10863"
+      },
+      {
+        "id": "10832",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1616.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10829",
+        "succ": null
+      },
+      {
+        "id": "10833",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1616.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10831",
+        "succ": "10834"
+      },
+      {
+        "id": "10863",
+        "kind": "note",
+        "attack": true,
+        "staff": "3",
+        "x": 1620.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10862",
+        "succ": null
+      },
+      {
+        "id": "10834",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1661.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10833",
+        "succ": null
+      }
+    ]
+  },
+  "5": {
+    "measure": 5,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "6": {
+    "measure": 6,
+    "page": 1,
+    "system": 1,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 71,
+    "meter_ticks": 128,
+    "attack_count": 9,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10846"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "10848",
+          "10849",
+          "10850"
+        ]
+      },
+      {
+        "onset_ticks": 36,
+        "onset_whole_units": "9/32",
+        "onset_quarter_units": "9/8",
+        "events": [
+          "10851"
+        ]
+      },
+      {
+        "onset_ticks": 37,
+        "onset_whole_units": "37/128",
+        "onset_quarter_units": "37/32",
+        "events": [
+          "10852"
+        ]
+      },
+      {
+        "onset_ticks": 61,
+        "onset_whole_units": "61/128",
+        "onset_quarter_units": "61/32",
+        "events": [
+          "10854"
+        ]
+      },
+      {
+        "onset_ticks": 79,
+        "onset_whole_units": "79/128",
+        "onset_quarter_units": "79/32",
+        "events": [
+          "10855"
+        ]
+      },
+      {
+        "onset_ticks": 80,
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "events": [
+          "10856"
+        ]
+      },
+      {
+        "onset_ticks": 91,
+        "onset_whole_units": "91/128",
+        "onset_quarter_units": "91/32",
+        "events": [
+          "10857"
+        ]
+      },
+      {
+        "onset_ticks": 103,
+        "onset_whole_units": "103/128",
+        "onset_quarter_units": "103/32",
+        "events": [
+          "10858"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "9/8",
+      "37/32",
+      "61/32",
+      "79/32",
+      "5/2",
+      "91/32",
+      "103/32"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "10846",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2201.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10847",
+        "kind": "note",
+        "attack": false,
+        "staff": "2",
+        "x": 2236.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10848"
+      },
+      {
+        "id": "10848",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2278.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10847",
+        "succ": null
+      },
+      {
+        "id": "10849",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2347.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10850",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2375.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10851"
+      },
+      {
+        "id": "10851",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2400.0,
+        "onset_ticks": 36,
+        "onset_quarter_units": "9/8",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10850",
+        "succ": null
+      },
+      {
+        "id": "12709",
+        "kind": "rest",
+        "attack": false,
+        "staff": "1",
+        "x": 2429.5,
+        "onset_ticks": 37,
+        "onset_quarter_units": "37/32",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "12710",
+        "kind": "rest",
+        "attack": false,
+        "staff": "3",
+        "x": 2434.0,
+        "onset_ticks": 37,
+        "onset_quarter_units": "37/32",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10852",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2437.0,
+        "onset_ticks": 37,
+        "onset_quarter_units": "37/32",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10853",
+        "kind": "note",
+        "attack": false,
+        "staff": "2",
+        "x": 2454.0,
+        "onset_ticks": 37,
+        "onset_quarter_units": "37/32",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10854"
+      },
+      {
+        "id": "10854",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2501.5,
+        "onset_ticks": 61,
+        "onset_quarter_units": "61/32",
+        "duration_ticks": 18,
+        "duration_quarter_units": "9/16",
+        "duration_source": {
+          "ticks": 12,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10853",
+        "succ": "10855"
+      },
+      {
+        "id": "10855",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2555.5,
+        "onset_ticks": 79,
+        "onset_quarter_units": "79/32",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10854",
+        "succ": "10857"
+      },
+      {
+        "id": "10856",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2596.0,
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10857",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2623.0,
+        "onset_ticks": 91,
+        "onset_quarter_units": "91/32",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10855",
+        "succ": "10858"
+      },
+      {
+        "id": "10858",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 2646.0,
+        "onset_ticks": 103,
+        "onset_quarter_units": "103/32",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10857",
+        "succ": null
+      }
+    ]
+  },
+  "7": {
+    "measure": 7,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "8": {
+    "measure": 8,
+    "page": 1,
+    "system": 2,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 74,
+    "meter_ticks": 128,
+    "attack_count": 5,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10867",
+          "10905",
+          "10906"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "10868",
+          "10907",
+          "10908",
+          "10909",
+          "10911"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "10912"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "10913"
+        ]
+      },
+      {
+        "onset_ticks": 96,
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "events": [
+          "10914"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "3/2",
+      "9/4",
+      "3"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "10867",
+        "kind": "note",
+        "attack": true,
+        "staff": "4",
+        "x": 836.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10905",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 839.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10907"
+      },
+      {
+        "id": "10906",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 840.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10907",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 890.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10905",
+        "succ": null
+      },
+      {
+        "id": "10908",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 939.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10909",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 971.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "12862",
+        "kind": "rest",
+        "attack": false,
+        "staff": "6",
+        "x": 1000.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10868",
+        "kind": "note",
+        "attack": true,
+        "staff": "4",
+        "x": 1023.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10910",
+        "kind": "note",
+        "attack": false,
+        "staff": "5",
+        "x": 1026.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10912"
+      },
+      {
+        "id": "10911",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 1027.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10914"
+      },
+      {
+        "id": "10912",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 1077.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10910",
+        "succ": "10913"
+      },
+      {
+        "id": "10913",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 1126.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10912",
+        "succ": null
+      },
+      {
+        "id": "10914",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 1156.0,
+        "onset_ticks": 96,
+        "onset_quarter_units": "3",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10911",
+        "succ": null
+      }
+    ]
+  },
+  "9": {
+    "measure": 9,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "10": {
+    "measure": 10,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "11": {
+    "measure": 11,
+    "page": 1,
+    "system": 2,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 69,
+    "meter_ticks": 128,
+    "attack_count": 4,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10889",
+          "10935",
+          "10936",
+          "10937",
+          "10938",
+          "10947",
+          "10948"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "10941",
+          "10942"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "10943",
+          "10944",
+          "10949"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "10945",
+          "10946"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "3/2",
+      "9/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "10935",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 2348.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10936",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 2350.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "12873",
+        "kind": "rest",
+        "attack": false,
+        "staff": "6",
+        "x": 2352.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10889",
+        "kind": "note",
+        "attack": true,
+        "staff": "4",
+        "x": 2354.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10937",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 2415.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10938",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 2415.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10947",
+        "kind": "note",
+        "attack": true,
+        "staff": "6",
+        "x": 2415.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10939",
+        "kind": "note",
+        "attack": false,
+        "staff": "5",
+        "x": 2486.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10941"
+      },
+      {
+        "id": "10940",
+        "kind": "note",
+        "attack": false,
+        "staff": "5",
+        "x": 2487.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10942"
+      },
+      {
+        "id": "10948",
+        "kind": "note",
+        "attack": true,
+        "staff": "6",
+        "x": 2488.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10949"
+      },
+      {
+        "id": "10941",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 2535.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10939",
+        "succ": "10943"
+      },
+      {
+        "id": "10942",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 2536.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10940",
+        "succ": "10944"
+      },
+      {
+        "id": "10943",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 2584.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10941",
+        "succ": "10945"
+      },
+      {
+        "id": "10944",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 2585.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10942",
+        "succ": "10946"
+      },
+      {
+        "id": "10949",
+        "kind": "note",
+        "attack": true,
+        "staff": "6",
+        "x": 2585.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10948",
+        "succ": null
+      },
+      {
+        "id": "10946",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 2636.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10944",
+        "succ": null
+      },
+      {
+        "id": "10945",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 2636.5,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10943",
+        "succ": null
+      }
+    ]
+  },
+  "12": {
+    "measure": 12,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "13": {
+    "measure": 13,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "14": {
+    "measure": 14,
+    "page": 1,
+    "system": 3,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 62,
+    "meter_ticks": 128,
+    "attack_count": 3,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10958",
+          "10959",
+          "10981",
+          "10982",
+          "10983",
+          "10984",
+          "10985",
+          "11026",
+          "11027"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "11028"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "10986"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/2",
+      "9/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "10958",
+        "kind": "note",
+        "attack": true,
+        "staff": "7",
+        "x": 1121.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10981",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1121.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10982",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1124.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10983",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1176.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11026",
+        "kind": "note",
+        "attack": true,
+        "staff": "9",
+        "x": 1177.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10984",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1227.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10986"
+      },
+      {
+        "id": "10959",
+        "kind": "note",
+        "attack": true,
+        "staff": "7",
+        "x": 1228.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10985",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1229.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11027",
+        "kind": "note",
+        "attack": true,
+        "staff": "9",
+        "x": 1229.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11028"
+      },
+      {
+        "id": "11028",
+        "kind": "note",
+        "attack": true,
+        "staff": "9",
+        "x": 1285.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11027",
+        "succ": null
+      },
+      {
+        "id": "10986",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1310.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10984",
+        "succ": null
+      }
+    ]
+  },
+  "15": {
+    "measure": 15,
+    "page": 1,
+    "system": 3,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 65,
+    "meter_ticks": 128,
+    "attack_count": 6,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10960",
+          "10987",
+          "10988",
+          "10989",
+          "11029",
+          "11030"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "10990",
+          "11031"
+        ]
+      },
+      {
+        "onset_ticks": 32,
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "events": [
+          "10961"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "10991"
+        ]
+      },
+      {
+        "onset_ticks": 64,
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "events": [
+          "10992",
+          "10993"
+        ]
+      },
+      {
+        "onset_ticks": 104,
+        "onset_whole_units": "13/16",
+        "onset_quarter_units": "13/4",
+        "events": [
+          "10962"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "1",
+      "3/2",
+      "2",
+      "13/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "10987",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1388.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10988",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1390.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 96,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10993"
+      },
+      {
+        "id": "11029",
+        "kind": "note",
+        "attack": true,
+        "staff": "9",
+        "x": 1390.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10960",
+        "kind": "note",
+        "attack": true,
+        "staff": "7",
+        "x": 1391.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10989",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1441.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10990"
+      },
+      {
+        "id": "11030",
+        "kind": "note",
+        "attack": true,
+        "staff": "9",
+        "x": 1446.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11031"
+      },
+      {
+        "id": "10990",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1474.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10989",
+        "succ": "10991"
+      },
+      {
+        "id": "11031",
+        "kind": "note",
+        "attack": true,
+        "staff": "9",
+        "x": 1520.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "visual"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11030",
+        "succ": null
+      },
+      {
+        "id": "10961",
+        "kind": "note",
+        "attack": true,
+        "staff": "7",
+        "x": 1509.0,
+        "onset_ticks": 32,
+        "onset_quarter_units": "1",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10962"
+      },
+      {
+        "id": "10991",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1513.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10990",
+        "succ": null
+      },
+      {
+        "id": "10992",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1567.0,
+        "onset_ticks": 64,
+        "onset_quarter_units": "2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10993",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1568.0,
+        "onset_ticks": 64,
+        "onset_quarter_units": "2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10988",
+        "succ": null
+      },
+      {
+        "id": "10962",
+        "kind": "note",
+        "attack": true,
+        "staff": "7",
+        "x": 1590.0,
+        "onset_ticks": 104,
+        "onset_quarter_units": "13/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10961",
+        "succ": null
+      }
+    ]
+  },
+  "16": {
+    "measure": 16,
+    "page": 1,
+    "system": 3,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 67,
+    "meter_ticks": 128,
+    "attack_count": 3,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10963",
+          "10964",
+          "10994",
+          "10995",
+          "10996",
+          "10997",
+          "10998",
+          "10999",
+          "11032"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "11000"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "11001"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/2",
+      "9/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "10994",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1690.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10995",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1690.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10963",
+        "kind": "note",
+        "attack": true,
+        "staff": "7",
+        "x": 1693.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11032",
+        "kind": "note",
+        "attack": true,
+        "staff": "9",
+        "x": 1698.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10996",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1746.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10997",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1778.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10998",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1839.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11000"
+      },
+      {
+        "id": "10964",
+        "kind": "note",
+        "attack": true,
+        "staff": "7",
+        "x": 1840.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10999",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1840.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11001"
+      },
+      {
+        "id": "12939",
+        "kind": "rest",
+        "attack": false,
+        "staff": "9",
+        "x": 1842.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 128,
+        "duration_quarter_units": "4",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11000",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1895.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10998",
+        "succ": null
+      },
+      {
+        "id": "11001",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1926.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10999",
+        "succ": null
+      }
+    ]
+  },
+  "17": {
+    "measure": 17,
+    "page": 1,
+    "system": 3,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 45,
+    "meter_ticks": 128,
+    "attack_count": 5,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10965",
+          "11002",
+          "11003",
+          "11004",
+          "11033"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "11006"
+        ]
+      },
+      {
+        "onset_ticks": 36,
+        "onset_whole_units": "9/32",
+        "onset_quarter_units": "9/8",
+        "events": [
+          "11007"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "11008"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "11009",
+          "11034"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "9/8",
+      "3/2",
+      "9/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "11002",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 2013.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10965",
+        "kind": "note",
+        "attack": true,
+        "staff": "7",
+        "x": 2017.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "12940",
+        "kind": "rest",
+        "attack": false,
+        "staff": "9",
+        "x": 2017.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 128,
+        "duration_quarter_units": "4",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11003",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 2019.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11004",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 2071.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11005",
+        "kind": "note",
+        "attack": false,
+        "staff": "8",
+        "x": 2135.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11006"
+      },
+      {
+        "id": "11033",
+        "kind": "note",
+        "attack": true,
+        "staff": "9",
+        "x": 2137.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11034"
+      },
+      {
+        "id": "11006",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 2171.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11005",
+        "succ": "11007"
+      },
+      {
+        "id": "11007",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 2203.0,
+        "onset_ticks": 36,
+        "onset_quarter_units": "9/8",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11006",
+        "succ": "11008"
+      },
+      {
+        "id": "11008",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 2241.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11007",
+        "succ": "11009"
+      },
+      {
+        "id": "11009",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 2279.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11008",
+        "succ": null
+      },
+      {
+        "id": "11034",
+        "kind": "note",
+        "attack": true,
+        "staff": "9",
+        "x": 2281.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11033",
+        "succ": null
+      }
+    ]
+  },
+  "18": {
+    "measure": 18,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "19": {
+    "measure": 19,
+    "page": 1,
+    "system": 4,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 81,
+    "meter_ticks": 128,
+    "attack_count": 4,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "11057",
+          "11058",
+          "11059",
+          "11060",
+          "11061",
+          "11111",
+          "11112"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "11062",
+          "11063",
+          "11113"
+        ]
+      },
+      {
+        "onset_ticks": 64,
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
+        "events": [
+          "11039"
+        ]
+      },
+      {
+        "onset_ticks": 88,
+        "onset_whole_units": "11/16",
+        "onset_quarter_units": "11/4",
+        "events": [
+          "11040"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "2",
+      "11/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "13058",
+        "kind": "rest",
+        "attack": false,
+        "staff": "10",
+        "x": 338.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 128,
+        "duration_quarter_units": "4",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11057",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 339.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11058",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 340.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11063"
+      },
+      {
+        "id": "11111",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 341.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11059",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 380.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11060",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 406.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11112",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 408.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11061",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 447.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11062"
+      },
+      {
+        "id": "13060",
+        "kind": "rest",
+        "attack": false,
+        "staff": "10",
+        "x": 489.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11039"
+      },
+      {
+        "id": "11062",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 493.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11061",
+        "succ": null
+      },
+      {
+        "id": "11063",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 497.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11058",
+        "succ": null
+      },
+      {
+        "id": "11113",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 498.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11039",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 530.0,
+        "onset_ticks": 64,
+        "onset_quarter_units": "2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "13060",
+        "succ": "11040"
+      },
+      {
+        "id": "11040",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 571.0,
+        "onset_ticks": 88,
+        "onset_quarter_units": "11/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11039",
+        "succ": null
+      }
+    ]
+  },
+  "20": {
+    "measure": 20,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "21": {
+    "measure": 21,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "22": {
+    "measure": 22,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "23": {
+    "measure": 23,
+    "page": 1,
+    "system": 4,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 70,
+    "meter_ticks": 128,
+    "attack_count": 5,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "11056",
+          "11092",
+          "11093",
+          "11094",
+          "11095",
+          "11125",
+          "11126"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "11096",
+          "11097"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "11128"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "11098",
+          "11099",
+          "11101",
+          "11129"
+        ]
+      },
+      {
+        "onset_ticks": 96,
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "events": [
+          "11100"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "3/2",
+      "9/4",
+      "3"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "11092",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 1936.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11093",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 1936.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11101"
+      },
+      {
+        "id": "11056",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 1938.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11125",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 1938.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11126",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 2018.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11094",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2050.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11096"
+      },
+      {
+        "id": "11095",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2051.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11097"
+      },
+      {
+        "id": "11096",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2122.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11094",
+        "succ": "11098"
+      },
+      {
+        "id": "11097",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2122.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11095",
+        "succ": "11099"
+      },
+      {
+        "id": "11127",
+        "kind": "note",
+        "attack": false,
+        "staff": "12",
+        "x": 2123.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11128"
+      },
+      {
+        "id": "11128",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 2165.5,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11127",
+        "succ": "11129"
+      },
+      {
+        "id": "11098",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2211.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11096",
+        "succ": "11100"
+      },
+      {
+        "id": "11099",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2211.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11097",
+        "succ": null
+      },
+      {
+        "id": "11129",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 2214.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11128",
+        "succ": null
+      },
+      {
+        "id": "11101",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2255.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11093",
+        "succ": null
+      },
+      {
+        "id": "11100",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2254.0,
+        "onset_ticks": 96,
+        "onset_quarter_units": "3",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11098",
+        "succ": null
+      }
+    ]
+  },
+  "24": {
+    "measure": 24,
+    "page": 1,
+    "system": 4,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 80,
+    "meter_ticks": 128,
+    "attack_count": 5,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "11102",
+          "11103"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "11104",
+          "11105",
+          "11131",
+          "11132"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "11106",
+          "11107",
+          "11133"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "11108",
+          "11109",
+          "11134",
+          "11135"
+        ]
+      },
+      {
+        "onset_ticks": 96,
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "events": [
+          "11110"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "3/2",
+      "9/4",
+      "3"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "11102",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2339.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11108"
+      },
+      {
+        "id": "11103",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2339.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11109"
+      },
+      {
+        "id": "11130",
+        "kind": "note",
+        "attack": false,
+        "staff": "12",
+        "x": 2342.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11131"
+      },
+      {
+        "id": "11131",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 2382.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11130",
+        "succ": "11133"
+      },
+      {
+        "id": "11132",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 2433.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11135"
+      },
+      {
+        "id": "11104",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2460.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11106"
+      },
+      {
+        "id": "11105",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2462.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11107"
+      },
+      {
+        "id": "13069",
+        "kind": "rest",
+        "attack": false,
+        "staff": "10",
+        "x": 2497.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11106",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2513.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11104",
+        "succ": null
+      },
+      {
+        "id": "11107",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2514.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11105",
+        "succ": null
+      },
+      {
+        "id": "11133",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 2515.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11131",
+        "succ": "11134"
+      },
+      {
+        "id": "11134",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 2560.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11133",
+        "succ": null
+      },
+      {
+        "id": "11108",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2607.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11102",
+        "succ": null
+      },
+      {
+        "id": "11109",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2609.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11103",
+        "succ": "11110"
+      },
+      {
+        "id": "11135",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 2611.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11132",
+        "succ": null
+      },
+      {
+        "id": "11110",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 2653.0,
+        "onset_ticks": 96,
+        "onset_quarter_units": "3",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11109",
+        "succ": null
+      }
+    ]
+  },
+  "25": {
+    "measure": 25,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "26": {
+    "measure": 26,
+    "page": 1,
+    "system": 5,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 105,
+    "meter_ticks": 128,
+    "attack_count": 5,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "11137"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "11166",
+          "11167",
+          "11213",
+          "11214"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "11138",
+          "11168",
+          "11169"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "11171",
+          "11172",
+          "11173",
+          "11174",
+          "11216",
+          "11217"
+        ]
+      },
+      {
+        "onset_ticks": 96,
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "events": [
+          "11139"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "3/2",
+      "9/4",
+      "3"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "11164",
+        "kind": "note",
+        "attack": false,
+        "staff": "14",
+        "x": 672.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11169"
+      },
+      {
+        "id": "11137",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 674.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11139"
+      },
+      {
+        "id": "11165",
+        "kind": "note",
+        "attack": false,
+        "staff": "14",
+        "x": 674.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11170"
+      },
+      {
+        "id": "11212",
+        "kind": "note",
+        "attack": false,
+        "staff": "15",
+        "x": 676.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11213"
+      },
+      {
+        "id": "11213",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 733.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11212",
+        "succ": "11215"
+      },
+      {
+        "id": "11166",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 774.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11168"
+      },
+      {
+        "id": "11167",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 775.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11174"
+      },
+      {
+        "id": "11214",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 780.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11217"
+      },
+      {
+        "id": "11168",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 813.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11166",
+        "succ": "11173"
+      },
+      {
+        "id": "11138",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 856.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11169",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 856.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11164",
+        "succ": "11171"
+      },
+      {
+        "id": "11170",
+        "kind": "note",
+        "attack": false,
+        "staff": "14",
+        "x": 858.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11165",
+        "succ": "11172"
+      },
+      {
+        "id": "11215",
+        "kind": "note",
+        "attack": false,
+        "staff": "15",
+        "x": 863.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11213",
+        "succ": "11216"
+      },
+      {
+        "id": "11216",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 913.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11215",
+        "succ": null
+      },
+      {
+        "id": "11171",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 914.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11169",
+        "succ": null
+      },
+      {
+        "id": "11172",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 914.5,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11170",
+        "succ": null
+      },
+      {
+        "id": "11173",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 963.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11168",
+        "succ": null
+      },
+      {
+        "id": "11174",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 963.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11167",
+        "succ": null
+      },
+      {
+        "id": "11217",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 966.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11214",
+        "succ": null
+      },
+      {
+        "id": "11139",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 993.0,
+        "onset_ticks": 96,
+        "onset_quarter_units": "3",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11137",
+        "succ": null
+      }
+    ]
+  },
+  "27": {
+    "measure": 27,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "28": {
+    "measure": 28,
+    "page": 1,
+    "system": 5,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 91,
+    "meter_ticks": 128,
+    "attack_count": 11,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "11144",
+          "11185",
+          "11186",
+          "11223"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "11187",
+          "11188"
+        ]
+      },
+      {
+        "onset_ticks": 25,
+        "onset_whole_units": "25/128",
+        "onset_quarter_units": "25/32",
+        "events": [
+          "11145",
+          "11146",
+          "11224"
+        ]
+      },
+      {
+        "onset_ticks": 32,
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "events": [
+          "11225"
+        ]
+      },
+      {
+        "onset_ticks": 37,
+        "onset_whole_units": "37/128",
+        "onset_quarter_units": "37/32",
+        "events": [
+          "11147"
+        ]
+      },
+      {
+        "onset_ticks": 49,
+        "onset_whole_units": "49/128",
+        "onset_quarter_units": "49/32",
+        "events": [
+          "11148"
+        ]
+      },
+      {
+        "onset_ticks": 61,
+        "onset_whole_units": "61/128",
+        "onset_quarter_units": "61/32",
+        "events": [
+          "11149"
+        ]
+      },
+      {
+        "onset_ticks": 73,
+        "onset_whole_units": "73/128",
+        "onset_quarter_units": "73/32",
+        "events": [
+          "11150",
+          "11190"
+        ]
+      },
+      {
+        "onset_ticks": 97,
+        "onset_whole_units": "97/128",
+        "onset_quarter_units": "97/32",
+        "events": [
+          "11191"
+        ]
+      },
+      {
+        "onset_ticks": 109,
+        "onset_whole_units": "109/128",
+        "onset_quarter_units": "109/32",
+        "events": [
+          "11151"
+        ]
+      },
+      {
+        "onset_ticks": 115,
+        "onset_whole_units": "115/128",
+        "onset_quarter_units": "115/32",
+        "events": [
+          "11152"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "25/32",
+      "1",
+      "37/32",
+      "49/32",
+      "61/32",
+      "73/32",
+      "97/32",
+      "109/32",
+      "115/32"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "11144",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 1483.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11185",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 1485.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11187"
+      },
+      {
+        "id": "11186",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 1487.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 96,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11223",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 1489.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 72,
+        "duration_quarter_units": "9/4",
+        "duration_source": {
+          "ticks": 48,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11187",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 1530.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11185",
+        "succ": null
+      },
+      {
+        "id": "11188",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 1579.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11145",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 1617.0,
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11224",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 1622.0,
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11146",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 1673.0,
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11147"
+      },
+      {
+        "id": "11225",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 1684.0,
+        "onset_ticks": 32,
+        "onset_quarter_units": "1",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11147",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 1703.0,
+        "onset_ticks": 37,
+        "onset_quarter_units": "37/32",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11146",
+        "succ": "11148"
+      },
+      {
+        "id": "11148",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 1757.0,
+        "onset_ticks": 49,
+        "onset_quarter_units": "49/32",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11147",
+        "succ": "11149"
+      },
+      {
+        "id": "11149",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 1789.0,
+        "onset_ticks": 61,
+        "onset_quarter_units": "61/32",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11148",
+        "succ": "11150"
+      },
+      {
+        "id": "11150",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 1833.0,
+        "onset_ticks": 73,
+        "onset_quarter_units": "73/32",
+        "duration_ticks": 36,
+        "duration_quarter_units": "9/8",
+        "duration_source": {
+          "ticks": 24,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11149",
+        "succ": "11151"
+      },
+      {
+        "id": "11189",
+        "kind": "note",
+        "attack": false,
+        "staff": "14",
+        "x": 1835.0,
+        "onset_ticks": 73,
+        "onset_quarter_units": "73/32",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11191"
+      },
+      {
+        "id": "11190",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 1837.0,
+        "onset_ticks": 73,
+        "onset_quarter_units": "73/32",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11191",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 1894.0,
+        "onset_ticks": 97,
+        "onset_quarter_units": "97/32",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11189",
+        "succ": null
+      },
+      {
+        "id": "11151",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 1924.0,
+        "onset_ticks": 109,
+        "onset_quarter_units": "109/32",
+        "duration_ticks": 6,
+        "duration_quarter_units": "3/16",
+        "duration_source": {
+          "ticks": 4,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11150",
+        "succ": "11152"
+      },
+      {
+        "id": "11152",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 1953.0,
+        "onset_ticks": 115,
+        "onset_quarter_units": "115/32",
+        "duration_ticks": 6,
+        "duration_quarter_units": "3/16",
+        "duration_source": {
+          "ticks": 4,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11151",
+        "succ": null
+      }
+    ]
+  },
+  "29": {
+    "measure": 29,
+    "page": 1,
+    "system": 5,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 45,
+    "meter_ticks": 128,
+    "attack_count": 3,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "11153",
+          "11192",
+          "11193",
+          "11194",
+          "11195",
+          "11233"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "11196",
+          "11197",
+          "11198"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "11199"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/2",
+      "9/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "11192",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2040.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11198"
+      },
+      {
+        "id": "11193",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2041.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11153",
+        "kind": "note",
+        "attack": true,
+        "staff": "13",
+        "x": 2043.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11233",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 2048.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11194",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2101.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11196"
+      },
+      {
+        "id": "11195",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2101.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11197"
+      },
+      {
+        "id": "11196",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2158.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11194",
+        "succ": null
+      },
+      {
+        "id": "11197",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2159.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11195",
+        "succ": null
+      },
+      {
+        "id": "11198",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2224.5,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11192",
+        "succ": "11199"
+      },
+      {
+        "id": "11199",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2268.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11198",
+        "succ": null
+      }
+    ]
+  },
+  "30": {
+    "measure": 30,
+    "page": 1,
+    "system": 5,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 59,
+    "meter_ticks": 128,
+    "attack_count": 6,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "11200",
+          "11201",
+          "11227"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "11202",
+          "11228"
+        ]
+      },
+      {
+        "onset_ticks": 32,
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "events": [
+          "11204",
+          "11229"
+        ]
+      },
+      {
+        "onset_ticks": 56,
+        "onset_whole_units": "7/16",
+        "onset_quarter_units": "7/4",
+        "events": [
+          "11205",
+          "11230"
+        ]
+      },
+      {
+        "onset_ticks": 80,
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "events": [
+          "11206",
+          "11207",
+          "11231"
+        ]
+      },
+      {
+        "onset_ticks": 104,
+        "onset_whole_units": "13/16",
+        "onset_quarter_units": "13/4",
+        "events": [
+          "11208",
+          "11209",
+          "11232"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "1",
+      "7/4",
+      "5/2",
+      "13/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "11200",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2357.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11226",
+        "kind": "note",
+        "attack": false,
+        "staff": "15",
+        "x": 2358.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11201",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2417.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11202"
+      },
+      {
+        "id": "11227",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 2420.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11228"
+      },
+      {
+        "id": "11202",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2462.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11201",
+        "succ": null
+      },
+      {
+        "id": "11228",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 2463.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11227",
+        "succ": null
+      },
+      {
+        "id": "13220",
+        "kind": "rest",
+        "attack": false,
+        "staff": "13",
+        "x": 2510.0,
+        "onset_ticks": 32,
+        "onset_quarter_units": "1",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "11203",
+        "kind": "note",
+        "attack": false,
+        "staff": "14",
+        "x": 2513.0,
+        "onset_ticks": 32,
+        "onset_quarter_units": "1",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11205"
+      },
+      {
+        "id": "11204",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2513.5,
+        "onset_ticks": 32,
+        "onset_quarter_units": "1",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11207"
+      },
+      {
+        "id": "11229",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 2515.0,
+        "onset_ticks": 32,
+        "onset_quarter_units": "1",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "11230"
+      },
+      {
+        "id": "11205",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2559.0,
+        "onset_ticks": 56,
+        "onset_quarter_units": "7/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11203",
+        "succ": "11206"
+      },
+      {
+        "id": "11230",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 2562.0,
+        "onset_ticks": 56,
+        "onset_quarter_units": "7/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11229",
+        "succ": "11231"
+      },
+      {
+        "id": "11206",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2603.0,
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11205",
+        "succ": "11208"
+      },
+      {
+        "id": "11207",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2604.0,
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11204",
+        "succ": "11209"
+      },
+      {
+        "id": "11231",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 2607.0,
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "11230",
+        "succ": "11232"
+      },
+      {
+        "id": "11208",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2658.0,
+        "onset_ticks": 104,
+        "onset_quarter_units": "13/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11206",
+        "succ": null
+      },
+      {
+        "id": "11209",
+        "kind": "note",
+        "attack": true,
+        "staff": "14",
+        "x": 2660.0,
+        "onset_ticks": 104,
+        "onset_quarter_units": "13/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11207",
+        "succ": null
+      },
+      {
+        "id": "11232",
+        "kind": "note",
+        "attack": true,
+        "staff": "15",
+        "x": 2660.5,
+        "onset_ticks": 104,
+        "onset_quarter_units": "13/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "11231",
+        "succ": null
+      }
+    ]
+  },
+  "31": {
+    "measure": 31,
+    "page": 2,
+    "system": 1,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 55,
+    "meter_ticks": 128,
+    "attack_count": 5,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "8426",
+          "8427",
+          "8428",
+          "8473"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "8396",
+          "8429",
+          "8430"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "8431"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "8432",
+          "8433"
+        ]
+      },
+      {
+        "onset_ticks": 96,
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
+        "events": [
+          "8434",
+          "8435"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "3/2",
+      "9/4",
+      "3"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "8426",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 297.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "9711",
+        "kind": "rest",
+        "attack": false,
+        "staff": "1",
+        "x": 297.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 128,
+        "duration_quarter_units": "4",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8427",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 303.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8473",
+        "kind": "note",
+        "attack": true,
+        "staff": "3",
+        "x": 305.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8428",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 381.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8429"
+      },
+      {
+        "id": "8429",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 444.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8428",
+        "succ": null
+      },
+      {
+        "id": "8396",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 513.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8430",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 513.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8431"
+      },
+      {
+        "id": "8431",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 571.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8430",
+        "succ": "8432"
+      },
+      {
+        "id": "8432",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 632.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8431",
+        "succ": "8435"
+      },
+      {
+        "id": "8433",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 632.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8434"
+      },
+      {
+        "id": "8434",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 693.0,
+        "onset_ticks": 96,
+        "onset_quarter_units": "3",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8433",
+        "succ": null
+      },
+      {
+        "id": "8435",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 693.0,
+        "onset_ticks": 96,
+        "onset_quarter_units": "3",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8432",
+        "succ": null
+      }
+    ]
+  },
+  "32": {
+    "measure": 32,
+    "page": 2,
+    "system": 1,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 82,
+    "meter_ticks": 128,
+    "attack_count": 5,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "8397",
+          "8398",
+          "8436",
+          "8437",
+          "8438",
+          "8439",
+          "8442",
+          "8443"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "8440",
+          "8441",
+          "8444",
+          "8445"
+        ]
+      },
+      {
+        "onset_ticks": 36,
+        "onset_whole_units": "9/32",
+        "onset_quarter_units": "9/8",
+        "events": [
+          "8446"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "8447",
+          "8449"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "8448"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "9/8",
+      "3/2",
+      "9/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "8436",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 809.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8437",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 809.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8397",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 810.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8438",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 889.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8440"
+      },
+      {
+        "id": "8439",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 889.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8441"
+      },
+      {
+        "id": "8442",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1014.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8444"
+      },
+      {
+        "id": "8443",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1015.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8445"
+      },
+      {
+        "id": "8398",
+        "kind": "note",
+        "attack": true,
+        "staff": "1",
+        "x": 1018.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8440",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 948.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8438",
+        "succ": null
+      },
+      {
+        "id": "8441",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 948.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8439",
+        "succ": null
+      },
+      {
+        "id": "9714",
+        "kind": "rest",
+        "attack": false,
+        "staff": "3",
+        "x": 1008.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8444",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1074.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8442",
+        "succ": "8447"
+      },
+      {
+        "id": "8445",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1075.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8443",
+        "succ": "8446"
+      },
+      {
+        "id": "8446",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1137.0,
+        "onset_ticks": 36,
+        "onset_quarter_units": "9/8",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8445",
+        "succ": "8449"
+      },
+      {
+        "id": "8447",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1138.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8444",
+        "succ": "8448"
+      },
+      {
+        "id": "8449",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1197.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8446",
+        "succ": null
+      },
+      {
+        "id": "8448",
+        "kind": "note",
+        "attack": true,
+        "staff": "2",
+        "x": 1196.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8447",
+        "succ": null
+      }
+    ]
+  },
+  "33": {
+    "measure": 33,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "34": {
+    "measure": 34,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "35": {
+    "measure": 35,
+    "page": 2,
+    "system": 2,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 76,
+    "meter_ticks": 128,
+    "attack_count": 6,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "8482",
+          "8483",
+          "8484",
+          "8485",
+          "8486",
+          "8532"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "8487",
+          "8488"
+        ]
+      },
+      {
+        "onset_ticks": 32,
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "events": [
+          "8489",
+          "8490"
+        ]
+      },
+      {
+        "onset_ticks": 56,
+        "onset_whole_units": "7/16",
+        "onset_quarter_units": "7/4",
+        "events": [
+          "8491",
+          "8492"
+        ]
+      },
+      {
+        "onset_ticks": 80,
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "events": [
+          "8493",
+          "8494",
+          "8533"
+        ]
+      },
+      {
+        "onset_ticks": 104,
+        "onset_whole_units": "13/16",
+        "onset_quarter_units": "13/4",
+        "events": [
+          "8495",
+          "8496"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "1",
+      "7/4",
+      "5/2",
+      "13/4"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "8483",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 300.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8484",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 300.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8532",
+        "kind": "note",
+        "attack": true,
+        "staff": "6",
+        "x": 302.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8482",
+        "kind": "note",
+        "attack": true,
+        "staff": "4",
+        "x": 303.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8485",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 394.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8487"
+      },
+      {
+        "id": "8486",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 394.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8488"
+      },
+      {
+        "id": "8487",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 462.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8485",
+        "succ": null
+      },
+      {
+        "id": "8488",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 462.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8486",
+        "succ": null
+      },
+      {
+        "id": "8489",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 536.0,
+        "onset_ticks": 32,
+        "onset_quarter_units": "1",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8492"
+      },
+      {
+        "id": "8490",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 536.0,
+        "onset_ticks": 32,
+        "onset_quarter_units": "1",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8491"
+      },
+      {
+        "id": "9754",
+        "kind": "rest",
+        "attack": false,
+        "staff": "6",
+        "x": 537.0,
+        "onset_ticks": 32,
+        "onset_quarter_units": "1",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8491",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 605.0,
+        "onset_ticks": 56,
+        "onset_quarter_units": "7/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8490",
+        "succ": "8493"
+      },
+      {
+        "id": "8492",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 606.0,
+        "onset_ticks": 56,
+        "onset_quarter_units": "7/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8489",
+        "succ": "8494"
+      },
+      {
+        "id": "8493",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 669.0,
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8491",
+        "succ": "8496"
+      },
+      {
+        "id": "8494",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 670.0,
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8492",
+        "succ": "8495"
+      },
+      {
+        "id": "8533",
+        "kind": "note",
+        "attack": true,
+        "staff": "6",
+        "x": 672.0,
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8495",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 735.0,
+        "onset_ticks": 104,
+        "onset_quarter_units": "13/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8494",
+        "succ": null
+      },
+      {
+        "id": "8496",
+        "kind": "note",
+        "attack": true,
+        "staff": "5",
+        "x": 736.0,
+        "onset_ticks": 104,
+        "onset_quarter_units": "13/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8493",
+        "succ": null
+      }
+    ]
+  },
+  "36": {
+    "measure": 36,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "37": {
+    "measure": 37,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "38": {
+    "measure": 38,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "39": {
+    "measure": 39,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "40": {
+    "measure": 40,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "41": {
+    "measure": 41,
+    "page": 2,
+    "system": 3,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 58,
+    "meter_ticks": 128,
+    "attack_count": 6,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "8566",
+          "8586",
+          "8587",
+          "8624"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "8588",
+          "8589"
+        ]
+      },
+      {
+        "onset_ticks": 32,
+        "onset_whole_units": "1/4",
+        "onset_quarter_units": "1",
+        "events": [
+          "8595"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "8590",
+          "8591"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "8592",
+          "8593"
+        ]
+      },
+      {
+        "onset_ticks": 80,
+        "onset_whole_units": "5/8",
+        "onset_quarter_units": "5/2",
+        "events": [
+          "8594",
+          "8596",
+          "8597"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "1",
+      "3/2",
+      "9/4",
+      "5/2"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "8586",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1691.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8588"
+      },
+      {
+        "id": "8587",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1691.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8589"
+      },
+      {
+        "id": "8566",
+        "kind": "note",
+        "attack": true,
+        "staff": "7",
+        "x": 1695.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8624",
+        "kind": "note",
+        "attack": true,
+        "staff": "9",
+        "x": 1696.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 64,
+        "duration_quarter_units": "2",
+        "duration_source": {
+          "ticks": 128,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8588",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1749.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8586",
+        "succ": "8590"
+      },
+      {
+        "id": "8589",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1750.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8587",
+        "succ": "8591"
+      },
+      {
+        "id": "8595",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1939.0,
+        "onset_ticks": 32,
+        "onset_quarter_units": "1",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "8597"
+      },
+      {
+        "id": "8590",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1809.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8588",
+        "succ": "8593"
+      },
+      {
+        "id": "8591",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1809.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "8589",
+        "succ": "8592"
+      },
+      {
+        "id": "8592",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1868.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8591",
+        "succ": null
+      },
+      {
+        "id": "8593",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1869.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8590",
+        "succ": null
+      },
+      {
+        "id": "8594",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 1939.0,
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8596",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 2015.0,
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "8597",
+        "kind": "note",
+        "attack": true,
+        "staff": "8",
+        "x": 2015.0,
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "8595",
+        "succ": null
+      }
+    ]
+  },
+  "42": {
+    "measure": 42,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "43": {
+    "measure": 43,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "44": {
+    "measure": 44,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "45": {
+    "measure": 45,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "46": {
+    "measure": 46,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "47": {
+    "measure": 47,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "48": {
+    "measure": 48,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  },
+  "49": {
+    "measure": 49,
+    "ok": false,
+    "reason": "unsat",
+    "attacks": [],
+    "attack_count": null
+  }
+}
