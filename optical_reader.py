@@ -1160,16 +1160,35 @@ def comp_stats(binary: np.ndarray) -> list[tuple[int, int, int, int, int]]:
     return out
 
 
-def estimate_head_fill(gray: np.ndarray, box: tuple[int, int, int, int]) -> float:
+def estimate_head_fill(
+    gray: np.ndarray,
+    box: tuple[int, int, int, int],
+) -> tuple[float, float]:
+    """Return overall and central ink ratios for a visual notehead.
+
+    Hollow heads often cross a staff line, so an overall darkness threshold
+    alone can misclassify them as filled.  The central core is independent
+    evidence: a true filled head stays dark through its interior, whereas a
+    hollow head retains a light cavity even when a staff line crosses it.
+    """
     x, y, w, h = box
     pad_x = max(1, int(round(0.10 * w)))
     pad_y = max(1, int(round(0.10 * h)))
     x1, x2 = max(0, x + pad_x), min(gray.shape[1], x + w - pad_x)
     y1, y2 = max(0, y + pad_y), min(gray.shape[0], y + h - pad_y)
     if x2 <= x1 or y2 <= y1:
-        return 0.0
+        return 0.0, 0.0
+
     crop = gray[y1:y2, x1:x2]
-    return float(np.mean(crop < 155))
+    overall = float(np.mean(crop < 155))
+
+    cx1 = max(0, x + int(round(0.30 * w)))
+    cx2 = min(gray.shape[1], x + int(round(0.70 * w)))
+    cy1 = max(0, y + int(round(0.30 * h)))
+    cy2 = min(gray.shape[0], y + int(round(0.70 * h)))
+    core = gray[cy1:cy2, cx1:cx2]
+    central = float(np.mean(core < 155)) if core.size else overall
+    return overall, central
 
 
 def _adjust_notehead_bbox(
@@ -1306,8 +1325,19 @@ def detect_noteheads(
         if region.size == 0 or float(np.mean(region > 0)) < 0.10:
             continue
 
-        fill = estimate_head_fill(gray, (x1, y1, w, h))
-        head_type = "filled" if fill >= 0.62 else "hollow"
+        fill, central_fill = estimate_head_fill(
+            gray,
+            (x1, y1, w, h),
+        )
+        # A strongly dark body is filled.  Borderline overall darkness must
+        # also have a dark central core; this prevents a staff line passing
+        # through a hollow cavity from turning a whole/half note into a
+        # quarter note.
+        head_type = (
+            "filled"
+            if fill >= 0.72 or central_fill >= 0.72
+            else "hollow"
+        )
         bottom = staff.lines_y[-1]
         pos = int(round((bottom - cy) / (staff.spacing / 2.0)))
 
