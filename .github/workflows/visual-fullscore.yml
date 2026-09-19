@@ -41,6 +41,14 @@ jobs:
             python3 /work/visual_attack_extractor.py "$omr"
           '
 
+      - name: Commit diagnostic outputs before assertions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add visual_attacks/
+          git commit -m "[skip ci] store visual attack diagnostics for inspection" || true
+          git push || true
+
       - name: Validate visually audited target measures
         run: |
           python3 - <<'PY'
@@ -104,10 +112,3 @@ jobs:
             python3 /work/compare_current.py "$omr"
           '
 
-      - name: Commit visual audit outputs
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add visual_attacks/
-          git commit -m "[skip ci] add full-score visual attack audit"
-          git push
