@@ -37,6 +37,7 @@ jobs:
             omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
             test -n "$omr"
             PYTHONPATH=/app python3 /work/visual_attack_fullscore.py "$omr" --json /work/visual_attack_fullscore.json
+            python3 /work/visual_attack_solver.py /work/visual_attack_fullscore.json --out /work/visual_attack_solved.json
           '
 
       - name: Compare with current hit engine
@@ -52,7 +53,7 @@ jobs:
               by.setdefault(int(m), []).append(str(onset*4))
           for m in by:
               by[m]=sorted(by[m], key=lambda s: float(eval(s)) if '/' not in s else float(eval(s)))
-          data=json.load(open('visual_attack_fullscore.json'))
+          data=json.load(open('visual_attack_solved.json'))
           rows=[]
           for ms,r in data.items():
               m=int(ms)
@@ -80,6 +81,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add visual_attack_fullscore.json visual_vs_current.json
+          git add visual_attack_fullscore.json visual_attack_solved.json visual_vs_current.json
           git commit -m "[skip ci] add full-score visual attack diagnostics"
           git push
