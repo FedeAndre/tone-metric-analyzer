@@ -1,5 +1,19 @@
-# Hit-only constraint voice engine
+# TMA Optical Attack Reader — clean optical branch
 
-Clean-room hit-only score marker. Musical hit identity is reconstructed from semantic notation, voice sequence, note/rest duration, beams, flags, augmentation dots, and ties. Engraving x-coordinates are never clustered to create hits. Geometry is used only to recover missing notation relations and to anchor the final strike to a real attacking notehead.
+This branch is a clean rebuild of the score-reading layer. It contains no previous TMA reader, no Audiveris code, no HOMR code, and no legacy timing engine.
 
-No Levels, waves, pivots, trees, canonical timing engine, displaced-voice patch layer, or prior tone-metric analysis code is included.
+Purpose:
+
+PDF/image -> independent low-level visual symbol masks -> notehead/stem/beam/dot/tie graph -> later exact rhythmic attack reconstruction.
+
+The current stage intentionally stops before assigning musical onsets. It validates whether the page image can be converted into a trustworthy notation graph without inheriting timing, voice, or duration decisions from previous readers.
+
+Low-level visual inference is provided only by Oemer's pretrained segmentation networks. Oemer's MusicXML builder, rhythm reconstruction, voice alignment, and semantic timing are not used.
+
+Validation target in CI:
+- exact two-page public-domain Buxtehude score used in the TMA regression work;
+- both pages processed from PDF raster data;
+- colored overlays and JSON notation graph generated;
+- source-tree independence gate runs before analysis.
+
+No production deployment is performed from this branch.

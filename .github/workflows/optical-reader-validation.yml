@@ -1,0 +1,70 @@
+name: Clean optical reader validation
+
+on:
+  push:
+    branches:
+      - tma-optical-reader-clean-20260919
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      - name: Independence gate before any analysis
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          pytest -q tests/test_independence.py
+          echo "SOURCE TREE:"
+          find . -maxdepth 2 -type f ! -path './.git/*' | sort
+
+      - name: Install clean optical reader
+        run: pip install -r requirements.txt
+
+      - name: Reconstruct exact Buxtehude regression pages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          curl -L --fail --retry 3             'https://urresearch.rochester.edu/fileDownloadForInstitutionalItem.action?itemFileId=36184&itemId=15575'             -o full.pdf
+          pdfseparate -f 105 -l 106 full.pdf page-%d.pdf
+          pdfunite page-105.pdf page-106.pdf buxtehude.pdf
+          test "$(pdfinfo buxtehude.pdf | awk '/^Pages:/ {print $2}')" -eq 2
+
+      - name: Run independent image-to-notation graph
+        run: |
+          python optical_reader.py buxtehude.pdf --out optical_audit --dpi 300
+          python - <<'PY'
+          import json
+          d=json.load(open('optical_audit/notation_graph.json'))
+          assert d['engine']=='tma-optical-reader-clean-v1'
+          assert d['semantic_timing_used'] is False
+          assert len(d['pages'])==2
+          # Structural smoke checks only. These do not encode measure-specific answers.
+          assert all(p['staff_count'] >= 12 for p in d['pages']), [p['staff_count'] for p in d['pages']]
+          assert d['totals']['noteheads'] >= 400, d['totals']
+          assert d['totals']['stems'] >= 200, d['totals']
+          print('OPTICAL_GRAPH_STRUCTURE_OK')
+          print(json.dumps(d['totals'], indent=2))
+          PY
+
+      - name: Upload optical audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: tma-optical-reader-buxtehude-audit
+          path: |
+            optical_audit/notation_graph.json
+            optical_audit/page_01_optical_overlay.png
+            optical_audit/page_02_optical_overlay.png
+          retention-days: 14
