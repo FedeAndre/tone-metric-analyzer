@@ -1882,12 +1882,42 @@ def complete_beam_levels_from_pixels(
         if head.stem_id is not None:
             heads_by_stem.setdefault(head.stem_id, []).append(head)
 
+    # A long physical beam is often segmented into adjacent polygons
+    # between successive stems.  An interior stem therefore belongs to two
+    # polygons of the *same* beam layer.  Count distinct vertical beam layers,
+    # not the number of adjacent beam spans touching the stem.
+    beam_centers_by_stem: dict[int, list[tuple[float, float]]] = {}
     for beam in beams:
         for stem_id in beam.stem_ids:
-            stem = stem_by_id.get(stem_id)
-            if stem is None:
+            beam_centers_by_stem.setdefault(stem_id, []).append(
+                (float(beam.cy), float(beam.thickness))
+            )
+
+    staff_by_id = {staff.id: staff for staff in staves}
+    for stem_id, rows in beam_centers_by_stem.items():
+        stem = stem_by_id.get(stem_id)
+        if stem is None:
+            continue
+        spacing = (
+            float(staff_by_id[stem.staff_id].spacing)
+            if stem.staff_id in staff_by_id
+            else global_spacing(staves)
+        )
+        clusters: list[list[float]] = []
+        for cy, thickness in sorted(rows):
+            if not clusters:
+                clusters.append([cy])
                 continue
-            stem.beam_level += 1
+            tolerance = max(
+                0.34 * spacing,
+                1.25 * thickness,
+            )
+            if abs(cy - float(np.mean(clusters[-1]))) <= tolerance:
+                clusters[-1].append(cy)
+            else:
+                clusters.append([cy])
+        stem.beam_level = max(stem.beam_level, len(clusters))
+        if clusters:
             stem.beam_source = "component"
 
     by_staff_measure: dict[tuple[int, int], list[Stem]] = {}
@@ -1902,7 +1932,6 @@ def complete_beam_levels_from_pixels(
             continue
         by_staff_measure.setdefault((stem.staff_id, stem.measure_local), []).append(stem)
 
-    staff_by_id = {staff.id: staff for staff in staves}
     supported_edges = 0
     upgraded_stems: set[int] = set()
     for (staff_id, _measure), local_stems in by_staff_measure.items():
