@@ -1572,6 +1572,64 @@ def process_page(
     }
 
 
+def analyze_input(
+    input_path: Path,
+    out_dir: Path,
+    dpi: int = 300,
+    cache_dir: Path | None = None,
+) -> dict:
+    ensure_checkpoints()
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    if input_path.suffix.lower() == ".pdf":
+        pages = render_pdf(input_path, out_dir / "rendered", dpi=dpi)
+    else:
+        pages = [input_path]
+
+    result = {
+        "engine": "tma-optical-reader-clean-v1",
+        "stage": "optical_notation_graph",
+        "timing_source": "none",
+        "semantic_timing_used": False,
+        "rhythmic_attacks_ready": False,
+        "external_low_level_model": "oemer segmentation masks only",
+        "pages": [],
+    }
+
+    for i, page in enumerate(pages, 1):
+        print(f"Processing optical page {i}/{len(pages)}")
+        result["pages"].append(
+            process_page(page, out_dir, i, cache_dir)
+        )
+
+    result["totals"] = {
+        "pages": len(result["pages"]),
+        "staves": sum(x["staff_count"] for x in result["pages"]),
+        "systems": sum(x["system_count"] for x in result["pages"]),
+        "measures": sum(x["measure_count"] for x in result["pages"]),
+        "noteheads": sum(x["notehead_count"] for x in result["pages"]),
+        "filled_noteheads": sum(x["filled_notehead_count"] for x in result["pages"]),
+        "hollow_noteheads": sum(x["hollow_notehead_count"] for x in result["pages"]),
+        "unlinked_filled_noteheads": sum(x["unlinked_filled_noteheads"] for x in result["pages"]),
+        "stems": sum(x["stem_count"] for x in result["pages"]),
+        "beams": sum(x["beam_count"] for x in result["pages"]),
+        "rests": sum(x["rest_count"] for x in result["pages"]),
+        "dots": sum(x["dot_count"] for x in result["pages"]),
+        "tie_candidates": sum(x["tie_candidate_count"] for x in result["pages"]),
+        "component_stem_links": sum(x["component_stem_links"] for x in result["pages"]),
+        "pixel_stem_links": sum(x["pixel_stem_links"] for x in result["pages"]),
+    }
+
+    (out_dir / "notation_graph.json").write_text(
+        json.dumps(result, indent=2)
+    )
+    print(
+        "OPTICAL_SUMMARY="
+        + json.dumps(result["totals"], separators=(",", ":"))
+    )
+    return result
+
+
 def main() -> None:
     ap=argparse.ArgumentParser()
     ap.add_argument("input",type=Path)
@@ -1580,43 +1638,12 @@ def main() -> None:
     ap.add_argument("--cache-dir",type=Path,default=None)
     args=ap.parse_args()
 
-    ensure_checkpoints()
-    args.out.mkdir(parents=True,exist_ok=True)
-    if args.input.suffix.lower()==".pdf":
-        pages=render_pdf(args.input,args.out/"rendered",dpi=args.dpi)
-    else:
-        pages=[args.input]
-
-    result={
-        "engine":"tma-optical-reader-clean-v1",
-        "timing_source":"none",
-        "semantic_timing_used":False,
-        "external_low_level_model":"oemer segmentation masks only",
-        "pages":[],
-    }
-    for i,p in enumerate(pages,1):
-        print(f"Processing optical page {i}/{len(pages)}")
-        result["pages"].append(process_page(p,args.out,i,args.cache_dir))
-
-    result["totals"]={
-        "pages":len(result["pages"]),
-        "staves":sum(x["staff_count"] for x in result["pages"]),
-        "systems":sum(x["system_count"] for x in result["pages"]),
-        "measures":sum(x["measure_count"] for x in result["pages"]),
-        "noteheads":sum(x["notehead_count"] for x in result["pages"]),
-        "filled_noteheads":sum(x["filled_notehead_count"] for x in result["pages"]),
-        "hollow_noteheads":sum(x["hollow_notehead_count"] for x in result["pages"]),
-        "unlinked_filled_noteheads":sum(x["unlinked_filled_noteheads"] for x in result["pages"]),
-        "stems":sum(x["stem_count"] for x in result["pages"]),
-        "beams":sum(x["beam_count"] for x in result["pages"]),
-        "rests":sum(x["rest_count"] for x in result["pages"]),
-        "dots":sum(x["dot_count"] for x in result["pages"]),
-        "tie_candidates":sum(x["tie_candidate_count"] for x in result["pages"]),
-        "component_stem_links":sum(x["component_stem_links"] for x in result["pages"]),
-        "pixel_stem_links":sum(x["pixel_stem_links"] for x in result["pages"]),
-    }
-    (args.out/"notation_graph.json").write_text(json.dumps(result,indent=2))
-    print("OPTICAL_SUMMARY="+json.dumps(result["totals"],separators=(",",":")))
+    analyze_input(
+        input_path=args.input,
+        out_dir=args.out,
+        dpi=args.dpi,
+        cache_dir=args.cache_dir,
+    )
 
 
 if __name__=="__main__":
