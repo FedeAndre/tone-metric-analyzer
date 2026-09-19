@@ -1229,7 +1229,7 @@ def detect_beams(symbols: np.ndarray, staff: np.ndarray, note: np.ndarray, stems
 
 
 def _pixel_beam_levels(
-    binary: np.ndarray,
+    gray: np.ndarray,
     tip_a: tuple[float, float, str],
     tip_b: tuple[float, float, str],
     spacing: float,
@@ -1257,8 +1257,9 @@ def _pixel_beam_levels(
         density = []
         for offset in range(int(round(1.8 * spacing)) + 1):
             y = int(round(y0 + scan_sign * offset))
-            if 0 <= y < binary.shape[0]:
-                density.append(float(binary[y, max(0, x - 2):min(binary.shape[1], x + 3)].mean()))
+            if 0 <= y < gray.shape[0]:
+                window = gray[y, max(0, x - 2):min(gray.shape[1], x + 3)]
+                density.append(float(np.mean(window < 128)) if window.size else 0.0)
             else:
                 density.append(0.0)
 
@@ -1316,7 +1317,6 @@ def complete_beam_levels_from_pixels(
             stem.beam_level += 1
             stem.beam_source = "component"
 
-    binary = (gray < 128).astype(np.uint8)
     by_staff_measure: dict[tuple[int, int], list[Stem]] = {}
     for stem_id in heads_by_stem:
         stem = stem_by_id.get(stem_id)
@@ -1348,7 +1348,7 @@ def complete_beam_levels_from_pixels(
                 right.y1 if right.direction == "up" else right.y2,
                 right.direction,
             )
-            level = _pixel_beam_levels(binary, left_tip, right_tip, spacing)
+            level = _pixel_beam_levels(gray, left_tip, right_tip, spacing)
             if level <= 0:
                 continue
             supported_edges += 1
