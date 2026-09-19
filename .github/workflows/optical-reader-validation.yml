@@ -82,56 +82,80 @@ jobs:
           pdfunite page-105.pdf page-106.pdf buxtehude.pdf
           test "$(pdfinfo buxtehude.pdf | awk '/^Pages:/ {print $2}')" -eq 2
 
-      - name: Validate full PDF API under 512 MB container limit
+      - name: Validate asynchronous full PDF API under 512 MB container limit
         run: |
           cid=$(docker run -d --memory=512m --memory-swap=512m -p 8081:8080 tma-optical-reader-clean)
-          cleanup() {
-            kill "${monpid:-}" >/dev/null 2>&1 || true
-            docker rm -f "$cid" >/dev/null 2>&1 || true
-          }
-          trap cleanup EXIT
+          trap 'docker rm -f "$cid" >/dev/null 2>&1 || true' EXIT
+
           for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:8081/api/status >/dev/null; then
+            if curl -fsS http://127.0.0.1:8081/api/status > status.json; then
               break
             fi
             sleep 1
           done
 
-          (
-            while docker inspect "$cid" >/dev/null 2>&1; do
-              docker stats --no-stream --format '{{.MemUsage}} {{.MemPerc}} {{.CPUPerc}}' "$cid" >> container-stats.log 2>/dev/null || true
-              sleep 2
-            done
-          ) &
-          monpid=$!
+          python - <<'PY'
+          import json
+          s=json.load(open("status.json"))
+          assert s["job_mode"]=="asynchronous", s
+          PY
 
-          set +e
-          curl --fail --show-error --max-time 600             -F "file=@buxtehude.pdf;type=application/pdf"             http://127.0.0.1:8081/api/optical/read             -o api-result.json
-          curl_rc=$?
-          set -e
+          curl --fail --show-error --max-time 30 \
+            -F "file=@buxtehude.pdf;type=application/pdf" \
+            http://127.0.0.1:8081/api/optical/read \
+            -o submitted.json
 
-          kill "$monpid" >/dev/null 2>&1 || true
-          echo "CONTAINER_STATE:"
-          docker inspect --format 'status={{.State.Status}} oom={{.State.OOMKilled}} exit={{.State.ExitCode}} error={{.State.Error}}' "$cid" || true
-          echo "PEAK_SAMPLES:"
-          tail -n 30 container-stats.log || true
-          echo "CONTAINER_LOGS:"
-          docker logs --tail 250 "$cid" || true
+          job_id=$(python - <<'PY'
+          import json
+          d=json.load(open("submitted.json"))
+          assert d["status"]=="queued", d
+          print(d["job_id"])
+          PY
+          )
 
-          if [ "$curl_rc" -ne 0 ]; then
-            exit "$curl_rc"
+          echo "JOB_ID=$job_id"
+          completed=0
+          for i in $(seq 1 360); do
+            curl --fail --show-error --max-time 20 \
+              "http://127.0.0.1:8081/api/optical/jobs/$job_id" \
+              -o job.json
+            state=$(python - <<'PY'
+          import json
+          d=json.load(open("job.json"))
+          print(d["status"])
+          PY
+            )
+            echo "poll=$i status=$state"
+            if [ "$state" = "completed" ]; then
+              completed=1
+              break
+            fi
+            if [ "$state" = "failed" ]; then
+              cat job.json
+              exit 1
+            fi
+            sleep 2
+          done
+
+          if [ "$completed" -ne 1 ]; then
+            echo "Timed out waiting for asynchronous analysis"
+            docker logs --tail 300 "$cid" || true
+            exit 1
           fi
 
           python - <<'PY'
           import json
-          d=json.load(open("api-result.json"))
-          assert d["engine"]=="tma-optical-reader-clean-v1"
-          assert d["semantic_timing_used"] is False
-          assert d["totals"]["measures"]==49, d["totals"]
-          assert d["totals"]["noteheads"]>=400, d["totals"]
-          print("LOW_MEMORY_FULL_API_OK")
-          print(json.dumps(d["totals"], indent=2))
+          d=json.load(open("job.json"))
+          r=d["result"]
+          assert r["engine"]=="tma-optical-reader-clean-v1"
+          assert r["semantic_timing_used"] is False
+          assert r["totals"]["measures"]==49, r["totals"]
+          assert r["totals"]["noteheads"]>=400, r["totals"]
+          print("ASYNC_LOW_MEMORY_FULL_API_OK")
+          print(json.dumps(r["totals"], indent=2))
           PY
+
+          docker inspect --format 'status={{.State.Status}} oom={{.State.OOMKilled}} exit={{.State.ExitCode}}' "$cid"
 
       - name: Run independent image-to-notation graph
         run: |
