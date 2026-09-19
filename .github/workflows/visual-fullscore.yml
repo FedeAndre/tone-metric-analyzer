@@ -36,7 +36,7 @@ jobs:
             /opt/audiveris/bin/Audiveris -batch -save -export -output /work/aud_out /work/buxtehude.pdf
             omr=$(find /work/aud_out -type f -name "*.omr" -print -quit)
             test -n "$omr"
-            python3 /work/visual_attack_fullscore.py "$omr" --json /work/visual_attack_fullscore.json
+            PYTHONPATH=/app python3 /work/visual_attack_fullscore.py "$omr" --json /work/visual_attack_fullscore.json
           '
 
       - name: Compare with current hit engine
