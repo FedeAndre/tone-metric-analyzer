@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   bux:
+    if: "!contains(github.event.head_commit.message, '[skip buxq]')"
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -48,4 +49,21 @@ jobs:
           print("BUX_CONFLICT_MEASURES="+str(sum(bool(m["conflicts"]) for m in r["measures"])))
           print("BUX_UNRESOLVED_MEASURES="+str(len({x["measure_index"] for x in r["unresolved"]})))
           print("BUX_UNRESOLVED_REASONS="+json.dumps(Counter(x["reason"] for x in r["unresolved"]),sort_keys=True))
+          print("BUX_PROBLEM_MEASURES_BEGIN")
+          unresolved_by_measure={}
+          for row in r["unresolved"]:
+              unresolved_by_measure.setdefault(row["measure_index"],[]).append(row)
+          for m in r["measures"]:
+              mi=m["measure_index"]
+              if m["conflicts"] or mi in unresolved_by_measure:
+                  print(json.dumps({
+                      "measure_index":mi,
+                      "page":m["page"],
+                      "system_id":m["system_id"],
+                      "measure_in_system":m["measure_in_system"],
+                      "voices":m["voice_solutions"],
+                      "conflicts":m["conflicts"],
+                      "unresolved":unresolved_by_measure.get(mi,[]),
+                  },sort_keys=True))
+          print("BUX_PROBLEM_MEASURES_END")
           PY
