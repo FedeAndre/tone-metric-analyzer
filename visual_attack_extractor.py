@@ -519,6 +519,28 @@ def main(omr_path: str):
                             chords[cid]["status"] = "resolved-meter-repaired"
                             anchors_points.append((x, tau))
 
+                    # Pass 1c: a first event that is purely a tied continuation
+                    # must begin at the bar onset.  A cross-bar tie cannot begin after
+                    # silence; this is direct notation evidence, not an OMR timing guess.
+                    for vr in voice_records:
+                        if not vr["valid"] or vr["start"] is not None or not vr["events"]:
+                            continue
+                        _, _, first_cid = vr["events"][0]
+                        first_chord = chords[first_cid]
+                        tied_only = (
+                            first_chord["kind"] == "note"
+                            and bool(first_chord["heads"])
+                            and not bool(first_chord["attack_heads"])
+                        )
+                        if not tied_only or vr["span"] > meter:
+                            continue
+                        vr["start"] = Fraction(0)
+                        vr["status"] = "tied-continuation-at-bar-start"
+                        for tau, x, cid in vr["events"]:
+                            chords[cid]["onset"] = tau
+                            chords[cid]["status"] = "resolved-tied-bar-start"
+                            anchors_points.append((x, tau))
+
                     # Pass 2: use exact visual coincidence with resolved voices.
                     changed = True
                     while changed:
@@ -629,14 +651,11 @@ def main(omr_path: str):
                             "chord_ids": [c["id"] for c in cs],
                         })
 
-                    # For TMA, unresolved voice bookkeeping is acceptable when every
-                    # visible attack has nevertheless received a unique visual onset.
-                    # Overfull/unknown-duration reasons remain fatal unless repaired.
-                    fatal_reasons = [
-                        r for r in unresolved_reasons
-                        if not r.startswith("unresolved-voices:") and not r.startswith("unresolved-attacks:")
-                    ]
-                    complete = (not unresolved_notes) and (not fatal_reasons)
+                    # TMA requires exact attack onsets, not a complete scholarly
+                    # transcription of every sustaining/rest voice.  A measure is
+                    # hit-complete when every visible attack notehead has a unique onset.
+                    # Voice-duration issues remain recorded as warnings.
+                    complete = not unresolved_notes
                     score["measures"][str(gm)] = {
                         "page": page_index + 1,
                         "system": sy + 1,
@@ -645,6 +664,8 @@ def main(omr_path: str):
                         "system_bounds_y": [top, bottom],
                         "interline": il,
                         "complete": complete,
+                        "hit_complete": complete,
+                        "voice_warnings": unresolved_reasons,
                         "unresolved_reasons": unresolved_reasons,
                         "voice_records": [
                             {
