@@ -30,7 +30,11 @@ BANNED_SOURCE_TOKENS = [
 
 
 def test_clean_tree_has_no_previous_reader_files():
-    tops = {p.name for p in ROOT.iterdir() if p.name != ".git"}
+    tops = {
+        p.name
+        for p in ROOT.iterdir()
+        if p.name not in {".git", "__pycache__", ".pytest_cache"}
+    }
     assert tops <= ALLOWED_TOP, sorted(tops - ALLOWED_TOP)
 
 
@@ -62,4 +66,6 @@ def test_service_layer_is_clean():
     for token in BANNED_SOURCE_TOKENS:
         assert token.lower() not in src, token
     assert "/api/status" in src
-    assert "/api/optical/read" in src
+    assert "/api/analyze" in src
+    assert "/api/jobs/" in src
+    assert "/api/optical/read" not in src
