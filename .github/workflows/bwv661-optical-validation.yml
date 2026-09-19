@@ -1,0 +1,60 @@
+name: Clean optical reader BWV 661 regression
+
+on:
+  push:
+    branches:
+      - tma-optical-reader-clean-20260919
+
+permissions:
+  contents: read
+
+jobs:
+  bwv661:
+    if: "!contains(github.event.head_commit.message, '[skip bwv]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      - name: Install clean optical reader
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install --no-deps 'git+https://github.com/BreezeWhite/oemer@dbe2a933d630d0f74805d717960eb259473f5978'
+
+      - name: Download byte-identical BWV 661 regression score
+        run: |
+          curl -fL --retry 4 --retry-delay 2 -o bwv661.pdf 'https://www.mutopiaproject.org/ftp/BachJS/BWV661/bwv661/bwv661-a4.pdf'
+          test "$(stat -c%s bwv661.pdf)" = "101270"
+          echo 'd50205f28f876126a272ef854e17543d877020e3cd6a106678cdbf5e954502bc  bwv661.pdf' | sha256sum -c -
+
+      - name: Run independent image-to-notation graph on exact BWV 661
+        run: |
+          python optical_reader.py bwv661.pdf --out bwv661_optical --dpi 300 --cache-dir bwv661_cache
+          python - <<'PY'
+          import json
+          d=json.load(open('bwv661_optical/notation_graph.json'))
+          assert d['engine']=='tma-optical-reader-clean-v1'
+          assert d['semantic_timing_used'] is False
+          assert d['totals']['pages'] >= 1
+          assert d['totals']['noteheads'] > 100
+          assert d['totals']['measures'] > 10
+          print('BWV661_OPTICAL_GRAPH_OK')
+          print(json.dumps(d['totals'], indent=2))
+          PY
+
+      - name: Upload exact BWV 661 optical audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tma-optical-reader-bwv661-audit
+          path: |
+            bwv661_optical/notation_graph.json
+            bwv661_optical/page_*_optical_overlay.png
+          retention-days: 14
