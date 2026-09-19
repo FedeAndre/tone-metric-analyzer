@@ -57,4 +57,6 @@ jobs:
           path: |
             bwv661_optical/notation_graph.json
             bwv661_optical/page_*_optical_overlay.png
+            bwv661_cache/page_*.npz
+            bwv661.pdf
           retention-days: 14
