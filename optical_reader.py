@@ -2284,27 +2284,61 @@ def tie_confidence(
 
     return best
 
-def detect_tie_candidates(gray: np.ndarray, staff_mask: np.ndarray, noteheads: list[Notehead], staves: list[Staff]) -> list[TieCandidate]:
-    sp=global_spacing(staves)
-    by_staff={}
-    for n in noteheads:
-        by_staff.setdefault(n.staff_id,[]).append(n)
-    out=[]
-    for sid,heads in by_staff.items():
-        if sid is None: continue
-        heads=sorted(heads,key=lambda n:n.cx)
-        for i,a in enumerate(heads):
-            for b in heads[i+1:]:
-                if b.cx-a.cx>20.5*sp: break
-                if a.staff_pos_halfspaces != b.staff_pos_halfspaces:
-                    continue
-                side,conf=tie_confidence(gray,staff_mask,a,b,sp)
-                if conf>=0.56:
-                    out.append(TieCandidate(
-                        id=len(out),left_notehead_id=a.id,right_notehead_id=b.id,
-                        side=side,confidence=round(conf,4)
-                    ))
+def detect_tie_candidates(
+    gray: np.ndarray,
+    staff_mask: np.ndarray,
+    noteheads: list[Notehead],
+    staves: list[Staff],
+) -> list[TieCandidate]:
+    """Detect ties only between nearest subsequent same-pitch noteheads.
+
+    A tie cannot legitimately skip an intervening attack of the same written
+    pitch in the same staff voice.  Restricting the visual arc test to that
+    nearest target prevents a weak local miss from jumping across later
+    repeated notes and becoming a false long tie.
+    """
+    sp = global_spacing(staves)
+    by_staff: dict[int | None, list[Notehead]] = {}
+    for note in noteheads:
+        by_staff.setdefault(note.staff_id, []).append(note)
+
+    out: list[TieCandidate] = []
+    for sid, heads in by_staff.items():
+        if sid is None:
+            continue
+        heads = sorted(heads, key=lambda note: note.cx)
+        for i, left in enumerate(heads):
+            right = None
+            for candidate in heads[i + 1:]:
+                if candidate.cx - left.cx > 20.5 * sp:
                     break
+                if (
+                    left.staff_pos_halfspaces
+                    == candidate.staff_pos_halfspaces
+                ):
+                    right = candidate
+                    break
+            if right is None:
+                continue
+
+            side, confidence = tie_confidence(
+                gray,
+                staff_mask,
+                left,
+                right,
+                sp,
+            )
+            if confidence < 0.62:
+                continue
+            out.append(
+                TieCandidate(
+                    id=len(out),
+                    left_notehead_id=left.id,
+                    right_notehead_id=right.id,
+                    side=side,
+                    confidence=round(confidence, 4),
+                )
+            )
     return out
 
 
