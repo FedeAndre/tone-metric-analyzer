@@ -47,6 +47,7 @@ class Notehead:
     fill_ratio: float
     head_type: str
     stem_id: int | None = None
+    stem_source: str | None = None
     dot_id: int | None = None
 
 
@@ -356,63 +357,161 @@ def estimate_head_fill(gray: np.ndarray, box: tuple[int, int, int, int]) -> floa
     return float(np.mean(crop < 155))
 
 
-def detect_noteheads(gray: np.ndarray, note_mask: np.ndarray, staves: list[Staff]) -> list[Notehead]:
+def _adjust_notehead_bbox(
+    box: tuple[int, int, int, int],
+    note_mask: np.ndarray,
+) -> tuple[int, int, int, int] | None:
+    x1, y1, x2, y2 = [int(v) for v in box]
+    x1 = max(0, x1)
+    y1 = max(0, y1)
+    x2 = min(note_mask.shape[1], x2)
+    y2 = min(note_mask.shape[0], y2)
+    if x2 <= x1 or y2 <= y1:
+        return None
+    region = note_mask[y1:y2, x1:x2]
+    ys, xs = np.where(region > 0)
+    if len(xs) == 0:
+        return None
+    return (
+        max(0, x1 + int(xs.min()) - 1),
+        max(0, y1 + int(ys.min()) - 1),
+        min(note_mask.shape[1], x1 + int(xs.max()) + 2),
+        min(note_mask.shape[0], y1 + int(ys.max()) + 2),
+    )
+
+
+def _split_notehead_bbox(
+    box: tuple[int, int, int, int],
+    note_mask: np.ndarray,
+    spacing: float,
+    depth: int = 0,
+) -> list[tuple[int, int, int, int]]:
+    x1, y1, x2, y2 = [int(v) for v in box]
+    w = x2 - x1
+    h = y2 - y1
+    expected_w = 1.285714 * spacing
+    expected_h = spacing
+
+    # Adjacent chord heads can merge in the segmentation mask. Split only when
+    # the component is substantially larger than a single engraved notehead.
+    if depth < 4 and w > 1.65 * expected_w:
+        n = max(2, int(round(w / expected_w)))
+        pieces: list[tuple[int, int, int, int]] = []
+        for i in range(n):
+            a = round(x1 + i * w / n)
+            b = round(x1 + (i + 1) * w / n)
+            adjusted = _adjust_notehead_bbox((a, y1, b, y2), note_mask)
+            if adjusted is not None:
+                pieces.extend(
+                    _split_notehead_bbox(adjusted, note_mask, spacing, depth + 1)
+                )
+        if pieces:
+            return pieces
+
+    if depth < 4 and h > 1.55 * expected_h:
+        n = max(2, int(round(h / expected_h)))
+        pieces = []
+        for i in range(n):
+            a = round(y1 + i * h / n)
+            b = round(y1 + (i + 1) * h / n)
+            adjusted = _adjust_notehead_bbox((x1, a, x2, b), note_mask)
+            if adjusted is not None:
+                pieces.append(adjusted)
+        if pieces:
+            return pieces
+
+    return [(x1, y1, x2, y2)]
+
+
+def detect_noteheads(
+    gray: np.ndarray,
+    note_mask: np.ndarray,
+    staves: list[Staff],
+) -> list[Notehead]:
+    """
+    Extract visual noteheads from the low-level notehead mask.
+
+    This deliberately does not use pitch, voice, duration, MusicXML, OMR slots,
+    or semantic timing. The morphology is based only on expected notehead
+    geometry relative to locally observed staff spacing.
+    """
     sp = global_spacing(staves)
-    k = max(1, int(round(sp * 0.10)))
-    mask = cv2.morphologyEx(note_mask, cv2.MORPH_OPEN, np.ones((k, k), np.uint8))
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((max(1,k), max(1,k)), np.uint8))
+
+    # Preserve oval noteheads while removing thin staff/stem/beam fragments that
+    # leak into the neural mask.
+    small = max(2, int(round(sp / 3.0)))
+    small_kernel = cv2.getStructuringElement(
+        cv2.MORPH_ELLIPSE, (small, small)
+    )
+    cleaned = cv2.erode(
+        cv2.dilate(note_mask.astype(np.uint8), small_kernel),
+        small_kernel,
+    )
+
+    morph_size = (
+        max(2, int(round(sp * 0.50))),
+        max(2, int(round(sp * 0.40))),
+    )
+    head_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, morph_size)
+    head_core = cv2.erode(cleaned, head_kernel)
+    restore_kernel = cv2.getStructuringElement(
+        cv2.MORPH_ELLIPSE,
+        (morph_size[0] + 1, morph_size[1] + 1),
+    )
+    head_regions = cv2.dilate(head_core, restore_kernel)
+
+    boxes: list[tuple[int, int, int, int]] = []
+    for x, y, w, h, _area in comp_stats(head_regions):
+        boxes.extend(
+            _split_notehead_bbox(
+                (x, y, x + w, y + h),
+                note_mask,
+                sp,
+            )
+        )
 
     out: list[Notehead] = []
-    for x, y, w, h, area in comp_stats(mask):
-        if area < 0.10 * sp * sp:
+    for x1, y1, x2, y2 in boxes:
+        w = x2 - x1
+        h = y2 - y1
+        if not (0.45 * sp <= w <= 2.20 * sp):
             continue
-        if not (0.35 * sp <= w <= 2.35 * sp):
-            continue
-        if not (0.30 * sp <= h <= 1.80 * sp):
+        if not (0.45 * sp <= h <= 1.65 * sp):
             continue
 
-        # Very tall components can contain two vertically touching heads.
-        pieces = [(x, y, w, h)]
-        if h > 1.20 * sp:
-            reg = mask[y:y+h, x:x+w]
-            prof = reg.sum(axis=1).astype(float)
-            sm = np.convolve(prof, np.ones(3)/3.0, mode="same")
-            peaks = []
-            min_sep = max(2, int(round(0.42 * sp)))
-            order = np.argsort(sm)[::-1]
-            for p in order:
-                if sm[p] < 0.30 * np.max(sm):
-                    break
-                if all(abs(int(p)-q) >= min_sep for q in peaks):
-                    peaks.append(int(p))
-                if len(peaks) >= 3:
-                    break
-            peaks.sort()
-            if len(peaks) >= 2:
-                cuts = [0] + [int(round((a+b)/2)) for a,b in zip(peaks,peaks[1:])] + [h]
-                pieces = []
-                for a,b in zip(cuts,cuts[1:]):
-                    if b-a >= 0.28*sp:
-                        pieces.append((x, y+a, w, b-a))
+        cx = (x1 + x2) / 2.0
+        cy = (y1 + y2) / 2.0
+        staff = nearest_staff(cy, staves)
+        if staff is None:
+            continue
 
-        for bx, by, bw, bh in pieces:
-            cx, cy = bx + bw/2.0, by + bh/2.0
-            staff = nearest_staff(cy, staves)
-            fill = estimate_head_fill(gray, (bx,by,bw,bh))
-            head_type = "filled" if fill >= 0.62 else "hollow"
-            pos = None
-            sid = None
-            if staff is not None:
-                sid = staff.id
-                bottom = staff.lines_y[-1]
-                pos = int(round((bottom - cy) / (staff.spacing / 2.0)))
-            out.append(Notehead(
-                id=len(out), x1=bx, y1=by, x2=bx+bw, y2=by+bh,
-                cx=cx, cy=cy, staff_id=sid, staff_pos_halfspaces=pos,
-                fill_ratio=round(fill,4), head_type=head_type
-            ))
+        # The morphology already supplies the strong shape test. Retain only
+        # boxes with direct support in the model's low-level notehead pixels.
+        region = note_mask[y1:y2, x1:x2]
+        if region.size == 0 or float(np.mean(region > 0)) < 0.10:
+            continue
+
+        fill = estimate_head_fill(gray, (x1, y1, w, h))
+        head_type = "filled" if fill >= 0.62 else "hollow"
+        bottom = staff.lines_y[-1]
+        pos = int(round((bottom - cy) / (staff.spacing / 2.0)))
+
+        out.append(
+            Notehead(
+                id=len(out),
+                x1=x1,
+                y1=y1,
+                x2=x2,
+                y2=y2,
+                cx=cx,
+                cy=cy,
+                staff_id=staff.id,
+                staff_pos_halfspaces=pos,
+                fill_ratio=round(fill, 4),
+                head_type=head_type,
+            )
+        )
     return out
-
 
 def vertical_components(stems_rests: np.ndarray, staves: list[Staff]) -> list[Stem]:
     sp = global_spacing(staves)
@@ -433,25 +532,184 @@ def vertical_components(stems_rests: np.ndarray, staves: list[Staff]) -> list[St
     return out
 
 
-def link_noteheads_stems(noteheads: list[Notehead], stems: list[Stem], staves: list[Staff]) -> None:
+def _longest_vertical_run(column: np.ndarray) -> tuple[int, int | None, int | None]:
+    if column.size == 0:
+        return 0, None, None
+    data = cv2.morphologyEx(
+        column.astype(np.uint8).reshape(-1, 1),
+        cv2.MORPH_CLOSE,
+        np.ones((3, 1), np.uint8),
+    ).ravel()
+    best_len = 0
+    best_a = None
+    best_b = None
+    start = None
+    for i, value in enumerate(np.r_[data, 0]):
+        if value and start is None:
+            start = i
+        elif not value and start is not None:
+            if i - start > best_len:
+                best_len = i - start
+                best_a = start
+                best_b = i - 1
+            start = None
+    return best_len, best_a, best_b
+
+
+def _recover_pixel_stem(
+    nh: Notehead,
+    vertical_ink: np.ndarray,
+    spacing: float,
+) -> tuple[str, int, int, int] | None:
+    """
+    Recover a stem directly from raster ink adjoining a notehead.
+
+    The search is local to the two notehead edges and therefore cannot use
+    inferred voice/timing information. A candidate must overlap the notehead
+    vertically and extend by more than one staff spacing in a valid stem
+    direction.
+    """
+    h, w = vertical_ink.shape
+    best: tuple[float, str, int, int, int] | None = None
+
+    for edge_x in (nh.x1, nh.x2):
+        xa = max(0, int(round(edge_x - 0.50 * spacing)))
+        xb = min(w, int(round(edge_x + 0.50 * spacing)) + 1)
+
+        for direction in ("up", "down"):
+            if direction == "up":
+                ya = max(0, int(round(nh.cy - 4.7 * spacing)))
+                yb = min(h, int(round(nh.cy + 0.45 * spacing)) + 1)
+            else:
+                ya = max(0, int(round(nh.cy - 0.45 * spacing)))
+                yb = min(h, int(round(nh.cy + 4.7 * spacing)) + 1)
+
+            region = vertical_ink[ya:yb, xa:xb]
+            for j in range(region.shape[1]):
+                run, a, b = _longest_vertical_run(region[:, j])
+                if a is None or b is None:
+                    continue
+                if run < 1.15 * spacing or run > 5.15 * spacing:
+                    continue
+
+                gy1 = ya + a
+                gy2 = ya + b
+                if not (
+                    gy1 <= nh.cy + 0.60 * spacing
+                    and gy2 >= nh.cy - 0.60 * spacing
+                ):
+                    continue
+                if direction == "up" and gy1 >= nh.cy - 0.75 * spacing:
+                    continue
+                if direction == "down" and gy2 <= nh.cy + 0.75 * spacing:
+                    continue
+
+                x = xa + j
+                edge_distance = min(abs(x - nh.x1), abs(x - nh.x2))
+                score = float(run) - 1.5 * float(edge_distance)
+                candidate = (score, direction, x, gy1, gy2)
+                if best is None or candidate[0] > best[0]:
+                    best = candidate
+
+    if best is None:
+        return None
+    _score, direction, x, y1, y2 = best
+    return direction, x, y1, y2
+
+
+def link_noteheads_stems(
+    noteheads: list[Notehead],
+    stems: list[Stem],
+    staves: list[Staff],
+    gray: np.ndarray,
+) -> tuple[int, int]:
+    """
+    Link noteheads to stems using two independent visual paths.
+
+    First use globally detected vertical stem components. Only heads still
+    unlinked are tested against vertical ink in the original raster. Recovered
+    stems are materialized as normal Stem objects; there is no fallback timing
+    or semantic OMR path.
+    """
     sp = global_spacing(staves)
+    component_links = 0
+
     for nh in noteheads:
         candidates = []
         for st in stems:
-            if nh.staff_id is not None and st.staff_id is not None and nh.staff_id != st.staff_id:
+            if (
+                nh.staff_id is not None
+                and st.staff_id is not None
+                and nh.staff_id != st.staff_id
+            ):
                 continue
-            dx = min(abs(st.cx - nh.x1), abs(st.cx - nh.x2), abs(st.cx - nh.cx))
-            y_ok = st.y1 <= nh.cy + 0.55*sp and st.y2 >= nh.cy - 0.55*sp
-            if y_ok and dx <= 0.58*sp:
-                candidates.append((dx, abs(st.cy-nh.cy), st))
+            dx = min(
+                abs(st.cx - nh.x1),
+                abs(st.cx - nh.x2),
+                abs(st.cx - nh.cx),
+            )
+            y_ok = (
+                st.y1 <= nh.cy + 0.55 * sp
+                and st.y2 >= nh.cy - 0.55 * sp
+            )
+            if y_ok and dx <= 0.58 * sp:
+                candidates.append((dx, abs(st.cy - nh.cy), st))
+
         if candidates:
-            _, _, st = min(candidates, key=lambda z:(z[0],z[1],z[2].id))
+            _, _, st = min(
+                candidates,
+                key=lambda z: (z[0], z[1], z[2].id),
+            )
             nh.stem_id = st.id
+            nh.stem_source = "component"
+            component_links += 1
             if st.cy < nh.cy:
                 st.direction = "up"
             elif st.cy > nh.cy:
                 st.direction = "down"
 
+    # Independent raster evidence for noteheads whose stem was fragmented or
+    # omitted by the low-level stem segmentation.
+    ink = (gray < 175).astype(np.uint8)
+    vertical_ink = cv2.morphologyEx(
+        ink,
+        cv2.MORPH_OPEN,
+        np.ones((max(3, int(round(1.05 * sp))), 1), np.uint8),
+    )
+    vertical_ink = cv2.dilate(
+        vertical_ink,
+        np.ones((1, 2), np.uint8),
+    )
+
+    pixel_links = 0
+    for nh in noteheads:
+        if nh.stem_id is not None:
+            continue
+        recovered = _recover_pixel_stem(nh, vertical_ink, sp)
+        if recovered is None:
+            continue
+
+        direction, x, y1, y2 = recovered
+        staff = nearest_staff((y1 + y2) / 2.0, staves)
+        st = Stem(
+            id=len(stems),
+            x1=x,
+            y1=y1,
+            x2=x + 1,
+            y2=y2 + 1,
+            cx=x + 0.5,
+            cy=(y1 + y2 + 1) / 2.0,
+            height=float(y2 - y1 + 1),
+            width=1.0,
+            staff_id=None if staff is None else staff.id,
+            direction=direction,
+        )
+        stems.append(st)
+        nh.stem_id = st.id
+        nh.stem_source = "pixel"
+        pixel_links += 1
+
+    return component_links, pixel_links
 
 def detect_beams(symbols: np.ndarray, staff: np.ndarray, note: np.ndarray, stems_rests: np.ndarray,
                  stems: list[Stem], staves: list[Staff]) -> list[Beam]:
@@ -633,7 +891,9 @@ def process_page(
     staves=detect_staves(gray,staff_mask)
     noteheads=detect_noteheads(gray,note_mask,staves)
     stems=vertical_components(stems_rests,staves)
-    link_noteheads_stems(noteheads,stems,staves)
+    component_stem_links, pixel_stem_links = link_noteheads_stems(
+        noteheads, stems, staves, gray
+    )
     beams=detect_beams(symbols,staff_mask,note_mask,stems_rests,stems,staves)
     dots=detect_dots(gray,staff_mask,noteheads,stems,beams,staves)
     ties=detect_tie_candidates(gray,staff_mask,noteheads,staves)
@@ -651,6 +911,8 @@ def process_page(
         "beams": len(beams),
         "dots": len(dots),
         "ties": len(ties),
+        "component_stem_links": component_stem_links,
+        "pixel_stem_links": pixel_stem_links,
         "unlinked_filled": unlinked_filled,
     }, separators=(",", ":")))
 
@@ -668,6 +930,8 @@ def process_page(
         "beam_count":len(beams),
         "dot_count":len(dots),
         "tie_candidate_count":len(ties),
+        "component_stem_links":component_stem_links,
+        "pixel_stem_links":pixel_stem_links,
         "noteheads":[asdict(x) for x in noteheads],
         "stems":[asdict(x) for x in stems],
         "beams":[asdict(x) for x in beams],
@@ -714,6 +978,8 @@ def main() -> None:
         "beams":sum(x["beam_count"] for x in result["pages"]),
         "dots":sum(x["dot_count"] for x in result["pages"]),
         "tie_candidates":sum(x["tie_candidate_count"] for x in result["pages"]),
+        "component_stem_links":sum(x["component_stem_links"] for x in result["pages"]),
+        "pixel_stem_links":sum(x["pixel_stem_links"] for x in result["pages"]),
     }
     (args.out/"notation_graph.json").write_text(json.dumps(result,indent=2))
     print("OPTICAL_SUMMARY="+json.dumps(result["totals"],separators=(",",":")))
