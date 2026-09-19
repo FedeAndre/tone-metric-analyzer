@@ -1715,6 +1715,122 @@ def complete_beam_levels_from_pixels(
     return supported_edges, len(upgraded_stems)
 
 
+def complete_isolated_flag_levels(
+    symbols: np.ndarray,
+    staff_mask: np.ndarray,
+    note_mask: np.ndarray,
+    stems_rests: np.ndarray,
+    noteheads: list[Notehead],
+    stems: list[Stem],
+    staves: list[Staff],
+) -> int:
+    """Recover standalone flag counts from symbol pixels at free stem tips.
+
+    Beams are handled separately.  This routine only considers filled-note
+    stems whose beam level is still zero, and therefore cannot override a
+    detected beam.  The low-level symbol raster supplies the flag shape; no
+    spacing-to-time inference is involved.
+    """
+    residual = (
+        symbols.astype(np.int16)
+        - staff_mask.astype(np.int16)
+        - note_mask.astype(np.int16)
+        - stems_rests.astype(np.int16)
+    )
+    residual = (residual > 0).astype(np.uint8)
+    residual = cv2.morphologyEx(
+        residual,
+        cv2.MORPH_OPEN,
+        np.ones((2, 2), np.uint8),
+    )
+
+    staff_by_id = {staff.id: staff for staff in staves}
+    heads_by_stem: dict[int, list[Notehead]] = {}
+    for head in noteheads:
+        if head.stem_id is not None:
+            heads_by_stem.setdefault(head.stem_id, []).append(head)
+    stem_by_id = {stem.id: stem for stem in stems}
+
+    upgraded = 0
+    for stem_id, heads in heads_by_stem.items():
+        stem = stem_by_id.get(stem_id)
+        if (
+            stem is None
+            or stem.beam_level != 0
+            or stem.direction not in {"up", "down"}
+            or stem.staff_id is None
+            or not any(head.head_type == "filled" for head in heads)
+        ):
+            continue
+        staff = staff_by_id.get(stem.staff_id)
+        if staff is None:
+            continue
+        sp = float(staff.spacing)
+        tip_y = float(stem.y1 if stem.direction == "up" else stem.y2)
+        tip_x = float(stem.cx)
+        sign = 1.0 if stem.direction == "up" else -1.0
+
+        # A genuine flag begins next to the free tip and extends to the right.
+        levels: list[int] = []
+        for xoff in (0.18, 0.30, 0.42, 0.55, 0.70, 0.85):
+            x = int(round(tip_x + xoff * sp))
+            if not (0 <= x < residual.shape[1]):
+                continue
+            samples: list[int] = []
+            for step in range(
+                int(round(0.02 * sp)),
+                int(round(1.55 * sp)) + 1,
+            ):
+                y = int(round(tip_y + sign * step))
+                if 0 <= y < residual.shape[0]:
+                    xa = max(0, x - 1)
+                    xb = min(residual.shape[1], x + 2)
+                    samples.append(
+                        1 if residual[y, xa:xb].mean() >= 0.34 else 0
+                    )
+                else:
+                    samples.append(0)
+
+            segments = 0
+            run = 0
+            minimum = max(2, int(round(0.07 * sp)))
+            for active in samples + [0]:
+                if active:
+                    run += 1
+                else:
+                    if run >= minimum:
+                        segments += 1
+                    run = 0
+            if segments:
+                levels.append(min(4, segments))
+
+        if len(levels) < 3:
+            continue
+        level = int(round(float(np.median(levels))))
+        if level <= 0:
+            continue
+
+        # Require residual flag ink immediately beside the tip as an attachment
+        # check; detached articulations/text must not set rhythmic value.
+        xa = max(0, int(round(tip_x - 0.05 * sp)))
+        xb = min(residual.shape[1], int(round(tip_x + 0.40 * sp)) + 1)
+        if stem.direction == "up":
+            ya = max(0, int(round(tip_y)))
+            yb = min(residual.shape[0], int(round(tip_y + 0.75 * sp)) + 1)
+        else:
+            ya = max(0, int(round(tip_y - 0.75 * sp)))
+            yb = min(residual.shape[0], int(round(tip_y)) + 1)
+        attach = residual[ya:yb, xa:xb]
+        if attach.size == 0 or int(attach.sum()) < max(3, int(0.05 * sp * sp)):
+            continue
+
+        stem.beam_level = level
+        stem.beam_source = "isolated_flag"
+        upgraded += 1
+
+    return upgraded
+
+
 _SKLEARN_SYMBOL_MODELS: dict[str, dict] = {}
 
 
@@ -2400,6 +2516,15 @@ def process_page(
     pixel_beam_edges, pixel_beam_stem_upgrades = complete_beam_levels_from_pixels(
         gray, noteheads, stems, beams, staves
     )
+    isolated_flag_stem_upgrades = complete_isolated_flag_levels(
+        symbols,
+        staff_mask,
+        note_mask,
+        stems_rests,
+        noteheads,
+        stems,
+        staves,
+    )
     rests=detect_rests(
         stems_rests,
         noteheads,
@@ -2433,6 +2558,7 @@ def process_page(
         "ties": len(ties),
         "component_stem_links": component_stem_links,
         "pixel_stem_links": pixel_stem_links,
+        "isolated_flag_stem_upgrades": isolated_flag_stem_upgrades,
         "unlinked_filled": unlinked_filled,
     }, separators=(",", ":")))
 
@@ -2461,6 +2587,7 @@ def process_page(
         "beam_count":len(beams),
         "pixel_beam_edges":pixel_beam_edges,
         "pixel_beam_stem_upgrades":pixel_beam_stem_upgrades,
+        "isolated_flag_stem_upgrades":isolated_flag_stem_upgrades,
         "stem_beam_levels":{
             "level_0":sum(1 for stem in stems if stem.beam_level == 0),
             "level_1":sum(1 for stem in stems if stem.beam_level == 1),
