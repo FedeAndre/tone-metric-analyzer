@@ -75,10 +75,10 @@ class Notehead:
     cy: float
     staff_id: int | None
     staff_pos_halfspaces: int | None
-    system_id: int | None = None
-    measure_local: int | None = None
     fill_ratio: float
     head_type: str
+    system_id: int | None = None
+    measure_local: int | None = None
     stem_id: int | None = None
     stem_source: str | None = None
     dot_id: int | None = None
