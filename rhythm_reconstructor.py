@@ -12,7 +12,7 @@ capacity.
 from dataclasses import dataclass, field
 from fractions import Fraction
 from itertools import combinations
-from math import ceil
+from math import ceil, gcd
 from statistics import median
 from typing import Iterable
 
@@ -252,6 +252,93 @@ def _propagate_edges(
                         f"!= duration {frac_text(duration)}"
                     )
 
+
+
+def _fraction_gcd(values: Iterable[Fraction]) -> Fraction:
+    """Greatest common rational subdivision represented by *values*."""
+    vals = [abs(Fraction(value)) for value in values if value]
+    if not vals:
+        return Fraction(1)
+    den = 1
+    for value in vals:
+        den = den * value.denominator // gcd(den, value.denominator)
+    nums = [value.numerator * (den // value.denominator) for value in vals]
+    num = nums[0]
+    for value in nums[1:]:
+        num = gcd(num, value)
+    return Fraction(num, den)
+
+
+def _fill_uniquely_forced_grid_columns(
+    times: dict[int, Fraction],
+    columns: list[list[VisualEvent]],
+    events: list[VisualEvent],
+    capacity: Fraction,
+) -> int:
+    """Fill unresolved columns only when the notated rational grid forces them.
+
+    Horizontal coordinates establish order only.  The quantum is the rational
+    GCD of notated event durations.  Between two established time anchors (or
+    the measure end), if the number of unresolved notation columns equals the
+    number of available grid positions exactly, the assignment is unique and
+    therefore safe.
+    """
+    if not columns:
+        return 0
+    quantum = _fraction_gcd(
+        [capacity] + [
+            event.duration
+            for event in events
+            if event.kind != "measure_rest" and event.duration > 0
+        ]
+    )
+    if quantum <= 0:
+        return 0
+
+    added = 0
+    changed = True
+    while changed:
+        changed = False
+        known = sorted(times)
+        # Virtual measure-end anchor lets the tail be solved exactly.
+        anchors = [(column, times[column]) for column in known]
+        anchors.append((len(columns), capacity))
+
+        # A measure-start virtual anchor is useful only when column 0 is not
+        # already known.  This does not assert that column 0 is an attack;
+        # it merely bounds later notation columns from the barline.
+        if 0 not in times:
+            anchors.insert(0, (-1, Fraction(0)))
+
+        for (left_col, left_time), (right_col, right_time) in zip(
+            anchors,
+            anchors[1:],
+        ):
+            if right_time <= left_time:
+                continue
+            unresolved = [
+                column
+                for column in range(left_col + 1, right_col)
+                if column not in times
+            ]
+            if not unresolved:
+                continue
+
+            slots: list[Fraction] = []
+            value = left_time + quantum
+            while value < right_time:
+                slots.append(value)
+                value += quantum
+
+            if len(slots) != len(unresolved):
+                continue
+            for column, value in zip(unresolved, slots):
+                times[column] = value
+                added += 1
+                changed = True
+            if changed:
+                break
+    return added
 
 def _build_measure_events(
     page: dict,
@@ -690,6 +777,16 @@ def reconstruct_attacks(
             # notational boundary for ordinary (non-opening) measures.
             if columns and global_measure_index != 0 and 0 not in times:
                 times[0] = Fraction(0)
+
+            # Resolve any remaining binary-grid columns only where the
+            # rational subdivision and notation order leave exactly one
+            # possible assignment.
+            _fill_uniquely_forced_grid_columns(
+                times,
+                columns,
+                temporal_events,
+                capacity,
+            )
 
             # Opening incomplete measure: if no complete voice exists and the
             # longest explicitly notated voice has a unique shared duration,
