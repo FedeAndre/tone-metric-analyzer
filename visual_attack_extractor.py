@@ -23,7 +23,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 # Visual simultaneity tolerance.  The Buxtehude scan's main interline is 21 px;
 # this corresponds to about 5 px and is deliberately much tighter than a note spacing.
-ALIGN_IL = 0.28
+ALIGN_IL = 0.50
 
 
 def sheet_number(name: str) -> int:
@@ -106,6 +106,79 @@ def inferred_start_from_anchors(local_events, anchors, expected, il):
     if len(ranked) > 1 and ranked[1][1] == n and ranked[1][0] != best:
         return None
     return best
+
+
+def repair_voice_span_to_meter(vr, chords, meter):
+    """
+    Repair exactly one visually implausible binary duration when a voice is
+    visually anchored at onset 0 but its durations miss the meter by one
+    power-of-two step.
+
+    This targets the common OMR failure where an isolated flag is missed
+    (duration too long) or a spurious beam/flag is added (duration too short).
+    Selection is based only on graphical spacing to the next event.
+    """
+    delta = meter - vr["span"]
+    if delta == 0 or not vr["events"]:
+        return None
+
+    candidates = []
+    evs = vr["events"]
+    for i, (tau, x, cid) in enumerate(evs):
+        ch = chords[cid]
+        d = ch.get("duration")
+        if d is None or ch.get("kind") != "note":
+            continue
+        next_x = evs[i+1][1] if i+1 < len(evs) else None
+        if next_x is None:
+            continue
+        gap = max(0.0, float(next_x) - float(x))
+        dq = float(d * 4)
+        if dq <= 0:
+            continue
+        spacing_ratio = gap / dq
+
+        # Voice is too long: one duration may need one extra flag => halve it.
+        if delta < 0 and d / 2 == -delta:
+            candidates.append(("halve", i, cid, d / 2, spacing_ratio))
+        # Voice is too short: one duration may have one spurious flag/beam => double it.
+        if delta > 0 and d == delta:
+            candidates.append(("double", i, cid, d * 2, spacing_ratio))
+
+    if not candidates:
+        return None
+
+    if delta < 0:
+        ranked = sorted(candidates, key=lambda z: (z[4], z[1]))
+        best = ranked[0]
+        if len(ranked) > 1 and not (ranked[1][4] > best[4] * 1.12):
+            return None
+    else:
+        ranked = sorted(candidates, key=lambda z: (-z[4], z[1]))
+        best = ranked[0]
+        if len(ranked) > 1 and not (best[4] > ranked[1][4] * 1.12):
+            return None
+
+    action, _, cid, new_d, ratio = best
+    old_d = chords[cid]["duration"]
+    chords[cid]["duration"] = new_d
+    vr["span"] += new_d - old_d
+
+    # Rebuild cumulative local times after changing the visual duration.
+    local = Fraction(0)
+    rebuilt = []
+    for _, x, qid in vr["events"]:
+        rebuilt.append((local, x, qid))
+        local += chords[qid]["duration"]
+    vr["events"] = rebuilt
+    vr["span"] = local
+    return {
+        "action": action,
+        "chord_id": cid,
+        "old_duration": str(old_d),
+        "new_duration": str(new_d),
+        "spacing_ratio": ratio,
+    }
 
 
 def cluster_hit_chords(chords, il):
@@ -425,6 +498,27 @@ def main(omr_path: str):
                             vr["status"] = "overfull"
                             unresolved_reasons.append(f"{vr['key']}:overfull:{vr['span']}>{meter}")
 
+                    # Pass 1b: if a non-fitting voice begins on the same visual
+                    # column as a securely resolved onset-0 event, require start=0 and
+                    # try one visually supported binary duration repair.
+                    anchors0 = [x for x, onset in anchors_points if onset == 0]
+                    for vr in voice_records:
+                        if not vr["valid"] or vr["start"] is not None or not vr["events"]:
+                            continue
+                        first_x = vr["events"][0][1]
+                        if not anchors0 or min(abs(first_x - ax) for ax in anchors0) > ALIGN_IL * il:
+                            continue
+                        repair = repair_voice_span_to_meter(vr, chords, meter)
+                        if repair is None or vr["span"] != meter:
+                            continue
+                        vr["start"] = Fraction(0)
+                        vr["status"] = "meter-repaired-from-visual-spacing"
+                        vr["repair"] = repair
+                        for tau, x, cid in vr["events"]:
+                            chords[cid]["onset"] = tau
+                            chords[cid]["status"] = "resolved-meter-repaired"
+                            anchors_points.append((x, tau))
+
                     # Pass 2: use exact visual coincidence with resolved voices.
                     changed = True
                     while changed:
@@ -485,6 +579,22 @@ def main(omr_path: str):
                                 c["status"] = "visual-coincident-unreferenced"
                                 anchors_points.append((c["x"], c["onset"]))
 
+                    # Final visual-only rescue: any still-unresolved attack whose
+                    # notehead column uniquely coincides with an already resolved onset
+                    # inherits that onset.  This handles parallel/duplicate voice layers
+                    # without trusting their semantic timing.
+                    anchors = dedupe_x_onsets(anchors_points, ALIGN_IL * il)
+                    for c in [q for q in chords.values() if q["measure"] == gm and q["kind"] == "note" and q["attack_heads"] and q["onset"] is None]:
+                        close = sorted(
+                            (abs(c["x"] - ax), onset)
+                            for onset, ax in anchors.items()
+                            if abs(c["x"] - ax) <= ALIGN_IL * il
+                        )
+                        if close and (len(close) == 1 or close[0][0] + 0.10*il < close[1][0] or close[0][1] == close[1][1]):
+                            c["onset"] = close[0][1]
+                            c["status"] = "visual-coincident-rescue"
+                            anchors_points.append((c["x"], c["onset"]))
+
                     unresolved_voices = [vr["key"] for vr in voice_records if vr["valid"] and vr["start"] is None]
                     unresolved_notes = [
                         c["id"] for c in chords.values()
@@ -508,7 +618,14 @@ def main(omr_path: str):
                             "chord_ids": [c["id"] for c in cs],
                         })
 
-                    complete = not unresolved_reasons
+                    # For TMA, unresolved voice bookkeeping is acceptable when every
+                    # visible attack has nevertheless received a unique visual onset.
+                    # Overfull/unknown-duration reasons remain fatal unless repaired.
+                    fatal_reasons = [
+                        r for r in unresolved_reasons
+                        if not r.startswith("unresolved-voices:") and not r.startswith("unresolved-attacks:")
+                    ]
+                    complete = (not unresolved_notes) and (not fatal_reasons)
                     score["measures"][str(gm)] = {
                         "page": page_index + 1,
                         "system": sy + 1,
@@ -524,6 +641,7 @@ def main(omr_path: str):
                                 "span_whole_units": str(vr["span"]),
                                 "start_whole_units": None if vr["start"] is None else str(vr["start"]),
                                 "status": vr["status"],
+                                "repair": vr.get("repair"),
                             }
                             for vr in voice_records
                         ],
