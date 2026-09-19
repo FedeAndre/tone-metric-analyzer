@@ -1482,18 +1482,34 @@ def detect_rests(
         if staff is None:
             continue
 
-        # lines_y is top -> bottom. Whole rest hangs below line 2; half rest
-        # sits above the middle line.
-        whole_target = staff.lines_y[1] + 0.28 * staff.spacing
-        half_target = staff.lines_y[2] - 0.28 * staff.spacing
+        # lines_y is top -> bottom.  A semibreve (whole) rest hangs below
+        # the second staff line from the top; a minim (half) rest sits on the
+        # middle line.  The glyph centre is displaced by roughly half its own
+        # height from the supporting line.  Use the observed glyph height,
+        # rather than a fixed fraction of staff spacing, so the rule scales
+        # correctly across engraving sizes.
+        glyph_half_height = 0.5 * h
+        whole_target = staff.lines_y[1] + glyph_half_height
+        half_target = staff.lines_y[2] - glyph_half_height
         whole_dist = abs(cy - whole_target)
         half_dist = abs(cy - half_target)
-        if min(whole_dist, half_dist) > 0.55 * staff.spacing:
+        if min(whole_dist, half_dist) > 0.42 * staff.spacing:
             continue
 
+        # A strongly rectangular staff-aligned block is already the defining
+        # visual evidence for whole/half rests.  The generic rest classifier
+        # was trained to collapse both shapes to rest_whole and was rejecting
+        # many clean blocks in this engraving, so it is retained only as
+        # diagnostic evidence instead of as an acceptance gate.
         region = block_mask[y:y + h, x:x + w]
         label, margin = _classify_symbol(region, "rests")
-        if label != "rest_whole":
+        strong_block = (
+            area >= 0.25 * staff.spacing * staff.spacing
+            and w >= 0.80 * staff.spacing
+            and h >= 0.35 * staff.spacing
+            and w / max(h, 1) >= 1.50
+        )
+        if label != "rest_whole" and not strong_block:
             continue
 
         rest_type = "rest_whole" if whole_dist < half_dist else "rest_half"
