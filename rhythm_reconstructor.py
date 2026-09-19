@@ -827,11 +827,35 @@ def reconstruct_attacks(
                     } for rest in rests)
 
             solutions: list[VoiceSolution] = []
+            # Before any soft voice hypothesis is allowed to anchor time, test
+            # whether the measure's rational notation itself proves a complete
+            # subdivision grid.  If N ordered temporal columns exactly fill
+            # the N = capacity/quantum possible positions, order alone fixes
+            # every onset.  Horizontal distance is never used as time.
+            times: dict[int, Fraction] = {}
+            grid_quantum = _fraction_gcd(
+                [capacity] + [
+                    event.duration
+                    for event in temporal_events
+                    if event.duration > 0
+                ]
+            )
+            if grid_quantum > 0:
+                slot_count = capacity / grid_quantum
+                if (
+                    slot_count.denominator == 1
+                    and int(slot_count) == len(columns)
+                    and len(columns) > 0
+                ):
+                    for column_index in range(len(columns)):
+                        times[column_index] = (
+                            grid_quantum * column_index
+                        )
+
             # Voice identity is visually inferred and therefore soft evidence.
             # Only a self-consistent complete voice may anchor exact score time.
             # Other inferred voice chains contribute duration edges only when
             # they agree with already established exact anchors.
-            times: dict[int, Fraction] = {}
             conflicts: list[str] = []
             soft_edges: list[tuple[int, int, Fraction, str]] = []
 
