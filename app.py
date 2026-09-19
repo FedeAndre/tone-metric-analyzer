@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import shutil
+import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -12,7 +14,6 @@ from pathlib import Path
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from optical_reader import analyze_input
 
 APP_VERSION = "tma-optical-reader-clean-v1"
 JOB_ROOT = Path(tempfile.gettempdir()) / "tma-optical-jobs"
@@ -39,16 +40,61 @@ def _set_job(job_id: str, **changes) -> None:
 
 
 def _run_job(job_id: str, src: Path, out_dir: Path) -> None:
+    """Run each score analysis in a disposable child process.
+
+    The API process deliberately does not import ONNX Runtime or the optical
+    model stack.  This keeps the web server's resident set small and lets the
+    OS reclaim every native allocator page when a score finishes, instead of
+    accumulating model/session memory inside a long-lived worker thread.
+    """
     _set_job(job_id, status="running", started_at=time.time())
     try:
-        result = analyze_input(src, out_dir, 300, None)
+        app_root = Path(__file__).resolve().parent
+        command = [
+            sys.executable,
+            str(app_root / "optical_reader.py"),
+            str(src),
+            "--out",
+            str(out_dir),
+            "--dpi",
+            "300",
+        ]
+        completed = subprocess.run(
+            command,
+            cwd=str(app_root),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            timeout=60 * 60,
+            check=False,
+        )
+        log_text = completed.stdout or ""
+        if completed.returncode != 0:
+            tail = log_text[-12000:]
+            raise RuntimeError(
+                f"reader subprocess exited {completed.returncode}.\n{tail}"
+            )
+
         result_path = out_dir / "notation_graph.json"
+        if not result_path.exists():
+            raise RuntimeError(
+                "reader subprocess completed without notation_graph.json"
+            )
+        result = json.loads(result_path.read_text())
         _set_job(
             job_id,
             status="completed",
             completed_at=time.time(),
             result=result,
             result_path=str(result_path),
+            log_tail=log_text[-4000:],
+        )
+    except subprocess.TimeoutExpired as exc:
+        _set_job(
+            job_id,
+            status="failed",
+            completed_at=time.time(),
+            error=f"Optical notation extraction timed out: {exc}",
         )
     except Exception as exc:
         _set_job(
