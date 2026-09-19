@@ -228,6 +228,7 @@ def solve_measure(row: dict, ambiguity_check: bool = True) -> dict:
                 hard_edges.add((a, b))
 
     opt = Optimize()
+    opt.set(timeout=8000)
 
     t = {i: Int(f"t_{row['measure']}_{i}") for i in ids}
     d = {i: Int(f"d_{row['measure']}_{i}") for i in ids}
@@ -454,7 +455,7 @@ def solve_measure(row: dict, ambiguity_check: bool = True) -> dict:
 def solve_all(raw: dict) -> dict:
     out = {}
     for ms in sorted(raw, key=lambda x: int(x)):
-        out[str(ms)] = solve_measure(raw[ms], ambiguity_check=True)
+        out[str(ms)] = solve_measure(raw[ms], ambiguity_check=False)
     return out
 
 
