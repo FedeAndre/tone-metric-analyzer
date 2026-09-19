@@ -2156,43 +2156,133 @@ def detect_dots(
 
     return dots
 
-def tie_confidence(gray: np.ndarray, staff_mask: np.ndarray, a: Notehead, b: Notehead, sp: float) -> tuple[str,float]:
+def tie_confidence(
+    gray: np.ndarray,
+    staff_mask: np.ndarray,
+    a: Notehead,
+    b: Notehead,
+    sp: float,
+) -> tuple[str, float]:
+    """Score a visible same-pitch tie/slur arc between two noteheads.
+
+    The endpoints are already constrained to the same staff position by the
+    caller.  This detector combines connected-component evidence with direct
+    sampling of shallow parabolic arcs.  The latter survives barlines, stems,
+    accidentals, and small segmentation breaks that fragment a real tie into
+    multiple raster components.
+    """
     if b.cx <= a.cx:
-        return "none",0.0
-    gap=b.x1-a.x2
-    if gap < 0.5*sp or gap > 8.0*sp:
-        return "none",0.0
-    if abs(a.cy-b.cy)>0.38*sp:
-        return "none",0.0
+        return "none", 0.0
+    gap = b.x1 - a.x2
+    if gap < 0.35 * sp or gap > 20.0 * sp:
+        return "none", 0.0
+    if abs(a.cy - b.cy) > 0.38 * sp:
+        return "none", 0.0
 
-    ink=(gray<170).astype(np.uint8)
-    stafffree=np.where(cv2.dilate(staff_mask,np.ones((3,1),np.uint8))>0,0,ink).astype(np.uint8)
-    x1=max(0,a.x2); x2=min(gray.shape[1],b.x1)
-    if x2-x1<3:
-        return "none",0.0
+    ink = (gray < 170).astype(np.uint8)
+    stafffree = np.where(
+        cv2.dilate(staff_mask, np.ones((3, 1), np.uint8)) > 0,
+        0,
+        ink,
+    ).astype(np.uint8)
+    x1 = max(0, a.x2)
+    x2 = min(gray.shape[1], b.x1)
+    if x2 - x1 < 3:
+        return "none", 0.0
 
-    best=("none",0.0)
-    for side,ya,yb in [
-        ("above",min(a.y1,b.y1)-int(1.15*sp),min(a.y1,b.y1)+int(0.10*sp)),
-        ("below",max(a.y2,b.y2)-int(0.10*sp),max(a.y2,b.y2)+int(1.15*sp))
+    best = ("none", 0.0)
+
+    # Original connected-component evidence remains useful for clean short
+    # ties, but it is no longer the sole criterion.
+    for side, ya, yb in [
+        (
+            "above",
+            min(a.y1, b.y1) - int(1.35 * sp),
+            min(a.y1, b.y1) + int(0.12 * sp),
+        ),
+        (
+            "below",
+            max(a.y2, b.y2) - int(0.12 * sp),
+            max(a.y2, b.y2) + int(1.35 * sp),
+        ),
     ]:
-        ya=max(0,ya); yb=min(gray.shape[0],yb)
-        if yb<=ya: continue
-        reg=stafffree[ya:yb,x1:x2]
-        n,lab,stats,cent=cv2.connectedComponentsWithStats(reg,8)
-        for i in range(1,n):
-            x,y,w,h,area=[int(v) for v in stats[i]]
-            span=w/max(1,x2-x1)
-            if span<0.50 or h>1.15*sp:
+        ya = max(0, ya)
+        yb = min(gray.shape[0], yb)
+        if yb <= ya:
+            continue
+        reg = stafffree[ya:yb, x1:x2]
+        n, _lab, stats, _cent = cv2.connectedComponentsWithStats(reg, 8)
+        for i in range(1, n):
+            _x, _y, w, h, area = [int(v) for v in stats[i]]
+            span = w / max(1, x2 - x1)
+            if span < 0.42 or h > 1.35 * sp:
                 continue
-            density=area/max(1,w*h)
-            if density>0.55:
+            density = area / max(1, w * h)
+            if density > 0.55:
                 continue
-            conf=min(1.0,0.55*span+0.45*(1.0-min(1.0,density/0.55)))
-            if conf>best[1]:
-                best=(side,float(conf))
-    return best
+            conf = min(
+                1.0,
+                0.52 * span
+                + 0.48 * (1.0 - min(1.0, density / 0.55)),
+            )
+            if conf > best[1]:
+                best = (side, float(conf))
 
+    # Direct curve evidence.  A tie is a shallow arc whose ends approach the
+    # noteheads and whose middle bows away from them.  Sampling a small local
+    # window at many points is robust to intersections with stems/barlines.
+    sample_ts = np.linspace(0.08, 0.92, 33)
+    for side, y_start, y_end, sign in [
+        ("above", float(a.y1), float(b.y1), -1.0),
+        ("below", float(a.y2), float(b.y2), 1.0),
+    ]:
+        for amp_factor in (0.20, 0.30, 0.42, 0.56, 0.72, 0.90, 1.10):
+            amplitude = amp_factor * sp
+            hits: list[bool] = []
+            densities: list[float] = []
+            for t in sample_ts:
+                x = float(a.x2) + t * float(max(1, b.x1 - a.x2))
+                baseline = (1.0 - t) * y_start + t * y_end
+                y = baseline + sign * amplitude * 4.0 * t * (1.0 - t)
+                xi = int(round(x))
+                yi = int(round(y))
+                radius = max(2, int(round(0.10 * sp)))
+                xa = max(0, xi - radius)
+                xb = min(stafffree.shape[1], xi + radius + 1)
+                ya = max(0, yi - radius)
+                yb = min(stafffree.shape[0], yi + radius + 1)
+                patch = stafffree[ya:yb, xa:xb]
+                density = float(patch.mean()) if patch.size else 0.0
+                densities.append(density)
+                hits.append(density >= 0.06)
+
+            hit_fraction = sum(hits) / max(1, len(hits))
+            longest = 0
+            run = 0
+            for hit in hits:
+                run = run + 1 if hit else 0
+                longest = max(longest, run)
+            continuity = longest / max(1, len(hits))
+
+            # End-quarter support helps distinguish an actual connecting arc
+            # from unrelated horizontal notation crossing only the middle.
+            q = max(2, len(hits) // 4)
+            end_support = (
+                sum(hits[:q]) + sum(hits[-q:])
+            ) / float(2 * q)
+
+            curve_score = (
+                0.55 * hit_fraction
+                + 0.25 * continuity
+                + 0.20 * end_support
+            )
+            # Long gaps encounter more unrelated notation, so require slightly
+            # stronger evidence rather than forbidding them outright.
+            required = 0.48 if gap <= 8.0 * sp else 0.56
+            if curve_score >= required and curve_score > best[1]:
+                best = (side, float(min(1.0, curve_score)))
+
+    return best
 
 def detect_tie_candidates(gray: np.ndarray, staff_mask: np.ndarray, noteheads: list[Notehead], staves: list[Staff]) -> list[TieCandidate]:
     sp=global_spacing(staves)
@@ -2205,11 +2295,11 @@ def detect_tie_candidates(gray: np.ndarray, staff_mask: np.ndarray, noteheads: l
         heads=sorted(heads,key=lambda n:n.cx)
         for i,a in enumerate(heads):
             for b in heads[i+1:]:
-                if b.cx-a.cx>8.5*sp: break
+                if b.cx-a.cx>20.5*sp: break
                 if a.staff_pos_halfspaces != b.staff_pos_halfspaces:
                     continue
                 side,conf=tie_confidence(gray,staff_mask,a,b,sp)
-                if conf>=0.62:
+                if conf>=0.56:
                     out.append(TieCandidate(
                         id=len(out),left_notehead_id=a.id,right_notehead_id=b.id,
                         side=side,confidence=round(conf,4)
