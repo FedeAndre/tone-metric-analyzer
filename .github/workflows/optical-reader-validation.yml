@@ -62,6 +62,7 @@ jobs:
           PY
 
       - name: Upload optical audit
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: tma-optical-reader-buxtehude-audit
