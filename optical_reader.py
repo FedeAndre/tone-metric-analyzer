@@ -1632,21 +1632,23 @@ def detect_rests(
         if min(whole_dist, half_dist) > 0.42 * staff.spacing:
             continue
 
-        # A strongly rectangular staff-aligned block is already the defining
-        # visual evidence for whole/half rests.  The generic rest classifier
-        # was trained to collapse both shapes to rest_whole and was rejecting
-        # many clean blocks in this engraving, so it is retained only as
-        # diagnostic evidence instead of as an acceptance gate.
-        region = block_mask[y:y + h, x:x + w]
-        label, margin = _classify_symbol(region, "rests")
+        # Strong staff-aligned rectangular blocks are accepted from geometry
+        # alone.  This avoids loading the generic rest classifier for the most
+        # common whole/half-rest case, which materially lowers peak memory in
+        # the 512-MB service.  Only weaker blocks invoke the classifier.
         strong_block = (
             area >= 0.25 * staff.spacing * staff.spacing
             and w >= 0.80 * staff.spacing
             and h >= 0.35 * staff.spacing
             and w / max(h, 1) >= 1.50
         )
-        if label != "rest_whole" and not strong_block:
-            continue
+        if strong_block:
+            margin = 1.0
+        else:
+            region = block_mask[y:y + h, x:x + w]
+            label, margin = _classify_symbol(region, "rests")
+            if label != "rest_whole":
+                continue
 
         rest_type = "rest_whole" if whole_dist < half_dist else "rest_half"
         system_id, measure_id = locate(staff, cx)
