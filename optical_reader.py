@@ -4,6 +4,7 @@ import argparse
 import json
 import math
 import os
+import pickle
 import urllib.request
 from dataclasses import dataclass, asdict
 from pathlib import Path
@@ -110,6 +111,23 @@ class Beam:
     length: float
     thickness: float
     stem_ids: list[int]
+
+
+@dataclass
+class Rest:
+    id: int
+    x1: int
+    y1: int
+    x2: int
+    y2: int
+    cx: float
+    cy: float
+    staff_id: int | None
+    rest_type: str
+    classifier_margin: float
+    system_id: int | None = None
+    measure_local: int | None = None
+    dot_id: int | None = None
 
 
 @dataclass
@@ -1039,6 +1057,302 @@ def detect_beams(symbols: np.ndarray, staff: np.ndarray, note: np.ndarray, stems
     return beams
 
 
+_SKLEARN_SYMBOL_MODELS: dict[str, dict] = {}
+
+
+def _load_symbol_model(name: str) -> dict:
+    if name not in _SKLEARN_SYMBOL_MODELS:
+        path = Path(MODULE_PATH) / "sklearn_models" / f"{name}.model"
+        with path.open("rb") as fh:
+            _SKLEARN_SYMBOL_MODELS[name] = pickle.load(fh)
+    return _SKLEARN_SYMBOL_MODELS[name]
+
+
+def _classify_symbol(region: np.ndarray, model_name: str) -> tuple[str, float]:
+    info = _load_symbol_model(model_name)
+    model = info["model"]
+    width = int(info["w"])
+    height = int(info["h"])
+    class_map = info["class_map"]
+
+    patch = np.where(region > 0, 255, 0).astype(np.uint8)
+    image = Image.fromarray(patch).resize((width, height))
+    x = np.array(image, dtype=np.uint8).reshape(1, -1)
+    pred = model.predict(x)[0]
+    label = str(class_map[pred])
+
+    margin = 0.0
+    if hasattr(model, "decision_function"):
+        scores = np.asarray(model.decision_function(x)).reshape(-1)
+        if len(scores) >= 2:
+            ordered = np.sort(scores)
+            margin = float(ordered[-1] - ordered[-2])
+        elif len(scores) == 1:
+            margin = float(abs(scores[0]))
+    return label, margin
+
+
+def _bbox_overlap_fraction(
+    box: tuple[int, int, int, int],
+    other: tuple[int, int, int, int],
+) -> float:
+    x1, y1, x2, y2 = box
+    a1, b1, a2, b2 = other
+    ix = max(0, min(x2, a2) - max(x1, a1))
+    iy = max(0, min(y2, b2) - max(y1, b1))
+    area = max(1, (x2 - x1) * (y2 - y1))
+    return float(ix * iy) / float(area)
+
+
+def detect_rests(
+    stems_rests: np.ndarray,
+    noteheads: list[Notehead],
+    stems: list[Stem],
+    beams: list[Beam],
+    barlines: list[Barline],
+    staves: list[Staff],
+    systems: list[SystemRegion],
+    measures: list[MeasureRegion],
+) -> list[Rest]:
+    """
+    Detect rest glyphs from the low-level stem/rest mask.
+
+    Straight note stems, barlines, and detected beam polygons are removed as
+    visual structures before rest candidates are formed. The pretrained rest
+    classifier is used only to name the remaining glyph shape; no timing,
+    voice, or MusicXML output from the external OMR system is used.
+    """
+    sp = global_spacing(staves)
+    remove = np.zeros_like(stems_rests, dtype=np.uint8)
+
+    linked_stems = {
+        nh.stem_id
+        for nh in noteheads
+        if nh.stem_id is not None
+    }
+    for stem in stems:
+        if stem.id not in linked_stems:
+            continue
+        cv2.rectangle(
+            remove,
+            (
+                max(0, int(round(stem.x1 - 2))),
+                max(0, int(round(stem.y1 - 2))),
+            ),
+            (
+                min(remove.shape[1] - 1, int(round(stem.x2 + 2))),
+                min(remove.shape[0] - 1, int(round(stem.y2 + 2))),
+            ),
+            1,
+            -1,
+        )
+
+    for bar in barlines:
+        x = int(round(bar.x))
+        cv2.rectangle(
+            remove,
+            (max(0, x - 3), max(0, int(round(bar.top)))),
+            (
+                min(remove.shape[1] - 1, x + 3),
+                min(remove.shape[0] - 1, int(round(bar.bottom))),
+            ),
+            1,
+            -1,
+        )
+
+    for beam in beams:
+        pts = np.array(beam.points, dtype=np.int32)
+        cv2.fillPoly(remove, [pts], 1)
+
+    remove = cv2.dilate(remove, np.ones((3, 3), np.uint8))
+    residual = np.where(remove > 0, 0, stems_rests).astype(np.uint8)
+
+    # Remove residual straight-line fragments while preserving irregular rest
+    # bodies. Whole/half rests are detected separately from the unsuppressed
+    # residual below.
+    vertical = cv2.morphologyEx(
+        residual,
+        cv2.MORPH_OPEN,
+        np.ones((max(3, int(round(1.2 * sp))), 1), np.uint8),
+    )
+    horizontal = cv2.morphologyEx(
+        residual,
+        cv2.MORPH_OPEN,
+        np.ones((1, max(3, int(round(1.2 * sp)))), np.uint8),
+    )
+    line_mask = np.maximum(
+        cv2.dilate(vertical, np.ones((1, 2), np.uint8)),
+        cv2.dilate(horizontal, np.ones((2, 1), np.uint8)),
+    )
+    irregular = np.where(line_mask > 0, 0, residual).astype(np.uint8)
+    irregular = cv2.morphologyEx(
+        irregular,
+        cv2.MORPH_CLOSE,
+        np.ones((3, 3), np.uint8),
+    )
+
+    staff_by_id = {staff.id: staff for staff in staves}
+    staff_to_system = {
+        staff_id: system.id
+        for system in systems
+        for staff_id in system.staff_ids
+    }
+    measures_by_system: dict[int, list[MeasureRegion]] = {}
+    for measure in measures:
+        measures_by_system.setdefault(measure.system_id, []).append(measure)
+
+    def locate(staff: Staff, x: float) -> tuple[int | None, int | None]:
+        system_id = staff_to_system.get(staff.id)
+        if system_id is None:
+            return None, None
+        for measure in measures_by_system.get(system_id, []):
+            if measure.left <= x <= measure.right:
+                return system_id, measure.id
+        return system_id, None
+
+    def overlaps_notehead(box: tuple[int, int, int, int]) -> bool:
+        return any(
+            _bbox_overlap_fraction(
+                box,
+                (nh.x1, nh.y1, nh.x2, nh.y2),
+            ) > 0.10
+            for nh in noteheads
+        )
+
+    rests: list[Rest] = []
+
+    # Quarter/eighth/shorter rests: irregular, predominantly vertical glyphs.
+    for x, y, w, h, area in comp_stats(irregular):
+        if area < 0.08 * sp * sp:
+            continue
+        if not (0.45 * sp <= w <= 1.80 * sp):
+            continue
+        if not (1.00 * sp <= h <= 3.60 * sp):
+            continue
+        if w / max(h, 1) > 1.10:
+            continue
+
+        box = (x, y, x + w, y + h)
+        if overlaps_notehead(box):
+            continue
+
+        cx = x + w / 2.0
+        cy = y + h / 2.0
+        staff = nearest_staff(cy, staves)
+        if staff is None:
+            continue
+        if abs(cy - float(np.mean(staff.lines_y))) > 2.6 * sp:
+            continue
+
+        region = irregular[y:y + h, x:x + w]
+        label, margin = _classify_symbol(region, "rests")
+        if label == "rest_whole":
+            # Whole/half rests have a separate strong geometric detector below.
+            continue
+        if label == "rest_8th":
+            label, sub_margin = _classify_symbol(region, "rests_above8")
+            margin = max(margin, sub_margin)
+
+        if label not in {
+            "rest_quarter",
+            "rest_8th",
+            "rest_16th",
+            "rest_32nd",
+            "rest_64th",
+        }:
+            continue
+
+        system_id, measure_id = locate(staff, cx)
+        rests.append(
+            Rest(
+                id=len(rests),
+                x1=x,
+                y1=y,
+                x2=x + w,
+                y2=y + h,
+                cx=cx,
+                cy=cy,
+                staff_id=staff.id,
+                rest_type=label,
+                classifier_margin=round(float(margin), 4),
+                system_id=system_id,
+                measure_local=measure_id,
+            )
+        )
+
+    # Whole/half rests: short horizontal blocks in one of two conventional
+    # positions relative to the staff. Use geometry first and classifier support
+    # second, so beam fragments elsewhere cannot become rests.
+    block_mask = cv2.morphologyEx(
+        residual,
+        cv2.MORPH_CLOSE,
+        np.ones((2, 2), np.uint8),
+    )
+    existing_boxes = [
+        (r.x1, r.y1, r.x2, r.y2)
+        for r in rests
+    ]
+    for x, y, w, h, area in comp_stats(block_mask):
+        if area < 0.06 * sp * sp:
+            continue
+        if not (0.45 * sp <= w <= 1.55 * sp):
+            continue
+        if not (0.12 * sp <= h <= 0.75 * sp):
+            continue
+        if w / max(h, 1) < 1.15:
+            continue
+
+        box = (x, y, x + w, y + h)
+        if overlaps_notehead(box):
+            continue
+        if any(_bbox_overlap_fraction(box, b) > 0.25 for b in existing_boxes):
+            continue
+
+        cx = x + w / 2.0
+        cy = y + h / 2.0
+        staff = nearest_staff(cy, staves)
+        if staff is None:
+            continue
+
+        # lines_y is top -> bottom. Whole rest hangs below line 2; half rest
+        # sits above the middle line.
+        whole_target = staff.lines_y[1] + 0.28 * staff.spacing
+        half_target = staff.lines_y[2] - 0.28 * staff.spacing
+        whole_dist = abs(cy - whole_target)
+        half_dist = abs(cy - half_target)
+        if min(whole_dist, half_dist) > 0.55 * staff.spacing:
+            continue
+
+        region = block_mask[y:y + h, x:x + w]
+        label, margin = _classify_symbol(region, "rests")
+        if label != "rest_whole":
+            continue
+
+        rest_type = "rest_whole" if whole_dist < half_dist else "rest_half"
+        system_id, measure_id = locate(staff, cx)
+        rests.append(
+            Rest(
+                id=len(rests),
+                x1=x,
+                y1=y,
+                x2=x + w,
+                y2=y + h,
+                cx=cx,
+                cy=cy,
+                staff_id=staff.id,
+                rest_type=rest_type,
+                classifier_margin=round(float(margin), 4),
+                system_id=system_id,
+                measure_local=measure_id,
+            )
+        )
+
+    rests.sort(key=lambda r: (r.system_id if r.system_id is not None else 9999, r.cy, r.cx))
+    for i, rest in enumerate(rests):
+        rest.id = i
+    return rests
+
+
 def detect_dots(gray: np.ndarray, staff_mask: np.ndarray, noteheads: list[Notehead], stems: list[Stem],
                 beams: list[Beam], staves: list[Staff]) -> list[Dot]:
     sp=global_spacing(staves)
@@ -1138,7 +1452,7 @@ def detect_tie_candidates(gray: np.ndarray, staff_mask: np.ndarray, noteheads: l
 
 
 def overlay(gray: np.ndarray, staves: list[Staff], noteheads: list[Notehead], stems: list[Stem],
-            beams: list[Beam], dots: list[Dot], ties: list[TieCandidate], out_path: Path) -> None:
+            beams: list[Beam], rests: list[Rest], dots: list[Dot], ties: list[TieCandidate], out_path: Path) -> None:
     img=Image.fromarray(gray).convert("RGB")
     d=ImageDraw.Draw(img)
     for st in stems:
@@ -1149,6 +1463,8 @@ def overlay(gray: np.ndarray, staves: list[Staff], noteheads: list[Notehead], st
     for nh in noteheads:
         col=(0,190,0) if nh.head_type=="filled" else (0,150,255)
         d.ellipse((nh.x1,nh.y1,nh.x2,nh.y2),outline=col,width=3)
+    for rest in rests:
+        d.rectangle((rest.x1,rest.y1,rest.x2,rest.y2),outline=(0,190,190),width=2)
     for dot in dots:
         r=4
         d.ellipse((dot.cx-r,dot.cy-r,dot.cx+r,dot.cy+r),outline=(235,190,0),width=2)
@@ -1190,11 +1506,21 @@ def process_page(
     )
     assign_regions(noteheads, stems, systems, measures)
     beams=detect_beams(symbols,staff_mask,note_mask,stems_rests,stems,staves)
+    rests=detect_rests(
+        stems_rests,
+        noteheads,
+        stems,
+        beams,
+        barlines,
+        staves,
+        systems,
+        measures,
+    )
     dots=detect_dots(gray,staff_mask,noteheads,stems,beams,staves)
     ties=detect_tie_candidates(gray,staff_mask,noteheads,staves)
 
     overlay_path=out_dir/f"page_{page_index:02d}_optical_overlay.png"
-    overlay(gray,staves,noteheads,stems,beams,dots,ties,overlay_path)
+    overlay(gray,staves,noteheads,stems,beams,rests,dots,ties,overlay_path)
 
     unlinked_filled=sum(1 for n in noteheads if n.head_type=="filled" and n.stem_id is None)
     print("OPTICAL_PAGE=" + json.dumps({
@@ -1206,6 +1532,7 @@ def process_page(
         "noteheads": len(noteheads),
         "stems": len(stems),
         "beams": len(beams),
+        "rests": len(rests),
         "dots": len(dots),
         "ties": len(ties),
         "component_stem_links": component_stem_links,
@@ -1230,6 +1557,7 @@ def process_page(
         "unlinked_filled_noteheads":unlinked_filled,
         "stem_count":len(stems),
         "beam_count":len(beams),
+        "rest_count":len(rests),
         "dot_count":len(dots),
         "tie_candidate_count":len(ties),
         "component_stem_links":component_stem_links,
@@ -1237,6 +1565,7 @@ def process_page(
         "noteheads":[asdict(x) for x in noteheads],
         "stems":[asdict(x) for x in stems],
         "beams":[asdict(x) for x in beams],
+        "rests":[asdict(x) for x in rests],
         "dots":[asdict(x) for x in dots],
         "tie_candidates":[asdict(x) for x in ties],
         "overlay":overlay_path.name,
@@ -1280,6 +1609,7 @@ def main() -> None:
         "unlinked_filled_noteheads":sum(x["unlinked_filled_noteheads"] for x in result["pages"]),
         "stems":sum(x["stem_count"] for x in result["pages"]),
         "beams":sum(x["beam_count"] for x in result["pages"]),
+        "rests":sum(x["rest_count"] for x in result["pages"]),
         "dots":sum(x["dot_count"] for x in result["pages"]),
         "tie_candidates":sum(x["tie_candidate_count"] for x in result["pages"]),
         "component_stem_links":sum(x["component_stem_links"] for x in result["pages"]),
