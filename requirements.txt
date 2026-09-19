@@ -4,4 +4,4 @@ Pillow==11.1.0
 PyMuPDF==1.25.3
 onnxruntime==1.20.1
 scipy==1.14.1
-git+https://github.com/BreezeWhite/oemer@dbe2a933d630d0f74805d717960eb259473f5978
+scikit-learn==1.5.2
