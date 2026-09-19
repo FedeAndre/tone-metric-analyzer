@@ -258,8 +258,13 @@ def extract_visual_attacks(omr_path: str | Path):
                     node = by[cid]
                     typ = loc(node.tag)
                     if typ == "rest-chord":
-                        rr = by.get(rest_child.get(cid))
-                        return _rest_duration(rr.get("shape") if rr is not None else "")
+                        rid = rest_child.get(cid)
+                        rr = by.get(rid)
+                        base = _rest_duration(rr.get("shape") if rr is not None else "")
+                        if base is None:
+                            return None
+                        dn = dots.get(rid or "", 0)
+                        return base * sum(Fraction(1, 2**i) for i in range(dn + 1))
                     hs = chord_heads.get(cid, [])
                     if not hs:
                         return None
