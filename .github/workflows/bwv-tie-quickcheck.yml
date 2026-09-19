@@ -49,6 +49,11 @@ jobs:
           for p in d['pages']:
               for t in p.get('tie_candidates',[]):
                   ties.append((p['page'],t))
+          stems=[s for p in d['pages'] for s in p.get('stems',[])]
+          print('BWV_BEAM_LEVELS='+json.dumps(Counter(int(s.get('beam_level',0) or 0) for s in stems),sort_keys=True))
+          print('BWV_BEAM_SOURCES='+json.dumps(Counter(str(s.get('beam_source')) for s in stems),sort_keys=True))
+          print('BWV_HEAD_TYPES='+json.dumps(Counter(h['head_type'] for p in d['pages'] for h in p.get('noteheads',[])),sort_keys=True))
+          print('BWV_UNLINKED_FILLED='+str(sum(1 for p in d['pages'] for h in p.get('noteheads',[]) if h['head_type']=='filled' and h.get('stem_id') is None)))
           print('BWV_TIE_COUNT='+str(len(ties)))
           print('BWV_TIE_CONF='+json.dumps(Counter(round(float(t[1]['confidence']),1) for t in ties),sort_keys=True))
           print('BWV_TIES='+json.dumps(ties[:80],sort_keys=True))
