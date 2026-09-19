@@ -7,6 +7,8 @@ ALLOWED_TOP = {
     "README.md",
     "requirements.txt",
     "optical_reader.py",
+    "app.py",
+    "Dockerfile",
     "tests",
 }
 
@@ -47,3 +49,11 @@ def test_external_omr_is_used_only_for_low_level_inference():
     ]
     for token in forbidden:
         assert token not in src, token
+
+
+def test_service_layer_is_clean():
+    src = (ROOT / "app.py").read_text().lower()
+    for token in BANNED_SOURCE_TOKENS:
+        assert token.lower() not in src, token
+    assert "/api/status" in src
+    assert "/api/optical/read" in src
