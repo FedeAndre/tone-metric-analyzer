@@ -1,0 +1,345 @@
+{
+  "1": {
+    "measure": 1,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "2": {
+    "measure": 2,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "3": {
+    "measure": 3,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "4": {
+    "measure": 4,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "5": {
+    "measure": 5,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "6": {
+    "measure": 6,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "7": {
+    "measure": 7,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "8": {
+    "measure": 8,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "9": {
+    "measure": 9,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "10": {
+    "measure": 10,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "11": {
+    "measure": 11,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "12": {
+    "measure": 12,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "13": {
+    "measure": 13,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "14": {
+    "measure": 14,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "15": {
+    "measure": 15,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "16": {
+    "measure": 16,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "17": {
+    "measure": 17,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "18": {
+    "measure": 18,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "19": {
+    "measure": 19,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "20": {
+    "measure": 20,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "21": {
+    "measure": 21,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "22": {
+    "measure": 22,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "23": {
+    "measure": 23,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "24": {
+    "measure": 24,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "25": {
+    "measure": 25,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "26": {
+    "measure": 26,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "27": {
+    "measure": 27,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "28": {
+    "measure": 28,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "29": {
+    "measure": 29,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "30": {
+    "measure": 30,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "31": {
+    "measure": 31,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "32": {
+    "measure": 32,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "33": {
+    "measure": 33,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "34": {
+    "measure": 34,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "35": {
+    "measure": 35,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "36": {
+    "measure": 36,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "37": {
+    "measure": 37,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "38": {
+    "measure": 38,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "39": {
+    "measure": 39,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "40": {
+    "measure": 40,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "41": {
+    "measure": 41,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "42": {
+    "measure": 42,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "43": {
+    "measure": 43,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "44": {
+    "measure": 44,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "45": {
+    "measure": 45,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "46": {
+    "measure": 46,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "47": {
+    "measure": 47,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "48": {
+    "measure": 48,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  },
+  "49": {
+    "measure": 49,
+    "ok": false,
+    "reason": "unsat-or-timeout",
+    "attacks": [],
+    "attack_count": null
+  }
+}

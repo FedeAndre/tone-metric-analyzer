@@ -15,9 +15,9 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10806",
-          "10808",
-          "10809"
+          "10611",
+          "10613",
+          "10614"
         ]
       },
       {
@@ -25,8 +25,8 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "10810",
-          "10811"
+          "10615",
+          "10616"
         ]
       },
       {
@@ -34,8 +34,8 @@
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "events": [
-          "10812",
-          "10813"
+          "10617",
+          "10618"
         ]
       }
     ],
@@ -47,7 +47,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "12699",
+        "id": "12504",
         "kind": "rest",
         "attack": false,
         "staff": "2",
@@ -64,10 +64,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10813"
+        "succ": "10617"
       },
       {
-        "id": "12700",
+        "id": "12505",
         "kind": "rest",
         "attack": false,
         "staff": "2",
@@ -84,10 +84,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10812"
+        "succ": "10618"
       },
       {
-        "id": "10806",
+        "id": "10611",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -107,7 +107,7 @@
         "succ": null
       },
       {
-        "id": "10808",
+        "id": "10613",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -124,10 +124,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10810"
+        "succ": "10615"
       },
       {
-        "id": "10809",
+        "id": "10614",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -144,10 +144,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10811"
+        "succ": "10616"
       },
       {
-        "id": "12701",
+        "id": "12506",
         "kind": "rest",
         "attack": false,
         "staff": "3",
@@ -167,7 +167,7 @@
         "succ": null
       },
       {
-        "id": "10810",
+        "id": "10615",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -183,11 +183,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10808",
+        "pred": "10613",
         "succ": null
       },
       {
-        "id": "10811",
+        "id": "10616",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -203,11 +203,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10809",
+        "pred": "10614",
         "succ": null
       },
       {
-        "id": "10812",
+        "id": "10617",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -223,11 +223,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "12700",
+        "pred": "12504",
         "succ": null
       },
       {
-        "id": "10813",
+        "id": "10618",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -243,7 +243,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "12699",
+        "pred": "12505",
         "succ": null
       }
     ]
@@ -264,16 +264,16 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10798",
-          "10799",
-          "10814",
-          "10815",
-          "10816",
-          "10817",
-          "10818",
-          "10819",
-          "10859",
-          "10860"
+          "10603",
+          "10604",
+          "10619",
+          "10620",
+          "10621",
+          "10622",
+          "10623",
+          "10624",
+          "10664",
+          "10665"
         ]
       },
       {
@@ -281,7 +281,7 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "10820"
+          "10625"
         ]
       },
       {
@@ -289,7 +289,7 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "10821"
+          "10626"
         ]
       },
       {
@@ -297,7 +297,7 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "10822"
+          "10627"
         ]
       }
     ],
@@ -310,7 +310,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "10798",
+        "id": "10603",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -330,7 +330,7 @@
         "succ": null
       },
       {
-        "id": "10814",
+        "id": "10619",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -350,7 +350,7 @@
         "succ": null
       },
       {
-        "id": "10815",
+        "id": "10620",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -370,7 +370,7 @@
         "succ": null
       },
       {
-        "id": "12702",
+        "id": "12507",
         "kind": "rest",
         "attack": false,
         "staff": "3",
@@ -390,7 +390,7 @@
         "succ": null
       },
       {
-        "id": "10816",
+        "id": "10621",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -410,7 +410,7 @@
         "succ": null
       },
       {
-        "id": "10817",
+        "id": "10622",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -430,7 +430,7 @@
         "succ": null
       },
       {
-        "id": "10859",
+        "id": "10664",
         "kind": "note",
         "attack": true,
         "staff": "3",
@@ -450,7 +450,7 @@
         "succ": null
       },
       {
-        "id": "10818",
+        "id": "10623",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -470,7 +470,7 @@
         "succ": null
       },
       {
-        "id": "10799",
+        "id": "10604",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -490,7 +490,7 @@
         "succ": null
       },
       {
-        "id": "10819",
+        "id": "10624",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -507,10 +507,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10820"
+        "succ": "10625"
       },
       {
-        "id": "10860",
+        "id": "10665",
         "kind": "note",
         "attack": true,
         "staff": "3",
@@ -530,7 +530,7 @@
         "succ": null
       },
       {
-        "id": "10820",
+        "id": "10625",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -546,11 +546,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "10819",
-        "succ": "10821"
+        "pred": "10624",
+        "succ": "10626"
       },
       {
-        "id": "10821",
+        "id": "10626",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -566,11 +566,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "10820",
-        "succ": "10822"
+        "pred": "10625",
+        "succ": "10627"
       },
       {
-        "id": "10822",
+        "id": "10627",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -586,7 +586,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "10821",
+        "pred": "10626",
         "succ": null
       }
     ]
@@ -607,11 +607,11 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10800",
-          "10801",
-          "10824",
-          "10825",
-          "10826"
+          "10605",
+          "10606",
+          "10629",
+          "10630",
+          "10631"
         ]
       },
       {
@@ -619,8 +619,8 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "10802",
-          "10828"
+          "10607",
+          "10633"
         ]
       },
       {
@@ -628,7 +628,7 @@
         "onset_whole_units": "21/32",
         "onset_quarter_units": "21/8",
         "events": [
-          "10803"
+          "10608"
         ]
       }
     ],
@@ -640,7 +640,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "10823",
+        "id": "10628",
         "kind": "note",
         "attack": false,
         "staff": "2",
@@ -657,10 +657,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10827"
+        "succ": "10632"
       },
       {
-        "id": "10800",
+        "id": "10605",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -680,7 +680,7 @@
         "succ": null
       },
       {
-        "id": "10824",
+        "id": "10629",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -697,10 +697,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10828"
+        "succ": "10633"
       },
       {
-        "id": "10825",
+        "id": "10630",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -720,7 +720,7 @@
         "succ": null
       },
       {
-        "id": "10826",
+        "id": "10631",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -740,7 +740,7 @@
         "succ": null
       },
       {
-        "id": "10801",
+        "id": "10606",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -757,10 +757,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10802"
+        "succ": "10607"
       },
       {
-        "id": "12703",
+        "id": "12508",
         "kind": "rest",
         "attack": false,
         "staff": "3",
@@ -780,7 +780,7 @@
         "succ": null
       },
       {
-        "id": "10802",
+        "id": "10607",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -796,11 +796,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "10801",
-        "succ": "10803"
+        "pred": "10606",
+        "succ": "10608"
       },
       {
-        "id": "10827",
+        "id": "10632",
         "kind": "note",
         "attack": false,
         "staff": "2",
@@ -816,11 +816,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10823",
+        "pred": "10628",
         "succ": null
       },
       {
-        "id": "10828",
+        "id": "10633",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -836,11 +836,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10824",
+        "pred": "10629",
         "succ": null
       },
       {
-        "id": "10803",
+        "id": "10608",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -856,7 +856,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "10802",
+        "pred": "10607",
         "succ": null
       }
     ]
@@ -877,13 +877,13 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10804",
-          "10805",
-          "10829",
-          "10830",
-          "10831",
-          "10861",
-          "10862"
+          "10609",
+          "10610",
+          "10634",
+          "10635",
+          "10636",
+          "10666",
+          "10667"
         ]
       },
       {
@@ -891,9 +891,9 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "10832",
-          "10833",
-          "10863"
+          "10637",
+          "10638",
+          "10668"
         ]
       },
       {
@@ -901,7 +901,7 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "10834"
+          "10639"
         ]
       }
     ],
@@ -913,7 +913,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "10804",
+        "id": "10609",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -933,7 +933,7 @@
         "succ": null
       },
       {
-        "id": "12705",
+        "id": "12510",
         "kind": "rest",
         "attack": false,
         "staff": "3",
@@ -953,7 +953,7 @@
         "succ": null
       },
       {
-        "id": "10829",
+        "id": "10634",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -970,10 +970,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10832"
+        "succ": "10637"
       },
       {
-        "id": "10830",
+        "id": "10635",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -993,7 +993,7 @@
         "succ": null
       },
       {
-        "id": "10861",
+        "id": "10666",
         "kind": "note",
         "attack": true,
         "staff": "3",
@@ -1013,7 +1013,7 @@
         "succ": null
       },
       {
-        "id": "10805",
+        "id": "10610",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -1033,7 +1033,7 @@
         "succ": null
       },
       {
-        "id": "10831",
+        "id": "10636",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -1050,10 +1050,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10833"
+        "succ": "10638"
       },
       {
-        "id": "10862",
+        "id": "10667",
         "kind": "note",
         "attack": true,
         "staff": "3",
@@ -1070,10 +1070,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10863"
+        "succ": "10668"
       },
       {
-        "id": "10832",
+        "id": "10637",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -1089,11 +1089,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10829",
+        "pred": "10634",
         "succ": null
       },
       {
-        "id": "10833",
+        "id": "10638",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -1109,11 +1109,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "10831",
-        "succ": "10834"
+        "pred": "10636",
+        "succ": "10639"
       },
       {
-        "id": "10863",
+        "id": "10668",
         "kind": "note",
         "attack": true,
         "staff": "3",
@@ -1129,11 +1129,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10862",
+        "pred": "10667",
         "succ": null
       },
       {
-        "id": "10834",
+        "id": "10639",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -1149,7 +1149,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "10833",
+        "pred": "10638",
         "succ": null
       }
     ]
@@ -1170,14 +1170,14 @@
     "reason": null,
     "total_penalty": 71,
     "meter_ticks": 128,
-    "attack_count": 9,
+    "attack_count": 8,
     "attacks": [
       {
         "onset_ticks": 0,
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10846"
+          "10651"
         ]
       },
       {
@@ -1185,9 +1185,9 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "10848",
-          "10849",
-          "10850"
+          "10653",
+          "10654",
+          "10655"
         ]
       },
       {
@@ -1195,31 +1195,23 @@
         "onset_whole_units": "9/32",
         "onset_quarter_units": "9/8",
         "events": [
-          "10851"
+          "10656"
         ]
       },
       {
-        "onset_ticks": 37,
-        "onset_whole_units": "37/128",
-        "onset_quarter_units": "37/32",
+        "onset_ticks": 38,
+        "onset_whole_units": "19/64",
+        "onset_quarter_units": "19/16",
         "events": [
-          "10852"
+          "10657"
         ]
       },
       {
-        "onset_ticks": 61,
-        "onset_whole_units": "61/128",
-        "onset_quarter_units": "61/32",
+        "onset_ticks": 62,
+        "onset_whole_units": "31/64",
+        "onset_quarter_units": "31/16",
         "events": [
-          "10854"
-        ]
-      },
-      {
-        "onset_ticks": 79,
-        "onset_whole_units": "79/128",
-        "onset_quarter_units": "79/32",
-        "events": [
-          "10855"
+          "10659"
         ]
       },
       {
@@ -1227,23 +1219,24 @@
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "events": [
-          "10856"
+          "10660",
+          "10661"
         ]
       },
       {
-        "onset_ticks": 91,
-        "onset_whole_units": "91/128",
-        "onset_quarter_units": "91/32",
+        "onset_ticks": 92,
+        "onset_whole_units": "23/32",
+        "onset_quarter_units": "23/8",
         "events": [
-          "10857"
+          "10662"
         ]
       },
       {
-        "onset_ticks": 103,
-        "onset_whole_units": "103/128",
-        "onset_quarter_units": "103/32",
+        "onset_ticks": 104,
+        "onset_whole_units": "13/16",
+        "onset_quarter_units": "13/4",
         "events": [
-          "10858"
+          "10663"
         ]
       }
     ],
@@ -1251,17 +1244,16 @@
       "0",
       "3/4",
       "9/8",
-      "37/32",
-      "61/32",
-      "79/32",
+      "19/16",
+      "31/16",
       "5/2",
-      "91/32",
-      "103/32"
+      "23/8",
+      "13/4"
     ],
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "10846",
+        "id": "10651",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -1281,7 +1273,7 @@
         "succ": null
       },
       {
-        "id": "10847",
+        "id": "10652",
         "kind": "note",
         "attack": false,
         "staff": "2",
@@ -1298,10 +1290,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10848"
+        "succ": "10653"
       },
       {
-        "id": "10848",
+        "id": "10653",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -1317,11 +1309,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10847",
+        "pred": "10652",
         "succ": null
       },
       {
-        "id": "10849",
+        "id": "10654",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -1341,7 +1333,7 @@
         "succ": null
       },
       {
-        "id": "10850",
+        "id": "10655",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -1358,10 +1350,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10851"
+        "succ": "10656"
       },
       {
-        "id": "10851",
+        "id": "10656",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -1377,17 +1369,17 @@
         },
         "start": false,
         "end": true,
-        "pred": "10850",
+        "pred": "10655",
         "succ": null
       },
       {
-        "id": "12709",
+        "id": "12514",
         "kind": "rest",
         "attack": false,
         "staff": "1",
         "x": 2429.5,
-        "onset_ticks": 37,
-        "onset_quarter_units": "37/32",
+        "onset_ticks": 38,
+        "onset_quarter_units": "19/16",
         "duration_ticks": 64,
         "duration_quarter_units": "2",
         "duration_source": {
@@ -1401,13 +1393,13 @@
         "succ": null
       },
       {
-        "id": "12710",
+        "id": "12515",
         "kind": "rest",
         "attack": false,
         "staff": "3",
         "x": 2434.0,
-        "onset_ticks": 37,
-        "onset_quarter_units": "37/32",
+        "onset_ticks": 38,
+        "onset_quarter_units": "19/16",
         "duration_ticks": 64,
         "duration_quarter_units": "2",
         "duration_source": {
@@ -1421,13 +1413,13 @@
         "succ": null
       },
       {
-        "id": "10852",
+        "id": "10657",
         "kind": "note",
         "attack": true,
         "staff": "2",
         "x": 2437.0,
-        "onset_ticks": 37,
-        "onset_quarter_units": "37/32",
+        "onset_ticks": 38,
+        "onset_quarter_units": "19/16",
         "duration_ticks": 72,
         "duration_quarter_units": "9/4",
         "duration_source": {
@@ -1441,13 +1433,13 @@
         "succ": null
       },
       {
-        "id": "10853",
+        "id": "10658",
         "kind": "note",
         "attack": false,
         "staff": "2",
         "x": 2454.0,
-        "onset_ticks": 37,
-        "onset_quarter_units": "37/32",
+        "onset_ticks": 38,
+        "onset_quarter_units": "19/16",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -1458,16 +1450,16 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10854"
+        "succ": "10659"
       },
       {
-        "id": "10854",
+        "id": "10659",
         "kind": "note",
         "attack": true,
         "staff": "2",
         "x": 2501.5,
-        "onset_ticks": 61,
-        "onset_quarter_units": "61/32",
+        "onset_ticks": 62,
+        "onset_quarter_units": "31/16",
         "duration_ticks": 18,
         "duration_quarter_units": "9/16",
         "duration_source": {
@@ -1477,17 +1469,17 @@
         },
         "start": false,
         "end": false,
-        "pred": "10853",
-        "succ": "10855"
+        "pred": "10658",
+        "succ": "10660"
       },
       {
-        "id": "10855",
+        "id": "10660",
         "kind": "note",
         "attack": true,
         "staff": "2",
         "x": 2555.5,
-        "onset_ticks": 79,
-        "onset_quarter_units": "79/32",
+        "onset_ticks": 80,
+        "onset_quarter_units": "5/2",
         "duration_ticks": 12,
         "duration_quarter_units": "3/8",
         "duration_source": {
@@ -1497,11 +1489,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "10854",
-        "succ": "10857"
+        "pred": "10659",
+        "succ": "10662"
       },
       {
-        "id": "10856",
+        "id": "10661",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -1521,13 +1513,13 @@
         "succ": null
       },
       {
-        "id": "10857",
+        "id": "10662",
         "kind": "note",
         "attack": true,
         "staff": "2",
         "x": 2623.0,
-        "onset_ticks": 91,
-        "onset_quarter_units": "91/32",
+        "onset_ticks": 92,
+        "onset_quarter_units": "23/8",
         "duration_ticks": 12,
         "duration_quarter_units": "3/8",
         "duration_source": {
@@ -1537,17 +1529,17 @@
         },
         "start": false,
         "end": false,
-        "pred": "10855",
-        "succ": "10858"
+        "pred": "10660",
+        "succ": "10663"
       },
       {
-        "id": "10858",
+        "id": "10663",
         "kind": "note",
         "attack": true,
         "staff": "2",
         "x": 2646.0,
-        "onset_ticks": 103,
-        "onset_quarter_units": "103/32",
+        "onset_ticks": 104,
+        "onset_quarter_units": "13/4",
         "duration_ticks": 12,
         "duration_quarter_units": "3/8",
         "duration_source": {
@@ -1557,7 +1549,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "10857",
+        "pred": "10662",
         "succ": null
       }
     ]
@@ -1578,16 +1570,16 @@
     "reason": null,
     "total_penalty": 74,
     "meter_ticks": 128,
-    "attack_count": 5,
+    "attack_count": 6,
     "attacks": [
       {
         "onset_ticks": 0,
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10867",
-          "10905",
-          "10906"
+          "10672",
+          "10710",
+          "10711"
         ]
       },
       {
@@ -1595,49 +1587,57 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "10868",
-          "10907",
-          "10908",
-          "10909",
-          "10911"
+          "10712"
         ]
       },
       {
-        "onset_ticks": 48,
-        "onset_whole_units": "3/8",
-        "onset_quarter_units": "3/2",
+        "onset_ticks": 25,
+        "onset_whole_units": "25/128",
+        "onset_quarter_units": "25/32",
         "events": [
-          "10912"
+          "10673",
+          "10713",
+          "10714",
+          "10716"
         ]
       },
       {
-        "onset_ticks": 72,
-        "onset_whole_units": "9/16",
-        "onset_quarter_units": "9/4",
+        "onset_ticks": 49,
+        "onset_whole_units": "49/128",
+        "onset_quarter_units": "49/32",
         "events": [
-          "10913"
+          "10717"
         ]
       },
       {
-        "onset_ticks": 96,
-        "onset_whole_units": "3/4",
-        "onset_quarter_units": "3",
+        "onset_ticks": 73,
+        "onset_whole_units": "73/128",
+        "onset_quarter_units": "73/32",
         "events": [
-          "10914"
+          "10718"
+        ]
+      },
+      {
+        "onset_ticks": 97,
+        "onset_whole_units": "97/128",
+        "onset_quarter_units": "97/32",
+        "events": [
+          "10719"
         ]
       }
     ],
     "primary_attack_set_quarter": [
       "0",
       "3/4",
-      "3/2",
-      "9/4",
-      "3"
+      "25/32",
+      "49/32",
+      "73/32",
+      "97/32"
     ],
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "10867",
+        "id": "10672",
         "kind": "note",
         "attack": true,
         "staff": "4",
@@ -1657,7 +1657,7 @@
         "succ": null
       },
       {
-        "id": "10905",
+        "id": "10710",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -1674,10 +1674,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10907"
+        "succ": "10712"
       },
       {
-        "id": "10906",
+        "id": "10711",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -1697,7 +1697,7 @@
         "succ": null
       },
       {
-        "id": "10907",
+        "id": "10712",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -1713,17 +1713,17 @@
         },
         "start": false,
         "end": true,
-        "pred": "10905",
+        "pred": "10710",
         "succ": null
       },
       {
-        "id": "10908",
+        "id": "10713",
         "kind": "note",
         "attack": true,
         "staff": "5",
         "x": 939.0,
-        "onset_ticks": 24,
-        "onset_quarter_units": "3/4",
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
         "duration_ticks": 48,
         "duration_quarter_units": "3/2",
         "duration_source": {
@@ -1737,13 +1737,13 @@
         "succ": null
       },
       {
-        "id": "10909",
+        "id": "10714",
         "kind": "note",
         "attack": true,
         "staff": "5",
         "x": 971.0,
-        "onset_ticks": 24,
-        "onset_quarter_units": "3/4",
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -1757,13 +1757,13 @@
         "succ": null
       },
       {
-        "id": "12862",
+        "id": "12667",
         "kind": "rest",
         "attack": false,
         "staff": "6",
         "x": 1000.0,
-        "onset_ticks": 24,
-        "onset_quarter_units": "3/4",
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
         "duration_ticks": 64,
         "duration_quarter_units": "2",
         "duration_source": {
@@ -1777,13 +1777,13 @@
         "succ": null
       },
       {
-        "id": "10868",
+        "id": "10673",
         "kind": "note",
         "attack": true,
         "staff": "4",
         "x": 1023.0,
-        "onset_ticks": 24,
-        "onset_quarter_units": "3/4",
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
         "duration_ticks": 96,
         "duration_quarter_units": "3",
         "duration_source": {
@@ -1797,13 +1797,13 @@
         "succ": null
       },
       {
-        "id": "10910",
+        "id": "10715",
         "kind": "note",
         "attack": false,
         "staff": "5",
         "x": 1026.0,
-        "onset_ticks": 24,
-        "onset_quarter_units": "3/4",
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -1814,16 +1814,16 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10912"
+        "succ": "10717"
       },
       {
-        "id": "10911",
+        "id": "10716",
         "kind": "note",
         "attack": true,
         "staff": "5",
         "x": 1027.0,
-        "onset_ticks": 24,
-        "onset_quarter_units": "3/4",
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
         "duration_ticks": 72,
         "duration_quarter_units": "9/4",
         "duration_source": {
@@ -1834,16 +1834,16 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10914"
+        "succ": "10719"
       },
       {
-        "id": "10912",
+        "id": "10717",
         "kind": "note",
         "attack": true,
         "staff": "5",
         "x": 1077.0,
-        "onset_ticks": 48,
-        "onset_quarter_units": "3/2",
+        "onset_ticks": 49,
+        "onset_quarter_units": "49/32",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -1853,17 +1853,17 @@
         },
         "start": false,
         "end": false,
-        "pred": "10910",
-        "succ": "10913"
+        "pred": "10715",
+        "succ": "10718"
       },
       {
-        "id": "10913",
+        "id": "10718",
         "kind": "note",
         "attack": true,
         "staff": "5",
         "x": 1126.0,
-        "onset_ticks": 72,
-        "onset_quarter_units": "9/4",
+        "onset_ticks": 73,
+        "onset_quarter_units": "73/32",
         "duration_ticks": 48,
         "duration_quarter_units": "3/2",
         "duration_source": {
@@ -1873,17 +1873,17 @@
         },
         "start": false,
         "end": true,
-        "pred": "10912",
+        "pred": "10717",
         "succ": null
       },
       {
-        "id": "10914",
+        "id": "10719",
         "kind": "note",
         "attack": true,
         "staff": "5",
         "x": 1156.0,
-        "onset_ticks": 96,
-        "onset_quarter_units": "3",
+        "onset_ticks": 97,
+        "onset_quarter_units": "97/32",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -1893,7 +1893,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "10911",
+        "pred": "10716",
         "succ": null
       }
     ]
@@ -1928,13 +1928,13 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10889",
-          "10935",
-          "10936",
-          "10937",
-          "10938",
-          "10947",
-          "10948"
+          "10694",
+          "10740",
+          "10741",
+          "10742",
+          "10743",
+          "10752",
+          "10753"
         ]
       },
       {
@@ -1942,8 +1942,8 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "10941",
-          "10942"
+          "10746",
+          "10747"
         ]
       },
       {
@@ -1951,9 +1951,9 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "10943",
-          "10944",
-          "10949"
+          "10748",
+          "10749",
+          "10754"
         ]
       },
       {
@@ -1961,8 +1961,8 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "10945",
-          "10946"
+          "10750",
+          "10751"
         ]
       }
     ],
@@ -1975,7 +1975,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "10935",
+        "id": "10740",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -1995,7 +1995,7 @@
         "succ": null
       },
       {
-        "id": "10936",
+        "id": "10741",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -2015,7 +2015,7 @@
         "succ": null
       },
       {
-        "id": "12873",
+        "id": "12678",
         "kind": "rest",
         "attack": false,
         "staff": "6",
@@ -2035,7 +2035,7 @@
         "succ": null
       },
       {
-        "id": "10889",
+        "id": "10694",
         "kind": "note",
         "attack": true,
         "staff": "4",
@@ -2055,7 +2055,7 @@
         "succ": null
       },
       {
-        "id": "10937",
+        "id": "10742",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -2075,7 +2075,7 @@
         "succ": null
       },
       {
-        "id": "10938",
+        "id": "10743",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -2095,7 +2095,7 @@
         "succ": null
       },
       {
-        "id": "10947",
+        "id": "10752",
         "kind": "note",
         "attack": true,
         "staff": "6",
@@ -2115,7 +2115,7 @@
         "succ": null
       },
       {
-        "id": "10939",
+        "id": "10744",
         "kind": "note",
         "attack": false,
         "staff": "5",
@@ -2132,10 +2132,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10941"
+        "succ": "10746"
       },
       {
-        "id": "10940",
+        "id": "10745",
         "kind": "note",
         "attack": false,
         "staff": "5",
@@ -2152,10 +2152,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10942"
+        "succ": "10747"
       },
       {
-        "id": "10948",
+        "id": "10753",
         "kind": "note",
         "attack": true,
         "staff": "6",
@@ -2172,10 +2172,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10949"
+        "succ": "10754"
       },
       {
-        "id": "10941",
+        "id": "10746",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -2191,11 +2191,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "10939",
-        "succ": "10943"
+        "pred": "10744",
+        "succ": "10748"
       },
       {
-        "id": "10942",
+        "id": "10747",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -2211,11 +2211,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "10940",
-        "succ": "10944"
+        "pred": "10745",
+        "succ": "10749"
       },
       {
-        "id": "10943",
+        "id": "10748",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -2231,11 +2231,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "10941",
-        "succ": "10945"
+        "pred": "10746",
+        "succ": "10750"
       },
       {
-        "id": "10944",
+        "id": "10749",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -2251,11 +2251,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "10942",
-        "succ": "10946"
+        "pred": "10747",
+        "succ": "10751"
       },
       {
-        "id": "10949",
+        "id": "10754",
         "kind": "note",
         "attack": true,
         "staff": "6",
@@ -2271,11 +2271,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10948",
+        "pred": "10753",
         "succ": null
       },
       {
-        "id": "10946",
+        "id": "10751",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -2291,11 +2291,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10944",
+        "pred": "10749",
         "succ": null
       },
       {
-        "id": "10945",
+        "id": "10750",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -2311,7 +2311,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "10943",
+        "pred": "10748",
         "succ": null
       }
     ]
@@ -2346,15 +2346,15 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10958",
-          "10959",
-          "10981",
-          "10982",
-          "10983",
-          "10984",
-          "10985",
-          "11026",
-          "11027"
+          "10763",
+          "10764",
+          "10786",
+          "10787",
+          "10788",
+          "10789",
+          "10790",
+          "10831",
+          "10832"
         ]
       },
       {
@@ -2362,7 +2362,7 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "11028"
+          "10833"
         ]
       },
       {
@@ -2370,7 +2370,7 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "10986"
+          "10791"
         ]
       }
     ],
@@ -2382,7 +2382,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "10958",
+        "id": "10763",
         "kind": "note",
         "attack": true,
         "staff": "7",
@@ -2402,7 +2402,7 @@
         "succ": null
       },
       {
-        "id": "10981",
+        "id": "10786",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2422,7 +2422,7 @@
         "succ": null
       },
       {
-        "id": "10982",
+        "id": "10787",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2442,7 +2442,7 @@
         "succ": null
       },
       {
-        "id": "10983",
+        "id": "10788",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2462,7 +2462,7 @@
         "succ": null
       },
       {
-        "id": "11026",
+        "id": "10831",
         "kind": "note",
         "attack": true,
         "staff": "9",
@@ -2482,7 +2482,7 @@
         "succ": null
       },
       {
-        "id": "10984",
+        "id": "10789",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2499,10 +2499,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10986"
+        "succ": "10791"
       },
       {
-        "id": "10959",
+        "id": "10764",
         "kind": "note",
         "attack": true,
         "staff": "7",
@@ -2522,7 +2522,7 @@
         "succ": null
       },
       {
-        "id": "10985",
+        "id": "10790",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2542,7 +2542,7 @@
         "succ": null
       },
       {
-        "id": "11027",
+        "id": "10832",
         "kind": "note",
         "attack": true,
         "staff": "9",
@@ -2559,10 +2559,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11028"
+        "succ": "10833"
       },
       {
-        "id": "11028",
+        "id": "10833",
         "kind": "note",
         "attack": true,
         "staff": "9",
@@ -2578,11 +2578,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11027",
+        "pred": "10832",
         "succ": null
       },
       {
-        "id": "10986",
+        "id": "10791",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2598,7 +2598,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "10984",
+        "pred": "10789",
         "succ": null
       }
     ]
@@ -2619,12 +2619,12 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10960",
-          "10987",
-          "10988",
-          "10989",
-          "11029",
-          "11030"
+          "10765",
+          "10792",
+          "10793",
+          "10794",
+          "10834",
+          "10835"
         ]
       },
       {
@@ -2632,16 +2632,16 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "10990",
-          "11031"
+          "10795",
+          "10836"
         ]
       },
       {
-        "onset_ticks": 32,
-        "onset_whole_units": "1/4",
-        "onset_quarter_units": "1",
+        "onset_ticks": 25,
+        "onset_whole_units": "25/128",
+        "onset_quarter_units": "25/32",
         "events": [
-          "10961"
+          "10766"
         ]
       },
       {
@@ -2649,7 +2649,7 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "10991"
+          "10796"
         ]
       },
       {
@@ -2657,31 +2657,31 @@
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "events": [
-          "10992",
-          "10993"
+          "10797",
+          "10798"
         ]
       },
       {
-        "onset_ticks": 104,
-        "onset_whole_units": "13/16",
-        "onset_quarter_units": "13/4",
+        "onset_ticks": 97,
+        "onset_whole_units": "97/128",
+        "onset_quarter_units": "97/32",
         "events": [
-          "10962"
+          "10767"
         ]
       }
     ],
     "primary_attack_set_quarter": [
       "0",
       "3/4",
-      "1",
+      "25/32",
       "3/2",
       "2",
-      "13/4"
+      "97/32"
     ],
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "10987",
+        "id": "10792",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2701,7 +2701,7 @@
         "succ": null
       },
       {
-        "id": "10988",
+        "id": "10793",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2718,10 +2718,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10993"
+        "succ": "10798"
       },
       {
-        "id": "11029",
+        "id": "10834",
         "kind": "note",
         "attack": true,
         "staff": "9",
@@ -2741,7 +2741,7 @@
         "succ": null
       },
       {
-        "id": "10960",
+        "id": "10765",
         "kind": "note",
         "attack": true,
         "staff": "7",
@@ -2761,7 +2761,7 @@
         "succ": null
       },
       {
-        "id": "10989",
+        "id": "10794",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2778,10 +2778,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10990"
+        "succ": "10795"
       },
       {
-        "id": "11030",
+        "id": "10835",
         "kind": "note",
         "attack": true,
         "staff": "9",
@@ -2798,10 +2798,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11031"
+        "succ": "10836"
       },
       {
-        "id": "10990",
+        "id": "10795",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2817,11 +2817,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "10989",
-        "succ": "10991"
+        "pred": "10794",
+        "succ": "10796"
       },
       {
-        "id": "11031",
+        "id": "10836",
         "kind": "note",
         "attack": true,
         "staff": "9",
@@ -2837,17 +2837,17 @@
         },
         "start": false,
         "end": true,
-        "pred": "11030",
+        "pred": "10835",
         "succ": null
       },
       {
-        "id": "10961",
+        "id": "10766",
         "kind": "note",
         "attack": true,
         "staff": "7",
         "x": 1509.0,
-        "onset_ticks": 32,
-        "onset_quarter_units": "1",
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
         "duration_ticks": 72,
         "duration_quarter_units": "9/4",
         "duration_source": {
@@ -2858,10 +2858,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "10962"
+        "succ": "10767"
       },
       {
-        "id": "10991",
+        "id": "10796",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2877,11 +2877,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10990",
+        "pred": "10795",
         "succ": null
       },
       {
-        "id": "10992",
+        "id": "10797",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2901,7 +2901,7 @@
         "succ": null
       },
       {
-        "id": "10993",
+        "id": "10798",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -2917,17 +2917,17 @@
         },
         "start": false,
         "end": true,
-        "pred": "10988",
+        "pred": "10793",
         "succ": null
       },
       {
-        "id": "10962",
+        "id": "10767",
         "kind": "note",
         "attack": true,
         "staff": "7",
         "x": 1590.0,
-        "onset_ticks": 104,
-        "onset_quarter_units": "13/4",
+        "onset_ticks": 97,
+        "onset_quarter_units": "97/32",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -2937,7 +2937,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "10961",
+        "pred": "10766",
         "succ": null
       }
     ]
@@ -2958,15 +2958,15 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10963",
-          "10964",
-          "10994",
-          "10995",
-          "10996",
-          "10997",
-          "10998",
-          "10999",
-          "11032"
+          "10768",
+          "10769",
+          "10799",
+          "10800",
+          "10801",
+          "10802",
+          "10803",
+          "10804",
+          "10837"
         ]
       },
       {
@@ -2974,7 +2974,7 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "11000"
+          "10805"
         ]
       },
       {
@@ -2982,7 +2982,7 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "11001"
+          "10806"
         ]
       }
     ],
@@ -2994,7 +2994,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "10994",
+        "id": "10799",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3014,7 +3014,7 @@
         "succ": null
       },
       {
-        "id": "10995",
+        "id": "10800",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3034,7 +3034,7 @@
         "succ": null
       },
       {
-        "id": "10963",
+        "id": "10768",
         "kind": "note",
         "attack": true,
         "staff": "7",
@@ -3054,7 +3054,7 @@
         "succ": null
       },
       {
-        "id": "11032",
+        "id": "10837",
         "kind": "note",
         "attack": true,
         "staff": "9",
@@ -3074,7 +3074,7 @@
         "succ": null
       },
       {
-        "id": "10996",
+        "id": "10801",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3094,7 +3094,7 @@
         "succ": null
       },
       {
-        "id": "10997",
+        "id": "10802",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3114,7 +3114,7 @@
         "succ": null
       },
       {
-        "id": "10998",
+        "id": "10803",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3131,10 +3131,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11000"
+        "succ": "10805"
       },
       {
-        "id": "10964",
+        "id": "10769",
         "kind": "note",
         "attack": true,
         "staff": "7",
@@ -3154,7 +3154,7 @@
         "succ": null
       },
       {
-        "id": "10999",
+        "id": "10804",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3171,10 +3171,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11001"
+        "succ": "10806"
       },
       {
-        "id": "12939",
+        "id": "12744",
         "kind": "rest",
         "attack": false,
         "staff": "9",
@@ -3194,7 +3194,7 @@
         "succ": null
       },
       {
-        "id": "11000",
+        "id": "10805",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3210,11 +3210,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "10998",
+        "pred": "10803",
         "succ": null
       },
       {
-        "id": "11001",
+        "id": "10806",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3230,7 +3230,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "10999",
+        "pred": "10804",
         "succ": null
       }
     ]
@@ -3251,11 +3251,11 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "10965",
-          "11002",
-          "11003",
-          "11004",
-          "11033"
+          "10770",
+          "10807",
+          "10808",
+          "10809",
+          "10838"
         ]
       },
       {
@@ -3263,7 +3263,7 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "11006"
+          "10811"
         ]
       },
       {
@@ -3271,7 +3271,7 @@
         "onset_whole_units": "9/32",
         "onset_quarter_units": "9/8",
         "events": [
-          "11007"
+          "10812"
         ]
       },
       {
@@ -3279,7 +3279,7 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "11008"
+          "10813"
         ]
       },
       {
@@ -3287,8 +3287,8 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "11009",
-          "11034"
+          "10814",
+          "10839"
         ]
       }
     ],
@@ -3302,7 +3302,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "11002",
+        "id": "10807",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3322,7 +3322,7 @@
         "succ": null
       },
       {
-        "id": "10965",
+        "id": "10770",
         "kind": "note",
         "attack": true,
         "staff": "7",
@@ -3342,7 +3342,7 @@
         "succ": null
       },
       {
-        "id": "12940",
+        "id": "12745",
         "kind": "rest",
         "attack": false,
         "staff": "9",
@@ -3362,7 +3362,7 @@
         "succ": null
       },
       {
-        "id": "11003",
+        "id": "10808",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3382,7 +3382,7 @@
         "succ": null
       },
       {
-        "id": "11004",
+        "id": "10809",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3402,7 +3402,7 @@
         "succ": null
       },
       {
-        "id": "11005",
+        "id": "10810",
         "kind": "note",
         "attack": false,
         "staff": "8",
@@ -3419,10 +3419,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11006"
+        "succ": "10811"
       },
       {
-        "id": "11033",
+        "id": "10838",
         "kind": "note",
         "attack": true,
         "staff": "9",
@@ -3439,10 +3439,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11034"
+        "succ": "10839"
       },
       {
-        "id": "11006",
+        "id": "10811",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3458,11 +3458,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11005",
-        "succ": "11007"
+        "pred": "10810",
+        "succ": "10812"
       },
       {
-        "id": "11007",
+        "id": "10812",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3478,11 +3478,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11006",
-        "succ": "11008"
+        "pred": "10811",
+        "succ": "10813"
       },
       {
-        "id": "11008",
+        "id": "10813",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3498,11 +3498,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11007",
-        "succ": "11009"
+        "pred": "10812",
+        "succ": "10814"
       },
       {
-        "id": "11009",
+        "id": "10814",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -3518,11 +3518,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11008",
+        "pred": "10813",
         "succ": null
       },
       {
-        "id": "11034",
+        "id": "10839",
         "kind": "note",
         "attack": true,
         "staff": "9",
@@ -3538,7 +3538,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "11033",
+        "pred": "10838",
         "succ": null
       }
     ]
@@ -3566,13 +3566,13 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "11057",
-          "11058",
-          "11059",
-          "11060",
-          "11061",
-          "11111",
-          "11112"
+          "10862",
+          "10863",
+          "10864",
+          "10865",
+          "10866",
+          "10916",
+          "10917"
         ]
       },
       {
@@ -3580,9 +3580,9 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "11062",
-          "11063",
-          "11113"
+          "10867",
+          "10868",
+          "10918"
         ]
       },
       {
@@ -3590,7 +3590,7 @@
         "onset_whole_units": "1/2",
         "onset_quarter_units": "2",
         "events": [
-          "11039"
+          "10844"
         ]
       },
       {
@@ -3598,7 +3598,7 @@
         "onset_whole_units": "11/16",
         "onset_quarter_units": "11/4",
         "events": [
-          "11040"
+          "10845"
         ]
       }
     ],
@@ -3611,7 +3611,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "13058",
+        "id": "12863",
         "kind": "rest",
         "attack": false,
         "staff": "10",
@@ -3631,7 +3631,7 @@
         "succ": null
       },
       {
-        "id": "11057",
+        "id": "10862",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -3651,7 +3651,7 @@
         "succ": null
       },
       {
-        "id": "11058",
+        "id": "10863",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -3668,10 +3668,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11063"
+        "succ": "10868"
       },
       {
-        "id": "11111",
+        "id": "10916",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -3691,7 +3691,7 @@
         "succ": null
       },
       {
-        "id": "11059",
+        "id": "10864",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -3711,7 +3711,7 @@
         "succ": null
       },
       {
-        "id": "11060",
+        "id": "10865",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -3731,7 +3731,7 @@
         "succ": null
       },
       {
-        "id": "11112",
+        "id": "10917",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -3751,7 +3751,7 @@
         "succ": null
       },
       {
-        "id": "11061",
+        "id": "10866",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -3768,10 +3768,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11062"
+        "succ": "10867"
       },
       {
-        "id": "13060",
+        "id": "12865",
         "kind": "rest",
         "attack": false,
         "staff": "10",
@@ -3788,10 +3788,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11039"
+        "succ": "10844"
       },
       {
-        "id": "11062",
+        "id": "10867",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -3807,11 +3807,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11061",
+        "pred": "10866",
         "succ": null
       },
       {
-        "id": "11063",
+        "id": "10868",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -3827,11 +3827,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11058",
+        "pred": "10863",
         "succ": null
       },
       {
-        "id": "11113",
+        "id": "10918",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -3851,7 +3851,7 @@
         "succ": null
       },
       {
-        "id": "11039",
+        "id": "10844",
         "kind": "note",
         "attack": true,
         "staff": "10",
@@ -3867,11 +3867,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "13060",
-        "succ": "11040"
+        "pred": "12865",
+        "succ": "10845"
       },
       {
-        "id": "11040",
+        "id": "10845",
         "kind": "note",
         "attack": true,
         "staff": "10",
@@ -3887,7 +3887,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "11039",
+        "pred": "10844",
         "succ": null
       }
     ]
@@ -3908,10 +3908,557 @@
   },
   "22": {
     "measure": 22,
-    "ok": false,
-    "reason": "unsat",
-    "attacks": [],
-    "attack_count": null
+    "page": 1,
+    "system": 4,
+    "ok": true,
+    "ambiguous": false,
+    "reason": null,
+    "total_penalty": 122,
+    "meter_ticks": 128,
+    "attack_count": 7,
+    "attacks": [
+      {
+        "onset_ticks": 0,
+        "onset_whole_units": "0",
+        "onset_quarter_units": "0",
+        "events": [
+          "10852",
+          "10889",
+          "10890",
+          "10926"
+        ]
+      },
+      {
+        "onset_ticks": 24,
+        "onset_whole_units": "3/16",
+        "onset_quarter_units": "3/4",
+        "events": [
+          "10853",
+          "10891",
+          "10892",
+          "10927"
+        ]
+      },
+      {
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
+        "events": [
+          "10854",
+          "10855",
+          "10893",
+          "10894",
+          "10928"
+        ]
+      },
+      {
+        "onset_ticks": 60,
+        "onset_whole_units": "15/32",
+        "onset_quarter_units": "15/8",
+        "events": [
+          "10856"
+        ]
+      },
+      {
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
+        "events": [
+          "10857",
+          "10895",
+          "10896",
+          "10929"
+        ]
+      },
+      {
+        "onset_ticks": 108,
+        "onset_whole_units": "27/32",
+        "onset_quarter_units": "27/8",
+        "events": [
+          "10859"
+        ]
+      },
+      {
+        "onset_ticks": 114,
+        "onset_whole_units": "57/64",
+        "onset_quarter_units": "57/16",
+        "events": [
+          "10860"
+        ]
+      }
+    ],
+    "primary_attack_set_quarter": [
+      "0",
+      "3/4",
+      "3/2",
+      "15/8",
+      "9/4",
+      "27/8",
+      "57/16"
+    ],
+    "alternate_attack_set_quarter": null,
+    "events": [
+      {
+        "id": "10852",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 1426.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10855"
+      },
+      {
+        "id": "12871",
+        "kind": "rest",
+        "attack": false,
+        "staff": "11",
+        "x": 1426.5,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 32,
+        "duration_quarter_units": "1",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10889",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 1431.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10894"
+      },
+      {
+        "id": "10926",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 1434.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10928"
+      },
+      {
+        "id": "10890",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 1474.0,
+        "onset_ticks": 0,
+        "onset_quarter_units": "0",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10891"
+      },
+      {
+        "id": "10853",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 1510.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10854"
+      },
+      {
+        "id": "10891",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 1514.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10890",
+        "succ": "10893"
+      },
+      {
+        "id": "10927",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 1514.0,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": false,
+        "pred": null,
+        "succ": "10929"
+      },
+      {
+        "id": "10892",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 1514.5,
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
+        "duration_ticks": 96,
+        "duration_quarter_units": "3",
+        "duration_source": {
+          "ticks": 64,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10854",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 1550.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10853",
+        "succ": "10858"
+      },
+      {
+        "id": "10893",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 1555.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 24,
+        "duration_quarter_units": "3/4",
+        "duration_source": {
+          "ticks": 16,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10891",
+        "succ": "10895"
+      },
+      {
+        "id": "12873",
+        "kind": "rest",
+        "attack": false,
+        "staff": "10",
+        "x": 1602.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 16,
+        "duration_quarter_units": "1/2",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10894",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 1604.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10889",
+        "succ": null
+      },
+      {
+        "id": "10928",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 1605.0,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10926",
+        "succ": null
+      },
+      {
+        "id": "10855",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 1637.5,
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10852",
+        "succ": "10856"
+      },
+      {
+        "id": "10856",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 1672.0,
+        "onset_ticks": 60,
+        "onset_quarter_units": "15/8",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10855",
+        "succ": "10857"
+      },
+      {
+        "id": "10857",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 1703.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 12,
+        "duration_quarter_units": "3/8",
+        "duration_source": {
+          "ticks": 8,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10856",
+        "succ": null
+      },
+      {
+        "id": "10858",
+        "kind": "note",
+        "attack": false,
+        "staff": "10",
+        "x": 1748.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 36,
+        "duration_quarter_units": "9/8",
+        "duration_source": {
+          "ticks": 24,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10854",
+        "succ": "10859"
+      },
+      {
+        "id": "10895",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 1749.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10893",
+        "succ": null
+      },
+      {
+        "id": "10896",
+        "kind": "note",
+        "attack": true,
+        "staff": "11",
+        "x": 1751.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": true,
+        "end": true,
+        "pred": null,
+        "succ": null
+      },
+      {
+        "id": "10929",
+        "kind": "note",
+        "attack": true,
+        "staff": "12",
+        "x": 1751.0,
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
+        "duration_ticks": 48,
+        "duration_quarter_units": "3/2",
+        "duration_source": {
+          "ticks": 32,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10927",
+        "succ": null
+      },
+      {
+        "id": "10859",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 1813.0,
+        "onset_ticks": 108,
+        "onset_quarter_units": "27/8",
+        "duration_ticks": 6,
+        "duration_quarter_units": "3/16",
+        "duration_source": {
+          "ticks": 4,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": false,
+        "pred": "10858",
+        "succ": "10860"
+      },
+      {
+        "id": "10860",
+        "kind": "note",
+        "attack": true,
+        "staff": "10",
+        "x": 1844.0,
+        "onset_ticks": 114,
+        "onset_quarter_units": "57/16",
+        "duration_ticks": 6,
+        "duration_quarter_units": "3/16",
+        "duration_source": {
+          "ticks": 4,
+          "cost": 0,
+          "why": "primary"
+        },
+        "start": false,
+        "end": true,
+        "pred": "10859",
+        "succ": null
+      }
+    ]
   },
   "23": {
     "measure": 23,
@@ -3929,13 +4476,13 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "11056",
-          "11092",
-          "11093",
-          "11094",
-          "11095",
-          "11125",
-          "11126"
+          "10861",
+          "10897",
+          "10898",
+          "10899",
+          "10900",
+          "10930",
+          "10931"
         ]
       },
       {
@@ -3943,8 +4490,8 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "11096",
-          "11097"
+          "10901",
+          "10902"
         ]
       },
       {
@@ -3952,7 +4499,7 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "11128"
+          "10933"
         ]
       },
       {
@@ -3960,10 +4507,10 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "11098",
-          "11099",
-          "11101",
-          "11129"
+          "10903",
+          "10904",
+          "10906",
+          "10934"
         ]
       },
       {
@@ -3971,7 +4518,7 @@
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "events": [
-          "11100"
+          "10905"
         ]
       }
     ],
@@ -3985,7 +4532,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "11092",
+        "id": "10897",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4005,7 +4552,7 @@
         "succ": null
       },
       {
-        "id": "11093",
+        "id": "10898",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4022,10 +4569,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11101"
+        "succ": "10906"
       },
       {
-        "id": "11056",
+        "id": "10861",
         "kind": "note",
         "attack": true,
         "staff": "10",
@@ -4045,7 +4592,7 @@
         "succ": null
       },
       {
-        "id": "11125",
+        "id": "10930",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -4065,7 +4612,7 @@
         "succ": null
       },
       {
-        "id": "11126",
+        "id": "10931",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -4085,7 +4632,7 @@
         "succ": null
       },
       {
-        "id": "11094",
+        "id": "10899",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4102,10 +4649,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11096"
+        "succ": "10901"
       },
       {
-        "id": "11095",
+        "id": "10900",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4122,10 +4669,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11097"
+        "succ": "10902"
       },
       {
-        "id": "11096",
+        "id": "10901",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4141,11 +4688,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11094",
-        "succ": "11098"
+        "pred": "10899",
+        "succ": "10903"
       },
       {
-        "id": "11097",
+        "id": "10902",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4161,11 +4708,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11095",
-        "succ": "11099"
+        "pred": "10900",
+        "succ": "10904"
       },
       {
-        "id": "11127",
+        "id": "10932",
         "kind": "note",
         "attack": false,
         "staff": "12",
@@ -4182,10 +4729,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11128"
+        "succ": "10933"
       },
       {
-        "id": "11128",
+        "id": "10933",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -4201,11 +4748,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11127",
-        "succ": "11129"
+        "pred": "10932",
+        "succ": "10934"
       },
       {
-        "id": "11098",
+        "id": "10903",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4221,11 +4768,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11096",
-        "succ": "11100"
+        "pred": "10901",
+        "succ": "10905"
       },
       {
-        "id": "11099",
+        "id": "10904",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4241,11 +4788,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11097",
+        "pred": "10902",
         "succ": null
       },
       {
-        "id": "11129",
+        "id": "10934",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -4261,11 +4808,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11128",
+        "pred": "10933",
         "succ": null
       },
       {
-        "id": "11101",
+        "id": "10906",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4281,11 +4828,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11093",
+        "pred": "10898",
         "succ": null
       },
       {
-        "id": "11100",
+        "id": "10905",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4301,7 +4848,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "11098",
+        "pred": "10903",
         "succ": null
       }
     ]
@@ -4322,8 +4869,8 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "11102",
-          "11103"
+          "10907",
+          "10908"
         ]
       },
       {
@@ -4331,10 +4878,10 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "11104",
-          "11105",
-          "11131",
-          "11132"
+          "10909",
+          "10910",
+          "10936",
+          "10937"
         ]
       },
       {
@@ -4342,9 +4889,9 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "11106",
-          "11107",
-          "11133"
+          "10911",
+          "10912",
+          "10938"
         ]
       },
       {
@@ -4352,10 +4899,10 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "11108",
-          "11109",
-          "11134",
-          "11135"
+          "10913",
+          "10914",
+          "10939",
+          "10940"
         ]
       },
       {
@@ -4363,7 +4910,7 @@
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "events": [
-          "11110"
+          "10915"
         ]
       }
     ],
@@ -4377,7 +4924,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "11102",
+        "id": "10907",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4394,10 +4941,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11108"
+        "succ": "10913"
       },
       {
-        "id": "11103",
+        "id": "10908",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4414,10 +4961,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11109"
+        "succ": "10914"
       },
       {
-        "id": "11130",
+        "id": "10935",
         "kind": "note",
         "attack": false,
         "staff": "12",
@@ -4434,10 +4981,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11131"
+        "succ": "10936"
       },
       {
-        "id": "11131",
+        "id": "10936",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -4453,11 +5000,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11130",
-        "succ": "11133"
+        "pred": "10935",
+        "succ": "10938"
       },
       {
-        "id": "11132",
+        "id": "10937",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -4474,10 +5021,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11135"
+        "succ": "10940"
       },
       {
-        "id": "11104",
+        "id": "10909",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4494,10 +5041,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11106"
+        "succ": "10911"
       },
       {
-        "id": "11105",
+        "id": "10910",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4514,16 +5061,16 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11107"
+        "succ": "10912"
       },
       {
-        "id": "13069",
+        "id": "12874",
         "kind": "rest",
         "attack": false,
         "staff": "10",
         "x": 2497.0,
-        "onset_ticks": 48,
-        "onset_quarter_units": "3/2",
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
         "duration_ticks": 64,
         "duration_quarter_units": "2",
         "duration_source": {
@@ -4537,7 +5084,7 @@
         "succ": null
       },
       {
-        "id": "11106",
+        "id": "10911",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4553,11 +5100,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11104",
+        "pred": "10909",
         "succ": null
       },
       {
-        "id": "11107",
+        "id": "10912",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4573,11 +5120,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11105",
+        "pred": "10910",
         "succ": null
       },
       {
-        "id": "11133",
+        "id": "10938",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -4593,11 +5140,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11131",
-        "succ": "11134"
+        "pred": "10936",
+        "succ": "10939"
       },
       {
-        "id": "11134",
+        "id": "10939",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -4613,11 +5160,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11133",
+        "pred": "10938",
         "succ": null
       },
       {
-        "id": "11108",
+        "id": "10913",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4633,11 +5180,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11102",
+        "pred": "10907",
         "succ": null
       },
       {
-        "id": "11109",
+        "id": "10914",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4653,11 +5200,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11103",
-        "succ": "11110"
+        "pred": "10908",
+        "succ": "10915"
       },
       {
-        "id": "11135",
+        "id": "10940",
         "kind": "note",
         "attack": true,
         "staff": "12",
@@ -4673,11 +5220,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11132",
+        "pred": "10937",
         "succ": null
       },
       {
-        "id": "11110",
+        "id": "10915",
         "kind": "note",
         "attack": true,
         "staff": "11",
@@ -4693,7 +5240,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "11109",
+        "pred": "10914",
         "succ": null
       }
     ]
@@ -4721,7 +5268,7 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "11137"
+          "10942"
         ]
       },
       {
@@ -4729,10 +5276,10 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "11166",
-          "11167",
-          "11213",
-          "11214"
+          "10971",
+          "10972",
+          "11018",
+          "11019"
         ]
       },
       {
@@ -4740,9 +5287,9 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "11138",
-          "11168",
-          "11169"
+          "10943",
+          "10973",
+          "10974"
         ]
       },
       {
@@ -4750,12 +5297,12 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "11171",
-          "11172",
-          "11173",
-          "11174",
-          "11216",
-          "11217"
+          "10976",
+          "10977",
+          "10978",
+          "10979",
+          "11021",
+          "11022"
         ]
       },
       {
@@ -4763,7 +5310,7 @@
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "events": [
-          "11139"
+          "10944"
         ]
       }
     ],
@@ -4777,7 +5324,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "11164",
+        "id": "10969",
         "kind": "note",
         "attack": false,
         "staff": "14",
@@ -4794,10 +5341,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11169"
+        "succ": "10974"
       },
       {
-        "id": "11137",
+        "id": "10942",
         "kind": "note",
         "attack": true,
         "staff": "13",
@@ -4814,10 +5361,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11139"
+        "succ": "10944"
       },
       {
-        "id": "11165",
+        "id": "10970",
         "kind": "note",
         "attack": false,
         "staff": "14",
@@ -4834,10 +5381,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11170"
+        "succ": "10975"
       },
       {
-        "id": "11212",
+        "id": "11017",
         "kind": "note",
         "attack": false,
         "staff": "15",
@@ -4854,10 +5401,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11213"
+        "succ": "11018"
       },
       {
-        "id": "11213",
+        "id": "11018",
         "kind": "note",
         "attack": true,
         "staff": "15",
@@ -4873,11 +5420,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11212",
-        "succ": "11215"
+        "pred": "11017",
+        "succ": "11020"
       },
       {
-        "id": "11166",
+        "id": "10971",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -4894,10 +5441,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11168"
+        "succ": "10973"
       },
       {
-        "id": "11167",
+        "id": "10972",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -4914,10 +5461,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11174"
+        "succ": "10979"
       },
       {
-        "id": "11214",
+        "id": "11019",
         "kind": "note",
         "attack": true,
         "staff": "15",
@@ -4934,10 +5481,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11217"
+        "succ": "11022"
       },
       {
-        "id": "11168",
+        "id": "10973",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -4953,11 +5500,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11166",
-        "succ": "11173"
+        "pred": "10971",
+        "succ": "10978"
       },
       {
-        "id": "11138",
+        "id": "10943",
         "kind": "note",
         "attack": true,
         "staff": "13",
@@ -4977,7 +5524,7 @@
         "succ": null
       },
       {
-        "id": "11169",
+        "id": "10974",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -4993,11 +5540,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11164",
-        "succ": "11171"
+        "pred": "10969",
+        "succ": "10976"
       },
       {
-        "id": "11170",
+        "id": "10975",
         "kind": "note",
         "attack": false,
         "staff": "14",
@@ -5013,11 +5560,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11165",
-        "succ": "11172"
+        "pred": "10970",
+        "succ": "10977"
       },
       {
-        "id": "11215",
+        "id": "11020",
         "kind": "note",
         "attack": false,
         "staff": "15",
@@ -5033,11 +5580,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11213",
-        "succ": "11216"
+        "pred": "11018",
+        "succ": "11021"
       },
       {
-        "id": "11216",
+        "id": "11021",
         "kind": "note",
         "attack": true,
         "staff": "15",
@@ -5053,11 +5600,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11215",
+        "pred": "11020",
         "succ": null
       },
       {
-        "id": "11171",
+        "id": "10976",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5073,11 +5620,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11169",
+        "pred": "10974",
         "succ": null
       },
       {
-        "id": "11172",
+        "id": "10977",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5093,11 +5640,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11170",
+        "pred": "10975",
         "succ": null
       },
       {
-        "id": "11173",
+        "id": "10978",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5113,11 +5660,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11168",
+        "pred": "10973",
         "succ": null
       },
       {
-        "id": "11174",
+        "id": "10979",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5133,11 +5680,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11167",
+        "pred": "10972",
         "succ": null
       },
       {
-        "id": "11217",
+        "id": "11022",
         "kind": "note",
         "attack": true,
         "staff": "15",
@@ -5153,11 +5700,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11214",
+        "pred": "11019",
         "succ": null
       },
       {
-        "id": "11139",
+        "id": "10944",
         "kind": "note",
         "attack": true,
         "staff": "13",
@@ -5173,7 +5720,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "11137",
+        "pred": "10942",
         "succ": null
       }
     ]
@@ -5194,17 +5741,17 @@
     "reason": null,
     "total_penalty": 91,
     "meter_ticks": 128,
-    "attack_count": 11,
+    "attack_count": 10,
     "attacks": [
       {
         "onset_ticks": 0,
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "11144",
-          "11185",
-          "11186",
-          "11223"
+          "10949",
+          "10990",
+          "10991",
+          "11028"
         ]
       },
       {
@@ -5212,8 +5759,7 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "11187",
-          "11188"
+          "10992"
         ]
       },
       {
@@ -5221,17 +5767,11 @@
         "onset_whole_units": "25/128",
         "onset_quarter_units": "25/32",
         "events": [
-          "11145",
-          "11146",
-          "11224"
-        ]
-      },
-      {
-        "onset_ticks": 32,
-        "onset_whole_units": "1/4",
-        "onset_quarter_units": "1",
-        "events": [
-          "11225"
+          "10950",
+          "10951",
+          "10993",
+          "11029",
+          "11030"
         ]
       },
       {
@@ -5239,7 +5779,7 @@
         "onset_whole_units": "37/128",
         "onset_quarter_units": "37/32",
         "events": [
-          "11147"
+          "10952"
         ]
       },
       {
@@ -5247,7 +5787,7 @@
         "onset_whole_units": "49/128",
         "onset_quarter_units": "49/32",
         "events": [
-          "11148"
+          "10953"
         ]
       },
       {
@@ -5255,40 +5795,40 @@
         "onset_whole_units": "61/128",
         "onset_quarter_units": "61/32",
         "events": [
-          "11149"
+          "10954"
         ]
       },
       {
-        "onset_ticks": 73,
-        "onset_whole_units": "73/128",
-        "onset_quarter_units": "73/32",
+        "onset_ticks": 64,
+        "onset_whole_units": "1/2",
+        "onset_quarter_units": "2",
         "events": [
-          "11150",
-          "11190"
+          "10955",
+          "10995"
         ]
       },
       {
-        "onset_ticks": 97,
-        "onset_whole_units": "97/128",
-        "onset_quarter_units": "97/32",
+        "onset_ticks": 88,
+        "onset_whole_units": "11/16",
+        "onset_quarter_units": "11/4",
         "events": [
-          "11191"
+          "10996"
         ]
       },
       {
-        "onset_ticks": 109,
-        "onset_whole_units": "109/128",
-        "onset_quarter_units": "109/32",
+        "onset_ticks": 100,
+        "onset_whole_units": "25/32",
+        "onset_quarter_units": "25/8",
         "events": [
-          "11151"
+          "10956"
         ]
       },
       {
-        "onset_ticks": 115,
-        "onset_whole_units": "115/128",
-        "onset_quarter_units": "115/32",
+        "onset_ticks": 106,
+        "onset_whole_units": "53/64",
+        "onset_quarter_units": "53/16",
         "events": [
-          "11152"
+          "10957"
         ]
       }
     ],
@@ -5296,19 +5836,18 @@
       "0",
       "3/4",
       "25/32",
-      "1",
       "37/32",
       "49/32",
       "61/32",
-      "73/32",
-      "97/32",
-      "109/32",
-      "115/32"
+      "2",
+      "11/4",
+      "25/8",
+      "53/16"
     ],
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "11144",
+        "id": "10949",
         "kind": "note",
         "attack": true,
         "staff": "13",
@@ -5328,7 +5867,7 @@
         "succ": null
       },
       {
-        "id": "11185",
+        "id": "10990",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5345,10 +5884,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11187"
+        "succ": "10992"
       },
       {
-        "id": "11186",
+        "id": "10991",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5363,12 +5902,12 @@
           "why": "primary"
         },
         "start": true,
-        "end": true,
+        "end": false,
         "pred": null,
-        "succ": null
+        "succ": "10994"
       },
       {
-        "id": "11223",
+        "id": "11028",
         "kind": "note",
         "attack": true,
         "staff": "15",
@@ -5388,7 +5927,7 @@
         "succ": null
       },
       {
-        "id": "11187",
+        "id": "10992",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5404,17 +5943,17 @@
         },
         "start": false,
         "end": true,
-        "pred": "11185",
+        "pred": "10990",
         "succ": null
       },
       {
-        "id": "11188",
+        "id": "10993",
         "kind": "note",
         "attack": true,
         "staff": "14",
         "x": 1579.0,
-        "onset_ticks": 24,
-        "onset_quarter_units": "3/4",
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
         "duration_ticks": 96,
         "duration_quarter_units": "3",
         "duration_source": {
@@ -5428,7 +5967,7 @@
         "succ": null
       },
       {
-        "id": "11145",
+        "id": "10950",
         "kind": "note",
         "attack": true,
         "staff": "13",
@@ -5448,7 +5987,7 @@
         "succ": null
       },
       {
-        "id": "11224",
+        "id": "11029",
         "kind": "note",
         "attack": true,
         "staff": "15",
@@ -5468,7 +6007,7 @@
         "succ": null
       },
       {
-        "id": "11146",
+        "id": "10951",
         "kind": "note",
         "attack": true,
         "staff": "13",
@@ -5485,16 +6024,16 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11147"
+        "succ": "10952"
       },
       {
-        "id": "11225",
+        "id": "11030",
         "kind": "note",
         "attack": true,
         "staff": "15",
         "x": 1684.0,
-        "onset_ticks": 32,
-        "onset_quarter_units": "1",
+        "onset_ticks": 25,
+        "onset_quarter_units": "25/32",
         "duration_ticks": 96,
         "duration_quarter_units": "3",
         "duration_source": {
@@ -5508,7 +6047,7 @@
         "succ": null
       },
       {
-        "id": "11147",
+        "id": "10952",
         "kind": "note",
         "attack": true,
         "staff": "13",
@@ -5524,11 +6063,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11146",
-        "succ": "11148"
+        "pred": "10951",
+        "succ": "10953"
       },
       {
-        "id": "11148",
+        "id": "10953",
         "kind": "note",
         "attack": true,
         "staff": "13",
@@ -5544,11 +6083,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11147",
-        "succ": "11149"
+        "pred": "10952",
+        "succ": "10954"
       },
       {
-        "id": "11149",
+        "id": "10954",
         "kind": "note",
         "attack": true,
         "staff": "13",
@@ -5563,18 +6102,18 @@
           "why": "primary"
         },
         "start": false,
-        "end": false,
-        "pred": "11148",
-        "succ": "11150"
+        "end": true,
+        "pred": "10953",
+        "succ": null
       },
       {
-        "id": "11150",
+        "id": "10955",
         "kind": "note",
         "attack": true,
         "staff": "13",
         "x": 1833.0,
-        "onset_ticks": 73,
-        "onset_quarter_units": "73/32",
+        "onset_ticks": 64,
+        "onset_quarter_units": "2",
         "duration_ticks": 36,
         "duration_quarter_units": "9/8",
         "duration_source": {
@@ -5582,19 +6121,19 @@
           "cost": 0,
           "why": "primary"
         },
-        "start": false,
+        "start": true,
         "end": false,
-        "pred": "11149",
-        "succ": "11151"
+        "pred": null,
+        "succ": "10956"
       },
       {
-        "id": "11189",
+        "id": "10994",
         "kind": "note",
         "attack": false,
         "staff": "14",
         "x": 1835.0,
-        "onset_ticks": 73,
-        "onset_quarter_units": "73/32",
+        "onset_ticks": 64,
+        "onset_quarter_units": "2",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -5602,19 +6141,19 @@
           "cost": 0,
           "why": "primary"
         },
-        "start": true,
+        "start": false,
         "end": false,
-        "pred": null,
-        "succ": "11191"
+        "pred": "10991",
+        "succ": "10996"
       },
       {
-        "id": "11190",
+        "id": "10995",
         "kind": "note",
         "attack": true,
         "staff": "14",
         "x": 1837.0,
-        "onset_ticks": 73,
-        "onset_quarter_units": "73/32",
+        "onset_ticks": 64,
+        "onset_quarter_units": "2",
         "duration_ticks": 48,
         "duration_quarter_units": "3/2",
         "duration_source": {
@@ -5628,13 +6167,13 @@
         "succ": null
       },
       {
-        "id": "11191",
+        "id": "10996",
         "kind": "note",
         "attack": true,
         "staff": "14",
         "x": 1894.0,
-        "onset_ticks": 97,
-        "onset_quarter_units": "97/32",
+        "onset_ticks": 88,
+        "onset_quarter_units": "11/4",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -5644,17 +6183,17 @@
         },
         "start": false,
         "end": true,
-        "pred": "11189",
+        "pred": "10994",
         "succ": null
       },
       {
-        "id": "11151",
+        "id": "10956",
         "kind": "note",
         "attack": true,
         "staff": "13",
         "x": 1924.0,
-        "onset_ticks": 109,
-        "onset_quarter_units": "109/32",
+        "onset_ticks": 100,
+        "onset_quarter_units": "25/8",
         "duration_ticks": 6,
         "duration_quarter_units": "3/16",
         "duration_source": {
@@ -5664,17 +6203,17 @@
         },
         "start": false,
         "end": false,
-        "pred": "11150",
-        "succ": "11152"
+        "pred": "10955",
+        "succ": "10957"
       },
       {
-        "id": "11152",
+        "id": "10957",
         "kind": "note",
         "attack": true,
         "staff": "13",
         "x": 1953.0,
-        "onset_ticks": 115,
-        "onset_quarter_units": "115/32",
+        "onset_ticks": 106,
+        "onset_quarter_units": "53/16",
         "duration_ticks": 6,
         "duration_quarter_units": "3/16",
         "duration_source": {
@@ -5684,7 +6223,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "11151",
+        "pred": "10956",
         "succ": null
       }
     ]
@@ -5705,12 +6244,12 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "11153",
-          "11192",
-          "11193",
-          "11194",
-          "11195",
-          "11233"
+          "10958",
+          "10997",
+          "10998",
+          "10999",
+          "11000",
+          "11038"
         ]
       },
       {
@@ -5718,9 +6257,9 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "11196",
-          "11197",
-          "11198"
+          "11001",
+          "11002",
+          "11003"
         ]
       },
       {
@@ -5728,7 +6267,7 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "11199"
+          "11004"
         ]
       }
     ],
@@ -5740,7 +6279,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "11192",
+        "id": "10997",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5757,10 +6296,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11198"
+        "succ": "11003"
       },
       {
-        "id": "11193",
+        "id": "10998",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5780,7 +6319,7 @@
         "succ": null
       },
       {
-        "id": "11153",
+        "id": "10958",
         "kind": "note",
         "attack": true,
         "staff": "13",
@@ -5800,7 +6339,7 @@
         "succ": null
       },
       {
-        "id": "11233",
+        "id": "11038",
         "kind": "note",
         "attack": true,
         "staff": "15",
@@ -5820,7 +6359,7 @@
         "succ": null
       },
       {
-        "id": "11194",
+        "id": "10999",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5837,10 +6376,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11196"
+        "succ": "11001"
       },
       {
-        "id": "11195",
+        "id": "11000",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5857,10 +6396,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11197"
+        "succ": "11002"
       },
       {
-        "id": "11196",
+        "id": "11001",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5876,11 +6415,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11194",
+        "pred": "10999",
         "succ": null
       },
       {
-        "id": "11197",
+        "id": "11002",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5896,11 +6435,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11195",
+        "pred": "11000",
         "succ": null
       },
       {
-        "id": "11198",
+        "id": "11003",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5916,11 +6455,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "11192",
-        "succ": "11199"
+        "pred": "10997",
+        "succ": "11004"
       },
       {
-        "id": "11199",
+        "id": "11004",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -5936,7 +6475,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "11198",
+        "pred": "11003",
         "succ": null
       }
     ]
@@ -5950,16 +6489,16 @@
     "reason": null,
     "total_penalty": 59,
     "meter_ticks": 128,
-    "attack_count": 6,
+    "attack_count": 5,
     "attacks": [
       {
         "onset_ticks": 0,
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "11200",
-          "11201",
-          "11227"
+          "11005",
+          "11006",
+          "11032"
         ]
       },
       {
@@ -5967,61 +6506,53 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "11202",
-          "11228"
+          "11007",
+          "11009",
+          "11033",
+          "11034"
         ]
       },
       {
-        "onset_ticks": 32,
-        "onset_whole_units": "1/4",
-        "onset_quarter_units": "1",
+        "onset_ticks": 48,
+        "onset_whole_units": "3/8",
+        "onset_quarter_units": "3/2",
         "events": [
-          "11204",
-          "11229"
+          "11010",
+          "11035"
         ]
       },
       {
-        "onset_ticks": 56,
-        "onset_whole_units": "7/16",
-        "onset_quarter_units": "7/4",
+        "onset_ticks": 72,
+        "onset_whole_units": "9/16",
+        "onset_quarter_units": "9/4",
         "events": [
-          "11205",
-          "11230"
+          "11011",
+          "11012",
+          "11036"
         ]
       },
       {
-        "onset_ticks": 80,
-        "onset_whole_units": "5/8",
-        "onset_quarter_units": "5/2",
+        "onset_ticks": 96,
+        "onset_whole_units": "3/4",
+        "onset_quarter_units": "3",
         "events": [
-          "11206",
-          "11207",
-          "11231"
-        ]
-      },
-      {
-        "onset_ticks": 104,
-        "onset_whole_units": "13/16",
-        "onset_quarter_units": "13/4",
-        "events": [
-          "11208",
-          "11209",
-          "11232"
+          "11013",
+          "11014",
+          "11037"
         ]
       }
     ],
     "primary_attack_set_quarter": [
       "0",
       "3/4",
-      "1",
-      "7/4",
-      "5/2",
-      "13/4"
+      "3/2",
+      "9/4",
+      "3"
     ],
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "11200",
+        "id": "11005",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -6041,7 +6572,7 @@
         "succ": null
       },
       {
-        "id": "11226",
+        "id": "11031",
         "kind": "note",
         "attack": false,
         "staff": "15",
@@ -6061,7 +6592,7 @@
         "succ": null
       },
       {
-        "id": "11201",
+        "id": "11006",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -6078,10 +6609,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11202"
+        "succ": "11007"
       },
       {
-        "id": "11227",
+        "id": "11032",
         "kind": "note",
         "attack": true,
         "staff": "15",
@@ -6098,10 +6629,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11228"
+        "succ": "11033"
       },
       {
-        "id": "11202",
+        "id": "11007",
         "kind": "note",
         "attack": true,
         "staff": "14",
@@ -6117,11 +6648,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "11201",
+        "pred": "11006",
         "succ": null
       },
       {
-        "id": "11228",
+        "id": "11033",
         "kind": "note",
         "attack": true,
         "staff": "15",
@@ -6137,17 +6668,17 @@
         },
         "start": false,
         "end": true,
-        "pred": "11227",
+        "pred": "11032",
         "succ": null
       },
       {
-        "id": "13220",
+        "id": "13025",
         "kind": "rest",
         "attack": false,
         "staff": "13",
         "x": 2510.0,
-        "onset_ticks": 32,
-        "onset_quarter_units": "1",
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
         "duration_ticks": 64,
         "duration_quarter_units": "2",
         "duration_source": {
@@ -6161,13 +6692,13 @@
         "succ": null
       },
       {
-        "id": "11203",
+        "id": "11008",
         "kind": "note",
         "attack": false,
         "staff": "14",
         "x": 2513.0,
-        "onset_ticks": 32,
-        "onset_quarter_units": "1",
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -6178,16 +6709,16 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11205"
+        "succ": "11010"
       },
       {
-        "id": "11204",
+        "id": "11009",
         "kind": "note",
         "attack": true,
         "staff": "14",
         "x": 2513.5,
-        "onset_ticks": 32,
-        "onset_quarter_units": "1",
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
         "duration_ticks": 48,
         "duration_quarter_units": "3/2",
         "duration_source": {
@@ -6198,16 +6729,16 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11207"
+        "succ": "11012"
       },
       {
-        "id": "11229",
+        "id": "11034",
         "kind": "note",
         "attack": true,
         "staff": "15",
         "x": 2515.0,
-        "onset_ticks": 32,
-        "onset_quarter_units": "1",
+        "onset_ticks": 24,
+        "onset_quarter_units": "3/4",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -6218,16 +6749,16 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "11230"
+        "succ": "11035"
       },
       {
-        "id": "11205",
+        "id": "11010",
         "kind": "note",
         "attack": true,
         "staff": "14",
         "x": 2559.0,
-        "onset_ticks": 56,
-        "onset_quarter_units": "7/4",
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -6237,17 +6768,17 @@
         },
         "start": false,
         "end": false,
-        "pred": "11203",
-        "succ": "11206"
+        "pred": "11008",
+        "succ": "11011"
       },
       {
-        "id": "11230",
+        "id": "11035",
         "kind": "note",
         "attack": true,
         "staff": "15",
         "x": 2562.0,
-        "onset_ticks": 56,
-        "onset_quarter_units": "7/4",
+        "onset_ticks": 48,
+        "onset_quarter_units": "3/2",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -6257,17 +6788,17 @@
         },
         "start": false,
         "end": false,
-        "pred": "11229",
-        "succ": "11231"
+        "pred": "11034",
+        "succ": "11036"
       },
       {
-        "id": "11206",
+        "id": "11011",
         "kind": "note",
         "attack": true,
         "staff": "14",
         "x": 2603.0,
-        "onset_ticks": 80,
-        "onset_quarter_units": "5/2",
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -6277,17 +6808,17 @@
         },
         "start": false,
         "end": false,
-        "pred": "11205",
-        "succ": "11208"
+        "pred": "11010",
+        "succ": "11013"
       },
       {
-        "id": "11207",
+        "id": "11012",
         "kind": "note",
         "attack": true,
         "staff": "14",
         "x": 2604.0,
-        "onset_ticks": 80,
-        "onset_quarter_units": "5/2",
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -6297,17 +6828,17 @@
         },
         "start": false,
         "end": false,
-        "pred": "11204",
-        "succ": "11209"
+        "pred": "11009",
+        "succ": "11014"
       },
       {
-        "id": "11231",
+        "id": "11036",
         "kind": "note",
         "attack": true,
         "staff": "15",
         "x": 2607.0,
-        "onset_ticks": 80,
-        "onset_quarter_units": "5/2",
+        "onset_ticks": 72,
+        "onset_quarter_units": "9/4",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -6317,17 +6848,17 @@
         },
         "start": false,
         "end": false,
-        "pred": "11230",
-        "succ": "11232"
+        "pred": "11035",
+        "succ": "11037"
       },
       {
-        "id": "11208",
+        "id": "11013",
         "kind": "note",
         "attack": true,
         "staff": "14",
         "x": 2658.0,
-        "onset_ticks": 104,
-        "onset_quarter_units": "13/4",
+        "onset_ticks": 96,
+        "onset_quarter_units": "3",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -6337,17 +6868,17 @@
         },
         "start": false,
         "end": true,
-        "pred": "11206",
+        "pred": "11011",
         "succ": null
       },
       {
-        "id": "11209",
+        "id": "11014",
         "kind": "note",
         "attack": true,
         "staff": "14",
         "x": 2660.0,
-        "onset_ticks": 104,
-        "onset_quarter_units": "13/4",
+        "onset_ticks": 96,
+        "onset_quarter_units": "3",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -6357,17 +6888,17 @@
         },
         "start": false,
         "end": true,
-        "pred": "11207",
+        "pred": "11012",
         "succ": null
       },
       {
-        "id": "11232",
+        "id": "11037",
         "kind": "note",
         "attack": true,
         "staff": "15",
         "x": 2660.5,
-        "onset_ticks": 104,
-        "onset_quarter_units": "13/4",
+        "onset_ticks": 96,
+        "onset_quarter_units": "3",
         "duration_ticks": 24,
         "duration_quarter_units": "3/4",
         "duration_source": {
@@ -6377,7 +6908,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "11231",
+        "pred": "11036",
         "succ": null
       }
     ]
@@ -6398,10 +6929,10 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "8426",
-          "8427",
-          "8428",
-          "8473"
+          "8359",
+          "8360",
+          "8361",
+          "8406"
         ]
       },
       {
@@ -6409,9 +6940,9 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "8396",
-          "8429",
-          "8430"
+          "8329",
+          "8362",
+          "8363"
         ]
       },
       {
@@ -6419,7 +6950,7 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "8431"
+          "8364"
         ]
       },
       {
@@ -6427,8 +6958,8 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "8432",
-          "8433"
+          "8365",
+          "8366"
         ]
       },
       {
@@ -6436,8 +6967,8 @@
         "onset_whole_units": "3/4",
         "onset_quarter_units": "3",
         "events": [
-          "8434",
-          "8435"
+          "8367",
+          "8368"
         ]
       }
     ],
@@ -6451,7 +6982,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "8426",
+        "id": "8359",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6471,7 +7002,7 @@
         "succ": null
       },
       {
-        "id": "9711",
+        "id": "9644",
         "kind": "rest",
         "attack": false,
         "staff": "1",
@@ -6491,7 +7022,7 @@
         "succ": null
       },
       {
-        "id": "8427",
+        "id": "8360",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6511,7 +7042,7 @@
         "succ": null
       },
       {
-        "id": "8473",
+        "id": "8406",
         "kind": "note",
         "attack": true,
         "staff": "3",
@@ -6531,7 +7062,7 @@
         "succ": null
       },
       {
-        "id": "8428",
+        "id": "8361",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6548,10 +7079,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8429"
+        "succ": "8362"
       },
       {
-        "id": "8429",
+        "id": "8362",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6567,11 +7098,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "8428",
+        "pred": "8361",
         "succ": null
       },
       {
-        "id": "8396",
+        "id": "8329",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -6591,7 +7122,7 @@
         "succ": null
       },
       {
-        "id": "8430",
+        "id": "8363",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6608,10 +7139,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8431"
+        "succ": "8364"
       },
       {
-        "id": "8431",
+        "id": "8364",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6627,11 +7158,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8430",
-        "succ": "8432"
+        "pred": "8363",
+        "succ": "8365"
       },
       {
-        "id": "8432",
+        "id": "8365",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6647,11 +7178,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8431",
-        "succ": "8435"
+        "pred": "8364",
+        "succ": "8368"
       },
       {
-        "id": "8433",
+        "id": "8366",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6668,10 +7199,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8434"
+        "succ": "8367"
       },
       {
-        "id": "8434",
+        "id": "8367",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6687,11 +7218,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "8433",
+        "pred": "8366",
         "succ": null
       },
       {
-        "id": "8435",
+        "id": "8368",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6707,7 +7238,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "8432",
+        "pred": "8365",
         "succ": null
       }
     ]
@@ -6728,14 +7259,14 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "8397",
-          "8398",
-          "8436",
-          "8437",
-          "8438",
-          "8439",
-          "8442",
-          "8443"
+          "8330",
+          "8331",
+          "8369",
+          "8370",
+          "8371",
+          "8372",
+          "8375",
+          "8376"
         ]
       },
       {
@@ -6743,10 +7274,10 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "8440",
-          "8441",
-          "8444",
-          "8445"
+          "8373",
+          "8374",
+          "8377",
+          "8378"
         ]
       },
       {
@@ -6754,7 +7285,7 @@
         "onset_whole_units": "9/32",
         "onset_quarter_units": "9/8",
         "events": [
-          "8446"
+          "8379"
         ]
       },
       {
@@ -6762,8 +7293,8 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "8447",
-          "8449"
+          "8380",
+          "8382"
         ]
       },
       {
@@ -6771,7 +7302,7 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "8448"
+          "8381"
         ]
       }
     ],
@@ -6785,7 +7316,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "8436",
+        "id": "8369",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6805,7 +7336,7 @@
         "succ": null
       },
       {
-        "id": "8437",
+        "id": "8370",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6825,7 +7356,7 @@
         "succ": null
       },
       {
-        "id": "8397",
+        "id": "8330",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -6845,7 +7376,7 @@
         "succ": null
       },
       {
-        "id": "8438",
+        "id": "8371",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6862,10 +7393,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8440"
+        "succ": "8373"
       },
       {
-        "id": "8439",
+        "id": "8372",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6882,10 +7413,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8441"
+        "succ": "8374"
       },
       {
-        "id": "8442",
+        "id": "8375",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6902,10 +7433,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8444"
+        "succ": "8377"
       },
       {
-        "id": "8443",
+        "id": "8376",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6922,10 +7453,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8445"
+        "succ": "8378"
       },
       {
-        "id": "8398",
+        "id": "8331",
         "kind": "note",
         "attack": true,
         "staff": "1",
@@ -6945,7 +7476,7 @@
         "succ": null
       },
       {
-        "id": "8440",
+        "id": "8373",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6961,11 +7492,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "8438",
+        "pred": "8371",
         "succ": null
       },
       {
-        "id": "8441",
+        "id": "8374",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -6981,11 +7512,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "8439",
+        "pred": "8372",
         "succ": null
       },
       {
-        "id": "9714",
+        "id": "9647",
         "kind": "rest",
         "attack": false,
         "staff": "3",
@@ -7005,7 +7536,7 @@
         "succ": null
       },
       {
-        "id": "8444",
+        "id": "8377",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -7021,11 +7552,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8442",
-        "succ": "8447"
+        "pred": "8375",
+        "succ": "8380"
       },
       {
-        "id": "8445",
+        "id": "8378",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -7041,11 +7572,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8443",
-        "succ": "8446"
+        "pred": "8376",
+        "succ": "8379"
       },
       {
-        "id": "8446",
+        "id": "8379",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -7061,11 +7592,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8445",
-        "succ": "8449"
+        "pred": "8378",
+        "succ": "8382"
       },
       {
-        "id": "8447",
+        "id": "8380",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -7081,11 +7612,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8444",
-        "succ": "8448"
+        "pred": "8377",
+        "succ": "8381"
       },
       {
-        "id": "8449",
+        "id": "8382",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -7101,11 +7632,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "8446",
+        "pred": "8379",
         "succ": null
       },
       {
-        "id": "8448",
+        "id": "8381",
         "kind": "note",
         "attack": true,
         "staff": "2",
@@ -7121,7 +7652,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "8447",
+        "pred": "8380",
         "succ": null
       }
     ]
@@ -7156,12 +7687,12 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "8482",
-          "8483",
-          "8484",
-          "8485",
-          "8486",
-          "8532"
+          "8415",
+          "8416",
+          "8417",
+          "8418",
+          "8419",
+          "8465"
         ]
       },
       {
@@ -7169,8 +7700,8 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "8487",
-          "8488"
+          "8420",
+          "8421"
         ]
       },
       {
@@ -7178,8 +7709,8 @@
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "events": [
-          "8489",
-          "8490"
+          "8422",
+          "8423"
         ]
       },
       {
@@ -7187,8 +7718,8 @@
         "onset_whole_units": "7/16",
         "onset_quarter_units": "7/4",
         "events": [
-          "8491",
-          "8492"
+          "8424",
+          "8425"
         ]
       },
       {
@@ -7196,9 +7727,9 @@
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "events": [
-          "8493",
-          "8494",
-          "8533"
+          "8426",
+          "8427",
+          "8466"
         ]
       },
       {
@@ -7206,8 +7737,8 @@
         "onset_whole_units": "13/16",
         "onset_quarter_units": "13/4",
         "events": [
-          "8495",
-          "8496"
+          "8428",
+          "8429"
         ]
       }
     ],
@@ -7222,7 +7753,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "8483",
+        "id": "8416",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7242,7 +7773,7 @@
         "succ": null
       },
       {
-        "id": "8484",
+        "id": "8417",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7262,7 +7793,7 @@
         "succ": null
       },
       {
-        "id": "8532",
+        "id": "8465",
         "kind": "note",
         "attack": true,
         "staff": "6",
@@ -7282,7 +7813,7 @@
         "succ": null
       },
       {
-        "id": "8482",
+        "id": "8415",
         "kind": "note",
         "attack": true,
         "staff": "4",
@@ -7302,7 +7833,7 @@
         "succ": null
       },
       {
-        "id": "8485",
+        "id": "8418",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7319,10 +7850,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8487"
+        "succ": "8420"
       },
       {
-        "id": "8486",
+        "id": "8419",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7339,10 +7870,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8488"
+        "succ": "8421"
       },
       {
-        "id": "8487",
+        "id": "8420",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7358,11 +7889,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "8485",
+        "pred": "8418",
         "succ": null
       },
       {
-        "id": "8488",
+        "id": "8421",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7378,11 +7909,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "8486",
+        "pred": "8419",
         "succ": null
       },
       {
-        "id": "8489",
+        "id": "8422",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7399,10 +7930,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8492"
+        "succ": "8425"
       },
       {
-        "id": "8490",
+        "id": "8423",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7419,10 +7950,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8491"
+        "succ": "8424"
       },
       {
-        "id": "9754",
+        "id": "9687",
         "kind": "rest",
         "attack": false,
         "staff": "6",
@@ -7442,7 +7973,7 @@
         "succ": null
       },
       {
-        "id": "8491",
+        "id": "8424",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7458,11 +7989,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8490",
-        "succ": "8493"
+        "pred": "8423",
+        "succ": "8426"
       },
       {
-        "id": "8492",
+        "id": "8425",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7478,11 +8009,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8489",
-        "succ": "8494"
+        "pred": "8422",
+        "succ": "8427"
       },
       {
-        "id": "8493",
+        "id": "8426",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7498,11 +8029,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8491",
-        "succ": "8496"
+        "pred": "8424",
+        "succ": "8429"
       },
       {
-        "id": "8494",
+        "id": "8427",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7518,11 +8049,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8492",
-        "succ": "8495"
+        "pred": "8425",
+        "succ": "8428"
       },
       {
-        "id": "8533",
+        "id": "8466",
         "kind": "note",
         "attack": true,
         "staff": "6",
@@ -7542,7 +8073,7 @@
         "succ": null
       },
       {
-        "id": "8495",
+        "id": "8428",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7558,11 +8089,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "8494",
+        "pred": "8427",
         "succ": null
       },
       {
-        "id": "8496",
+        "id": "8429",
         "kind": "note",
         "attack": true,
         "staff": "5",
@@ -7578,7 +8109,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "8493",
+        "pred": "8426",
         "succ": null
       }
     ]
@@ -7634,10 +8165,10 @@
         "onset_whole_units": "0",
         "onset_quarter_units": "0",
         "events": [
-          "8566",
-          "8586",
-          "8587",
-          "8624"
+          "8499",
+          "8519",
+          "8520",
+          "8557"
         ]
       },
       {
@@ -7645,8 +8176,8 @@
         "onset_whole_units": "3/16",
         "onset_quarter_units": "3/4",
         "events": [
-          "8588",
-          "8589"
+          "8521",
+          "8522"
         ]
       },
       {
@@ -7654,7 +8185,7 @@
         "onset_whole_units": "1/4",
         "onset_quarter_units": "1",
         "events": [
-          "8595"
+          "8528"
         ]
       },
       {
@@ -7662,8 +8193,8 @@
         "onset_whole_units": "3/8",
         "onset_quarter_units": "3/2",
         "events": [
-          "8590",
-          "8591"
+          "8523",
+          "8524"
         ]
       },
       {
@@ -7671,8 +8202,8 @@
         "onset_whole_units": "9/16",
         "onset_quarter_units": "9/4",
         "events": [
-          "8592",
-          "8593"
+          "8525",
+          "8526"
         ]
       },
       {
@@ -7680,9 +8211,9 @@
         "onset_whole_units": "5/8",
         "onset_quarter_units": "5/2",
         "events": [
-          "8594",
-          "8596",
-          "8597"
+          "8527",
+          "8529",
+          "8530"
         ]
       }
     ],
@@ -7697,7 +8228,7 @@
     "alternate_attack_set_quarter": null,
     "events": [
       {
-        "id": "8586",
+        "id": "8519",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7714,10 +8245,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8588"
+        "succ": "8521"
       },
       {
-        "id": "8587",
+        "id": "8520",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7734,10 +8265,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8589"
+        "succ": "8522"
       },
       {
-        "id": "8566",
+        "id": "8499",
         "kind": "note",
         "attack": true,
         "staff": "7",
@@ -7757,7 +8288,7 @@
         "succ": null
       },
       {
-        "id": "8624",
+        "id": "8557",
         "kind": "note",
         "attack": true,
         "staff": "9",
@@ -7777,7 +8308,7 @@
         "succ": null
       },
       {
-        "id": "8588",
+        "id": "8521",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7793,11 +8324,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8586",
-        "succ": "8590"
+        "pred": "8519",
+        "succ": "8523"
       },
       {
-        "id": "8589",
+        "id": "8522",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7813,11 +8344,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8587",
-        "succ": "8591"
+        "pred": "8520",
+        "succ": "8524"
       },
       {
-        "id": "8595",
+        "id": "8528",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7834,10 +8365,10 @@
         "start": true,
         "end": false,
         "pred": null,
-        "succ": "8597"
+        "succ": "8530"
       },
       {
-        "id": "8590",
+        "id": "8523",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7853,11 +8384,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8588",
-        "succ": "8593"
+        "pred": "8521",
+        "succ": "8526"
       },
       {
-        "id": "8591",
+        "id": "8524",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7873,11 +8404,11 @@
         },
         "start": false,
         "end": false,
-        "pred": "8589",
-        "succ": "8592"
+        "pred": "8522",
+        "succ": "8525"
       },
       {
-        "id": "8592",
+        "id": "8525",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7893,11 +8424,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "8591",
+        "pred": "8524",
         "succ": null
       },
       {
-        "id": "8593",
+        "id": "8526",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7913,11 +8444,11 @@
         },
         "start": false,
         "end": true,
-        "pred": "8590",
+        "pred": "8523",
         "succ": null
       },
       {
-        "id": "8594",
+        "id": "8527",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7937,7 +8468,7 @@
         "succ": null
       },
       {
-        "id": "8596",
+        "id": "8529",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7957,7 +8488,7 @@
         "succ": null
       },
       {
-        "id": "8597",
+        "id": "8530",
         "kind": "note",
         "attack": true,
         "staff": "8",
@@ -7973,7 +8504,7 @@
         },
         "start": false,
         "end": true,
-        "pred": "8595",
+        "pred": "8528",
         "succ": null
       }
     ]
