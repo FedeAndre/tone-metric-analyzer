@@ -58,6 +58,7 @@ jobs:
           print('BWV_TIE_CONF='+json.dumps(Counter(round(float(t[1]['confidence']),1) for t in ties),sort_keys=True))
           print('BWV_TIES='+json.dumps(ties[:80],sort_keys=True))
           r=reconstruct_attacks(d,meter=(2,2))
+          json.dump(r,open('bwv_audit/rhythm_audit.json','w'),indent=2)
           print('BWV_RHYTHM_STATS='+json.dumps(r['stats'],sort_keys=True))
           print('BWV_READY='+str(r['rhythmic_attacks_ready']))
           print('BWV_UNRESOLVED_REASONS='+json.dumps(Counter(x['reason'] for x in r['unresolved']),sort_keys=True))
@@ -106,3 +107,14 @@ jobs:
           print('BWV_FIRST_FP='+','.join(str(x) for x in sorted(fp)[:80]))
           print('BWV_FIRST_FN='+','.join(str(x) for x in sorted(fn)[:80]))
           PY
+
+      - name: Upload BWV quickcheck audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bwv661-tie-rhythm-quickcheck
+          path: |
+            bwv_audit/notation_graph.json
+            bwv_audit/rhythm_audit.json
+            bwv_audit/page_*_optical_overlay.png
+          retention-days: 7
