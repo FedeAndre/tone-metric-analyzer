@@ -161,6 +161,8 @@ class Dot:
     cy: float
     area: int
     notehead_id: int | None = None
+    visual_confidence: float = 0.0
+    candidate_only: bool = True
 
 
 @dataclass
@@ -1956,41 +1958,132 @@ def detect_rests(
     return rests
 
 
-def detect_dots(gray: np.ndarray, staff_mask: np.ndarray, noteheads: list[Notehead], stems: list[Stem],
-                beams: list[Beam], staves: list[Staff]) -> list[Dot]:
-    sp=global_spacing(staves)
-    ink=(gray<160).astype(np.uint8)
-    remove=cv2.dilate(staff_mask,np.ones((3,3),np.uint8))
-    for nh in noteheads:
-        cv2.rectangle(remove,(nh.x1-1,nh.y1-1),(nh.x2+1,nh.y2+1),1,-1)
-    for st in stems:
-        cv2.rectangle(remove,(st.x1-1,st.y1-1),(st.x2+1,st.y2+1),1,-1)
-    for bm in beams:
-        pts=np.array(bm.points,dtype=np.int32)
-        cv2.fillPoly(remove,[pts],1)
-    residual=np.where(remove>0,0,ink).astype(np.uint8)
+def detect_dots(
+    gray: np.ndarray,
+    staff_mask: np.ndarray,
+    note_mask: np.ndarray,
+    noteheads: list[Notehead],
+    stems: list[Stem],
+    beams: list[Beam],
+    staves: list[Staff],
+) -> list[Dot]:
+    """Detect augmentation-dot candidates from compact residual glyphs.
 
-    comps=[]
-    for x,y,w,h,area in comp_stats(residual):
-        if 0.015*sp*sp <= area <= 0.22*sp*sp and w<=0.60*sp and h<=0.60*sp:
-            comps.append((x+w/2.0,y+h/2.0,area))
-
-    dots=[]
-    used=set()
+    A visual dot is deliberately only a *candidate* here.  Duration is not
+    lengthened until the later measure/voice constraint solver can show that
+    the dotted value is metrically consistent.  This prevents a stray speck or
+    fragment from silently changing score time.
+    """
+    sp = global_spacing(staves)
+    ink = (gray < 160).astype(np.uint8)
+    remove = cv2.dilate(staff_mask, np.ones((3, 3), np.uint8))
     for nh in noteheads:
-        cands=[]
-        for j,(cx,cy,area) in enumerate(comps):
-            if j in used: continue
-            dx=cx-nh.x2
-            dy=abs(cy-nh.cy)
-            if 0.18*sp<=dx<=1.45*sp and dy<=0.48*sp:
-                cands.append((dx,dy,j,cx,cy,area))
-        if cands:
-            _,_,j,cx,cy,area=min(cands)
-            d=Dot(id=len(dots),cx=float(cx),cy=float(cy),area=int(area),notehead_id=nh.id)
-            dots.append(d); used.add(j); nh.dot_id=d.id
+        cv2.rectangle(
+            remove,
+            (nh.x1 - 1, nh.y1 - 1),
+            (nh.x2 + 1, nh.y2 + 1),
+            1,
+            -1,
+        )
+    for stem in stems:
+        cv2.rectangle(
+            remove,
+            (stem.x1 - 1, stem.y1 - 1),
+            (stem.x2 + 1, stem.y2 + 1),
+            1,
+            -1,
+        )
+    for beam in beams:
+        pts = np.array(beam.points, dtype=np.int32)
+        cv2.fillPoly(remove, [pts], 1)
+
+    residual = np.where(remove > 0, 0, ink).astype(np.uint8)
+
+    components: list[dict] = []
+    for x, y, w, h, area in comp_stats(residual):
+        if not (0.05 * sp * sp <= area <= 0.25 * sp * sp):
+            continue
+        if not (0.22 * sp <= w <= 0.65 * sp):
+            continue
+        if not (0.22 * sp <= h <= 0.65 * sp):
+            continue
+        aspect = w / max(h, 1)
+        fill = area / max(1, w * h)
+        if not (0.55 <= aspect <= 1.80):
+            continue
+        if fill < 0.45:
+            continue
+
+        # The low-level notehead mask is independent evidence that rejects
+        # missed/fragmented noteheads which otherwise look like round dots.
+        x0 = max(0, x - 1)
+        x1 = min(note_mask.shape[1], x + w + 1)
+        y0 = max(0, y - 1)
+        y1 = min(note_mask.shape[0], y + h + 1)
+        if int(note_mask[y0:y1, x0:x1].sum()) > 0:
+            continue
+
+        cx = x + w / 2.0
+        cy = y + h / 2.0
+        roundness = max(0.0, 1.0 - abs(math.log(max(aspect, 1e-6))))
+        compactness = min(1.0, fill / 0.75)
+        components.append({
+            "cx": float(cx),
+            "cy": float(cy),
+            "area": int(area),
+            "shape_score": float(0.55 * roundness + 0.45 * compactness),
+        })
+
+    dots: list[Dot] = []
+    used: set[int] = set()
+    for nh in noteheads:
+        candidates = []
+        for index, component in enumerate(components):
+            if index in used:
+                continue
+            dx = component["cx"] - nh.x2
+            dy = abs(component["cy"] - nh.cy)
+            if not (0.15 * sp <= dx <= 0.95 * sp):
+                continue
+            if dy > 0.35 * sp:
+                continue
+            proximity = max(
+                0.0,
+                1.0 - 0.65 * abs(dx / sp - 0.50) - 0.35 * (dy / sp),
+            )
+            confidence = (
+                0.65 * component["shape_score"]
+                + 0.35 * proximity
+            )
+            candidates.append(
+                (
+                    -confidence,
+                    dx,
+                    dy,
+                    index,
+                    component,
+                )
+            )
+
+        if not candidates:
+            continue
+
+        _neg_conf, _dx, _dy, index, component = min(candidates)
+        used.add(index)
+        confidence = -_neg_conf
+        dot = Dot(
+            id=len(dots),
+            cx=component["cx"],
+            cy=component["cy"],
+            area=component["area"],
+            notehead_id=nh.id,
+            visual_confidence=round(float(confidence), 4),
+            candidate_only=True,
+        )
+        dots.append(dot)
+        nh.dot_id = dot.id
+
     return dots
-
 
 def tie_confidence(gray: np.ndarray, staff_mask: np.ndarray, a: Notehead, b: Notehead, sp: float) -> tuple[str,float]:
     if b.cx <= a.cx:
@@ -2122,7 +2215,9 @@ def process_page(
         systems,
         measures,
     )
-    dots=detect_dots(gray,staff_mask,noteheads,stems,beams,staves)
+    dots=detect_dots(
+        gray, staff_mask, note_mask, noteheads, stems, beams, staves
+    )
     ties=detect_tie_candidates(gray,staff_mask,noteheads,staves)
 
     overlay_path=out_dir/f"page_{page_index:02d}_optical_overlay.png"
