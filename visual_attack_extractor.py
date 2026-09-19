@@ -316,6 +316,38 @@ def main(omr_path: str):
                         if vr["start"] is None and vr not in unresolved:
                             vr["reason"]=vr["reason"] or "unresolved-start"; unresolved.append(vr)
 
+                    # Independent visual-column consistency gate: if two resolved
+                    # voice events occupy the same printed x-column, they must have the
+                    # same musical onset. This catches semantic voice timelines that are
+                    # internally legal but contradict the engraving.
+                    resolved_visual_events=[]
+                    for vr in voice_recs:
+                        if vr["start"] is None:
+                            continue
+                        for e in vr["seq"]:
+                            if e["rest"]:
+                                continue
+                            resolved_visual_events.append({
+                                "cid":e["cid"],"x":e["x"],"t":vr["start"]+e["rel"],
+                                "part":vr["part"],"voice":vr["voice"]
+                            })
+                    resolved_visual_events.sort(key=lambda e:e["x"])
+                    visual_conflicts=[]
+                    groups=[]
+                    for ev in resolved_visual_events:
+                        if not groups or abs(ev["x"]-median([q["x"] for q in groups[-1]]))>.35*il:
+                            groups.append([ev])
+                        else:
+                            groups[-1].append(ev)
+                    for grp in groups:
+                        ts=sorted(set(q["t"] for q in grp))
+                        if len(ts)>1:
+                            visual_conflicts.append({
+                                "x":round(float(median([q["x"] for q in grp])),3),
+                                "times":[str(t) for t in ts],
+                                "events":[{"cid":q["cid"],"part":q["part"],"voice":q["voice"],"t":str(q["t"])} for q in grp]
+                            })
+
                     attacks=defaultdict(list)
                     note_rows=[]
                     for cid,g in geom.items():
@@ -333,7 +365,7 @@ def main(omr_path: str):
 
                     attack_rows=[{"onset_whole":str(t),"onset_quarter":str(t*4),"chords":sorted(set(cids))}
                                  for t,cids in sorted(attacks.items())]
-                    status="resolved" if not unresolved else "unresolved"
+                    status="resolved" if (not unresolved and not visual_conflicts) else "unresolved"
 
                     # Full-measure auditable overlay.
                     x0=max(0,int(round(left-il))); x1=min(int(W),int(round(right+il)))
@@ -347,6 +379,8 @@ def main(omr_path: str):
                     draw.text((8,50),f"attacks={len(attack_rows)}  unresolved_voices={len(unresolved)}",fill=(0,0,0))
                     radius=max(5,int(round(.30*il))); width=max(2,int(round(.11*il)))
                     unresolved_ids={e["cid"] for vr in unresolved for e in vr["seq"]}
+                    conflict_ids={e["cid"] for cf in visual_conflicts for e in cf["events"]}
+                    unresolved_ids.update(conflict_ids)
                     for row in note_rows:
                         hbs=[(h,get_box(by.get(h))) for h in row["heads"]]
                         hbs=[(h,b) for h,b in hbs if b is not None]
@@ -374,7 +408,9 @@ def main(omr_path: str):
                             "items":[{"cid":e["cid"],"rel":str(e["rel"]),"duration":flabel(e["duration"]),
                                       "rest":e["rest"],"attack":e["attack"]} for e in vr["seq"]]
                         } for vr in voice_recs],
-                        "unresolved_voice_count":len(unresolved)
+                        "unresolved_voice_count":len(unresolved),
+                        "visual_timing_conflict_count":len(visual_conflicts),
+                        "visual_timing_conflicts":visual_conflicts
                     }
                 page_base += len(stacks)
             page_measure_base=page_base
@@ -397,7 +433,8 @@ def main(omr_path: str):
         print(f"TARGET m{m}: "+json.dumps({
             "status":r["status"],"count":r["attack_count"],
             "q":[x["onset_quarter"] for x in r["attacks"]],
-            "unresolved_voices":r["unresolved_voice_count"]
+            "unresolved_voices":r["unresolved_voice_count"],
+            "visual_conflicts":r["visual_timing_conflict_count"]
         },separators=(",",":")))
 
 if __name__=="__main__":
