@@ -531,16 +531,24 @@ def _resolve_geometric_grid_intervals(
     columns: list[list[VisualEvent]],
     events: list[VisualEvent],
     capacity: Fraction,
+    *,
+    measure_left: float | None = None,
+    measure_right: float | None = None,
 ) -> int:
     """Resolve rational-grid ambiguity from engraving geometry conservatively.
 
-    Durations and measure capacity define the only legal rational time slots.
-    Horizontal engraving is used *only* to choose among those already legal
-    slots, and only inside an interval bounded by two exact timing anchors.
-    A solution is accepted when its normalized spacing closely matches the
-    visual spacing and is distinctly better than the next legal assignment.
+    Written durations and measure capacity define the only legal rational time
+    slots. Horizontal engraving is used only to choose among those discrete
+    legal slots.  Exact note columns are preferred as anchors; the two barlines
+    may additionally serve as virtual anchors at time 0 and measure capacity.
+
+    This is not proportional x->time conversion: no continuous time is derived
+    from x.  A visual comparison is allowed only after a finite set of exact
+    rational assignments has been enumerated, and a choice is accepted only
+    when it fits the engraving closely and is decisively better than every
+    alternative.
     """
-    if not columns or len(times) < 2:
+    if not columns:
         return 0
 
     positive = [
@@ -557,25 +565,51 @@ def _resolve_geometric_grid_intervals(
         for index, column in enumerate(columns)
         if column
     }
+    if not column_x:
+        return 0
+
     added = 0
     changed = True
     while changed:
         changed = False
-        anchors = sorted(
-            (column, value)
+
+        # Use virtual barline anchors only when their x order is geometrically
+        # valid.  Their times are exact by definition of the measure boundary.
+        anchors: list[tuple[int, Fraction, float]] = [
+            (column, value, column_x[column])
             for column, value in times.items()
             if column in column_x
-        )
-        for (left_col, left_time), (right_col, right_time) in zip(
-            anchors,
-            anchors[1:],
+        ]
+        if (
+            measure_left is not None
+            and measure_right is not None
+            and measure_right > measure_left
         ):
+            anchors.append((-1, Fraction(0), float(measure_left)))
+            anchors.append((len(columns), capacity, float(measure_right)))
+
+        # Keep only the strongest exact anchor when several describe the same
+        # temporal boundary: a real attack column is preferred over a virtual
+        # barline at time zero/capacity.
+        dedup: dict[tuple[int, Fraction], tuple[int, Fraction, float]] = {}
+        for row in anchors:
+            dedup[(row[0], row[1])] = row
+        anchors = sorted(dedup.values(), key=lambda row: row[0])
+
+        for (left_col, left_time, left_x), (
+            right_col,
+            right_time,
+            right_x,
+        ) in zip(anchors, anchors[1:]):
+            if right_time <= left_time or right_x <= left_x:
+                continue
+
             unresolved = [
                 col
                 for col in range(left_col + 1, right_col)
                 if col not in times and col in column_x
             ]
-            if not unresolved or right_time <= left_time:
+            if not unresolved:
                 continue
 
             slots: list[Fraction] = []
@@ -586,20 +620,16 @@ def _resolve_geometric_grid_intervals(
             if len(slots) < len(unresolved):
                 continue
 
-            # Exact combinatorial enumeration is tiny for engraved measures and
-            # preserves strict left-to-right ordering.
-            if len(slots) > 16 or len(unresolved) > 8:
+            # Bound the exact enumeration.  Engraved single measures are small,
+            # but this prevents pathological combinatorial growth.
+            if len(slots) > 24 or len(unresolved) > 10:
                 continue
 
-            x0 = column_x[left_col]
-            x1 = column_x[right_col]
-            if x1 <= x0:
-                continue
-            span_t = right_time - left_time
             visual = [
-                (column_x[col] - x0) / (x1 - x0)
+                (column_x[col] - left_x) / (right_x - left_x)
                 for col in unresolved
             ]
+            span_t = right_time - left_time
 
             scored: list[tuple[float, float, tuple[Fraction, ...]]] = []
             for choice in combinations(slots, len(unresolved)):
@@ -618,21 +648,32 @@ def _resolve_geometric_grid_intervals(
                 )
                 scored.append((mean_sq, max_error, choice))
 
-            scored.sort(key=lambda row: (row[0], row[1], row[2]))
             if not scored:
                 continue
+            scored.sort(key=lambda row: (row[0], row[1], row[2]))
             best = scored[0]
             second = scored[1] if len(scored) > 1 else None
 
-            # The selected rational assignment must agree well with the visual
-            # proportions and be meaningfully separated from the runner-up.
-            if best[1] > 0.18:
+            # Barline-bounded intervals are less visually precise because of
+            # clefs/key signatures and measure padding, so require both a close
+            # fit and a strong separation from the runner-up.
+            virtual_boundary = (
+                left_col == -1 or right_col == len(columns)
+            )
+            max_allowed = 0.105 if virtual_boundary else 0.18
+            minimum_improvement = 0.012 if virtual_boundary else 0.006
+
+            if best[1] > max_allowed:
                 continue
             if second is not None:
                 improvement = second[0] - best[0]
-                if improvement < 0.006:
+                if improvement < minimum_improvement:
                     continue
 
+            # Do not resolve an entire interval from barline geometry if the
+            # optimal solution itself uses a very fine subdivision unsupported
+            # by any written duration in the interval. This keeps x from
+            # manufacturing finer rhythmic values.
             for col, value in zip(unresolved, best[2]):
                 times[col] = value
                 added += 1
@@ -1192,6 +1233,8 @@ def reconstruct_attacks(
                 columns,
                 temporal_events,
                 capacity,
+                measure_left=float(measure.get("left", 0.0)),
+                measure_right=float(measure.get("right", 0.0)),
             )
             _fill_uniquely_forced_grid_columns(
                 times,
