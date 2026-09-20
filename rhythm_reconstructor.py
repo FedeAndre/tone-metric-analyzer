@@ -349,15 +349,22 @@ def _solve_unique_duration_chain_columns(
     *,
     max_assignments: int = 50000,
 ) -> int:
-    """Solve unresolved columns by unique notated-duration chain continuity.
+    """Resolve columns invariant across all valid exact duration-chain layouts.
 
-    This is a finite exact search over the rational grid; x supplies column
-    order only.  A candidate assignment is admissible only when every event in
-    an unresolved column can be embedded in a same-staff duration chain: it is
-    preceded by an event ending exactly at its onset (or starts at the
-    measure boundary) and followed by an event beginning exactly at its end
-    (or ends at the measure boundary).  Times are committed only if exactly
-    one complete assignment satisfies those constraints.
+    Horizontal coordinates establish only notation order.  Candidate onsets
+    come from the rational grid implied by written durations and measure
+    capacity.  Every complete assignment must embed each unresolved event in a
+    same-staff duration chain.
+
+    The older implementation required the *entire* measure to have exactly one
+    valid assignment.  That is unnecessarily strict for TMA: one part of a
+    measure can remain voice-ambiguous while a particular attack column is
+    nevertheless forced to the same exact time in every admissible solution.
+
+    Therefore this routine exhaustively enumerates valid assignments (within a
+    bounded finite search).  A column is committed only when every valid
+    assignment gives it the identical rational onset.  If the search bound is
+    reached, nothing is committed because exhaustiveness has not been proved.
     """
     unresolved_columns = [
         column for column in range(len(columns)) if column not in times
@@ -412,6 +419,7 @@ def _solve_unique_duration_chain_columns(
     valid: list[dict[int, Fraction]] = []
     assignment: dict[int, Fraction] = {}
     explored = 0
+    truncated = False
 
     def event_time(
         event: VisualEvent,
@@ -470,8 +478,9 @@ def _solve_unique_duration_chain_columns(
     ordered = unresolved_columns
 
     def search(index: int, previous_time: Fraction) -> None:
-        nonlocal explored
-        if len(valid) > 1 or explored >= max_assignments:
+        nonlocal explored, truncated
+        if explored >= max_assignments:
+            truncated = True
             return
         if index >= len(ordered):
             explored += 1
@@ -482,8 +491,6 @@ def _solve_unique_duration_chain_columns(
             return
 
         column = ordered[index]
-        # Respect any fixed time to the right while preserving strict notation
-        # order.  Simultaneous objects are already in the same column.
         next_known_time = capacity
         for known_col, known_time in known_sorted:
             if known_col > column:
@@ -496,12 +503,9 @@ def _solve_unique_duration_chain_columns(
             assignment[column] = value
             search(index + 1, value)
             assignment.pop(column, None)
-            if len(valid) > 1 or explored >= max_assignments:
+            if truncated:
                 return
 
-    # The first unresolved column must occur after the closest known column to
-    # its left; use -quantum when the measure begins unresolved so zero remains
-    # available only through an explicit column-0 anchor set elsewhere.
     first = ordered[0]
     previous = Fraction(-1)
     for known_col, known_time in known_sorted:
@@ -511,12 +515,16 @@ def _solve_unique_duration_chain_columns(
             break
     search(0, previous)
 
-    if len(valid) != 1:
+    if truncated or not valid:
         return 0
-    for column, value in valid[0].items():
-        times[column] = value
-    return len(valid[0])
 
+    added = 0
+    for column in unresolved_columns:
+        values = {row[column] for row in valid if column in row}
+        if len(values) == 1:
+            times[column] = next(iter(values))
+            added += 1
+    return added
 
 def _resolve_geometric_grid_intervals(
     times: dict[int, Fraction],
