@@ -1,6 +1,7 @@
 name: Buxtehude independent MIDI oracle
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - tma-optical-reader-clean-20260919
