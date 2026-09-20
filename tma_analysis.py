@@ -98,7 +98,6 @@ def analyze_tone_metric(rhythm: dict) -> dict:
                 measure_number=str(row.get("measure_number", measure_index + 1)),
                 offset_in_measure=offset,
                 sources=sources,
-                canonical_recovered=False,
             )
         )
 
