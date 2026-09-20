@@ -129,6 +129,35 @@ jobs:
           print('BUX_ORACLE_MEASURE_DIFFS='+json.dumps(per,separators=(',',':')))
           PY
 
+          python - <<'PY'
+          import json
+          from statistics import median
+          from rhythm_reconstructor import _build_measure_events, _cluster_columns
+          d=json.load(open('bux_audit/notation_graph.json'))
+          r=json.load(open('bux_audit/rhythm_audit.json'))
+          bad={int(x['measure_index']) for x in r['unresolved']}
+          gi=0
+          rows=[]
+          for page in d['pages']:
+              systems={int(s['id']):s for s in page.get('systems',[])}
+              staves={int(s['id']):s for s in page.get('staves',[])}
+              measures=sorted(page.get('measures',[]),key=lambda m:(int(m.get('system_id',0)),int(m.get('measure_in_system',0)),float(m.get('left',0))))
+              for measure in measures:
+                  if gi in bad:
+                      events=_build_measure_events(page,measure)
+                      temporal=[e for e in events if e.kind!='measure_rest']
+                      sys=systems.get(int(measure.get('system_id',0)),{})
+                      ss=[float(staves[i].get('spacing',18) or 18) for i in sys.get('staff_ids',[]) if i in staves]
+                      sp=float(median(ss)) if ss else 18.0
+                      cols=_cluster_columns(temporal,0.65*sp)
+                      left=float(measure['left']); right=float(measure['right'])
+                      xs=[float(median([e.x for e in col])) for col in cols]
+                      norm=[round((x-left)/(right-left),5) for x in xs]
+                      rows.append({'measure':gi+1,'left':round(left,2),'right':round(right,2),'columns':len(cols),'norm_x':norm,'events':[[e.id for e in col] for col in cols]})
+                  gi+=1
+          print('BUX_COLUMN_GEOMETRY='+json.dumps(rows,separators=(',',':')))
+          PY
+
       - name: Upload Buxtehude rhythm audit
         if: always()
         uses: actions/upload-artifact@v4
