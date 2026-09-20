@@ -1,0 +1,60 @@
+name: Buxtehude independent MIDI oracle
+
+on:
+  push:
+    branches:
+      - tma-optical-reader-clean-20260919
+
+permissions:
+  contents: read
+
+jobs:
+  bux-midi-oracle:
+    if: "!contains(github.event.head_commit.message, '[skip buxoracle]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Resolve public BuxWV 183 MIDI
+        run: |
+          set -u
+          UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/153 Safari/537.36'
+          PREP='https://www.kunstderfuge.com/-/midi.asp?file=buxtehude%2Fchorale-preludes_buxwv-183_%28mccloskey%29.mid'
+          DOWN='https://www.kunstderfuge.com/-/downloader.asp?file=buxtehude/chorale-preludes_buxwv-183_(mccloskey).mid&bucket='
+          curl -A "$UA" -c /tmp/kdf.cookies -b /tmp/kdf.cookies -L -sS "$PREP" -o /tmp/prep.html
+          echo '=== PREP HTML ==='
+          sed -n '1,220p' /tmp/prep.html
+          echo '=== PREP URLS ==='
+          grep -Eo 'https?://[^"'''<> ]+|[A-Za-z0-9_./?=&%()-]+\.mid[^"'''<> ]*' /tmp/prep.html || true
+          sleep 6
+          curl -A "$UA" -c /tmp/kdf.cookies -b /tmp/kdf.cookies -L -sS -D /tmp/down.headers "$DOWN" -o /tmp/down.bin
+          echo '=== DOWN HEADERS ==='
+          cat /tmp/down.headers
+          echo '=== DOWN TYPE ==='
+          file /tmp/down.bin
+          wc -c /tmp/down.bin
+          head -c 100 /tmp/down.bin | xxd || true
+          if python - <<'PY'
+          from pathlib import Path
+          p=Path('/tmp/down.bin')
+          raise SystemExit(0 if p.read_bytes()[:4] == b'MThd' else 1)
+          PY
+          then
+            cp /tmp/down.bin buxwv183-oracle.mid
+          else
+            echo 'Downloader did not directly return MIDI.'
+            cp /tmp/down.bin downloader-response.html
+          fi
+      - name: Upload oracle diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buxwv183-midi-oracle-diagnostic
+          path: |
+            buxwv183-oracle.mid
+            downloader-response.html
+          if-no-files-found: ignore
+          retention-days: 3
