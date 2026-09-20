@@ -127,6 +127,29 @@ jobs:
                       'unresolved':unresolved_by_measure.get(mi,0),
                   })
           print('BUX_ORACLE_MEASURE_DIFFS='+json.dumps(per,separators=(',',':')))
+
+          # Tie-policy sensitivity: the independent MIDI oracle lets us test
+          # whether visual tie suppression is improving or harming the sonic
+          # attack set without feeding oracle timing into production.
+          import copy
+          from rhythm_reconstructor import reconstruct_attacks
+          graph=json.load(open('bux_audit/notation_graph.json'))
+          for label,threshold in [('none',1.01),('0.90',0.90),('0.85',0.85),('0.80',0.80),('all',0.0)]:
+              gg=copy.deepcopy(graph)
+              for page in gg.get('pages',[]):
+                  for tie in page.get('tie_candidates',[]):
+                      conf=float(tie.get('confidence',0.0))
+                      tie['confidence']=1.0 if conf>=threshold else 0.0
+              rr=reconstruct_attacks(gg,meter=(4,4))
+              oo={Fraction(str(h['onset_quarter'])) for h in rr['hits']}
+              tt=oo & oracle
+              print('BUX_TIE_POLICY='+json.dumps({
+                  'policy':label,'observed':len(oo),'tp':len(tt),
+                  'fp':len(oo-oracle),'fn':len(oracle-oo),
+                  'precision':(len(tt)/len(oo) if oo else 0),
+                  'recall':(len(tt)/len(oracle) if oracle else 0),
+                  'unresolved':len(rr['unresolved']),
+              },sort_keys=True))
           PY
 
           python - <<'PY'
