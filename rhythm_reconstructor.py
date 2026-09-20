@@ -181,17 +181,37 @@ def _cluster_columns(
     events: list[VisualEvent],
     tolerance: float,
 ) -> list[list[VisualEvent]]:
+    """Cluster near-vertical notation without collapsing rapid same-staff notes.
+
+    The broad tolerance is useful across different staves because engraving may
+    stagger simultaneous parts horizontally.  On one staff, however, successive
+    16th/32nd attacks can be closer than that tolerance.  Chord fragments have
+    already been repaired upstream, so same-staff symbols are merged only under
+    a much tighter alignment criterion.
+    """
     if not events:
         return []
     ordered = sorted(events, key=lambda event: event.x)
     groups: list[list[VisualEvent]] = []
+    same_staff_tolerance = tolerance * (0.22 / 0.65)
     for event in ordered:
         if not groups:
             groups.append([event])
             continue
-        xs = [item.x for item in groups[-1]]
-        if event.x - min(xs) <= tolerance:
-            groups[-1].append(event)
+        group = groups[-1]
+        xs = [item.x for item in group]
+        broad_match = event.x - min(xs) <= tolerance
+        same_staff = [
+            item for item in group
+            if item.staff_id == event.staff_id
+        ]
+        same_staff_match = (
+            not same_staff
+            or min(abs(event.x - item.x) for item in same_staff)
+            <= same_staff_tolerance
+        )
+        if broad_match and same_staff_match:
+            group.append(event)
         else:
             groups.append([event])
     for column, group in enumerate(groups):
