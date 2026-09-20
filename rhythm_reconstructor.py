@@ -591,13 +591,13 @@ def _solve_unique_duration_chain_columns(
         # against the next exact chain solution.  Simultaneous cross-staff
         # staggering is tolerated through the max-error allowance.
         if (
-            best_mse < 0.010
-            and best_max < 0.20
+            best_mse < 0.020
+            and best_max < 0.28
             and (
                 second_score is None
                 or (
-                    second_score[0] - best_mse >= 0.0015
-                    and second_score[0] >= best_mse * 1.20
+                    second_score[0] - best_mse >= 0.00035
+                    and second_score[0] >= best_mse * 1.06
                 )
             )
         ):
