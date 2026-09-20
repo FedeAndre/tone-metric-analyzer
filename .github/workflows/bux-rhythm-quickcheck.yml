@@ -24,6 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install --no-deps 'git+https://github.com/BreezeWhite/oemer@dbe2a933d630d0f74805d717960eb259473f5978'
+          pip install mido
       - uses: actions/cache@v4
         with:
           path: optical_cache
@@ -67,6 +68,65 @@ jobs:
                       "unresolved":unresolved_by_measure.get(mi,[]),
                   },sort_keys=True))
           print("BUX_PROBLEM_MEASURES_END")
+          PY
+
+          curl -A 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/153 Safari/537.36' \
+            -L --fail --retry 3 --retry-delay 2 -sS \
+            'https://kunstderfuge.com/-/mid.files/buxtehude/chorale-preludes_buxwv-183_(mccloskey).mid' \
+            -o buxwv183-oracle.mid
+
+          python - <<'PY'
+          import json
+          from fractions import Fraction
+          import mido
+
+          r=json.load(open('bux_audit/rhythm_audit.json'))
+          observed={Fraction(str(h['onset_quarter'])) for h in r['hits']}
+          unresolved_by_measure={}
+          for row in r['unresolved']:
+              unresolved_by_measure.setdefault(int(row['measure_index']),0)
+              unresolved_by_measure[int(row['measure_index'])]+=1
+
+          mid=mido.MidiFile('buxwv183-oracle.mid')
+          oracle=set()
+          for track in mid.tracks:
+              tick=0
+              for msg in track:
+                  tick += msg.time
+                  if msg.type=='note_on' and getattr(msg,'velocity',0)>0:
+                      oracle.add(Fraction(tick,mid.ticks_per_beat))
+
+          tp=observed & oracle
+          fp=observed-oracle
+          fn=oracle-observed
+          print('BUX_ORACLE_ATTACKS='+str(len(oracle)))
+          print('BUX_OBSERVED_ATTACKS='+str(len(observed)))
+          print('BUX_ATTACK_TP='+str(len(tp)))
+          print('BUX_ATTACK_FP='+str(len(fp)))
+          print('BUX_ATTACK_FN='+str(len(fn)))
+          print('BUX_ATTACK_PRECISION='+f'{len(tp)/len(observed):.8f}' if observed else 'BUX_ATTACK_PRECISION=0')
+          print('BUX_ATTACK_RECALL='+f'{len(tp)/len(oracle):.8f}' if oracle else 'BUX_ATTACK_RECALL=0')
+          print('BUX_FIRST_FP='+','.join(str(x) for x in sorted(fp)[:100]))
+          print('BUX_FIRST_FN='+','.join(str(x) for x in sorted(fn)[:120]))
+
+          per=[]
+          for mi in range(49):
+              start=Fraction(mi*4)
+              end=start+4
+              oo=sorted(x-start for x in observed if start <= x < end)
+              rr=sorted(x-start for x in oracle if start <= x < end)
+              fpm=sorted(set(oo)-set(rr))
+              fnm=sorted(set(rr)-set(oo))
+              if fpm or fnm or mi in unresolved_by_measure:
+                  per.append({
+                      'measure':mi+1,
+                      'observed':[str(x) for x in oo],
+                      'oracle':[str(x) for x in rr],
+                      'fp':[str(x) for x in fpm],
+                      'fn':[str(x) for x in fnm],
+                      'unresolved':unresolved_by_measure.get(mi,0),
+                  })
+          print('BUX_ORACLE_MEASURE_DIFFS='+json.dumps(per,separators=(',',':')))
           PY
 
       - name: Upload Buxtehude rhythm audit
