@@ -394,8 +394,13 @@ def _solve_unique_duration_chain_columns(
                 right_time = min(right_time, known_time)
                 break
         values: list[Fraction] = []
-        value = left_time + quantum
-        while value < right_time:
+        # Different staves/voices can engrave simultaneous attacks at slightly
+        # different x coordinates.  Therefore global visual-column order is
+        # non-decreasing in time, not strictly increasing.  Boundary times are
+        # legal candidates; same-staff duration-chain checks below decide
+        # whether equality is musically admissible for a particular event.
+        value = left_time
+        while value <= right_time:
             values.append(value)
             value += quantum
         if not values:
@@ -498,7 +503,7 @@ def _solve_unique_duration_chain_columns(
                 break
 
         for value in candidate_map[column]:
-            if value <= previous_time or value >= next_known_time:
+            if value < previous_time or value > next_known_time:
                 continue
             assignment[column] = value
             search(index + 1, value)
