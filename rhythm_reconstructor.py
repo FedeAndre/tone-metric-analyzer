@@ -1141,6 +1141,56 @@ def reconstruct_attacks(
                             grid_quantum * column_index
                         )
 
+            # Beam connectivity is stronger visual evidence than stem
+            # direction. Consecutive stems touched by the same engraved beam
+            # belong to one sequential rhythmic group, even when voices cross
+            # or switch stem direction.
+            beam_edges: list[tuple[int, int, Fraction, str]] = []
+            event_by_stem = {
+                int(event.stem_id): event
+                for event in temporal_events
+                if event.stem_id is not None
+                and event.duration > 0
+                and event.column is not None
+            }
+            seen_beam_edges: set[tuple[int, int, Fraction]] = set()
+            for beam in page.get("beams", []):
+                matched = [
+                    event_by_stem[int(stem_id)]
+                    for stem_id in beam.get("stem_ids", [])
+                    if int(stem_id) in event_by_stem
+                ]
+                # A beam component can touch symbols outside this measure; keep
+                # only the current measure and collapse chord/same-column hits.
+                matched = [
+                    event for event in matched
+                    if event.measure_local == int(measure["id"])
+                ]
+                unique_by_column: dict[int, VisualEvent] = {}
+                for event in sorted(matched, key=lambda item: item.x):
+                    unique_by_column.setdefault(int(event.column), event)
+                ordered_beam = sorted(
+                    unique_by_column.values(),
+                    key=lambda item: (item.x, int(item.column)),
+                )
+                for left, right in zip(ordered_beam, ordered_beam[1:]):
+                    if int(left.column) == int(right.column):
+                        continue
+                    key = (
+                        int(left.column),
+                        int(right.column),
+                        left.duration,
+                    )
+                    if key in seen_beam_edges:
+                        continue
+                    seen_beam_edges.add(key)
+                    beam_edges.append((
+                        int(left.column),
+                        int(right.column),
+                        left.duration,
+                        f"beam {beam.get('id')}",
+                    ))
+
             # Voice identity is visually inferred and therefore soft evidence.
             # Only a self-consistent complete voice may anchor exact score time.
             # Other inferred voice chains contribute duration edges only when
@@ -1257,7 +1307,9 @@ def reconstruct_attacks(
             # exact anchors.  This is the key distinction from the old solver:
             # stem direction / inferred voice never gets to overrule score
             # time established by a self-consistent complete path.
-            active_edges = list(soft_edges)
+            # Process direct beam evidence first.  Softer inferred-voice
+            # edges may fill additional times only when compatible.
+            active_edges = list(beam_edges) + list(soft_edges)
             changed = True
             while changed:
                 changed = False
