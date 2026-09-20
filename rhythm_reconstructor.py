@@ -549,6 +549,84 @@ def _solve_unique_duration_chain_columns(
         if len(values) == 1:
             times[column] = next(iter(values))
             added += 1
+
+    # If exact duration-chain logic leaves several whole-layout solutions,
+    # engraving geometry may break the tie — but only between those already
+    # valid rational solutions.  No continuous time is created from x.
+    still_unresolved = [
+        column for column in unresolved_columns if column not in times
+    ]
+    if still_unresolved and len(valid) > 1:
+        column_x = {
+            index: float(median([event.x for event in column]))
+            for index, column in enumerate(columns)
+            if column
+        }
+
+        def geometry_score(row: dict[int, Fraction]) -> tuple[float, float]:
+            merged = dict(times)
+            merged.update(row)
+            points = [
+                (float(merged[column] / capacity), column_x[column])
+                for column in sorted(merged)
+                if column in column_x
+            ]
+            if len(points) < 3:
+                return float("inf"), float("inf")
+            xs = [point[1] for point in points]
+            x_min = min(xs)
+            x_span = max(xs) - x_min
+            if x_span <= 0:
+                return float("inf"), float("inf")
+            ts = [point[0] for point in points]
+            xn = [(x - x_min) / x_span for x in xs]
+
+            mean_t = sum(ts) / len(ts)
+            mean_x = sum(xn) / len(xn)
+            var_t = sum((t - mean_t) ** 2 for t in ts)
+            if var_t <= 1e-12:
+                return float("inf"), float("inf")
+            slope = sum(
+                (t - mean_t) * (x - mean_x)
+                for t, x in zip(ts, xn)
+            ) / var_t
+            if slope <= 0:
+                return float("inf"), float("inf")
+            intercept = mean_x - slope * mean_t
+            errors = [
+                abs(x - (intercept + slope * t))
+                for t, x in zip(ts, xn)
+            ]
+            mse = sum(error * error for error in errors) / len(errors)
+            return mse, max(errors)
+
+        scored = sorted(
+            (geometry_score(row), index, row)
+            for index, row in enumerate(valid)
+        )
+        best_score, _best_index, best_row = scored[0]
+        second_score = scored[1][0] if len(scored) > 1 else None
+        best_mse, best_max = best_score
+
+        # Require both a close global affine engraving fit and clear evidence
+        # against the next exact chain solution.  Simultaneous cross-staff
+        # staggering is tolerated through the max-error allowance.
+        if (
+            best_mse < 0.010
+            and best_max < 0.20
+            and (
+                second_score is None
+                or (
+                    second_score[0] - best_mse >= 0.0015
+                    and second_score[0] >= best_mse * 1.20
+                )
+            )
+        ):
+            for column in still_unresolved:
+                if column in best_row:
+                    times[column] = best_row[column]
+                    added += 1
+
     return added
 
 def _resolve_geometric_grid_intervals(
