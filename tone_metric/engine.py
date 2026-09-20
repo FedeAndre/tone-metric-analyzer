@@ -257,22 +257,6 @@ def _contains_interior_hit(hits: List[Fraction], a: Fraction, b: Fraction) -> bo
     return any(a < t < b for t in hits)
 
 
-def _canonical_score_time_ternary_factor(a: Fraction, b: Fraction, hits: List[Hit]) -> int | None:
-    span = b - a
-    if span <= 0:
-        return None
-    for h in hits:
-        if not getattr(h, "canonical_recovered", False) or not (a < h.onset < b):
-            continue
-        rel = (h.onset - a) / span
-        den = rel.denominator
-        while den % 2 == 0:
-            den //= 2
-        if den % 3 == 0:
-            return 3
-    return None
-
-
 def _refine_span(
     a: Fraction,
     b: Fraction,
@@ -307,15 +291,7 @@ def _refine_span(
         return
 
     explicit_factor = _explicit_tuplet_factor(a, b, hits, warnings)
-    canonical_ternary = None
-    if explicit_factor is None and default_factor == 2:
-        canonical_ternary = _canonical_score_time_ternary_factor(a, b, hits)
-        if canonical_ternary is not None:
-            _warn_once(
-                warnings,
-                "Local ternary subdivision recovered from exact canonical score-time where explicit MusicXML tuplet metadata was unavailable.",
-            )
-    factor = explicit_factor or canonical_ternary or default_factor
+    factor = explicit_factor or default_factor
     child_spans = _add_local_structure(a, b, parent_level, factor, stacks)
     for x, y, child_parent_level in child_spans:
         if _contains_interior_hit(hit_times, x, y):
@@ -441,7 +417,6 @@ def analyze_segment(segment: MeterSegment) -> dict:
             "within_tactus_initial_arity": first_factor,
             "finer_continuation_arity": 2,
             "explicit_tuplet_rule": "prime actual-notes arity replaces the default only in the recursively matched parent span",
-            "canonical_score_time_ternary_rule": "canonical OMR positions that cannot be reached dyadically force local ternary subdivision only in binary spans",
             "explicit_tuplet_ratios": sorted(
                 {
                     f"{int(src.tuplet_actual)}:{int(src.tuplet_normal)}"
