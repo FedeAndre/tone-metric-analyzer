@@ -26,7 +26,7 @@ THRESHOLD_N = 20.0
 PROJECTION_TOL_S = 0.005
 N_CYCLES = 64
 HALF_CYCLES = 32
-SCRAMBLE_B = 80
+SCRAMBLE_B = 12
 PERM_B = 5000
 
 OUT = Path("research/tma_gait_gauge_results")
