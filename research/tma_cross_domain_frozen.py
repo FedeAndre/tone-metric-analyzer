@@ -383,7 +383,7 @@ def hcp_rows():
         subject=root/"subjects"/str(sid)/"MOTOR"
         views=[]
         for key in ("LR","RL"):
-            run=subject/key
+            run=subject/f"tfMRI_MOTOR_{key}"
             tsfile=run/"data.npy"
             evdir=run/"EVs"
             if not tsfile.exists() or not evdir.exists():
