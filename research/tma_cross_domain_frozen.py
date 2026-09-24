@@ -228,16 +228,23 @@ def neural_rows():
     import tma_neural_theta_spike as n
     tmp=Path("/tmp/tma_neural_cross.nwb"); candidates=[]
     per_sub=defaultdict(list)
+    # Frozen balanced subset: process sessions only until each animal contributes
+    # five eligible 16-cycle windows. This preserves the prespecified 20-entity
+    # design while avoiding unnecessary multi-GB downloads after quota is filled.
     for idx,(sub,ses,url) in enumerate(n.ASSETS,1):
+        if len(per_sub[sub])>=5:
+            continue
         try:
             _,surr=n.process_session(sub,ses,url,tmp)
             for rid,ss,phase_lists in surr:
                 q=[np.asarray(x,float) for x in phase_lists if len(x)>=3]
-                if len(q)>=16: per_sub[ss].append((rid,q))
+                if len(q)>=16 and len(per_sub[ss])<5:
+                    per_sub[ss].append((rid,q))
         except Exception as e:
             log(f"neural skip {ses}: {e!r}")
-    # balance across four animals: up to five windows each
-    for sub in sorted(per_sub):
+        if all(len(per_sub[x])>=5 for x in ("M01","M02","M03","M05")):
+            break
+    for sub in ("M01","M02","M03","M05"):
         candidates.extend([(sub,rid,q) for rid,q in per_sub[sub][:5]])
     out=[]
     for sub,rid,q in candidates[:N_PER_DOMAIN]:
