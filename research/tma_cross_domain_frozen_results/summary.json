@@ -60,7 +60,7 @@
       "domain": "binary_counter",
       "n": 20,
       "same_mean": 0.0,
-      "different_mean": 3.7684123472974638,
+      "different_mean": 3.768412347297463,
       "same_over_different": 0.0,
       "paired_permutation_p": 0.0004997501249375312,
       "top1_identity": 0.2,
@@ -69,9 +69,9 @@
     {
       "domain": "cardiorespiratory",
       "n": 20,
-      "same_mean": 1.3687378154893743,
-      "different_mean": 1.336808130466407,
-      "same_over_different": 1.0238850170755822,
+      "same_mean": 1.368737815489374,
+      "different_mean": 1.3368081304664068,
+      "same_over_different": 1.023885017075582,
       "paired_permutation_p": 0.68015992003998,
       "top1_identity": 0.0,
       "chance_identity": 0.05
@@ -79,8 +79,8 @@
     {
       "domain": "cmapss",
       "n": 20,
-      "same_mean": 1.416447309383799,
-      "different_mean": 1.8096559729440806,
+      "same_mean": 1.4164473093837988,
+      "different_mean": 1.8096559729440804,
       "same_over_different": 0.7827163452948568,
       "paired_permutation_p": 0.0004997501249375312,
       "top1_identity": 0.2,
@@ -90,8 +90,8 @@
       "domain": "gait",
       "n": 20,
       "same_mean": 2.1074406307459057,
-      "different_mean": 2.722599235914181,
-      "same_over_different": 0.7740546617902359,
+      "different_mean": 2.7225992359141795,
+      "same_over_different": 0.7740546617902362,
       "paired_permutation_p": 0.0034982508745627187,
       "top1_identity": 0.1,
       "chance_identity": 0.05
@@ -99,8 +99,8 @@
     {
       "domain": "neural_theta_spike",
       "n": 20,
-      "same_mean": 1.363158040820922,
-      "different_mean": 1.3232119659411365,
+      "same_mean": 1.3631580408209216,
+      "different_mean": 1.323211965941136,
       "same_over_different": 1.0301887195007142,
       "paired_permutation_p": 0.7481259370314842,
       "top1_identity": 0.1,
@@ -109,10 +109,10 @@
     {
       "domain": "ultrasound",
       "n": 20,
-      "same_mean": 1.3098209156067797,
-      "different_mean": 1.3848317295907517,
-      "same_over_different": 0.9458339866272855,
-      "paired_permutation_p": 0.12693653173413294,
+      "same_mean": 1.3098209156067793,
+      "different_mean": 1.3848317295907515,
+      "same_over_different": 0.9458339866272854,
+      "paired_permutation_p": 0.13193403298350825,
       "top1_identity": 0.05,
       "chance_identity": 0.05
     }
@@ -133,19 +133,19 @@
     {
       "domain": "cmapss",
       "n": 20,
-      "centroid_norm": 0.5182843444006154,
+      "centroid_norm": 0.5182843444006152,
       "null_tail_p": 0.0004997501249375312
     },
     {
       "domain": "gait",
       "n": 20,
-      "centroid_norm": 2.768043758252897,
+      "centroid_norm": 2.7680437582528965,
       "null_tail_p": 0.0004997501249375312
     },
     {
       "domain": "neural_theta_spike",
       "n": 20,
-      "centroid_norm": 0.2646255066282814,
+      "centroid_norm": 0.26462550662828155,
       "null_tail_p": 0.1584207896051974
     },
     {
@@ -158,55 +158,60 @@
   "distance_matrix": {
     "binary_counter": {
       "binary_counter": 0.0,
-      "cardiorespiratory": 3.483667077754555,
-      "cmapss": 3.2890556877043378,
-      "gait": 2.4899616440783254,
+      "cardiorespiratory": 3.4836670777545553,
+      "cmapss": 3.289055687704338,
+      "gait": 2.489961644078325,
       "neural_theta_spike": 3.423119427423022,
-      "ultrasound": 3.420707354028322
+      "ultrasound": 3.4207073540283224
     },
     "cardiorespiratory": {
-      "binary_counter": 3.483667077754555,
+      "binary_counter": 3.4836670777545553,
       "cardiorespiratory": 0.0,
-      "cmapss": 0.6062615397744192,
+      "cmapss": 0.6062615397744191,
       "gait": 2.908020738261393,
-      "neural_theta_spike": 0.15934353090005454,
-      "ultrasound": 0.31912360510120413
+      "neural_theta_spike": 0.1593435309000545,
+      "ultrasound": 0.319123605101204
     },
     "cmapss": {
-      "binary_counter": 3.2890556877043378,
-      "cardiorespiratory": 0.6062615397744192,
+      "binary_counter": 3.289055687704338,
+      "cardiorespiratory": 0.6062615397744191,
       "cmapss": 0.0,
       "gait": 2.4353530075612877,
-      "neural_theta_spike": 0.5993669867576907,
-      "ultrasound": 0.6472739937631231
+      "neural_theta_spike": 0.5993669867576906,
+      "ultrasound": 0.647273993763123
     },
     "gait": {
-      "binary_counter": 2.4899616440783254,
+      "binary_counter": 2.489961644078325,
       "cardiorespiratory": 2.908020738261393,
       "cmapss": 2.4353530075612877,
       "gait": 0.0,
-      "neural_theta_spike": 2.873878538210697,
-      "ultrasound": 2.907859482608728
+      "neural_theta_spike": 2.8738785382106964,
+      "ultrasound": 2.9078594826087274
     },
     "neural_theta_spike": {
       "binary_counter": 3.423119427423022,
-      "cardiorespiratory": 0.15934353090005454,
-      "cmapss": 0.5993669867576907,
-      "gait": 2.873878538210697,
+      "cardiorespiratory": 0.1593435309000545,
+      "cmapss": 0.5993669867576906,
+      "gait": 2.8738785382106964,
       "neural_theta_spike": 0.0,
-      "ultrasound": 0.25404168977342007
+      "ultrasound": 0.25404168977342
     },
     "ultrasound": {
-      "binary_counter": 3.420707354028322,
-      "cardiorespiratory": 0.31912360510120413,
-      "cmapss": 0.6472739937631231,
-      "gait": 2.907859482608728,
-      "neural_theta_spike": 0.25404168977342007,
+      "binary_counter": 3.4207073540283224,
+      "cardiorespiratory": 0.319123605101204,
+      "cmapss": 0.647273993763123,
+      "gait": 2.9078594826087274,
+      "neural_theta_spike": 0.25404168977342,
       "ultrasound": 0.0
     }
   },
-  "failures": {
-    "fmri": "RuntimeError('only 0 pairs')"
-  },
-  "runtime_s": 1854.8006644248962
+  "execution": "parallel raw-domain workers; identical frozen comparator",
+  "part_files": [
+    "binary_counter.csv",
+    "cardiorespiratory.csv",
+    "cmapss.csv",
+    "gait.csv",
+    "neural_theta_spike.csv",
+    "ultrasound.csv"
+  ]
 }
