@@ -1,0 +1,181 @@
+{
+  "seed": 20260924,
+  "criterion": "I \u2014 incremental information beyond conventional gait variables",
+  "verdict": "INCONCLUSIVE",
+  "cohort_note": "Speed_01 is missing for GaPt03, so speed-containing models use 46 participants.",
+  "model": {
+    "type": "standardized L2/ridge logistic regression",
+    "validation": "participant-level leave-one-out cross-validation",
+    "primary_C": 1.0,
+    "scaling": "fit within each training fold only",
+    "bootstrap": "paired subject bootstrap of fixed LOOCV predictions, B=5000"
+  },
+  "comparisons": [
+    {
+      "label": "core_plus_full",
+      "n": 46,
+      "n_control": 18,
+      "n_pd": 28,
+      "C": 1.0,
+      "conventional_features": [
+        "speed_m_s",
+        "stride_cv_pct",
+        "swing_cv_pct",
+        "bilateral_swing_asym_log_pct",
+        "pci_pct"
+      ],
+      "tma_features": [
+        "mean_H",
+        "mean_D",
+        "mean_lambda",
+        "multilevel",
+        "pivot_rate",
+        "compound_pivot_fraction",
+        "pivot_depth",
+        "tree_span_events",
+        "RTO_mean_D",
+        "RTO_mean_lambda",
+        "RTO_multilevel",
+        "RHS_mean_D",
+        "RHS_mean_lambda",
+        "RHS_multilevel",
+        "LTO_mean_D",
+        "LTO_mean_lambda",
+        "LTO_multilevel"
+      ],
+      "auc_conventional": 0.7281746031746031,
+      "auc_conventional_plus_tma": 0.9365079365079366,
+      "delta_auc": 0.20833333333333348,
+      "bootstrap": {
+        "B_requested": 5000,
+        "B_valid": 5000,
+        "delta_mean": 0.2079128092076181,
+        "ci95_low": 0.08694607023411366,
+        "ci95_high": 0.3489459371038316,
+        "p_delta_le_0": 0.0003999200159968006
+      }
+    },
+    {
+      "label": "expanded_plus_full",
+      "n": 46,
+      "n_control": 18,
+      "n_pd": 28,
+      "C": 1.0,
+      "conventional_features": [
+        "speed_m_s",
+        "mean_stride_s",
+        "stride_cv_pct",
+        "swing_cv_pct",
+        "bilateral_swing_asym_log_pct",
+        "contralateral_hs_phase_error_pct",
+        "pci_pct"
+      ],
+      "tma_features": [
+        "mean_H",
+        "mean_D",
+        "mean_lambda",
+        "multilevel",
+        "pivot_rate",
+        "compound_pivot_fraction",
+        "pivot_depth",
+        "tree_span_events",
+        "RTO_mean_D",
+        "RTO_mean_lambda",
+        "RTO_multilevel",
+        "RHS_mean_D",
+        "RHS_mean_lambda",
+        "RHS_multilevel",
+        "LTO_mean_D",
+        "LTO_mean_lambda",
+        "LTO_multilevel"
+      ],
+      "auc_conventional": 0.8650793650793651,
+      "auc_conventional_plus_tma": 0.9484126984126985,
+      "delta_auc": 0.08333333333333337,
+      "bootstrap": {
+        "B_requested": 5000,
+        "B_valid": 5000,
+        "delta_mean": 0.08314561475049304,
+        "ci95_low": -0.009920634920634889,
+        "ci95_high": 0.19238887279049532,
+        "p_delta_le_0": 0.04059188162367527
+      }
+    },
+    {
+      "label": "core_plus_compact",
+      "n": 46,
+      "n_control": 18,
+      "n_pd": 28,
+      "C": 1.0,
+      "conventional_features": [
+        "speed_m_s",
+        "stride_cv_pct",
+        "swing_cv_pct",
+        "bilateral_swing_asym_log_pct",
+        "pci_pct"
+      ],
+      "tma_features": [
+        "mean_D",
+        "mean_lambda",
+        "multilevel",
+        "pivot_rate",
+        "compound_pivot_fraction",
+        "pivot_depth",
+        "tree_span_events",
+        "RHS_mean_D",
+        "RHS_mean_lambda",
+        "RHS_multilevel"
+      ],
+      "auc_conventional": 0.7281746031746031,
+      "auc_conventional_plus_tma": 0.9464285714285715,
+      "delta_auc": 0.21825396825396837,
+      "bootstrap": {
+        "B_requested": 5000,
+        "B_valid": 5000,
+        "delta_mean": 0.21951889991199786,
+        "ci95_low": 0.09904454685099835,
+        "ci95_high": 0.365079365079365,
+        "p_delta_le_0": 0.0001999600079984003
+      }
+    },
+    {
+      "label": "expanded_plus_compact",
+      "n": 46,
+      "n_control": 18,
+      "n_pd": 28,
+      "C": 1.0,
+      "conventional_features": [
+        "speed_m_s",
+        "mean_stride_s",
+        "stride_cv_pct",
+        "swing_cv_pct",
+        "bilateral_swing_asym_log_pct",
+        "contralateral_hs_phase_error_pct",
+        "pci_pct"
+      ],
+      "tma_features": [
+        "mean_D",
+        "mean_lambda",
+        "multilevel",
+        "pivot_rate",
+        "compound_pivot_fraction",
+        "pivot_depth",
+        "tree_span_events",
+        "RHS_mean_D",
+        "RHS_mean_lambda",
+        "RHS_multilevel"
+      ],
+      "auc_conventional": 0.8650793650793651,
+      "auc_conventional_plus_tma": 0.9563492063492064,
+      "delta_auc": 0.09126984126984128,
+      "bootstrap": {
+        "B_requested": 5000,
+        "B_valid": 5000,
+        "delta_mean": 0.09172053685615851,
+        "ci95_low": 0.008109163205512037,
+        "ci95_high": 0.19785114247311827,
+        "p_delta_le_0": 0.014997000599880024
+      }
+    }
+  ]
+}
