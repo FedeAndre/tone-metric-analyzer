@@ -11,7 +11,7 @@ with requests.get(u,stream=True,timeout=1200,allow_redirects=True) as r:
 with tarfile.open(p,'r:gz') as tf:
     names=tf.getnames()
     sl=[n for n in names if n.endswith('subjects_list.txt')][0]
-    ids=tf.extractfile(sl).read().decode().splitlines()
+    ids=tf.extractfile(sl).read().decode().split()
     print('SUBJECTS_LIST_PATH',sl)
     print('FIRST_IDS',ids[:5])
     sid=ids[0].strip()
