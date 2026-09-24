@@ -350,7 +350,7 @@ def hcp_extract_archive(path):
         if not reg or not sl:
             raise RuntimeError("HCP regions.npy or subjects_list.txt not found")
         raw=tf.extractfile(sl[0]).read().decode("utf-8","replace")
-        subject_ids=[x.strip() for x in raw.splitlines() if x.strip()][:N_PER_DOMAIN]
+        subject_ids=[x.strip() for x in raw.split() if x.strip()][:N_PER_DOMAIN]
         needed=[reg[0],sl[0]]
         for m in members:
             n="/"+m.name.replace("\\","/")
