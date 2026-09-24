@@ -343,21 +343,25 @@ def computing_rows():
 
 def hcp_extract_archive(path):
     root=CACHE/"hcp"; root.mkdir(exist_ok=True)
-    needed=[]
     with tarfile.open(path,"r:gz") as tf:
         members=tf.getmembers()
-        # locate prefix and exact required files dynamically
+        reg=[m for m in members if m.name.endswith("/regions.npy") or m.name=="regions.npy"]
+        sl=[m for m in members if m.name.endswith("/subjects_list.txt") or m.name=="subjects_list.txt"]
+        if not reg or not sl:
+            raise RuntimeError("HCP regions.npy or subjects_list.txt not found")
+        raw=tf.extractfile(sl[0]).read().decode("utf-8","replace")
+        subject_ids=[x.strip() for x in raw.splitlines() if x.strip()][:N_PER_DOMAIN]
+        needed=[reg[0],sl[0]]
         for m in members:
-            n=m.name
-            if n.endswith("regions.npy"): needed.append(m)
-            if any(f"/subjects/{s}/" in "/"+n for s in range(N_PER_DOMAIN)):
-                if "/EVs/tfMRI_MOTOR_" in n or any(f"bold{r}_Atlas_MSMAll_Glasser360Cortical.npy" in n for r in (5,6)):
+            n="/"+m.name.replace("\\","/")
+            if any(f"/subjects/{sid}/MOTOR/" in n for sid in subject_ids):
+                if n.endswith("/data.npy") or "/EVs/" in n:
                     needed.append(m)
         tf.extractall(root,members=needed)
-    # locate data root
     regions=list(root.rglob("regions.npy"))
-    if not regions: raise RuntimeError("HCP regions.npy not found")
-    return regions[0].parent
+    if not regions: raise RuntimeError("HCP regions.npy not found after extract")
+    base=regions[0].parent
+    return base,subject_ids
 
 def select_signal_peaks(y):
     y=np.asarray(y,float)
@@ -366,37 +370,37 @@ def select_signal_peaks(y):
     return topk_event_phases(y,K,max(1,len(y)//6))
 
 def hcp_rows():
-    # 100-subject NMA HCP task archive used in the earlier fMRI analysis.
     url="https://files.de-1.osf.io/v1/resources/54w3g/providers/osfstorage/60e80c2bf80fdb01334d9147"
     p=download(url,CACHE/"hcp_task.tgz",retries=8,timeout=1200)
-    root=hcp_extract_archive(p)
+    root,subject_ids=hcp_extract_archive(p)
     regions=np.load(root/"regions.npy",allow_pickle=True).T
     nets=np.asarray(regions[1]).astype(str)
     sm=np.array(["somatomotor" in x.lower() for x in nets])
     if np.sum(sm)<5:
-        # common NMA label is "Somatomotor"
         raise RuntimeError(f"Somatomotor parcels not found; networks={np.unique(nets)}")
     out=[]
-    for s in range(N_PER_DOMAIN):
-        subject=root/"subjects"/str(s)
+    for sid in subject_ids:
+        subject=root/"subjects"/str(sid)/"MOTOR"
         views=[]
-        for run,boldnum,key in [(0,5,"RL"),(1,6,"LR")]:
-            tsfile=subject/"timeseries"/f"bold{boldnum}_Atlas_MSMAll_Glasser360Cortical.npy"
-            evdir=subject/"EVs"/f"tfMRI_MOTOR_{key}"
+        for key in ("LR","RL"):
+            run=subject/key
+            tsfile=run/"data.npy"
+            evdir=run/"EVs"
             if not tsfile.exists() or not evdir.exists():
                 views=[];break
             ts=np.load(tsfile)
-            y=np.mean(ts[sm],axis=0)
+            if ts.ndim!=2:
+                views=[];break
+            y=np.mean(ts[sm],axis=0) if ts.shape[0]==len(sm) else np.mean(ts[:,sm],axis=1)
             blocks=[]
             for cond in ["lf","rf","lh","rh","t"]:
-                f=evdir/f"{cond}.txt"
-                if not f.exists():continue
-                a=np.loadtxt(f,ndmin=2)
+                ev=evdir/f"{cond}.txt"
+                if not ev.exists():continue
+                a=np.loadtxt(ev,ndmin=2)
                 for row in a:
                     onset,dur=float(row[0]),float(row[1])
-                    # HRF-shifted movement response window.
                     start=int(math.floor((onset+4.0)/.72))
-                    n=int(math.ceil(dur/.72))
+                    n=max(K,int(math.ceil(dur/.72)))
                     seg=y[start:min(len(y),start+n)]
                     ph=select_signal_peaks(seg)
                     if ph is not None: blocks.append((onset,ph))
@@ -405,7 +409,7 @@ def hcp_rows():
                 views=[];break
             views.append([b[1] for b in blocks[:F]])
         if len(views)==2:
-            out += [mkrow("fmri",s,"A",views[0]),mkrow("fmri",s,"B",views[1])]
+            out += [mkrow("fmri",sid,"A",views[0]),mkrow("fmri",sid,"B",views[1])]
     log(f"fmri pairs={len(out)//2}")
     return out
 
