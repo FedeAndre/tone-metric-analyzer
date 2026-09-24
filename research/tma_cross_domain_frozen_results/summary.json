@@ -37,6 +37,7 @@
     "binary_counter",
     "cardiorespiratory",
     "cmapss",
+    "fmri",
     "gait",
     "neural_theta_spike",
     "ultrasound"
@@ -45,13 +46,14 @@
     "binary_counter": 20,
     "cardiorespiratory": 20,
     "cmapss": 20,
+    "fmri": 20,
     "gait": 20,
     "neural_theta_spike": 20,
     "ultrasound": 20
   },
   "domain_classification": {
-    "leave_one_entity_out_accuracy": 0.49166666666666664,
-    "chance": 0.16666666666666666,
+    "leave_one_entity_out_accuracy": 0.4714285714285714,
+    "chance": 0.14285714285714285,
     "permutation_p": 0.0004997501249375312,
     "B": 2000
   },
@@ -87,11 +89,21 @@
       "chance_identity": 0.05
     },
     {
+      "domain": "fmri",
+      "n": 20,
+      "same_mean": 1.7567552764604628,
+      "different_mean": 1.7060821711203031,
+      "same_over_different": 1.029701444747462,
+      "paired_permutation_p": 0.6596701649175413,
+      "top1_identity": 0.0,
+      "chance_identity": 0.05
+    },
+    {
       "domain": "gait",
       "n": 20,
-      "same_mean": 2.1074406307459057,
+      "same_mean": 2.107440630745906,
       "different_mean": 2.7225992359141795,
-      "same_over_different": 0.7740546617902362,
+      "same_over_different": 0.7740546617902364,
       "paired_permutation_p": 0.0034982508745627187,
       "top1_identity": 0.1,
       "chance_identity": 0.05
@@ -110,9 +122,9 @@
       "domain": "ultrasound",
       "n": 20,
       "same_mean": 1.3098209156067793,
-      "different_mean": 1.3848317295907515,
-      "same_over_different": 0.9458339866272854,
-      "paired_permutation_p": 0.13193403298350825,
+      "different_mean": 1.384831729590751,
+      "same_over_different": 0.9458339866272856,
+      "paired_permutation_p": 0.12693653173413294,
       "top1_identity": 0.05,
       "chance_identity": 0.05
     }
@@ -137,6 +149,12 @@
       "null_tail_p": 0.0004997501249375312
     },
     {
+      "domain": "fmri",
+      "n": 20,
+      "centroid_norm": 0.8000385708329129,
+      "null_tail_p": 0.0004997501249375312
+    },
+    {
       "domain": "gait",
       "n": 20,
       "centroid_norm": 2.7680437582528965,
@@ -146,13 +164,13 @@
       "domain": "neural_theta_spike",
       "n": 20,
       "centroid_norm": 0.26462550662828155,
-      "null_tail_p": 0.1584207896051974
+      "null_tail_p": 0.15792103948025987
     },
     {
       "domain": "ultrasound",
       "n": 20,
-      "centroid_norm": 0.29037045994477073,
-      "null_tail_p": 0.07846076961519241
+      "centroid_norm": 0.2903704599447708,
+      "null_tail_p": 0.08195902048975512
     }
   ],
   "distance_matrix": {
@@ -160,6 +178,7 @@
       "binary_counter": 0.0,
       "cardiorespiratory": 3.4836670777545553,
       "cmapss": 3.289055687704338,
+      "fmri": 3.123890180232022,
       "gait": 2.489961644078325,
       "neural_theta_spike": 3.423119427423022,
       "ultrasound": 3.4207073540283224
@@ -167,23 +186,35 @@
     "cardiorespiratory": {
       "binary_counter": 3.4836670777545553,
       "cardiorespiratory": 0.0,
-      "cmapss": 0.6062615397744191,
+      "cmapss": 0.606261539774419,
+      "fmri": 0.9052319976664585,
       "gait": 2.908020738261393,
       "neural_theta_spike": 0.1593435309000545,
       "ultrasound": 0.319123605101204
     },
     "cmapss": {
       "binary_counter": 3.289055687704338,
-      "cardiorespiratory": 0.6062615397744191,
+      "cardiorespiratory": 0.606261539774419,
       "cmapss": 0.0,
+      "fmri": 0.5782980224101961,
       "gait": 2.4353530075612877,
       "neural_theta_spike": 0.5993669867576906,
       "ultrasound": 0.647273993763123
+    },
+    "fmri": {
+      "binary_counter": 3.123890180232022,
+      "cardiorespiratory": 0.9052319976664585,
+      "cmapss": 0.5782980224101961,
+      "fmri": 0.0,
+      "gait": 2.1307134246821615,
+      "neural_theta_spike": 0.8913797791623719,
+      "ultrasound": 0.9122003915929598
     },
     "gait": {
       "binary_counter": 2.489961644078325,
       "cardiorespiratory": 2.908020738261393,
       "cmapss": 2.4353530075612877,
+      "fmri": 2.1307134246821615,
       "gait": 0.0,
       "neural_theta_spike": 2.8738785382106964,
       "ultrasound": 2.9078594826087274
@@ -192,6 +223,7 @@
       "binary_counter": 3.423119427423022,
       "cardiorespiratory": 0.1593435309000545,
       "cmapss": 0.5993669867576906,
+      "fmri": 0.8913797791623719,
       "gait": 2.8738785382106964,
       "neural_theta_spike": 0.0,
       "ultrasound": 0.25404168977342
@@ -200,18 +232,12 @@
       "binary_counter": 3.4207073540283224,
       "cardiorespiratory": 0.319123605101204,
       "cmapss": 0.647273993763123,
+      "fmri": 0.9122003915929598,
       "gait": 2.9078594826087274,
       "neural_theta_spike": 0.25404168977342,
       "ultrasound": 0.0
     }
   },
-  "execution": "parallel raw-domain workers; identical frozen comparator",
-  "part_files": [
-    "binary_counter.csv",
-    "cardiorespiratory.csv",
-    "cmapss.csv",
-    "gait.csv",
-    "neural_theta_spike.csv",
-    "ultrasound.csv"
-  ]
+  "execution": "existing six-domain frozen raw features + newly recovered raw HCP fMRI, identical frozen comparator",
+  "fmri_added_pairs": 20
 }
