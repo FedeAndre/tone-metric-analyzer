@@ -130,12 +130,20 @@ def conventional_from_cycles(cycles, fs: float) -> dict:
 def load_speed_table() -> dict[str, float]:
     rr = requests.get(DEMOGRAPHICS_URL, timeout=90)
     rr.raise_for_status()
-    df = pd.read_csv(io.StringIO(rr.text), sep="\t")
     out = {}
-    for _, row in df.iterrows():
-        sid = str(row.get("ID", "")).strip()
+    # PhysioNet's legacy demographics.txt contains irregular trailing tab fields
+    # in a few rows. We only need column 0 (ID) and column 12 (Speed_01), so
+    # parse those positions directly rather than requiring a rectangular table.
+    for line in rr.text.splitlines()[1:]:
+        fields = line.rstrip("\r\n").split("\t")
+        if not fields:
+            continue
+        sid = fields[0].strip()
+        if not sid:
+            continue
+        raw = fields[12].strip() if len(fields) > 12 else ""
         try:
-            speed = float(row.get("Speed_01"))
+            speed = float(raw)
         except Exception:
             speed = np.nan
         out[sid] = speed
