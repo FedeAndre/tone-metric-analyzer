@@ -9,7 +9,7 @@ if not base.exists():
     raise RuntimeError("Existing six-domain frozen raw features are missing")
 old=pd.read_csv(base)
 old=old[old.domain!="fmri"].copy()
-rows=t.fmri_rows()
+rows=t.hcp_rows()
 if len(rows)<10:
     raise RuntimeError(f"fMRI produced only {len(rows)//2} paired entities")
 fmri=pd.DataFrame(rows)
