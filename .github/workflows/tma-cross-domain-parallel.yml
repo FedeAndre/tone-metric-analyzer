@@ -6,6 +6,7 @@ on:
     paths:
       - 'research/cross_domain_parallel_worker.py'
       - 'research/cross_domain_parallel_aggregate.py'
+      - 'research/tma_cross_domain_frozen.py'
       - '.github/workflows/tma-cross-domain-parallel.yml'
   workflow_dispatch:
 
