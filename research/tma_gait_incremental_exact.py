@@ -253,23 +253,26 @@ def sensitivity_table(df, conventional, tma, label):
 
 def main():
     tma = pd.read_csv(TMA_FEATURE_PATH)
-    speeds = load_speed_table()
-
-    rows = []
-    for i, (record, group) in enumerate(RECORDS, 1):
-        print(f"[conventional] {i:02d}/{len(RECORDS)} {record}", flush=True)
-        arr = download_record(record)
-        cycles, fs, _ = extract_cycles(arr, record)
-        feat = conventional_from_cycles(cycles, fs)
-        sid = record.split("_")[0]
-        rows.append({
-            "record": record,
-            "group": group,
-            "speed_m_s": speeds.get(sid, np.nan),
-            **feat,
-        })
-
-    conv = pd.DataFrame(rows).sort_values("record").reset_index(drop=True)
+    verified_conv = Path("research/tma_gait_conventional_exact.csv")
+    if verified_conv.exists():
+        conv = pd.read_csv(verified_conv).sort_values("record").reset_index(drop=True)
+        print(f"[conventional] using verified precomputed matrix: {len(conv)} subjects", flush=True)
+    else:
+        speeds = load_speed_table()
+        rows = []
+        for i, (record, group) in enumerate(RECORDS, 1):
+            print(f"[conventional] {i:02d}/{len(RECORDS)} {record}", flush=True)
+            arr = download_record(record)
+            cycles, fs, _ = extract_cycles(arr, record)
+            feat = conventional_from_cycles(cycles, fs)
+            sid = record.split("_")[0]
+            rows.append({
+                "record": record,
+                "group": group,
+                "speed_m_s": speeds.get(sid, np.nan),
+                **feat,
+            })
+        conv = pd.DataFrame(rows).sort_values("record").reset_index(drop=True)
     conv.to_csv(OUT / "conventional_features.csv", index=False)
 
     merged = conv.merge(
