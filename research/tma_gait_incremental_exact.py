@@ -61,7 +61,7 @@ TMA_COMPACT = [
 
 C_PRIMARY = 1.0
 C_SENSITIVITY = [0.03, 0.1, 0.3, 1.0, 3.0, 10.0, 30.0]
-BOOT_B = 20000
+BOOT_B = 5000
 
 DEMOGRAPHICS_URL = "https://physionet.org/files/gaitpdb/1.0.0/demographics.txt"
 
