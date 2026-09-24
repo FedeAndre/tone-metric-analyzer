@@ -1,0 +1,42 @@
+=== gait ===
+gait pairs=20
+=== cardiorespiratory ===
+cardio 1/20
+cardio 2/20
+cardio 3/20
+cardio 4/20
+cardio 5/20
+cardio 6/20
+cardio 7/20
+cardio 8/20
+cardio 9/20
+cardio 10/20
+cardio 11/20
+cardio 12/20
+cardio 13/20
+cardio 14/20
+cardio 15/20
+cardio 16/20
+cardio 17/20
+cardio 18/20
+cardio 19/20
+cardio 20/20
+cardiorespiratory pairs=20
+=== neural_theta_spike ===
+neural pairs=20
+=== ultrasound ===
+ultrasound pairs=20
+=== cmapss ===
+cmapss pairs=20
+=== binary_counter ===
+binary_counter pairs=20
+=== fmri ===
+fmri pairs=0
+DOMAIN FAILURE fmri: RuntimeError('only 0 pairs')
+=== universal null ===
+null 250/1500
+null 500/1500
+null 750/1500
+null 1000/1500
+null 1250/1500
+null 1500/1500
