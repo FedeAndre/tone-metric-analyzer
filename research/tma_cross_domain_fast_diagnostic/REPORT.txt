@@ -1,0 +1,564 @@
+OSF_REQ https://api.osf.io/v2/nodes/7bta5/files/osfstorage/ 200
+{"kind": "folder", "name": "audio", "size": null, "download": null, "related": null}
+{"kind": "file", "name": "setD_individual.csv", "size": 596556, "download": "https://osf.io/download/n48hp/", "related": null}
+{"kind": "file", "name": "readme.rtf", "size": 2984, "download": "https://osf.io/download/kt74a/", "related": null}
+{"kind": "file", "name": "GLMM_predictors_LCO.R", "size": 30677, "download": "https://osf.io/download/6md8t/", "related": null}
+{"kind": "file", "name": "setD_cues.xlsx", "size": 629630, "download": "https://osf.io/download/35ukt/", "related": null}
+{"kind": "file", "name": "syntactic_annotation.docx", "size": 53441, "download": "https://osf.io/download/vj2p8/", "related": null}
+{"kind": "file", "name": "transcripts.docx", "size": 32415, "download": "https://osf.io/download/4xcdp/", "related": null}
+NASA_REQ https://data.nasa.gov/api/views/ff5v-kuh6 404 25180
+<!DOCTYPE html>
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"  > <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+      <meta name="csrf_field_name" content="_csrf_token" />
+      <meta name="_csrf_token" content="Ijk2MGJhN2RjODMyNDhkNGE0MzA1N2E1ODk3YjJiN2RlNGM0OTYxOWYi.arV-ew.18FgGmy-D5Nz4T-ZK1gWpPeYYOs" />
+
+      <meta name="generator" content="ckan 2.11.6" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error 404 
+          - 
+        NASA Open Data Portal</title>
+
+    
+    <link rel="shortcut icon" href="/img/favicons/favicon.ico" />
+    
+  
+    
+      
+      
+      
+      <!-- Public Sans Web -->
+      <link rel="preload" href="/hds/fonts/public-sans/PublicSans-ExtraLight.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts/public-sans/PublicSans-Light.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts/public-sans/PublicSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts/public-sans/PublicSans-Bold.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts/public-sans/PublicSans-ExtraLightItalic.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts/public-sans/PublicSans-LightItalic.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts/public-sans/PublicSans-Italic.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts/public-sans/PublicSans-BoldItalic.woff2" as="font" type="font/woff2" crossorigin>
+      
+      <!-- Inter (weight 200, split by unicode-range) -->
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2JL7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa0ZL7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2ZL7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1pL7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2pL7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa25L7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2" as="font" type="font/woff2" crossorigin>
+      
+      <!-- Inter (weight 400, split by unicode-range) -->
+      <link rel="preload" href="/hds/fonts-split/inter/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZJhiI2B.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZthiI2B.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZNhiI2B.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZxhiI2B.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZBhiI2B.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZFhiI2B.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
+      
+      <!-- Inter (weight 700, split by unicode-range) -->
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2JL7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa0ZL7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2ZL7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1pL7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2pL7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa25L7SUc.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/inter/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2" as="font" type="font/woff2" crossorigin>
+      
+      <!-- dm-mono (weight 400) -->
+      <link rel="preload" href="/hds/fonts-split/db-mono/aFTU7PB1QTsUX8KYthSQBLyM.woff2" as="font" type="font/woff2" crossorigin>
+      <link rel="preload" href="/hds/fonts-split/db-mono/aFTU7PB1QTsUX8KYthqQBA.woff2" as="font" type="font/woff2" crossorigin>
+      
+      <link rel="stylesheet" href="/hds/css/fonts.css">
+      <link rel="stylesheet" href="/css/nasa-full.css">
+    
+    
+
+  
+
+
+    
+    <link href="/webassets/base/51d427fe_main.css" rel="stylesheet"/>
+<link href="/webassets/ckanext-harvest/c95a0af2_harvest_css.css" rel="stylesheet"/>
+<link href="/webassets/ckanext-activity/8dd77216_activity.css" rel="stylesheet"/>
+    
+    
+
+  </head>
+
+  
+  <body data-site-root="https://data.nasa.gov/" data-locale-root="https://data.nasa.gov/" >
+    
+    <div class="visually-hidden-focusable"><a href="#content">Skip to main content</a></div>
+  
+
+  
+    
+
+
+
+
+<style>
+    .account-masthead .account ul li a {
+        color: white;
+    }
+</style>
+ 
+
+<header class="masthead usa-header usa-header--basic usa-header-primary padding-y-2 padding-x-2 bg-carbon-black color-spacesuit-white" style="background-color: black;">
+    <div class="container">
+          
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <hgroup class="header-image navbar-left">
+
+                
+                
+                <div style="display: flex; align-items:center;">
+                    <a class="logo" href="https://www.nasa.gov/" target="_blank" style="width: unset;">
+                        <img src="https://data.nasa.gov/img/NASA_logo.png" alt="nasa.gov link"
+                            title="nasa meatball" />
+                    </a>
+                    <span style="padding-left: .5rem;">
+                        <a href="/" style="color: white;">NASA Open Data Portal</a>
+                    </span>
+                </div>
+                
+                
+
+            </hgroup>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#main-navigation-toggle" aria-controls="main-navigation-toggle" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="fa fa-bars text-white"></span>
+            </button>
+
+            <div class="main-navbar collapse navbar-collapse" id="main-navigation-toggle">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    
+                    
+                    
+                    
+
+                    <li>
+                        <a href="/dataset/">
+                            <span>Datasets</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/about">
+                            <span>About</span>
+                        </a>
+                    </li>
+
+                    
+                </ul>
+                
+                
+                <form action="/dataset/?sort=score+desc%2C+metadata_modified+desc" class="d-flex site-search hds-search usa-search usa-search--small float-none" role="search" style="float: none!important;">
+                    <label class="usa-sr-only" for="search-field-en-small">Search</label>
+                    <input class="hds-search-input hds-search-input-dark usa-input border bg-carbon-black border-color-carbon-70-important" style="border-color:#444447!important;padding-left: .5rem;" id="field-sitewide-search" type="search" name="q" placeholder="Search Datasets...">
+                    <button class="usa-button display-none" type="submit" aria-label="Search">
+                    </button>
+                </form>
+                
+            </div>
+        </nav>
+    </div>
+</header>
+<script>
+    const navLinks = document.querySelectorAll('.navbar-nav li a');
+    navLinks.forEach(link => {
+        if (link.href === window.location.href) {
+            link.children[0].style.borderBottom = '2px solid white';
+        }
+    });
+</script>
+
+  
+    <div class="main">
+      <div id="content" class="container">
+        
+          
+
+
+
+
+          
+            <div class="toolbar" role="navigation" aria-label="Breadcrumb">
+              
+
+            </div>
+          
+
+          <div class="row wrapper no-nav">
+            
+            
+            
+
+            
+
+            
+<article class="module">
+  <div class="module-content">
+    
+    <h1>404 Not Found</h1>
+    
+    The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+    <div style="padding-top: 1rem;">
+      <a style="color: black;" href="/">Back to homepage <i class="fa fa-home"></i></a>
+    </div>
+  </div>
+  
+  
+  
+</article>
+
+
+          </div>
+        
+      </div>
+    </div>
+  
+    <footer class="usa-footer bg-carbon-black-important padding-x-3 padding-y-7">
+  <div class="usa-footer__primary-section bg-carbon-black-important">
+    <div class="grid-container grid-container-widescreen padding-x-0">
+      <img
+        fetchpriority="low"
+        width="63.99"
+        height="53.94"
+        class="width-8 margin-bottom-2"
+        alt="NASA Logo"
+        src="https://www.nasa.gov/wp-content/themes/nasa/assets/images/nasa-logo@2x.png"
+        srcset="https://www.nasa.gov/wp-content/themes/nasa/assets/images/nasa-logo.svg"
+      />
+    </div>
+
+    <div class="grid-container grid-container-widescreen">
+      <div class="grid-row">
+        <div
+          class="grid-col-12 tablet:grid-col-6 desktop:grid-col-4 margin-bottom-5 padding-right-0 tablet:padding-right-2 margin-bottom-5 desktop:margin-bottom-0 color-spacesuit-white"
+        >
+          <div class="hds-footer-details">
+            <h3 class="heading-22 line-height-md">
+              National Aeronautics and Space Administration
+            </h3>
+            <p class="p-sm color-carbon-30">
+              NASA explores the unknown in air and space, innovates for the
+              benefit of humanity, and inspires the world through discovery.
+            </p>
+
+            <ul class="hds-footer-menu usa-unstyled-list">
+              <li>
+                <a href="https://www.nasa.gov/about/"><span>About NASA's
+                    Mission</span></a>
+              </li>
+            </ul>
+            <a
+              href="/dataset/"
+              target="_self"
+              class="button-primary button-primary-sm link-external-false"
+              tabindex="0"
+            >
+              <span class="line-height-alt-1 color-spacesuit-white-important"
+              >Explore NASA Data</span>
+              <svg
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="https://www.w3.org/2000/svg"
+              >
+                <circle class="button-primary-circle" cx="16" cy="16" r="16">
+                </circle>
+                <path
+                  d="M8 16.956h12.604l-3.844 4.106 1.252 1.338L24 16l-5.988-6.4-1.252 1.338 3.844 4.106H8v1.912z"
+                  class="color-spacesuit-white"
+                >
+                </path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="grid-col-12 tablet:grid-col-6 desktop:grid-col-6 margin-bottom-5 desktop:margin-bottom-0 padding-0"
+        >
+          <div
+            class="desktop:padding-left-5 desktop:padding-right-5 grid-row color-spacesuit-white"
+          >
+            <div class="grid-col">
+              <ul class="hds-footer-menu hds-menu-col-3 usa-unstyled-list">
+                <li><a href="https://www.nasa.gov" aria-label="nasa.gov homepage"><span>Home</span></a></li>
+                <li>
+                  <a href="https://www.nasa.gov/news/"><span>News &amp;
+                      Events</span></a>
+                </li>
+                <li>
+                  <a href="https://www.nasa.gov/multimedia/"><span
+                    >Multimedia</span></a>
+                </li>
+                <li>
+                  <a
+                    href="https://plus.nasa.gov/"
+                    class="usa-nav__link-nasa-live"
+                  ><span>NASA+</span></a>
+                </li>
+                <li>
+                  <a href="https://www.nasa.gov/nasa-missions/"><span
+                    >Missions</span></a>
+                </li>
+                <li>
+                  <a href="https://www.nasa.gov/humans-in-space/"><span>Humans
+                      in Space</span></a>
+                </li>
+                <li>
+                  <a href="https://science.nasa.gov/earth/"><span>Earth</span></a>
+                </li>
+                <li>
+                  <a href="https://science.nasa.gov/solar-system/"><span>The
+                      Solar System</span></a>
+                </li>
+                <li>
+                  <a href="https://science.nasa.gov/universe/"><span>The
+                      Universe</span></a>
+                </li>
+                <li>
+                  <a href="https://science.nasa.gov/"><span>Science</span></a>
+                </li>
+                <li>
+                  <a href="https://www.nasa.gov/aeronautics/"><span
+                    >Aeronautics</span></a>
+                </li>
+                <li>
+                  <a href="https://www.nasa.gov/technology/"><span
+                    >Technology</span></a>
+                </li>
+                <li>
+                  <a href="https://www.nasa.gov/learning-resources/"><span
+                    >Learning Resources</span></a>
+                </li>
+                <li>
+                  <a href="https://www.nasa.gov/about/"><span>About NASA</span
+                    ></a>
+                </li>
+                <li>
+                  <a href="https://www.nasa.gov/es/" target="_blank"><span>NASA
+                      en Español</span></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="grid-col-12 tablet:grid-col-4 desktop:grid-col-2 color-spacesuit-white margin-bottom-5 tablet:margin-bottom-0 padding-right-5 desktop:padding-right-0"
+        >
+          <div class="width-fit-content margin-left-0 desktop:margin-left-auto">
+            <div class="hds-footer-socials margin-bottom-2">
+              <h3 class="heading-16 color-carbon-40 margin-bottom-2">
+                Follow NASA
+              </h3>
+              <ul class="social-icons margin-bottom-3">
+                <li>
+                  <a
+                    href="https://www.facebook.com/NASA"
+                    title="NASA on Facebook"
+                    target="_blank"
+                  ><svg
+                      alt="Facebook"
+                      width="9"
+                      height="18"
+                      viewBox="0 0 9 18"
+                      fill="none"
+                      xmlns="https://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.55557 4.25966H6.95557C6.31794 4.25966 6.1852 4.52158 6.1852 5.18173V6.63003H8.55557L8.30787 9.0004H6.1852V17.2967H2.62965V9.0004H0.259277V6.63003H2.62965V3.89462C2.62965 1.79803 3.73306 0.704102 6.21957 0.704102H8.55557V4.25966Z"
+                        fill="#F7F5F4"
+                      >
+                      </path>
+                    </svg></a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.instagram.com/nasa/"
+                    title="NASA on Instagram"
+                    target="_blank"
+                  ><svg
+                      alt="Instagram"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      xmlns="https://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M4.74015 9.0004C4.74015 11.3542 6.64829 13.2611 9.00089 13.2611C11.3535 13.2611 13.2616 11.353 13.2616 9.0004C13.2616 6.6478 11.3535 4.74084 9.00089 4.74084C6.64829 4.74084 4.74015 6.6478 4.74015 9.0004ZM11.7625 9.00037C11.7625 10.5281 10.524 11.7654 8.9975 11.7654C7.47098 11.7654 6.23247 10.5281 6.23247 9.00037C6.23247 7.47267 7.47098 6.23533 8.9975 6.23533C10.524 6.23533 11.7625 7.47267 11.7625 9.00037Z"
+                        fill="#F7F5F4"
+                      >
+                      </path>
+                      <path
+                        d="M12.4344 4.57255C12.4344 5.12247 12.88 5.5681 13.4299 5.5681C13.9798 5.5681 14.4255 5.12129 14.4255 4.57255C14.4255 4.02262 13.9798 3.57699 13.4299 3.57699C12.88 3.57699 12.4344 4.02262 12.4344 4.57255Z"
+                        fill="#F7F5F4"
+                      >
+                      </path>
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M12.4225 17.2469C15.4317 17.1083 17.1111 15.4371 17.2474 12.4208C17.2877 11.5367 17.2972 11.2534 17.2972 9.0004C17.2972 6.74736 17.2877 6.46529 17.2474 5.57995C17.1123 2.57077 15.4388 0.893731 12.4225 0.755065C11.5372 0.713583 11.2539 0.704102 9.00089 0.704102C6.74785 0.704102 6.46578 0.713583 5.58044 0.755065C2.56652 0.892546 0.893034 2.56484 0.754367 5.57995C0.714071 6.46529 0.70459 6.74736 0.70459 9.0004C0.70459 11.2534 0.714071 11.5367 0.754367 12.4208C0.893034 15.4348 2.56533 17.1083 5.58044 17.2469C6.46578 17.2872 6.74785 17.2967 9.00089 17.2967C11.2539 17.2967 11.5372 17.2872 12.4225 17.2469ZM9.00089 2.19981C11.216 2.19981 11.4791 2.20692 12.3538 2.24721C14.6021 2.35032 15.651 3.41699 15.7553 5.64869C15.7944 6.52336 15.8027 6.78529 15.8027 9.0004C15.8027 11.2155 15.7944 11.4786 15.7553 12.3533C15.651 14.5838 14.6044 15.6528 12.3538 15.7548C11.4791 15.7951 11.2172 15.8034 9.00089 15.8034C6.78577 15.8034 6.52266 15.7939 5.64918 15.7548C3.39378 15.6517 2.35081 14.5803 2.2477 12.3533C2.20859 11.4774 2.19911 11.2155 2.19911 9.0004C2.19911 6.78529 2.20859 6.52336 2.2477 5.64869C2.35081 3.41581 3.39852 2.35032 5.64918 2.24721C6.52385 2.2081 6.78577 2.19981 9.00089 2.19981Z"
+                        fill="#F7F5F4"
+                      >
+                      </path>
+                    </svg></a>
+                </li>
+                <li>
+                  <a
+                    href="https://x.com/NASA"
+                    title="NASA on X"
+                    target="_blank"
+                  ><svg
+                      alt="X"
+                      width="1200"
+                      height="1227"
+                      viewBox="0 0 1200 1227"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
+                        fill="white"
+                      >
+                      </path>
+                    </svg></a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.youtube.com/@NASA"
+                    title="NASA on YouTube"
+                    target="_blank"
+                  ><svg
+                      alt="YouTube"
+                      width="18"
+                      height="12"
+                      viewBox="0 0 18 12"
+                      fill="none"
+                      xmlns="https://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M3.73629 11.7981C6.224 11.9687 11.773 11.9687 14.2643 11.7981C16.9594 11.6132 17.2759 10.3012 17.2972 6.00015C17.2759 1.7074 16.963 0.387108 14.2643 0.202219C11.7742 0.0315521 6.224 0.0315521 3.73629 0.202219C1.04237 0.387108 0.724738 1.69911 0.70459 6.00015C0.724738 10.2929 1.03881 11.6132 3.73629 11.7981ZM6.6283 3.22455L12.4559 5.99552L6.6283 8.77596V3.22455Z"
+                        fill="#F7F5F4"
+                      >
+                      </path>
+                    </svg></a>
+                </li>
+              </ul>
+            </div>
+
+            <ul class="hds-footer-menu usa-unstyled-list">
+              <li>
+                <a href="https://www.nasa.gov/social-media/"><span>More NASA
+                    Social Accounts</span></a>
+              </li>
+              <li>
+                <a href="https://www.nasa.gov/nasa-newsletters/"><span>NASA
+                    Newsletters</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="grid-col-12 tablet:grid-col-8 desktop:grid-col-12 margin-bottom-2 padding-top-3 border-top-1px hds-footer-secondary"
+        >
+          <ul
+            class="color-carbon-30-important hds-footer-menu hds-footer-menu-horizontal usa-unstyled-list"
+          >
+            <!-- <li>
+              <a href="https://www.nasa.gov/sitemap/"><span>Sitemap</span></a>
+            </li> -->
+            <li>
+              <a
+                href="https://www.nasa.gov/nasa-web-privacy-policy-and-important-notices/"
+              ><span>Privacy Policy</span></a>
+            </li>
+            <li><a href="https://www.nasa.gov/foia/"><span>FOIA</span></a></li>
+            <li>
+              <a href="https://www.nasa.gov/no-fear-act/"><span>No FEAR
+                  Act</span></a>
+            </li>
+            <li>
+              <a href="https://www.nasa.gov/ocio/"><span>Office of the CIO</span></a>
+            </li>
+            <li>
+              <a href="https://www.nasa.gov/accessibility/"><span
+                >Accessibility</span></a>
+            </li>
+            <!-- <li>
+              <a href="/new_data_request">
+                <span>New Data Requests (Internal)</span>
+              </a>
+            </li> -->
+          </ul>
+        </div>
+
+        <div class="margin-top-4 desktop:margin-top-0 grid-col-12">
+          <ul
+            class="color-carbon-40-important hds-footer-menu hds-footer-menu-horizontal hds-menu-meta usa-unstyled-list"
+          >
+          <li class="hds-footer-meta">
+            <div class="hds-footer-meta-label">
+              Curator/Support:
+            </div>
+            <div class="hds-footer-meta-value">
+              <a style="font-weight: 600;text-decoration-style:dashed;" href="mailto:&#104;&#113;&#045;&#111;&#112;&#101;&#110;&#045;&#105;&#110;&#110;&#111;&#118;&#097;&#116;&#105;&#111;&#110;&#064;&#109;&#097;&#105;&#108;&#046;&#110;&#097;&#115;&#097;&#046;&#103;&#111;&#118;">Information, Data & Analytics Services(IDAS)</a>
+            </div>
+          </li>
+            <li class="hds-footer-meta">
+              <div class="hds-footer-meta-label">
+                Responsible NASA Official:
+              </div>
+              <div class="hds-footer-meta-value">
+                Nidhi Wahi
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+  
+  
+  
+  
+  
+  
+    <script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NASA" id="_fed_an_ua_tag"></script>
+    
+
+  
+
+  
+
+
+    
+    
+    <link href="/webassets/vendor/f3b8236b_select2.css" rel="stylesheet"/>
+<link href="/webassets/vendor/53df638c_fontawesome.css" rel="stylesheet"/>
+    <script src="/webassets/vendor/240e5086_jquery.js" type="text/javascript"></script>
+<script src="/webassets/vendor/71bc2bbc_vendor.js" type="text/javascript"></script>
+<script src="/webassets/vendor/6d1ad7e6_bootstrap.js" type="text/javascript"></script>
+<script src="/webassets/vendor/529a0eb7_htmx.js" type="text/javascript"></script>
+<script src="/webassets/base/ebc2f0b9_main.js" type="text/javascript"></script>
+<script src="/webassets/base/78ac888d_ckan.js" type="text/javascript"></script>
+<script src="/webassets/tracking/8b59a308_tracking.js" type="text/javascript"></script>
+<script src="/webassets/activity/0fdb5ee0_activity.js" type="text/javascript"></script>
+  </body>
+</html>
+NASA_REQ https://data.nasa.gov/api/3/action/package_show?id=cmapss-jet-engine-simulated-data 200 8635
+{"help": "https://data.nasa.gov/api/3/action/help_show?name=package_show", "success": true, "result": {"author": null, "author_email": null, "creator_user_id": "f4dcd664-ef4f-4ef4-9959-d2216440cb97", "id": "ceb8f72f-39d2-4a09-981e-cf913648f20e", "isopen": false, "license_id": "notspecified", "license_title": "License not specified", "maintainer": "Chris Teubert", "maintainer_email": "Christopher.a.teubert@nasa.gov", "metadata_created": "2025-03-31T18:46:12.996794", "metadata_modified": "2025-05-29T20:34:33.615327", "name": "cmapss-jet-engine-simulated-data", "notes": "Data sets consists of multiple multivariate time series. Each data set is further divided into training and test subsets. Each time series is from a different engine i.e., the data can be considered to be from a fleet of engines of the same type. Each engine starts with different degrees of initial wear and manufacturing variation which is unknown to the user. This wear and variation is considered normal, i.e., it is not considered a fault condition. There are three operational settings that have a substantial effect on engine performance. These settings are also included in the data. The data is contaminated with sensor noise.\n\nThe engine is operating normally at the start of each time series, and develops a fault at some point during the series. In the training set, the fault grows in magnitude until system failure. In the test set, the time series ends some time prior to system failure. The objective of the competition is to predict the number of remaining operational cycles before failure in the test set, i.e., the number of operational cycles after the last cycle that the engine will continue to operate. Also provided a vector of true Remaining Useful Life (RUL) values for the test data.\n\nThe data are provided as a zip-compressed text file with 26 columns of numbers, separated by spaces. Each row is a snapshot of data taken during a single operational cycle, each column is a different variable. The columns correspond to:\n1)            unit number\n2)            time, in cycles\n3)            operational setting 1\n4)            operational setting 2\n5)            operational setting 3\n6)            sensor measurement  1\n7)            sensor measurement  2\n...\n26)          sensor measurement  26\n \nData Set: FD001\nTrain trjectories: 100\nTest trajectories: 100\nConditions: ONE (Sea Level)\nFault Modes: ONE (HPC Degradation)\n \nData Set: FD002\nTrain trjectories: 260\nTest trajectories: 259\nConditions: SIX\nFault Modes: ONE (HPC Degradation)\n\nData Set: FD003\nTrain trjectories: 100\nTest trajectories: 100\nConditions: ONE (Sea Level)\nFault Modes: TWO (HPC Degradation, Fan Degradation)\n\nData Set: FD004\nTrain trjectories: 248\nTest trajectories: 249\nConditions: SIX\nFault Modes: TWO (HPC Degradation, Fan Degradation)\n\nReference: A. Saxena, K. Goebel, D. Simon, and N. Eklund, \u2018Damage Propagation Modeling for Aircraft Engine Run-to-Failure Simulation\u2019, in the Proceedings of the 1st International Conference on Prognostics and Health Management (PHM08), Denver CO, Oct 2008.", "num_resources": 1, "num_tags": 5, "organization": {"id": "dbb294e4-8597-44f5-aaf4-c0baac12cdbc", "name": "nasa", "title": "NASA", "type": "organization", "description": "NASA's vision: To reach for new heights and reveal the unknown so that what we do and learn will benefit all humankind.\r\n\r\nTo do that, thousands of people have been working around the world -- and off of it -- for 50 years, trying to answer some basic questions. What's out there in space? How do we get there? What will we find? What can we learn there, or learn just by trying to get there, that will make life better here on Earth?\r\n\r\nNASA conducts its work in four principal organizations, called mission directorates:\r\n\r\nAeronautics: works to solve the challenges that still exist in our nation's air transportation system: air traffic congestion, safety and environmental impacts.\r\n\r\nHuman Exploration and Operations: focuses on International Space Station operations, development of commercial spaceflight opportunities and human exploration beyond low Earth orbit.\r\n\r\nScience: explores the Earth, solar system and universe beyond; charts the best route of discovery; and reaps the benefits of Earth and space exploration for society.\r\n\r\nSpace Technology: rapidly develops, demonstrates, and infuses revolutionary, high-payoff technologies, expanding the boundaries of the aerospace enterprise.\r\n\r\nIn the early 21st century, NASA's reach spans the universe. The Mars rover Curiosity is still exploring Mars to see if it might once have had environments suitable for life. Cassini is in orbit around Saturn, as Juno makes its way to Jupiter. The restored Hubble Space Telescope continues to explore the deepest reaches of the cosmos as NASA developes the James Webb Space Telescope.\r\n\r\nCloser to home, the latest crew of the International Space Station is extending the permanent human presence in space. With commercial partners such as SpaceX, NASA is helping to foster the development of private-sector aerospace.\r\n\r\nEarth science satellites are sending back unprecedented data on Earth's oceans, climate and other features. NASA's aeronautics team is working with other government organizations, universities, and industry to fundamentally improve the air transportation experience and retain our nation's leadership in global aviation.", "image_url": "https://data.nasa.gov/img/NASA_logo.png", "created": "2025-03-31T12:12:56.293291", "is_organization": true, "approval_status": "approved", "state": "active"}, "owner_org": "dbb294e4-8597-44f5-aaf4-c0baac12cdbc", "private": false, "state": "active", "title": "CMAPSS Jet Engine Simulated Data", "type": "dataset", "url": null, "version": null, "extras": [{"key": "accessLevel", "value": "public"}, {"key": "bureauCode", "value": "{026:00}"}, {"key": "catalog_@context", "value": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld"}, {"key": "catalog_@id", "value": "https://data.nasa.gov/data.json"}, {"key": "catalog_conformsTo", "value": "https://project-open-data.cio.gov/v1.1/schema"}, {"key": "catalog_describedBy", "value": "https://project-open-data.cio.gov/v1.1/schema/catalog.json"}, {"key": "harvest_object_id", "value": "b80ff4d6-685e-4377-bc5e-4dac60c71d0b"}, {"key": "harvest_source_id", "value": "61638e72-b36c-4866-9d28-551a3062f158"}, {"key": "harvest_source_title", "value": "DNG Legacy Data"}, {"key": "identifier", "value": "https://data.nasa.gov/api/views/ff5v-kuh6"}, {"key": "issued", "value": "2022-07-14"}, {"key": "landingPage", "value": "https://data.nasa.gov/dataset/cmapss-jet-engine-simulated-data"}, {"key": "modified", "value": "2024-05-15"}, {"key": "programCode", "value": "{026:021}"}, {"key": "publisher", "value": "PCoE"}, {"key": "resource-type", "value": "Dataset"}, {"key": "source_datajson_identifier", "value": "true"}, {"key": "source_hash", "value": "eccb6957e4312dd2bbde3a2d3579a0d479b5893f9338e898d9cae1b774eb5c1b"}, {"key": "source_schema_version", "value": "1.1"}, {"key": "theme", "value": "{Aerospace}"}], "resources": [{"cache_last_updated": null, "cache_url": null, "created": "2025-05-29T20:34:33.642405", "datastore_active": false, "description": "", "format": "ZIP", "hash": "", "id": "5224bcd1-ad61-490b-93b9-2817288accb8", "last_modified": null, "metadata_modified": "2025-05-29T20:34:33.626854", "mimetype": "application/zip", "mimetype_inner": null, "name": "CMAPSSData.zip", "package_id": "ceb8f72f-39d2-4a09-981e-cf913648f20e", "position": 0, "resource_type": null, "size": null, "state": "active", "tracking_summary": {"total": 8898, "recent": 482}, "url": "https://data.nasa.gov/docs/legacy/CMAPSSData.zip", "url_type": null}], "tags": [{"display_name": "degradation", "id": "20355fe7-8df5-4472-9b8d-11614b6688c9", "name": "degradation", "state": "active", "vocabulary_id": null}, {"display_name": "fan-degradation", "id": "083c03ad-d8d8-401a-9e5a-4d2d5b633f88", "name": "fan-degradation", "state": "active", "vocabulary_id": null}, {"display_name": "ivhm", "id": "ea8c35f7-11af-4f82-9f17-c9c8f5b745e8", "name": "ivhm", "state": "active", "vocabulary_id": null}, {"display_name": "phm", "id": "f26750e9-378e-429e-9310-a0d91f2a2180", "name": "phm", "state": "active", "vocabulary_id": null}, {"display_name": "prognostics", "id": "f0312c91-b5ae-4b01-ac9f-9c83bbf9edc0", "name": "prognostics", "state": "active", "vocabulary_id": null}], "groups": [], "relationships_as_subject": [], "relationships_as_object": [], "tracking_summary": {"total": 28088, "recent": 1567}}}
+NASA_REQ https://data.nasa.gov/data.json 200 96178050
+[{"@type": "dcat:Dataset", "title": "C-MAPSS Aircraft Engine Simulator Data", "description": "**SPECIAL NOTE:**\r\n      C-MAPSS and C-MAPSS40K ARE CURRENTLY UNAVAILABLE FOR DOWNLOAD. Glenn Research Center management is reviewing the availability requirements for these software packages. We are working with Center management to get the review completed and issues resolved in a timely manner. We will post updates on this website when the issues are resolved. We apologize for any inconvenience. Please contact Jonathan Litt, jonathan.s.litt@nasa.gov, if you have any questions in the meantime.\r\n\r\n**Subject Area:**\r\n    Engine Health\r\n\r\n**Description:**\r\n    This data set was generated with the C-MAPSS simulator. C-MAPSS stands for 'Commercial Modular Aero-Propulsion System Simulation' and it is a tool for the simulation of realistic large commercial turbofan engine data. Each flight is a combination of a series of flight conditions with a reasonable linear transition period to allow the engine to change from one flight condition to the next. The flight conditions are arranged to cover a typical ascent from sea level to 35K ft and descent back down to sea level. The fault was injected at a given time in one of the flights and persists throughout the remaining flights, effectively increasing the age of the engine. The intent is to identify which flight and when in the flight the fault occurred.\r\n\r\n**How Data Was Acquired:**\r\n    The data provided is from a high fidelity system level engine simulation designed to simulate nominal and fault engine degradation over a series of flights. The simulated data was created with a Matlab Simulink tool called C-MAPSS.\r\n\r\n**Sample Rates and Parameter Description:**\r\n    The flights are full flight recordings sampled at 1 Hz and consist of 30 engine and flight condition parameters. Each flight contains 7 unique flight conditions for an approximately 90 min flight including ascent to cruise at 35K ft and descent back to sea level. The parameters for each flight are the flight conditions, health indicators, measurement temperatures and pressure measurements.\r\n\r\n**Faults/Anomalies:**\r\n    Faults arose from the inlet engine fan, the low pressure compressor, the high pressure compressor, the high pressure turbine and the low pressure turbine.", "modified": "2025-07-17", "accessLevel": "non-public", "identifier": "DASHLINK_140", "issued": "2010-09-22", "publisher": {"@type": "org:Organization", "name": "Dashlink"}, "accrualPeriodicity": "irregular", "contactPoint": {"@type": "vcard:Contact", "fn": "Nikunj Oza", "hasEmail": "mailto:Nikunj.C.Oza@nasa.gov"}, "bureauCode": ["026:00"], "programCode": ["026:029"], "keyword": ["ames", "dashlink", "nasa"], "rights": null}, {"@type": "dcat:Dataset", "title": "CMAPSS Jet Engine Simulated Data", "description": "Data sets consists of multiple multivariate time series. Each data set is further divided into training and test subsets. Each time series is from a different engine i.e., the data can be considered to be from a fleet of engines of the same type. Each engine starts with different degrees of initial wear and manufacturing variation which is unknown to the user. This wear and variation is considered normal, i.e., it is not considered a fault condition. There are three operational settings that have a substantial effect on engine performance. These settings are also included in the data. The data is contaminated with sensor noise.\n\nThe engine is operating normally at the start of each time series, and develops a fault at some point during the series. In the training set, the fault grows in magnitude until system failure. In the test set, the time series ends some time prior to system failure. The objective of the competition is to predict the number of remaining operational cycles before failure in the test set, i.e., the number of operational cycles after the last cycle that the engine will continue to operate. Also provided a vector of true Remaining Useful Life (RUL) values for the test data.\n\nThe data are provided as a zip-compressed text file with 26 columns of numbers, separated by spaces. Each row is a snapshot of data taken during a single operational cycle, each column is a different variable. The columns correspond to:\n1)            unit number\n2)            time, in cycles\n3)            operational setting 1\n4)            operational setting 2\n5)            operational setting 3\n6)            sensor measurement  1\n7)            sensor measurement  2\n...\n26)          sensor measurement  26\n \nData Set: FD001\nTrain trjectories: 100\nTest trajectories: 100\nConditions: ONE (Sea Level)\nFault Modes: ONE (HPC Degradation)\n \nData Set: FD002\nTrain trjectories: 260\nTest trajectories: 259\nConditions: SIX\nFault Modes: ONE (HPC Degradation)\n\nData Set: FD003\nTrain trjectories: 100\nTest trajectories: 100\nConditions: ONE (Sea Level)\nFault Modes: TWO (HPC Degradation, Fan Degradation)\n\nData Set: FD004\nTrain trjectories: 248\nTest trajectories: 249\nConditions: SIX\nFault Modes: TWO (HPC Degradation, Fan Degradation)\n\nReference: A. Saxena, K. Goebel, D. Simon, and N. Eklund, ‘Damage Propagation Modeling for Aircraft Engine Run-to-Failure Simulation’, in the Proceedings of the 1st International Conference on Prognostics and Health Management (PHM08), Denver CO, Oct 2008.", "modified": "2025-05-29", "accessLevel": "public", "identifier": "https://data.nasa.gov/api/views/ff5v-kuh6", "issued": "2022-07-14", "landingPage": "https://data.nasa.gov/dataset/cmapss-jet-engine-simulated-data", "publisher": {"@type": "org:Organization", "name": "PCoE"}, "contactPoint": {"@type": "vcard:Contact", "fn": "Chris Teubert", "hasEmail": "mailto:Christopher.a.teubert@nasa.gov"}, "distribution": [{"@type": "dcat:Distribution", "mediaType": "application/zip", "format": "ZIP", "title": "CMAPSSData.zip", "downloadURL": "https://data.nasa.gov/docs/legacy/CMAPSSData.zip"}], "bureauCode": ["026:00"], "programCode": ["026:021"], "theme": ["Aerospace"], "keyword": ["degradation", "fan-degradation", "ivhm", "phm", "prognostics"]}]
