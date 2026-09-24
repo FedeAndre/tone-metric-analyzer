@@ -1,0 +1,77 @@
+name: TMA frozen raw cross-domain parallel
+
+on:
+  push:
+    branches: [tma-cross-domain-frozen-20260924]
+    paths:
+      - 'research/cross_domain_parallel_worker.py'
+      - 'research/cross_domain_parallel_aggregate.py'
+      - '.github/workflows/tma-cross-domain-parallel.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  domain:
+    strategy:
+      fail-fast: false
+      matrix:
+        domain: [gait, cardiorespiratory, neural_theta_spike, ultrasound, cmapss, binary_counter, fmri]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'scikit-learn>=1.6,<2' 'wfdb>=4.2,<5' 'h5py>=3.12,<4'
+      - name: Run domain worker
+        env:
+          TMA_DOMAIN: ${{ matrix.domain }}
+        run: PYTHONPATH=.:research python research/cross_domain_parallel_worker.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-cross-domain-part-${{ matrix.domain }}
+          path: research/tma_cross_domain_parts/${{ matrix.domain }}.csv
+          if-no-files-found: error
+
+  aggregate:
+    needs: domain
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'scikit-learn>=1.6,<2' 'wfdb>=4.2,<5' 'h5py>=3.12,<4'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tma-cross-domain-part-*
+          path: research/tma_cross_domain_parts
+          merge-multiple: true
+      - name: Aggregate frozen comparator
+        run: PYTHONPATH=.:research python research/cross_domain_parallel_aggregate.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-cross-domain-parallel-results
+          path: research/tma_cross_domain_frozen_results/
+          if-no-files-found: error
+      - name: Commit results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_cross_domain_frozen_results/
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add parallel frozen cross-domain TMA results'
+            git pull --rebase origin tma-cross-domain-frozen-20260924
+            git push origin HEAD:tma-cross-domain-frozen-20260924
+          fi
