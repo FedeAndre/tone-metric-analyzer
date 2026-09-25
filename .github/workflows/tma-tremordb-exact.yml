@@ -1,0 +1,31 @@
+name: Exact TMA TremorDB validation
+on:
+  push:
+    branches: [tma-tremordb-exact-20260925]
+    paths: ['research/tma_tremordb_exact.py','.github/workflows/tma-tremordb-exact.yml','tone_metric/**']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'scikit-learn>=1.6,<2'
+      - run: PYTHONPATH=. python research/tma_tremordb_exact.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-tremordb-exact-results
+          path: research/tma_tremordb_exact_results/
+          if-no-files-found: error
+      - name: Commit results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_tremordb_exact_results/
+          git commit -m 'Add exact TMA TremorDB results' || exit 0
+          git pull --rebase origin tma-tremordb-exact-20260925 || true
+          git push origin HEAD:tma-tremordb-exact-20260925 || true
