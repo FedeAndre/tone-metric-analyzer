@@ -1,0 +1,16 @@
+name: Inspect PD MRI OpenNeuro
+on:
+  push:
+    branches: [tma-pd-mri-multidataset-20260925]
+    paths: ['research/inspect_pd_mri_openneuro.py','.github/workflows/inspect-pd-mri.yml']
+permissions: {contents: read}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install boto3 pandas
+      - run: python research/inspect_pd_mri_openneuro.py
