@@ -1,0 +1,16 @@
+name: GaitNDD exact smoke test
+on:
+  push:
+    branches: [tma-gait-ndd-exact-20260925]
+    paths: ['research/gaitndd_smoke.py','.github/workflows/gaitndd-smoke.yml']
+permissions: {contents: read}
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'wfdb>=4.2,<5' 'scikit-learn>=1.6,<2'
+      - run: PYTHONPATH=. python research/gaitndd_smoke.py
