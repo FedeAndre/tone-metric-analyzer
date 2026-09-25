@@ -1,10 +1,3 @@
 {
-  "ds002336/sub-xp102/func/sub-xp102_task-MIpost_bold.nii.gz": "RuntimeError('too few anchors')",
-  "ds002336/sub-xp103/func/sub-xp103_task-MIpost_bold.nii.gz": "RuntimeError('too few anchors')",
-  "ds002336/sub-xp105/func/sub-xp105_task-MIpost_bold.nii.gz": "RuntimeError('too few anchors')",
-  "ds002336/sub-xp106/func/sub-xp106_task-MIpost_bold.nii.gz": "RuntimeError('unexpected shape (106, 106, 32, 55)')",
-  "ds002336/sub-xp107/func/sub-xp107_task-MIpost_bold.nii.gz": "RuntimeError('too few anchors')",
-  "ds002336/sub-xp108/func/sub-xp108_task-MIpost_bold.nii.gz": "RuntimeError('too few anchors')",
-  "ds002336/sub-xp109/func/sub-xp109_task-MIpost_bold.nii.gz": "RuntimeError('too few anchors')",
-  "ds002336/sub-xp110/func/sub-xp110_task-MIpost_bold.nii.gz": "RuntimeError('too few anchors')"
+  "ds002336/sub-xp106/func/sub-xp106_task-MIpost_bold.nii.gz": "RuntimeError('unexpected shape (106, 106, 32, 55)')"
 }

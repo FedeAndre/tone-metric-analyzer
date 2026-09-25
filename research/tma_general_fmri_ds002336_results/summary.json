@@ -5,7 +5,7 @@
     "boundary_match": true,
     "lucas_pascal_mismatches": 0
   },
-  "n_scans": 28,
+  "n_scans": 35,
   "n_subjects": 10,
   "tasks": [
     "motorloc",
@@ -208,6 +208,71 @@
         "positive_fraction": 0.5,
         "q_BH": 0.7470114678306434
       }
+    ],
+    "MIpost": [
+      {
+        "feature": "surz_pivot_rate",
+        "n": 7,
+        "mean_z": -0.47272298450421474,
+        "t": -1.219807644138199,
+        "p": 0.2683053001085113,
+        "positive_fraction": 0.42857142857142855,
+        "q_BH": 0.9049226639862943
+      },
+      {
+        "feature": "surz_multilevel",
+        "n": 7,
+        "mean_z": -0.3016684681107056,
+        "t": -0.9373654030202401,
+        "p": 0.38475062675964844,
+        "positive_fraction": 0.42857142857142855,
+        "q_BH": 0.9049226639862943
+      },
+      {
+        "feature": "surz_tree_span_events",
+        "n": 7,
+        "mean_z": 0.1457685663186999,
+        "t": 0.6307780615179441,
+        "p": 0.5514400578225209,
+        "positive_fraction": 0.5714285714285714,
+        "q_BH": 0.9049226639862943
+      },
+      {
+        "feature": "surz_mean_D",
+        "n": 7,
+        "mean_z": -0.1177025335537512,
+        "t": -0.6247705015729036,
+        "p": 0.5551207093613005,
+        "positive_fraction": 0.2857142857142857,
+        "q_BH": 0.9049226639862943
+      },
+      {
+        "feature": "surz_mean_lambda",
+        "n": 7,
+        "mean_z": 0.0842061179480711,
+        "t": 0.3215380177891573,
+        "p": 0.7587090392857828,
+        "positive_fraction": 0.42857142857142855,
+        "q_BH": 0.9049226639862943
+      },
+      {
+        "feature": "surz_tree_span_time",
+        "n": 7,
+        "mean_z": -0.027923947898872172,
+        "t": -0.132314585858623,
+        "p": 0.8990611723269113,
+        "positive_fraction": 0.2857142857142857,
+        "q_BH": 0.9049226639862943
+      },
+      {
+        "feature": "surz_mean_H",
+        "n": 7,
+        "mean_z": 0.03416983961635641,
+        "t": 0.1245831909662727,
+        "p": 0.9049226639862943,
+        "positive_fraction": 0.42857142857142855,
+        "q_BH": 0.9049226639862943
+      }
     ]
   },
   "cross_task_replication": [
@@ -219,6 +284,8 @@
       "fmriNF_q": 0.4649597666640613,
       "MIpre_mean_z": -0.28603942699517604,
       "MIpre_q": 0.7470114678306434,
+      "MIpost_mean_z": 0.03416983961635641,
+      "MIpost_q": 0.9049226639862943,
       "same_direction_all": false,
       "n_fdr_tasks": 0,
       "n_nominal_tasks": 0
@@ -231,6 +298,8 @@
       "fmriNF_q": 0.4649597666640613,
       "MIpre_mean_z": 0.5890657088692098,
       "MIpre_q": 0.7470114678306434,
+      "MIpost_mean_z": -0.1177025335537512,
+      "MIpost_q": 0.9049226639862943,
       "same_direction_all": false,
       "n_fdr_tasks": 0,
       "n_nominal_tasks": 1
@@ -243,6 +312,8 @@
       "fmriNF_q": 0.6317683959080277,
       "MIpre_mean_z": -0.5177116912224103,
       "MIpre_q": 0.7470114678306434,
+      "MIpost_mean_z": 0.0842061179480711,
+      "MIpost_q": 0.9049226639862943,
       "same_direction_all": false,
       "n_fdr_tasks": 0,
       "n_nominal_tasks": 0
@@ -255,6 +326,8 @@
       "fmriNF_q": 0.5756994466163586,
       "MIpre_mean_z": 0.3076656100749734,
       "MIpre_q": 0.7470114678306434,
+      "MIpost_mean_z": -0.3016684681107056,
+      "MIpost_q": 0.9049226639862943,
       "same_direction_all": false,
       "n_fdr_tasks": 0,
       "n_nominal_tasks": 0
@@ -267,7 +340,9 @@
       "fmriNF_q": 0.4649597666640613,
       "MIpre_mean_z": 0.25851060846270635,
       "MIpre_q": 0.7470114678306434,
-      "same_direction_all": true,
+      "MIpost_mean_z": -0.47272298450421474,
+      "MIpost_q": 0.9049226639862943,
+      "same_direction_all": false,
       "n_fdr_tasks": 0,
       "n_nominal_tasks": 0
     },
@@ -279,6 +354,8 @@
       "fmriNF_q": 0.18451141228891818,
       "MIpre_mean_z": -0.0877773645626744,
       "MIpre_q": 0.7470114678306434,
+      "MIpost_mean_z": 0.1457685663186999,
+      "MIpost_q": 0.9049226639862943,
       "same_direction_all": false,
       "n_fdr_tasks": 0,
       "n_nominal_tasks": 0
@@ -291,6 +368,8 @@
       "fmriNF_q": 0.18451141228891818,
       "MIpre_mean_z": -0.09817170387555282,
       "MIpre_q": 0.7470114678306434,
+      "MIpost_mean_z": -0.027923947898872172,
+      "MIpost_q": 0.9049226639862943,
       "same_direction_all": false,
       "n_fdr_tasks": 0,
       "n_nominal_tasks": 1
@@ -298,7 +377,7 @@
   ],
   "failures": {
     "fmriNF_failures.json": 0,
-    "MIpost_failures.json": 8,
+    "MIpost_failures.json": 1,
     "motorloc_failures.json": 0,
     "MIpre_failures.json": 0
   }
