@@ -1,0 +1,356 @@
+{
+  "dataset": "ds000005",
+  "description": "Healthy mixed-gambles decision task exact TMA task-locking validation",
+  "math_audit": {
+    "boundary_match": true,
+    "lucas_pascal_mismatches": 0
+  },
+  "n_scans": 48,
+  "n_subjects": 16,
+  "combined_task_locking": [
+    {
+      "feature": "surz_tree_span_time",
+      "n": 16,
+      "mean_z": -0.257701382215664,
+      "t": -2.1325864555915923,
+      "p": 0.049892653231928784,
+      "positive_fraction": 0.25,
+      "q_BH": 0.3492485726235015
+    },
+    {
+      "feature": "surz_tree_span_events",
+      "n": 16,
+      "mean_z": -0.1705917689964399,
+      "t": -1.3761303260843882,
+      "p": 0.18897986055283644,
+      "positive_fraction": 0.5,
+      "q_BH": 0.5897711856425462
+    },
+    {
+      "feature": "surz_mean_D",
+      "n": 16,
+      "mean_z": 0.15285960749701594,
+      "t": 1.0387387839955078,
+      "p": 0.31538141485515253,
+      "positive_fraction": 0.5,
+      "q_BH": 0.5897711856425462
+    },
+    {
+      "feature": "surz_mean_H",
+      "n": 16,
+      "mean_z": 0.1374879527800613,
+      "t": 0.8585511052112801,
+      "p": 0.40409940328374916,
+      "positive_fraction": 0.5625,
+      "q_BH": 0.5897711856425462
+    },
+    {
+      "feature": "surz_multilevel",
+      "n": 16,
+      "mean_z": 0.11962399005962523,
+      "t": 0.7318618117451077,
+      "p": 0.4755328061644148,
+      "positive_fraction": 0.6875,
+      "q_BH": 0.5897711856425462
+    },
+    {
+      "feature": "surz_pivot_rate",
+      "n": 16,
+      "mean_z": 0.10655006996910561,
+      "t": 0.6821889639336132,
+      "p": 0.5055181591221825,
+      "positive_fraction": 0.4375,
+      "q_BH": 0.5897711856425462
+    },
+    {
+      "feature": "surz_mean_lambda",
+      "n": 16,
+      "mean_z": -0.02566807125476274,
+      "t": -0.1878222061418855,
+      "p": 0.8535332166381926,
+      "positive_fraction": 0.5625,
+      "q_BH": 0.8535332166381926
+    }
+  ],
+  "run_task_locking": {
+    "1": [
+      {
+        "feature": "surz_pivot_rate",
+        "n": 16,
+        "mean_z": -0.14423532624995056,
+        "t": -0.9457565774540838,
+        "p": 0.3592596894152662,
+        "positive_fraction": 0.5,
+        "q_BH": 0.9691128932297627
+      },
+      {
+        "feature": "surz_tree_span_events",
+        "n": 16,
+        "mean_z": -0.1356207581831131,
+        "t": -0.9317219407891416,
+        "p": 0.36623502339166125,
+        "positive_fraction": 0.5,
+        "q_BH": 0.9691128932297627
+      },
+      {
+        "feature": "surz_tree_span_time",
+        "n": 16,
+        "mean_z": -0.1532948651490254,
+        "t": -0.6598473581913575,
+        "p": 0.5193557222997377,
+        "positive_fraction": 0.4375,
+        "q_BH": 0.9691128932297627
+      },
+      {
+        "feature": "surz_mean_H",
+        "n": 16,
+        "mean_z": 0.13215155945754992,
+        "t": 0.5155315105719035,
+        "p": 0.6136958734573125,
+        "positive_fraction": 0.4375,
+        "q_BH": 0.9691128932297627
+      },
+      {
+        "feature": "surz_mean_D",
+        "n": 16,
+        "mean_z": 0.07057450372924996,
+        "t": 0.32033934878495635,
+        "p": 0.7531301455609304,
+        "positive_fraction": 0.375,
+        "q_BH": 0.9691128932297627
+      },
+      {
+        "feature": "surz_multilevel",
+        "n": 16,
+        "mean_z": 0.03182802429389585,
+        "t": 0.1530815810001491,
+        "p": 0.8803742535951401,
+        "positive_fraction": 0.5,
+        "q_BH": 0.9691128932297627
+      },
+      {
+        "feature": "surz_mean_lambda",
+        "n": 16,
+        "mean_z": 0.00809593925462962,
+        "t": 0.03937220560131371,
+        "p": 0.9691128932297627,
+        "positive_fraction": 0.5,
+        "q_BH": 0.9691128932297627
+      }
+    ],
+    "2": [
+      {
+        "feature": "surz_mean_D",
+        "n": 16,
+        "mean_z": 0.39336279955184833,
+        "t": 1.6186556740284146,
+        "p": 0.1263510601059234,
+        "positive_fraction": 0.75,
+        "q_BH": 0.43512408118441565
+      },
+      {
+        "feature": "surz_mean_lambda",
+        "n": 16,
+        "mean_z": -0.33079037981757653,
+        "t": -1.4601219152603908,
+        "p": 0.16488341734299644,
+        "positive_fraction": 0.375,
+        "q_BH": 0.43512408118441565
+      },
+      {
+        "feature": "surz_tree_span_events",
+        "n": 16,
+        "mean_z": -0.3625289939612617,
+        "t": -1.3844159730157444,
+        "p": 0.18648174907903528,
+        "positive_fraction": 0.3125,
+        "q_BH": 0.43512408118441565
+      },
+      {
+        "feature": "surz_multilevel",
+        "n": 16,
+        "mean_z": 0.35854742419333824,
+        "t": 1.13818505374977,
+        "p": 0.27289657298319314,
+        "positive_fraction": 0.5625,
+        "q_BH": 0.477569002720588
+      },
+      {
+        "feature": "surz_pivot_rate",
+        "n": 16,
+        "mean_z": 0.23561427439194885,
+        "t": 0.8805000209691933,
+        "p": 0.39247783224738314,
+        "positive_fraction": 0.5625,
+        "q_BH": 0.5494689651463365
+      },
+      {
+        "feature": "surz_tree_span_time",
+        "n": 16,
+        "mean_z": -0.18136143029738414,
+        "t": -0.5317149760402446,
+        "p": 0.6027098161307997,
+        "positive_fraction": 0.5,
+        "q_BH": 0.7031614521525996
+      },
+      {
+        "feature": "surz_mean_H",
+        "n": 16,
+        "mean_z": -0.0893291424348833,
+        "t": -0.36758066642514253,
+        "p": 0.718320717499974,
+        "positive_fraction": 0.4375,
+        "q_BH": 0.7183207174999738
+      }
+    ],
+    "3": [
+      {
+        "feature": "surz_tree_span_time",
+        "n": 16,
+        "mean_z": -0.4384478512005825,
+        "t": -2.4929636481215973,
+        "p": 0.024848406475155287,
+        "positive_fraction": 0.25,
+        "q_BH": 0.173938845326087
+      },
+      {
+        "feature": "surz_mean_H",
+        "n": 16,
+        "mean_z": 0.3696414413175173,
+        "t": 1.2638321245197925,
+        "p": 0.22557882731112588,
+        "positive_fraction": 0.6875,
+        "q_BH": 0.7544982956759338
+      },
+      {
+        "feature": "surz_mean_lambda",
+        "n": 16,
+        "mean_z": 0.24569022679865865,
+        "t": 1.0211824530242157,
+        "p": 0.3233564124325431,
+        "positive_fraction": 0.5625,
+        "q_BH": 0.7544982956759338
+      },
+      {
+        "feature": "surz_pivot_rate",
+        "n": 16,
+        "mean_z": 0.2282712617653185,
+        "t": 0.7266589601947403,
+        "p": 0.4786223866799422,
+        "positive_fraction": 0.625,
+        "q_BH": 0.8375891766898989
+      },
+      {
+        "feature": "surz_multilevel",
+        "n": 16,
+        "mean_z": -0.03150347830835845,
+        "t": -0.14091051446072153,
+        "p": 0.8898155519606853,
+        "positive_fraction": 0.5,
+        "q_BH": 0.9778344933338491
+      },
+      {
+        "feature": "surz_tree_span_events",
+        "n": 16,
+        "mean_z": -0.013625554844944956,
+        "t": -0.0510462281491345,
+        "p": 0.9599622487952154,
+        "positive_fraction": 0.5625,
+        "q_BH": 0.9778344933338491
+      },
+      {
+        "feature": "surz_mean_D",
+        "n": 16,
+        "mean_z": -0.0053584807900505516,
+        "t": -0.028250889442248565,
+        "p": 0.9778344933338491,
+        "positive_fraction": 0.5,
+        "q_BH": 0.9778344933338491
+      }
+    ]
+  },
+  "run_replication": [
+    {
+      "feature": "surz_mean_H",
+      "run1_mean_z": 0.13215155945754992,
+      "run1_q": 0.9691128932297627,
+      "run2_mean_z": -0.0893291424348833,
+      "run2_q": 0.7183207174999738,
+      "run3_mean_z": 0.3696414413175173,
+      "run3_q": 0.7544982956759338,
+      "same_direction_all3": false,
+      "n_fdr_runs": 0
+    },
+    {
+      "feature": "surz_mean_D",
+      "run1_mean_z": 0.07057450372924996,
+      "run1_q": 0.9691128932297627,
+      "run2_mean_z": 0.39336279955184833,
+      "run2_q": 0.43512408118441565,
+      "run3_mean_z": -0.0053584807900505516,
+      "run3_q": 0.9778344933338491,
+      "same_direction_all3": false,
+      "n_fdr_runs": 0
+    },
+    {
+      "feature": "surz_mean_lambda",
+      "run1_mean_z": 0.00809593925462962,
+      "run1_q": 0.9691128932297627,
+      "run2_mean_z": -0.33079037981757653,
+      "run2_q": 0.43512408118441565,
+      "run3_mean_z": 0.24569022679865865,
+      "run3_q": 0.7544982956759338,
+      "same_direction_all3": false,
+      "n_fdr_runs": 0
+    },
+    {
+      "feature": "surz_multilevel",
+      "run1_mean_z": 0.03182802429389585,
+      "run1_q": 0.9691128932297627,
+      "run2_mean_z": 0.35854742419333824,
+      "run2_q": 0.477569002720588,
+      "run3_mean_z": -0.03150347830835845,
+      "run3_q": 0.9778344933338491,
+      "same_direction_all3": false,
+      "n_fdr_runs": 0
+    },
+    {
+      "feature": "surz_pivot_rate",
+      "run1_mean_z": -0.14423532624995056,
+      "run1_q": 0.9691128932297627,
+      "run2_mean_z": 0.23561427439194885,
+      "run2_q": 0.5494689651463365,
+      "run3_mean_z": 0.2282712617653185,
+      "run3_q": 0.8375891766898989,
+      "same_direction_all3": false,
+      "n_fdr_runs": 0
+    },
+    {
+      "feature": "surz_tree_span_events",
+      "run1_mean_z": -0.1356207581831131,
+      "run1_q": 0.9691128932297627,
+      "run2_mean_z": -0.3625289939612617,
+      "run2_q": 0.43512408118441565,
+      "run3_mean_z": -0.013625554844944956,
+      "run3_q": 0.9778344933338491,
+      "same_direction_all3": true,
+      "n_fdr_runs": 0
+    },
+    {
+      "feature": "surz_tree_span_time",
+      "run1_mean_z": -0.1532948651490254,
+      "run1_q": 0.9691128932297627,
+      "run2_mean_z": -0.18136143029738414,
+      "run2_q": 0.7031614521525996,
+      "run3_mean_z": -0.4384478512005825,
+      "run3_q": 0.173938845326087,
+      "same_direction_all3": true,
+      "n_fdr_runs": 0
+    }
+  ],
+  "failures": {
+    "run-01_failures.json": 0,
+    "run-02_failures.json": 0,
+    "run-03_failures.json": 0
+  }
+}
