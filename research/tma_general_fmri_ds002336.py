@@ -37,7 +37,18 @@ def download_temp(key):
 def read_root_events(task):
     key=f"{DS}/task-{task}_events.tsv"
     b=S3.get_object(Bucket=BUCKET,Key=key)["Body"].read()
-    return pd.read_csv(io.BytesIO(b),sep="\t",engine="python",on_bad_lines="skip")
+    # Only onset times define the block scaffold. Parse column 1 directly so
+    # a malformed trailing field in the public MIpost TSV cannot discard a block.
+    onsets=[]
+    for line in b.decode("utf-8-sig").splitlines()[1:]:
+        parts=line.strip().split("\t")
+        if not parts or not parts[0]:
+            continue
+        try:
+            onsets.append(float(parts[0]))
+        except ValueError:
+            continue
+    return pd.DataFrame({"onset":onsets})
 
 def subject(key):
     m=re.search(r"/(sub-[^/]+)/",key); return m.group(1) if m else None
