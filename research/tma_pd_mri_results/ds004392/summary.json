@@ -1,0 +1,1144 @@
+{
+  "dataset": "ds004392",
+  "description": "PD cognition spectrum resting-state fMRI",
+  "math_audit": {
+    "boundary_match": true,
+    "lucas_pascal_mismatches": 0
+  },
+  "n_scans": 58,
+  "groups": {
+    "PD normal cognition": 13,
+    "PD-MCI": 36,
+    "PDD": 9
+  },
+  "failures": {},
+  "top_contrasts": {
+    "PD-MCI_vs_PD normal cognition": [
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "sd_lambda",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 1.945921711589457,
+        "PD-MCI_mean": 2.020854309767042,
+        "diff": 0.07493259817758524,
+        "welch_p": 0.10142498985574167,
+        "hedges_g": 0.6132421356121764,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "sd_H",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 1.229464997006396,
+        "PD-MCI_mean": 1.297641422841679,
+        "diff": 0.06817642583528305,
+        "welch_p": 0.12785739152269412,
+        "hedges_g": 0.5037788050989349,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "B0_mean_D",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 3.600454246608092,
+        "PD-MCI_mean": 3.68015518432185,
+        "diff": 0.07970093771375764,
+        "welch_p": 0.12946041895999785,
+        "hedges_g": 0.4385684739127942,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "mean_lambda",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 4.1419927294927295,
+        "PD-MCI_mean": 4.230839241776741,
+        "diff": 0.08884651228401186,
+        "welch_p": 0.13486313095329788,
+        "hedges_g": 0.5173267733103946,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "mean_H",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 4.964242595011825,
+        "PD-MCI_mean": 5.044392104808771,
+        "diff": 0.08014950979694557,
+        "welch_p": 0.14540605538003598,
+        "hedges_g": 0.49322759117149184,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "B0_mean_H",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 4.255357889973275,
+        "PD-MCI_mean": 4.339598981265648,
+        "diff": 0.08424109129237323,
+        "welch_p": 0.14628574221187046,
+        "hedges_g": 0.46750325834121265,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "multilevel",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 0.37480126710895934,
+        "PD-MCI_mean": 0.35709485344902014,
+        "diff": -0.01770641365993919,
+        "welch_p": 0.16561714225208451,
+        "hedges_g": -0.46547899300541007,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "sd_D",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 1.228460923047997,
+        "PD-MCI_mean": 1.258770282793575,
+        "diff": 0.030309359745577913,
+        "welch_p": 0.1951153576624897,
+        "hedges_g": 0.3585070616436366,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "B1_mean_D",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 1.1633588633588632,
+        "PD-MCI_mean": 1.1081412414745748,
+        "diff": -0.05521762188428836,
+        "welch_p": 0.19857025932802005,
+        "hedges_g": -0.5288824069311815,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "B2_multilevel",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 0.2881272573580266,
+        "PD-MCI_mean": 0.22958160666493996,
+        "diff": -0.05854565069308662,
+        "welch_p": 0.22310239524357703,
+        "hedges_g": -0.4902615506526356,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "B0_multilevel",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 0.9853146853146852,
+        "PD-MCI_mean": 0.9978632478632478,
+        "diff": 0.012548562548562514,
+        "welch_p": 0.23941880835388057,
+        "hedges_g": 0.5811803805914311,
+        "q_BH": 0.6311950402056851
+      },
+      {
+        "contrast": "PD-MCI-vs-PD normal cognition",
+        "feature": "B1_mean_lambda",
+        "n0": 13,
+        "n1": 36,
+        "PD normal cognition_mean": 5.069088603703988,
+        "PD-MCI_mean": 5.195209034792368,
+        "diff": 0.12612043108838034,
+        "welch_p": 0.2924558886237577,
+        "hedges_g": 0.3548019006444695,
+        "q_BH": 0.6858336981343783
+      }
+    ],
+    "PDD_vs_PD-MCI": [
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "compound_pivot_fraction",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 0.677979427979428,
+        "PDD_mean": 0.613973063973064,
+        "diff": -0.06400636400636406,
+        "welch_p": 0.08790988493750977,
+        "hedges_g": -0.4253825346549549,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "B3_multilevel",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 0.09531857031857033,
+        "PDD_mean": 0.1515943751237869,
+        "diff": 0.05627580480521657,
+        "welch_p": 0.192557658940061,
+        "hedges_g": 0.4867044746947603,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "sd_lambda",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 2.020854309767042,
+        "PDD_mean": 1.9771803580693406,
+        "diff": -0.04367395169770161,
+        "welch_p": 0.21670026482163002,
+        "hedges_g": -0.39864753546189796,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "tree_span_time",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 1.1244882902840656,
+        "PDD_mean": 1.1582084850672794,
+        "diff": 0.03372019478321375,
+        "welch_p": 0.2269392916128558,
+        "hedges_g": 0.5104971161128412,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "tree_span_events",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 2.252360522551506,
+        "PDD_mean": 2.3157075042176993,
+        "diff": 0.06334698166619335,
+        "welch_p": 0.23564522669052948,
+        "hedges_g": 0.47772333232189856,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "B3_mean_D",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 1.106022835189502,
+        "PDD_mean": 1.151594375123787,
+        "diff": 0.045571539934284866,
+        "welch_p": 0.29640135632927306,
+        "hedges_g": 0.35835977387583134,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "B1_mean_D",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 1.1081412414745748,
+        "PDD_mean": 1.0744074734270812,
+        "diff": -0.03373376804749362,
+        "welch_p": 0.3069621907509481,
+        "hedges_g": -0.38285829328344806,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "B0_multilevel",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 0.9978632478632478,
+        "PDD_mean": 1.0,
+        "diff": 0.00213675213675224,
+        "welch_p": 0.32417434238601556,
+        "hedges_g": 0.18149393909961894,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "sd_H",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 1.297641422841679,
+        "PDD_mean": 1.2598301806338787,
+        "diff": -0.0378112422078003,
+        "welch_p": 0.3339125964457183,
+        "hedges_g": -0.2932348159635693,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "B1_multilevel",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 0.10561598894932228,
+        "PDD_mean": 0.07440747342708126,
+        "diff": -0.03120851552224102,
+        "welch_p": 0.3422897228615008,
+        "hedges_g": -0.3571819582793848,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "B0_mean_H",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 4.339598981265648,
+        "PDD_mean": 4.399445434739553,
+        "diff": 0.05984645347390494,
+        "welch_p": 0.4152985084571261,
+        "hedges_g": 0.32289765734279935,
+        "q_BH": 0.9638600276733166
+      },
+      {
+        "contrast": "PDD-vs-PD-MCI",
+        "feature": "tree_root_fraction",
+        "n0": 36,
+        "n1": 9,
+        "PD-MCI_mean": 0.0237219955969956,
+        "PDD_mean": 0.022733874694659012,
+        "diff": -0.0009881209023365894,
+        "welch_p": 0.48331567168443224,
+        "hedges_g": -0.28934690662612544,
+        "q_BH": 0.9638600276733166
+      }
+    ],
+    "PDD_vs_PD normal cognition": [
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "B1_mean_D",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 1.1633588633588632,
+        "PDD_mean": 1.0744074734270812,
+        "diff": -0.08895138993178198,
+        "welch_p": 0.07700896075565462,
+        "hedges_g": -0.7130689799474668,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "B0_mean_D",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 3.600454246608092,
+        "PDD_mean": 3.718525120485905,
+        "diff": 0.11807087387781268,
+        "welch_p": 0.07845380508782039,
+        "hedges_g": 0.7821132599436956,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "B0_mean_H",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 4.255357889973275,
+        "PDD_mean": 4.399445434739553,
+        "diff": 0.14408754476627816,
+        "welch_p": 0.08981738990814818,
+        "hedges_g": 0.7712994213138952,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "B1_multilevel",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 0.13258963258963258,
+        "PDD_mean": 0.07440747342708126,
+        "diff": -0.05818215916255132,
+        "welch_p": 0.14898537527774447,
+        "hedges_g": -0.6136147300876846,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "B0_multilevel",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 0.9853146853146852,
+        "PDD_mean": 1.0,
+        "diff": 0.014685314685314754,
+        "welch_p": 0.16592852893647944,
+        "hedges_g": 0.508121219932958,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "sd_D",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 1.228460923047997,
+        "PDD_mean": 1.2666211509887986,
+        "diff": 0.03816022794080154,
+        "welch_p": 0.20749410913261412,
+        "hedges_g": 0.5591318331007691,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "B3_multilevel",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 0.09317349317349316,
+        "PDD_mean": 0.1515943751237869,
+        "diff": 0.05842088195029374,
+        "welch_p": 0.2223497861659806,
+        "hedges_g": 0.5340691907687644,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "tree_span_time",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 1.1270726874666617,
+        "PDD_mean": 1.1582084850672794,
+        "diff": 0.031135797600617687,
+        "welch_p": 0.2675605593671292,
+        "hedges_g": 0.5368509135190778,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "B2_multilevel",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 0.2881272573580266,
+        "PDD_mean": 0.23747606786822473,
+        "diff": -0.05065118948980185,
+        "welch_p": 0.32198764457127516,
+        "hedges_g": -0.3774324162896092,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "B3_mean_D",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 1.1017205017205014,
+        "PDD_mean": 1.151594375123787,
+        "diff": 0.04987387340328553,
+        "welch_p": 0.33482717001165135,
+        "hedges_g": 0.40105322393833714,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "compound_pivot_fraction",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 0.6537989787989787,
+        "PDD_mean": 0.613973063973064,
+        "diff": -0.0398259148259148,
+        "welch_p": 0.335153097030942,
+        "hedges_g": -0.3801981038678568,
+        "q_BH": 0.7720184801286938
+      },
+      {
+        "contrast": "PDD-vs-PD normal cognition",
+        "feature": "B2_mean_lambda",
+        "n0": 13,
+        "n1": 9,
+        "PD normal cognition_mean": 4.7717786487017255,
+        "PDD_mean": 4.946755133029643,
+        "diff": 0.17497648432791735,
+        "welch_p": 0.3452677176492833,
+        "hedges_g": 0.3638623728653521,
+        "q_BH": 0.7720184801286938
+      }
+    ]
+  },
+  "correlations": {
+    "dx_order": [
+      {
+        "feature": "B0_mean_H",
+        "n": 58,
+        "rho": 0.2560406655332852,
+        "p": 0.05238308295536862,
+        "q_BH": 0.7294297372248588
+      },
+      {
+        "feature": "B0_multilevel",
+        "n": 58,
+        "rho": 0.2359518040147421,
+        "p": 0.0745687040305767,
+        "q_BH": 0.7294297372248588
+      },
+      {
+        "feature": "B1_mean_D",
+        "n": 58,
+        "rho": -0.2195664520279258,
+        "p": 0.09771288629007525,
+        "q_BH": 0.7294297372248588
+      },
+      {
+        "feature": "B0_mean_D",
+        "n": 58,
+        "rho": 0.2177364247952558,
+        "p": 0.10061099823791156,
+        "q_BH": 0.7294297372248588
+      },
+      {
+        "feature": "B1_multilevel",
+        "n": 58,
+        "rho": -0.18093115603820148,
+        "p": 0.1740887250759377,
+        "q_BH": 0.7740298140175144
+      },
+      {
+        "feature": "sd_D",
+        "n": 58,
+        "rho": 0.16687074987011974,
+        "p": 0.21057533326516484,
+        "q_BH": 0.7740298140175144
+      },
+      {
+        "feature": "tree_span_time",
+        "n": 58,
+        "rho": 0.16657814869796753,
+        "p": 0.21138780600049656,
+        "q_BH": 0.7740298140175144
+      },
+      {
+        "feature": "sd_lambda",
+        "n": 58,
+        "rho": 0.1538798738432265,
+        "p": 0.24879229823531565,
+        "q_BH": 0.7740298140175144
+      },
+      {
+        "feature": "B3_multilevel",
+        "n": 58,
+        "rho": 0.151438171647029,
+        "p": 0.25647093647965963,
+        "q_BH": 0.7740298140175144
+      },
+      {
+        "feature": "B3_mean_D",
+        "n": 58,
+        "rho": 0.1481975774657683,
+        "p": 0.26690683241983254,
+        "q_BH": 0.7740298140175144
+      },
+      {
+        "feature": "sd_H",
+        "n": 58,
+        "rho": 0.11534935833943705,
+        "p": 0.3885585221180014,
+        "q_BH": 0.8735990308958664
+      },
+      {
+        "feature": "tree_span_events",
+        "n": 58,
+        "rho": 0.11429614139427292,
+        "p": 0.39293360873598127,
+        "q_BH": 0.8735990308958664
+      }
+    ],
+    "global": [
+      {
+        "feature": "B1_mean_D",
+        "n": 58,
+        "rho": 0.1737275537453206,
+        "p": 0.19216164812710967,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "B1_multilevel",
+        "n": 58,
+        "rho": 0.15731270936704128,
+        "p": 0.23826368646805143,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "sd_lambda",
+        "n": 58,
+        "rho": -0.09056789554352598,
+        "p": 0.49896369184660244,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "B2_multilevel",
+        "n": 58,
+        "rho": -0.08871409063625552,
+        "p": 0.5078261225728835,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "B2_mean_D",
+        "n": 58,
+        "rho": -0.08658685899882401,
+        "p": 0.5180938373607394,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "pivot_rate",
+        "n": 58,
+        "rho": -0.08600044895387526,
+        "p": 0.5209425682029206,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "B0_multilevel",
+        "n": 58,
+        "rho": -0.08576293502064307,
+        "p": 0.5220986197753809,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "sd_H",
+        "n": 58,
+        "rho": -0.0724338960164778,
+        "p": 0.5889610461811701,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "tree_span_time",
+        "n": 58,
+        "rho": -0.05860546694049277,
+        "p": 0.6621215657323435,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "B0_mean_H",
+        "n": 58,
+        "rho": -0.054246419724916964,
+        "p": 0.6858942235709738,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "B3_mean_lambda",
+        "n": 58,
+        "rho": 0.04001049761778264,
+        "p": 0.7655527217988612,
+        "q_BH": 0.9969808678789565
+      },
+      {
+        "feature": "B2_mean_lambda",
+        "n": 58,
+        "rho": 0.03928632934600024,
+        "p": 0.7696783180645561,
+        "q_BH": 0.9969808678789565
+      }
+    ],
+    "HY": [
+      {
+        "feature": "mean_D",
+        "n": 58,
+        "rho": -0.2810386488450234,
+        "p": 0.03259717219161228,
+        "q_BH": 0.45017568770516947
+      },
+      {
+        "feature": "B0_mean_H",
+        "n": 58,
+        "rho": -0.26162066998100714,
+        "p": 0.047281470699417676,
+        "q_BH": 0.45017568770516947
+      },
+      {
+        "feature": "B2_mean_lambda",
+        "n": 58,
+        "rho": 0.2568605536295533,
+        "p": 0.05160657951562343,
+        "q_BH": 0.45017568770516947
+      },
+      {
+        "feature": "sd_D",
+        "n": 58,
+        "rho": -0.22944684589105088,
+        "p": 0.08317151167252634,
+        "q_BH": 0.45017568770516947
+      },
+      {
+        "feature": "B0_mean_D",
+        "n": 58,
+        "rho": -0.22484896464684073,
+        "p": 0.08971052185291847,
+        "q_BH": 0.45017568770516947
+      },
+      {
+        "feature": "B2_multilevel",
+        "n": 58,
+        "rho": -0.21142902681009915,
+        "p": 0.11111248865536917,
+        "q_BH": 0.45017568770516947
+      },
+      {
+        "feature": "B0_multilevel",
+        "n": 58,
+        "rho": 0.207968110757555,
+        "p": 0.1172217924158032,
+        "q_BH": 0.45017568770516947
+      },
+      {
+        "feature": "B2_mean_D",
+        "n": 58,
+        "rho": -0.20418680316943608,
+        "p": 0.1241863966083226,
+        "q_BH": 0.45017568770516947
+      },
+      {
+        "feature": "B2_mean_H",
+        "n": 58,
+        "rho": 0.1921046997840124,
+        "p": 0.14855003705400194,
+        "q_BH": 0.4786612305073396
+      },
+      {
+        "feature": "B1_multilevel",
+        "n": 58,
+        "rho": 0.14967754504619762,
+        "p": 0.262106073006045,
+        "q_BH": 0.6745732032221458
+      },
+      {
+        "feature": "B1_mean_H",
+        "n": 58,
+        "rho": -0.14468425962873385,
+        "p": 0.2785378229150177,
+        "q_BH": 0.6745732032221458
+      },
+      {
+        "feature": "tree_span_events",
+        "n": 58,
+        "rho": 0.14450690033005362,
+        "p": 0.27913373926433616,
+        "q_BH": 0.6745732032221458
+      }
+    ]
+  },
+  "adjusted_correlations": {
+    "global": [
+      {
+        "feature": "B1_multilevel",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": 0.2833892687977267,
+        "p": 0.031110904448954844,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.5763673334099082
+      },
+      {
+        "feature": "B1_mean_D",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": 0.2708375770025488,
+        "p": 0.03974947126964884,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.5763673334099082
+      },
+      {
+        "feature": "sd_lambda",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": -0.20020316665407076,
+        "p": 0.13185877354990544,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.8842191551951669
+      },
+      {
+        "feature": "B1_mean_lambda",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": -0.17410006422258917,
+        "p": 0.19119538271055975,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.8842191551951669
+      },
+      {
+        "feature": "pivot_rate",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": -0.16653844900431877,
+        "p": 0.21149821074079855,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.8842191551951669
+      },
+      {
+        "feature": "B0_mean_H",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": -0.1387385646863137,
+        "p": 0.29897503554473986,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.8842191551951669
+      },
+      {
+        "feature": "mean_H",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": -0.11735790613821477,
+        "p": 0.3802954009180803,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.8842191551951669
+      },
+      {
+        "feature": "B2_mean_D",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": -0.11290802418314494,
+        "p": 0.39874402772990564,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.8842191551951669
+      },
+      {
+        "feature": "B3_mean_D",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": -0.11238369582097876,
+        "p": 0.4009518031837272,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.8842191551951669
+      },
+      {
+        "feature": "mean_lambda",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": -0.11218033634719772,
+        "p": 0.4018100021065191,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.8842191551951669
+      },
+      {
+        "feature": "sd_H",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": -0.10925473273998335,
+        "p": 0.41427460610982525,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.8842191551951669
+      },
+      {
+        "feature": "tree_span_time",
+        "outcome": "global",
+        "n": 58,
+        "partial_rank_r": -0.10839098926849922,
+        "p": 0.4179967014590737,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.8842191551951669
+      }
+    ],
+    "HY": [
+      {
+        "feature": "B2_mean_lambda",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": 0.2940158861732276,
+        "p": 0.025079129835127466,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.443481146967103
+      },
+      {
+        "feature": "B2_mean_D",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": -0.25062491620770483,
+        "p": 0.05775409953373636,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.443481146967103
+      },
+      {
+        "feature": "mean_D",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": -0.2458626415971705,
+        "p": 0.06283722386553324,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.443481146967103
+      },
+      {
+        "feature": "B0_multilevel",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": 0.24454447358986883,
+        "p": 0.06430603400242633,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.443481146967103
+      },
+      {
+        "feature": "B2_multilevel",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": -0.23447083356260046,
+        "p": 0.07646226671846604,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.443481146967103
+      },
+      {
+        "feature": "B2_mean_H",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": 0.20302497907460385,
+        "p": 0.12638816045578166,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.5418013745446045
+      },
+      {
+        "feature": "tree_root_fraction",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": -0.20075269921917177,
+        "p": 0.13077964213145626,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.5418013745446045
+      },
+      {
+        "feature": "B0_mean_lambda",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": 0.16603951194654942,
+        "p": 0.21288921200480185,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.7717233935174067
+      },
+      {
+        "feature": "pivot_depth",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": -0.15419693301669793,
+        "p": 0.24780681266909207,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.7773420486305653
+      },
+      {
+        "feature": "sd_D",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": -0.14042254705465193,
+        "p": 0.2930903310767928,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.7773420486305653
+      },
+      {
+        "feature": "B1_mean_H",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": -0.1381142158864157,
+        "p": 0.30117619194651946,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.7773420486305653
+      },
+      {
+        "feature": "pivot_rate",
+        "outcome": "HY",
+        "n": 58,
+        "partial_rank_r": 0.132440563359507,
+        "p": 0.3216587787436822,
+        "covars": [
+          "age",
+          "years_of_education",
+          "peak_interval_mean",
+          "peak_interval_cv",
+          "spectral_entropy",
+          "dvars_pct",
+          "tsnr"
+        ],
+        "q_BH": 0.7773420486305653
+      }
+    ]
+  },
+  "incremental": {
+    "PD-MCI_vs_PD normal cognition": {
+      "n": 49,
+      "auc_base": 0.655982905982906,
+      "auc_plus_tma": 0.4957264957264957,
+      "delta_auc": -0.1602564102564103
+    },
+    "PDD_vs_PD normal cognition": {
+      "n": 22,
+      "auc_base": 0.8461538461538461,
+      "auc_plus_tma": 0.641025641025641,
+      "delta_auc": -0.20512820512820518
+    }
+  },
+  "max_projection_error_ms": 1000.0000000000031
+}
