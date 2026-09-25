@@ -1,0 +1,10 @@
+{
+  "ds001907/derivatives/sub-RC4120/ses-1/func/sub-RC4120_ses-1_task-ANT_run-3_bold.nii.gz": "RuntimeError('engine event count mismatch 44 != 45')",
+  "ds001907/derivatives/sub-RC4125/ses-1/func/sub-RC4125_ses-1_task-ANT_run-3_bold.nii.gz": "RuntimeError('engine event count mismatch 41 != 42')",
+  "ds001907/derivatives/sub-RC4125/ses-2/func/sub-RC4125_ses-2_task-ANT_run-3_bold.nii.gz": "RuntimeError('engine event count mismatch 37 != 38')",
+  "ds001907/derivatives/sub-RC4205/ses-2/func/sub-RC4205_ses-2_task-ANT_run-3_bold.nii.gz": "RuntimeError('engine event count mismatch 43 != 44')",
+  "ds001907/derivatives/sub-RC4212/ses-1/func/sub-RC4212_ses-1_task-ANT_run-3_bold.nii.gz": "RuntimeError('engine event count mismatch 40 != 41')",
+  "ds001907/derivatives/sub-RC4213/ses-1/func/sub-RC4213_ses-1_task-ANT_run-3_bold.nii.gz": "RuntimeError('engine event count mismatch 40 != 41')",
+  "ds001907/derivatives/sub-RC4219/ses-2/func/sub-RC4219_ses-2_task-ANT_run-3_bold.nii.gz": "RuntimeError('engine event count mismatch 36 != 37')",
+  "ds001907/derivatives/sub-RC4221/ses-2/func/sub-RC4221_ses-2_task-ANT_run-3_bold.nii.gz": "RuntimeError('engine event count mismatch 39 != 40')"
+}

@@ -1,0 +1,802 @@
+{
+  "ds001907/derivatives/sub-RC4101/ses-1/func/sub-RC4101_ses-1_task-ANT_run-6_bold.nii.gz": {
+    "first_target_onsets_s": [
+      26.291,
+      42.549,
+      55.794,
+      66.304,
+      70.302,
+      86.795,
+      91.042,
+      101.04
+    ],
+    "first_peak_times_s": [
+      4.813891163795379,
+      9.821404978131083,
+      14.906594503295299,
+      19.208451534895403,
+      29.161457214055723,
+      40.577722002610805,
+      57.5334275710335,
+      65.78576609122506,
+      72.37577152699697,
+      76.68126137497826,
+      84.24135647723143,
+      91.02381020794486
+    ],
+    "first_nonempty_frames": [
+      {
+        "duration_s": 16.258,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 2.8704572140557225
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 14.286722002610805
+          }
+        ]
+      },
+      {
+        "duration_s": 10.510000000000005,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 1.7394275710335023
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 9.99176609122506
+          }
+        ]
+      },
+      {
+        "duration_s": 16.492999999999995,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 2.073771526996964
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 6.379261374978256
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 13.939356477231428
+          }
+        ]
+      }
+    ],
+    "first_events": [
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 2,
+        "D": 1,
+        "lambda": 2,
+        "levels": "2",
+        "projection_depth": 1,
+        "projection_error_ms": 1194.0427859442775,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 2,
+        "projection_error_ms": 60.97200261080645,
+        "projected_phase": 1.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 888.0724289664988,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 518.2339087749456,
+        "projected_phase": 2.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 4,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 12.146526996964832,
+        "projected_phase": 0.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 4,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 194.38637497825775,
+        "projected_phase": 0.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 4,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 492.0185227685671,
+        "projected_phase": 1.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 5,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 18.18979205513916,
+        "projected_phase": 2.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 6,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 0,
+        "projection_error_ms": 153.58626244213994,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 7,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 1,
+        "projection_error_ms": 118.59798477102841,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 7,
+        "H": 5,
+        "D": 2,
+        "lambda": 4,
+        "levels": "4;5",
+        "projection_depth": 0,
+        "projection_error_ms": 1070.838243603745,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 8,
+        "H": 4,
+        "D": 4,
+        "lambda": 1,
+        "levels": "1;2;3;4",
+        "projection_depth": 0,
+        "projection_error_ms": 258.5143800224614,
+        "projected_phase": 0.0
+      }
+    ]
+  },
+  "ds001907/derivatives/sub-RC4101/ses-2/func/sub-RC4101_ses-2_task-ANT_run-6_bold.nii.gz": {
+    "first_target_onsets_s": [
+      26.29,
+      42.548,
+      55.808,
+      66.303,
+      70.301,
+      75.049,
+      86.809,
+      91.057
+    ],
+    "first_peak_times_s": [
+      7.317414698634353,
+      18.92182473869137,
+      26.461799083830645,
+      34.69203299513637,
+      48.25994742098204,
+      54.62079279592507,
+      62.393342624250046,
+      70.63841774891566,
+      76.40409087171174,
+      88.4140288329837,
+      95.0887618794568,
+      106.00944433398946
+    ],
+    "first_nonempty_frames": [
+      {
+        "duration_s": 16.258000000000003,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 0.17179908383064557
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 8.402032995136373
+          }
+        ]
+      },
+      {
+        "duration_s": 13.259999999999998,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 5.711947420982035
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 12.072792795925068
+          }
+        ]
+      },
+      {
+        "duration_s": 10.494999999999997,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 6.585342624250046
+          }
+        ]
+      }
+    ],
+    "first_events": [
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 1,
+        "D": 1,
+        "lambda": 1,
+        "levels": "1",
+        "projection_depth": 0,
+        "projection_error_ms": 171.79908383064557,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 1,
+        "D": 1,
+        "lambda": 1,
+        "levels": "1",
+        "projection_depth": 0,
+        "projection_error_ms": 273.03299513637234,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 2,
+        "D": 1,
+        "lambda": 2,
+        "levels": "2",
+        "projection_depth": 0,
+        "projection_error_ms": 918.0525790179635,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 2,
+        "D": 2,
+        "lambda": 1,
+        "levels": "1;2",
+        "projection_depth": 0,
+        "projection_error_ms": 1187.2072040749301,
+        "projected_phase": 2.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 25.96762425004791,
+        "projected_phase": 1.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 4,
+        "H": 3,
+        "D": 3,
+        "lambda": 1,
+        "levels": "1;2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 337.4177489156551,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 5,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 2,
+        "projection_error_ms": 114.90912828826092,
+        "projected_phase": 0.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 6,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 0,
+        "projection_error_ms": 518.9711670162965,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 7,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 0,
+        "projection_error_ms": 964.7381205432026,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 8,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 1019.444333989465,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 8,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 343.5615152808292,
+        "projected_phase": 1.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 9,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 1,
+        "projection_error_ms": 244.73609344251196,
+        "projected_phase": 0.5
+      }
+    ]
+  },
+  "ds001907/derivatives/sub-RC4103/ses-1/func/sub-RC4103_ses-1_task-ANT_run-6_bold.nii.gz": {
+    "first_target_onsets_s": [
+      26.293,
+      42.552,
+      55.812,
+      66.307,
+      70.305,
+      75.052,
+      86.797,
+      91.045
+    ],
+    "first_peak_times_s": [
+      11.56005528425783,
+      18.266728322950122,
+      26.532496552435344,
+      30.854455598006655,
+      40.41806673596933,
+      51.92394549000371,
+      63.10655286016676,
+      66.93960353424202,
+      79.62193156831638,
+      89.71809287130806,
+      100.94324642376449,
+      105.9758140222896
+    ],
+    "first_nonempty_frames": [
+      {
+        "duration_s": 16.259,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 0.2394965524353445
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 4.561455598006656
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 14.125066735969334
+          }
+        ]
+      },
+      {
+        "duration_s": 13.259999999999998,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 9.37194549000371
+          }
+        ]
+      },
+      {
+        "duration_s": 10.495000000000005,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 7.29455286016676
+          }
+        ]
+      }
+    ],
+    "first_events": [
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 2,
+        "D": 2,
+        "lambda": 1,
+        "levels": "1;2",
+        "projection_depth": 0,
+        "projection_error_ms": 239.4965524353445,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 2,
+        "D": 1,
+        "lambda": 2,
+        "levels": "2",
+        "projection_depth": 1,
+        "projection_error_ms": 496.70559800665575,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 2,
+        "projection_error_ms": 101.55826403066703,
+        "projected_phase": 1.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 573.0545099962882,
+        "projected_phase": 1.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 576.6971398332424,
+        "projected_phase": 1.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 3,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 632.6035342420226,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 5,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 2,
+        "projection_error_ms": 165.5565683163813,
+        "projected_phase": 0.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 6,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 0,
+        "projection_error_ms": 797.0928713080594,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 7,
+        "H": 4,
+        "D": 4,
+        "lambda": 1,
+        "levels": "1;2;3;4",
+        "projection_depth": 0,
+        "projection_error_ms": 96.75357623551375,
+        "projected_phase": 2.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 8,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 995.8140222895933,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 9,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 911.7473800565676,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 10,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 124.85963793716338,
+        "projected_phase": 0.0
+      }
+    ]
+  },
+  "ds001907/derivatives/sub-RC4103/ses-2/func/sub-RC4103_ses-2_task-ANT_run-6_bold.nii.gz": {
+    "first_target_onsets_s": [
+      26.302,
+      42.56,
+      55.82,
+      66.315,
+      70.313,
+      75.061,
+      86.806,
+      91.053
+    ],
+    "first_peak_times_s": [
+      9.093236314282267,
+      16.981085346695522,
+      21.399422111724142,
+      26.72337224569283,
+      35.93563920500921,
+      40.46731009307416,
+      48.31240089246315,
+      57.09167613704398,
+      63.221744925689556,
+      71.62652097670674,
+      79.24183900745064,
+      86.5047027820127
+    ],
+    "first_nonempty_frames": [
+      {
+        "duration_s": 16.258000000000003,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 0.4213722456928295
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 9.63363920500921
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 14.165310093074162
+          }
+        ]
+      },
+      {
+        "duration_s": 13.259999999999998,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 5.75240089246315
+          }
+        ]
+      },
+      {
+        "duration_s": 10.494999999999997,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 1.2716761370439826
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 7.401744925689556
+          }
+        ]
+      }
+    ],
+    "first_events": [
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 1,
+        "D": 1,
+        "lambda": 1,
+        "levels": "1",
+        "projection_depth": 0,
+        "projection_error_ms": 421.3722456928295,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 2,
+        "projection_error_ms": 527.6107949907923,
+        "projected_phase": 1.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 2,
+        "projection_error_ms": 60.43990692584009,
+        "projected_phase": 1.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 2,
+        "D": 1,
+        "lambda": 2,
+        "levels": "2",
+        "projection_depth": 0,
+        "projection_error_ms": 877.5991075368491,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 40.1988629560171,
+        "projected_phase": 0.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 469.50507431044156,
+        "projected_phase": 1.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 4,
+        "H": 2,
+        "D": 1,
+        "lambda": 2,
+        "levels": "2",
+        "projection_depth": 0,
+        "projection_error_ms": 1060.4790232932614,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 5,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 2,
+        "projection_error_ms": 223.53599254936714,
+        "projected_phase": 0.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 5,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 301.29721798729776,
+        "projected_phase": 2.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 7,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 1,
+        "projection_error_ms": 66.33973358228563,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 7,
+        "H": 4,
+        "D": 4,
+        "lambda": 1,
+        "levels": "1;2;3;4",
+        "projection_depth": 0,
+        "projection_error_ms": 915.3252384990365,
+        "projected_phase": 2.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 8,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 601.9599963999783,
+        "projected_phase": 1.25
+      }
+    ]
+  }
+}
