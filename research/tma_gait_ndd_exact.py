@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import json, math, time
+import json, math, time, io, zipfile
 from fractions import Fraction
 from pathlib import Path
 from collections import defaultdict
@@ -29,6 +29,7 @@ from tone_metric.theory import (
 SEED=20260925
 RNG=np.random.default_rng(SEED)
 BASE="https://physionet.org/files/gaitndd/1.0.0/"
+ZIP_URL="https://physionet.org/content/gaitndd/get-zip/1.0.0/"
 CACHE=Path("/tmp/gaitndd_exact"); CACHE.mkdir(parents=True,exist_ok=True)
 OUT=Path("research/tma_gait_ndd_exact_results"); OUT.mkdir(parents=True,exist_ok=True)
 N_CYCLES=64
@@ -36,6 +37,23 @@ HALF=32
 PROJ_TOL_S=0.005
 EVENT_TYPES=("LHS","RTO","RHS","LTO")
 PERM_B=5000
+
+def prefetch_dataset():
+    marker=CACHE/"RECORDS"
+    if marker.exists() and len(list(CACHE.glob("*.hea")))>=60:
+        return
+    r=requests.get(ZIP_URL,timeout=300,headers={"User-Agent":"Mozilla/5.0 TMA-research"})
+    r.raise_for_status()
+    with zipfile.ZipFile(io.BytesIO(r.content)) as z:
+        for name in z.namelist():
+            if name.endswith("/"):
+                continue
+            base=Path(name).name
+            if not base:
+                continue
+            (CACHE/base).write_bytes(z.read(name))
+    if not marker.exists():
+        raise RuntimeError("ZIP extraction did not produce RECORDS")
 
 def dl(name):
     p=CACHE/name
@@ -268,6 +286,7 @@ def loocv_auc(df,features,label_col="is_pd"):
     return float(roc_auc_score(y,pred)),len(use),pred
 
 def main():
+    prefetch_dataset()
     # Mathematical implementation audit: paper derivation and engine must agree.
     audit={
       "boundary_closed":boundary_sequence(2,12),
