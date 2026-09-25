@@ -1,0 +1,174 @@
+{
+  "dataset": "Gait in Aging and Disease",
+  "paper_math_audit": {
+    "boundary_match": true,
+    "lucas_pascal_mismatches": 0
+  },
+  "n_subjects": 12,
+  "groups": {
+    "old": 5,
+    "pd": 2,
+    "young": 5
+  },
+  "failures": {
+    "pd5-si.txt": "RuntimeError('only 245 valid strides; need 256')",
+    "pd1-si.txt": "RuntimeError('only 222 valid strides; need 256')",
+    "pd3-si.txt": "RuntimeError('only 203 valid strides; need 256')"
+  },
+  "top_pd_vs_old": [],
+  "top_old_vs_young": [
+    {
+      "contrast": "old-vs-young",
+      "feature": "HS3_multilevel",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 0.084375,
+      "old_mean": 0.128125,
+      "diff": 0.04374999999999998,
+      "welch_p": 0.06796797252177654,
+      "hedges_g": 1.2267608388934514,
+      "q_BH": 0.8495996565222084
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "HS3_mean_D",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 1.084375,
+      "old_mean": 1.128125,
+      "diff": 0.043749999999999956,
+      "welch_p": 0.06796797252177667,
+      "hedges_g": 1.2267608388934506,
+      "q_BH": 0.8495996565222084
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "sd_D",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 0.542687938668214,
+      "old_mean": 0.4921390714251725,
+      "diff": -0.05054886724304147,
+      "welch_p": 0.2655055348792861,
+      "hedges_g": -0.6894269983834019,
+      "q_BH": 0.8896380022263223
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "pivot_rate",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 0.25416666666666665,
+      "old_mean": 0.259375,
+      "diff": 0.00520833333333337,
+      "welch_p": 0.2712414986428059,
+      "hedges_g": 0.6927425705718226,
+      "q_BH": 0.8896380022263223
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "HS1_mean_lambda",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 9.31875,
+      "old_mean": 9.65,
+      "diff": 0.3312500000000007,
+      "welch_p": 0.2769148621804689,
+      "hedges_g": 0.6995267588766747,
+      "q_BH": 0.8896380022263223
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "HS1_mean_H",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 9.425,
+      "old_mean": 9.74375,
+      "diff": 0.31874999999999964,
+      "welch_p": 0.2887306315296794,
+      "hedges_g": 0.6806887789387907,
+      "q_BH": 0.8896380022263223
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "HS2_mean_D",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 1.490625,
+      "old_mean": 1.390625,
+      "diff": -0.10000000000000009,
+      "welch_p": 0.3073609584575443,
+      "hedges_g": -0.6228000956564879,
+      "q_BH": 0.8896380022263223
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "compound_pivot_fraction",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 0.8564864413850646,
+      "old_mean": 0.8152428971588636,
+      "diff": -0.04124354422620102,
+      "welch_p": 0.3945321434685529,
+      "hedges_g": -0.5219223018478211,
+      "q_BH": 0.8896380022263223
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "sd_lambda",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 3.4271191611445047,
+      "old_mean": 3.2643049864664855,
+      "diff": -0.16281417467801917,
+      "welch_p": 0.40908561583740144,
+      "hedges_g": -0.5105075833349891,
+      "q_BH": 0.8896380022263223
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "sd_H",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 3.13021300499327,
+      "old_mean": 2.9839804450793257,
+      "diff": -0.14623255991394446,
+      "welch_p": 0.41907500128764624,
+      "hedges_g": -0.5012294763941704,
+      "q_BH": 0.8896380022263223
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "HS2_multilevel",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 0.309375,
+      "old_mean": 0.2625,
+      "diff": -0.046875,
+      "welch_p": 0.45187029498823394,
+      "hedges_g": -0.4519268503636364,
+      "q_BH": 0.8896380022263223
+    },
+    {
+      "contrast": "old-vs-young",
+      "feature": "mean_D",
+      "n0": 5,
+      "n1": 5,
+      "young_mean": 1.2270833333333333,
+      "old_mean": 1.2041666666666666,
+      "diff": -0.022916666666666696,
+      "welch_p": 0.45477274006749435,
+      "hedges_g": -0.45216794371220925,
+      "q_BH": 0.8896380022263223
+    }
+  ],
+  "incremental": {
+    "pd_vs_old": {
+      "n": 7,
+      "auc_base": 0.8,
+      "auc_plus_tma": 1.0,
+      "delta_auc": 0.19999999999999996
+    }
+  },
+  "max_projection_error_ms": 5.000000000000509
+}
