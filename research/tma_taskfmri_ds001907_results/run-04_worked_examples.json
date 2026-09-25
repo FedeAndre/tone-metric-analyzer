@@ -97,17 +97,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 1,
-        "H": 2,
-        "D": 2,
-        "lambda": 1,
-        "levels": "1;2",
-        "projection_depth": 0,
-        "projection_error_ms": 893.48750210415,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 2,
         "H": 3,
         "D": 1,
@@ -116,28 +105,6 @@
         "projection_depth": 1,
         "projection_error_ms": 255.35284545460794,
         "projected_phase": 1.5
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 3,
-        "H": 3,
-        "D": 3,
-        "lambda": 1,
-        "levels": "1;2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 669.405773368581,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 4,
-        "H": 3,
-        "D": 2,
-        "lambda": 2,
-        "levels": "2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 226.05118998745888,
-        "projected_phase": 2.0
       },
       {
         "label": "BOLD",
@@ -193,6 +160,39 @@
         "projection_depth": 1,
         "projection_error_ms": 283.1061799155744,
         "projected_phase": 1.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 9,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 0,
+        "projection_error_ms": 69.50266827919927,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 11,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 2,
+        "projection_error_ms": 762.5333814290515,
+        "projected_phase": 0.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 12,
+        "H": 4,
+        "D": 3,
+        "lambda": 2,
+        "levels": "2;3;4",
+        "projection_depth": 0,
+        "projection_error_ms": 441.99995576857987,
+        "projected_phase": 0.0
       }
     ]
   },
@@ -294,17 +294,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 1,
-        "H": 2,
-        "D": 2,
-        "lambda": 1,
-        "levels": "1;2",
-        "projection_depth": 0,
-        "projection_error_ms": 737.6782318413647,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 3,
         "H": 3,
         "D": 2,
@@ -349,17 +338,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 7,
-        "H": 4,
-        "D": 4,
-        "lambda": 1,
-        "levels": "1;2;3;4",
-        "projection_depth": 0,
-        "projection_error_ms": 225.35162623525244,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 8,
         "H": 3,
         "D": 1,
@@ -390,6 +368,28 @@
         "projection_depth": 0,
         "projection_error_ms": 1039.9321930192543,
         "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 11,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 2,
+        "projection_error_ms": 544.5881231798354,
+        "projected_phase": 0.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 11,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 2,
+        "projection_error_ms": 482.16969375056306,
+        "projected_phase": 1.25
       }
     ]
   },
@@ -550,17 +550,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 5,
-        "H": 3,
-        "D": 2,
-        "lambda": 2,
-        "levels": "2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 426.23814471751604,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 6,
         "H": 4,
         "D": 1,
@@ -591,67 +580,90 @@
         "projection_depth": 1,
         "projection_error_ms": 1063.9641897382403,
         "projected_phase": 1.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 8,
+        "H": 5,
+        "D": 5,
+        "lambda": 1,
+        "levels": "1;2;3;4;5",
+        "projection_depth": 0,
+        "projection_error_ms": 583.9903258674184,
+        "projected_phase": 0.0
       }
     ]
   },
-  "ds001907/derivatives/sub-RC4106/ses-1/func/sub-RC4106_ses-1_task-ANT_run-4_bold.nii.gz": {
+  "ds001907/derivatives/sub-RC4103/ses-2/func/sub-RC4103_ses-2_task-ANT_run-4_bold.nii.gz": {
     "first_target_onsets_s": [
-      26.3,
-      42.559,
-      55.819,
-      66.314,
-      70.312,
-      75.059,
-      86.804,
-      91.051
+      26.29,
+      42.549,
+      55.809,
+      66.304,
+      70.301,
+      75.049,
+      86.794,
+      91.041
     ],
     "first_peak_times_s": [
-      5.063119416657423,
-      12.373246627342109,
-      21.75775786408939,
-      26.28773957295009,
-      31.914383485146192,
-      35.548636675218496,
-      48.167514341167085,
-      55.69271478273243,
-      64.46063518884432,
-      71.70490050719451,
-      77.24098625557481,
-      84.07182510888502
+      11.022288371222022,
+      16.588966627842094,
+      24.16799015348938,
+      29.288061372435696,
+      33.44001683490975,
+      37.85013425053545,
+      43.80819131432778,
+      47.82167188459515,
+      52.742463431496546,
+      58.44068160701388,
+      62.12228013449563,
+      67.23227994137558
     ],
     "first_nonempty_frames": [
       {
-        "duration_s": 16.258999999999997,
+        "duration_s": 16.259,
         "events": [
           {
             "label": "BOLD",
-            "offset_s": 5.614383485146192
+            "offset_s": 2.9980613724356964
           },
           {
             "label": "BOLD",
-            "offset_s": 9.248636675218496
+            "offset_s": 7.150016834909749
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 11.560134250535448
           }
         ]
       },
       {
-        "duration_s": 13.260000000000005,
+        "duration_s": 13.259999999999998,
         "events": [
           {
             "label": "BOLD",
-            "offset_s": 5.608514341167087
+            "offset_s": 1.2591913143277793
           },
           {
             "label": "BOLD",
-            "offset_s": 13.133714782732433
+            "offset_s": 5.272671884595148
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 10.193463431496546
           }
         ]
       },
       {
-        "duration_s": 10.49499999999999,
+        "duration_s": 10.495000000000005,
         "events": [
           {
             "label": "BOLD",
-            "offset_s": 8.641635188844319
+            "offset_s": 2.6316816070138813
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 6.313280134495635
           }
         ]
       }
@@ -660,46 +672,68 @@
       {
         "label": "BOLD",
         "frame_index": 0,
-        "H": 3,
-        "D": 1,
-        "lambda": 3,
-        "levels": "3",
-        "projection_depth": 2,
-        "projection_error_ms": 482.7415148538067,
-        "projected_phase": 0.75
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 0,
-        "H": 3,
-        "D": 3,
-        "lambda": 1,
-        "levels": "1;2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 1119.1366752184972,
-        "projected_phase": 1.0
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 1,
         "H": 2,
         "D": 1,
         "lambda": 2,
         "levels": "2",
-        "projection_depth": 0,
-        "projection_error_ms": 1021.4856588329153,
-        "projected_phase": 1.0
+        "projection_depth": 1,
+        "projection_error_ms": 1066.6886275643037,
+        "projected_phase": 0.5
       },
       {
         "label": "BOLD",
-        "frame_index": 1,
+        "frame_index": 0,
         "H": 2,
         "D": 2,
         "lambda": 1,
         "levels": "1;2",
         "projection_depth": 0,
-        "projection_error_ms": 126.2852172675726,
-        "projected_phase": 2.0
+        "projection_error_ms": 979.4831650902506,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 2,
+        "D": 1,
+        "lambda": 2,
+        "levels": "2",
+        "projection_depth": 1,
+        "projection_error_ms": 634.1157494645529,
+        "projected_phase": 1.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 398.3086856722204,
+        "projected_phase": 0.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 300.1718845951487,
+        "projected_phase": 0.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 248.46343149654777,
+        "projected_phase": 1.5
       },
       {
         "label": "BOLD",
@@ -709,8 +743,30 @@
         "lambda": 3,
         "levels": "3",
         "projection_depth": 1,
-        "projection_error_ms": 770.385188844326,
-        "projected_phase": 1.5
+        "projection_error_ms": 7.931607013879918,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 1065.7801344956326,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 3,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 928.2799413755782,
+        "projected_phase": 0.0
       },
       {
         "label": "BOLD",
@@ -720,30 +776,19 @@
         "lambda": 2,
         "levels": "2",
         "projection_depth": 0,
-        "projection_error_ms": 980.5994928054886,
+        "projection_error_ms": 67.56004480282479,
         "projected_phase": 1.0
       },
       {
         "label": "BOLD",
         "frame_index": 5,
-        "H": 4,
+        "H": 3,
         "D": 1,
-        "lambda": 4,
-        "levels": "4",
-        "projection_depth": 1,
-        "projection_error_ms": 754.263744425188,
-        "projected_phase": 0.5
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 5,
-        "H": 4,
-        "D": 1,
-        "lambda": 4,
-        "levels": "4",
-        "projection_depth": 1,
-        "projection_error_ms": 204.07510888502176,
-        "projected_phase": 1.5
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 0,
+        "projection_error_ms": 391.0333035534348,
+        "projected_phase": 1.0
       },
       {
         "label": "BOLD",
@@ -753,41 +798,8 @@
         "lambda": 3,
         "levels": "3;4",
         "projection_depth": 0,
-        "projection_error_ms": 133.2215860849857,
+        "projection_error_ms": 943.4506853877025,
         "projected_phase": 0.0
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 7,
-        "H": 4,
-        "D": 4,
-        "lambda": 1,
-        "levels": "1;2;3;4",
-        "projection_depth": 0,
-        "projection_error_ms": 7.845327213616068,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 8,
-        "H": 3,
-        "D": 2,
-        "lambda": 2,
-        "levels": "2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 349.66017655433063,
-        "projected_phase": 1.0
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 8,
-        "H": 4,
-        "D": 1,
-        "lambda": 4,
-        "levels": "4",
-        "projection_depth": 2,
-        "projection_error_ms": 300.3235023794013,
-        "projected_phase": 1.75
       }
     ]
   }

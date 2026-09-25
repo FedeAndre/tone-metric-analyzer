@@ -301,17 +301,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 3,
-        "H": 3,
-        "D": 3,
-        "lambda": 1,
-        "levels": "1;2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 905.2688367093112,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 5,
         "H": 4,
         "D": 1,
@@ -386,6 +375,17 @@
         "projection_depth": 0,
         "projection_error_ms": 1076.4334875304726,
         "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 11,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 2,
+        "projection_error_ms": 538.6856528878319,
+        "projected_phase": 0.25
       }
     ]
   },
@@ -692,17 +692,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 1,
-        "H": 2,
-        "D": 2,
-        "lambda": 1,
-        "levels": "1;2",
-        "projection_depth": 0,
-        "projection_error_ms": 170.8660014600265,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 3,
         "H": 3,
         "D": 1,
@@ -758,17 +747,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 8,
-        "H": 3,
-        "D": 2,
-        "lambda": 2,
-        "levels": "2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 804.9512293429334,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 10,
         "H": 3,
         "D": 2,
@@ -788,6 +766,28 @@
         "projection_depth": 2,
         "projection_error_ms": 806.8190258127177,
         "projected_phase": 1.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 12,
+        "H": 5,
+        "D": 4,
+        "lambda": 2,
+        "levels": "2;3;4;5",
+        "projection_depth": 0,
+        "projection_error_ms": 519.7218087819522,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 13,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 1,
+        "projection_error_ms": 86.17162156102874,
+        "projected_phase": 0.5
       }
     ]
   }

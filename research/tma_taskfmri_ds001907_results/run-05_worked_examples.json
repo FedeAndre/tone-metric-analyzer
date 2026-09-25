@@ -156,17 +156,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 5,
-        "H": 3,
-        "D": 2,
-        "lambda": 2,
-        "levels": "2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 490.00997603424395,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 7,
         "H": 4,
         "D": 2,
@@ -197,6 +186,218 @@
         "projection_depth": 2,
         "projection_error_ms": 218.2502932391655,
         "projected_phase": 0.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 8,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 636.1491918706143,
+        "projected_phase": 1.0
+      }
+    ]
+  },
+  "ds001907/derivatives/sub-RC4101/ses-2/func/sub-RC4101_ses-2_task-ANT_run-5_bold.nii.gz": {
+    "first_target_onsets_s": [
+      26.287,
+      42.546,
+      55.806,
+      66.317,
+      70.315,
+      75.063,
+      86.808,
+      91.055
+    ],
+    "first_peak_times_s": [
+      9.729476832192937,
+      22.175210028130948,
+      27.616859740324358,
+      33.513594973535525,
+      38.453696502837346,
+      48.16132509941785,
+      56.99786292554191,
+      62.23540942607183,
+      67.83226931034235,
+      77.27396564507228,
+      86.1511586507204,
+      93.51272882861255
+    ],
+    "first_nonempty_frames": [
+      {
+        "duration_s": 16.259,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 1.329859740324359
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 7.226594973535526
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 12.166696502837347
+          }
+        ]
+      },
+      {
+        "duration_s": 13.259999999999998,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 5.615325099417852
+          }
+        ]
+      },
+      {
+        "duration_s": 10.510999999999996,
+        "events": [
+          {
+            "label": "BOLD",
+            "offset_s": 1.191862925541912
+          },
+          {
+            "label": "BOLD",
+            "offset_s": 6.429409426071835
+          }
+        ]
+      }
+    ],
+    "first_events": [
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 2,
+        "projection_error_ms": 702.5152596756409,
+        "projected_phase": 0.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 2,
+        "D": 2,
+        "lambda": 1,
+        "levels": "1;2",
+        "projection_depth": 0,
+        "projection_error_ms": 902.9050264644735,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 2,
+        "D": 1,
+        "lambda": 2,
+        "levels": "2",
+        "projection_depth": 1,
+        "projection_error_ms": 27.553497162653937,
+        "projected_phase": 1.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 2,
+        "D": 1,
+        "lambda": 2,
+        "levels": "2",
+        "projection_depth": 0,
+        "projection_error_ms": 1014.6749005821467,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 2,
+        "D": 2,
+        "lambda": 1,
+        "levels": "1;2",
+        "projection_depth": 0,
+        "projection_error_ms": 1191.8629255419119,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 2,
+        "D": 1,
+        "lambda": 2,
+        "levels": "2",
+        "projection_depth": 0,
+        "projection_error_ms": 1173.9094260718377,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 3,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 0,
+        "projection_error_ms": 483.7306896576407,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 5,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 1,
+        "projection_error_ms": 725.2843549277229,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 7,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 1,
+        "projection_error_ms": 41.021171387452526,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 8,
+        "H": 4,
+        "D": 4,
+        "lambda": 1,
+        "levels": "1;2;3;4",
+        "projection_depth": 0,
+        "projection_error_ms": 257.16695366533315,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 8,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 616.8223521441776,
+        "projected_phase": 0.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 8,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 570.3457663181705,
+        "projected_phase": 1.75
       }
     ]
   },
@@ -298,17 +499,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 1,
-        "H": 2,
-        "D": 2,
-        "lambda": 1,
-        "levels": "1;2",
-        "projection_depth": 0,
-        "projection_error_ms": 920.4217844427027,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 2,
         "H": 2,
         "D": 1,
@@ -331,17 +521,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 4,
-        "H": 3,
-        "D": 2,
-        "lambda": 2,
-        "levels": "2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 595.5941582336808,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 5,
         "H": 3,
         "D": 1,
@@ -350,17 +529,6 @@
         "projection_depth": 0,
         "projection_error_ms": 15.93267590302308,
         "projected_phase": 1.0
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 6,
-        "H": 4,
-        "D": 2,
-        "lambda": 3,
-        "levels": "3;4",
-        "projection_depth": 0,
-        "projection_error_ms": 203.31947053206545,
-        "projected_phase": 2.0
       },
       {
         "label": "BOLD",
@@ -394,6 +562,39 @@
         "projection_depth": 1,
         "projection_error_ms": 809.6019404745678,
         "projected_phase": 1.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 10,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 209.44394790508625,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 11,
+        "H": 5,
+        "D": 2,
+        "lambda": 4,
+        "levels": "4;5",
+        "projection_depth": 0,
+        "projection_error_ms": 142.20717122415775,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 11,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 2,
+        "projection_error_ms": 633.798086702825,
+        "projected_phase": 1.75
       }
     ]
   },
@@ -513,17 +714,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 4,
-        "H": 3,
-        "D": 2,
-        "lambda": 2,
-        "levels": "2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 139.66237470668813,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 6,
         "H": 4,
         "D": 1,
@@ -557,17 +747,6 @@
       },
       {
         "label": "BOLD",
-        "frame_index": 9,
-        "H": 3,
-        "D": 2,
-        "lambda": 2,
-        "levels": "2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 168.49977668664442,
-        "projected_phase": 2.0
-      },
-      {
-        "label": "BOLD",
         "frame_index": 10,
         "H": 4,
         "D": 1,
@@ -587,199 +766,28 @@
         "projection_depth": 1,
         "projection_error_ms": 213.20967073066296,
         "projected_phase": 0.5
-      }
-    ]
-  },
-  "ds001907/derivatives/sub-RC4106/ses-1/func/sub-RC4106_ses-1_task-ANT_run-5_bold.nii.gz": {
-    "first_target_onsets_s": [
-      26.295,
-      42.553,
-      55.813,
-      66.308,
-      70.306,
-      75.054,
-      86.814,
-      91.062
-    ],
-    "first_peak_times_s": [
-      7.390333026015831,
-      13.408151549270313,
-      21.228594838402326,
-      29.32333870337575,
-      47.732288987619235,
-      53.88313298606097,
-      62.14516772071623,
-      76.21240863840772,
-      84.19949559109273,
-      93.38498702296867,
-      97.91668813242353,
-      108.570828001962
-    ],
-    "first_nonempty_frames": [
-      {
-        "duration_s": 16.257999999999996,
-        "events": [
-          {
-            "label": "BOLD",
-            "offset_s": 3.0283387033757485
-          }
-        ]
-      },
-      {
-        "duration_s": 13.260000000000005,
-        "events": [
-          {
-            "label": "BOLD",
-            "offset_s": 5.179288987619238
-          },
-          {
-            "label": "BOLD",
-            "offset_s": 11.330132986060974
-          }
-        ]
-      },
-      {
-        "duration_s": 10.495000000000005,
-        "events": [
-          {
-            "label": "BOLD",
-            "offset_s": 6.332167720716228
-          }
-        ]
-      }
-    ],
-    "first_events": [
-      {
-        "label": "BOLD",
-        "frame_index": 0,
-        "H": 2,
-        "D": 1,
-        "lambda": 2,
-        "levels": "2",
-        "projection_depth": 1,
-        "projection_error_ms": 1036.1612966242503,
-        "projected_phase": 0.5
       },
       {
         "label": "BOLD",
-        "frame_index": 1,
+        "frame_index": 13,
         "H": 4,
-        "D": 1,
-        "lambda": 4,
-        "levels": "4",
-        "projection_depth": 2,
-        "projection_error_ms": 206.78898761923597,
-        "projected_phase": 0.75
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 1,
-        "H": 4,
-        "D": 1,
-        "lambda": 4,
-        "levels": "4",
-        "projection_depth": 2,
-        "projection_error_ms": 272.36701393903087,
-        "projected_phase": 1.75
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 2,
-        "H": 2,
-        "D": 1,
-        "lambda": 2,
-        "levels": "2",
-        "projection_depth": 0,
-        "projection_error_ms": 1084.6677207162259,
-        "projected_phase": 1.0
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 5,
-        "H": 3,
         "D": 2,
-        "lambda": 2,
-        "levels": "2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 1158.408638407721,
-        "projected_phase": 0.0
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 5,
-        "H": 4,
-        "D": 1,
-        "lambda": 4,
-        "levels": "4",
-        "projection_depth": 1,
-        "projection_error_ms": 325.495591092732,
-        "projected_phase": 1.5
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 7,
-        "H": 5,
-        "D": 1,
-        "lambda": 5,
-        "levels": "5",
-        "projection_depth": 1,
-        "projection_error_ms": 176.512977031326,
-        "projected_phase": 0.5
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 7,
-        "H": 5,
-        "D": 1,
-        "lambda": 5,
-        "levels": "5",
-        "projection_depth": 1,
-        "projection_error_ms": 643.811867576471,
-        "projected_phase": 1.5
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 8,
-        "H": 2,
-        "D": 1,
-        "lambda": 2,
-        "levels": "2",
-        "projection_depth": 0,
-        "projection_error_ms": 369.1719980379982,
-        "projected_phase": 1.0
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 9,
-        "H": 3,
-        "D": 2,
-        "lambda": 2,
-        "levels": "2;3",
-        "projection_depth": 0,
-        "projection_error_ms": 821.3241914652656,
-        "projected_phase": 0.0
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 10,
-        "H": 4,
-        "D": 1,
-        "lambda": 4,
-        "levels": "4",
-        "projection_depth": 1,
-        "projection_error_ms": 251.15661378201548,
-        "projected_phase": 0.5
-      },
-      {
-        "label": "BOLD",
-        "frame_index": 11,
-        "H": 5,
-        "D": 3,
         "lambda": 3,
-        "levels": "3;4;5",
+        "levels": "3;4",
         "projection_depth": 0,
-        "projection_error_ms": 559.4997492409561,
+        "projection_error_ms": 297.4896700566205,
         "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 15,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 0,
+        "projection_error_ms": 880.5909789996491,
+        "projected_phase": 1.0
       }
     ]
   }
