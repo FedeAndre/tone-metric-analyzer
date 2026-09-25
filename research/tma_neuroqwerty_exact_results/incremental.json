@@ -1,0 +1,25 @@
+{
+  "auc_base": 0.6511627906976745,
+  "auc_plus_tma": 0.5,
+  "delta_auc": -0.15116279069767447,
+  "n": 85,
+  "base": [
+    "typing_speed_calc",
+    "median_ipi",
+    "ipi_cv",
+    "hold_mean",
+    "hold_sd",
+    "pause_fraction"
+  ],
+  "tma": [
+    "mean_H",
+    "mean_D",
+    "mean_lambda",
+    "multilevel",
+    "pivot_rate",
+    "compound_pivot_fraction",
+    "pivot_depth",
+    "tree_span_events",
+    "tree_span_time"
+  ]
+}

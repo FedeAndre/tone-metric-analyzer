@@ -1,0 +1,164 @@
+{
+  "dataset": "neuroQWERTY MIT-CSXPD",
+  "n_sessions": 116,
+  "n_subjects": 85,
+  "groups": {
+    "control": 43,
+    "pd": 42
+  },
+  "n_failed_files": 0,
+  "top_pd_control": [
+    {
+      "contrast": "pd-vs-control",
+      "feature": "multilevel",
+      "n0": 43,
+      "n1": 42,
+      "control_mean": 0.0073708709029358666,
+      "pd_mean": 0.005728012866804965,
+      "diff": -0.0016428580361309017,
+      "welch_p": 0.5185991036577843,
+      "hedges_g": -0.13884676153433798,
+      "q_BH": 0.8449652773004758
+    },
+    {
+      "contrast": "pd-vs-control",
+      "feature": "mean_D",
+      "n0": 43,
+      "n1": 42,
+      "control_mean": 1.0116654277803454,
+      "pd_mean": 1.0081039115666812,
+      "diff": -0.0035615162136641842,
+      "welch_p": 0.5325320547093619,
+      "hedges_g": -0.13389374139547683,
+      "q_BH": 0.8449652773004758
+    },
+    {
+      "contrast": "pd-vs-control",
+      "feature": "mean_lambda",
+      "n0": 43,
+      "n1": 42,
+      "control_mean": 3.8252997451283774,
+      "pd_mean": 4.127340739497454,
+      "diff": 0.3020409943690763,
+      "welch_p": 0.7424195744630329,
+      "hedges_g": 0.07090528226986521,
+      "q_BH": 0.8449652773004758
+    },
+    {
+      "contrast": "pd-vs-control",
+      "feature": "mean_H",
+      "n0": 43,
+      "n1": 42,
+      "control_mean": 3.839823914103594,
+      "pd_mean": 4.136379492085183,
+      "diff": 0.29655557798158894,
+      "welch_p": 0.7478485712665163,
+      "hedges_g": 0.06935463726376445,
+      "q_BH": 0.8449652773004758
+    },
+    {
+      "contrast": "pd-vs-control",
+      "feature": "pivot_rate",
+      "n0": 43,
+      "n1": 42,
+      "control_mean": 0.08123578977846001,
+      "pd_mean": 0.08661403566367078,
+      "diff": 0.0053782458852107695,
+      "welch_p": 0.8352346073112485,
+      "hedges_g": 0.04484300343161723,
+      "q_BH": 0.8449652773004758
+    },
+    {
+      "contrast": "pd-vs-control",
+      "feature": "tree_root_fraction",
+      "n0": 43,
+      "n1": 42,
+      "control_mean": 0.6883385720835171,
+      "pd_mean": 0.6690313162213525,
+      "diff": -0.01930725586216464,
+      "welch_p": 0.8449652773004758,
+      "hedges_g": -0.04215660032154739,
+      "q_BH": 0.8449652773004758
+    }
+  ],
+  "top_updrs": [
+    {
+      "feature": "pivot_rate",
+      "n": 42,
+      "rho": 0.36895352083549116,
+      "p": 0.0161970364947855,
+      "q_BH": 0.039798216285107726
+    },
+    {
+      "feature": "tree_root_fraction",
+      "n": 42,
+      "rho": -0.35753397300892714,
+      "p": 0.020094253043541573,
+      "q_BH": 0.039798216285107726
+    },
+    {
+      "feature": "mean_lambda",
+      "n": 42,
+      "rho": 0.3538202989189876,
+      "p": 0.02151999852597185,
+      "q_BH": 0.039798216285107726
+    },
+    {
+      "feature": "mean_H",
+      "n": 42,
+      "rho": 0.34221506738792656,
+      "p": 0.02653214419007182,
+      "q_BH": 0.039798216285107726
+    },
+    {
+      "feature": "multilevel",
+      "n": 42,
+      "rho": 0.2880436957666204,
+      "p": 0.06433899810514077,
+      "q_BH": 0.07720679772616892
+    },
+    {
+      "feature": "mean_D",
+      "n": 42,
+      "rho": 0.21507629807197232,
+      "p": 0.1713562566858226,
+      "q_BH": 0.17135625668582258
+    }
+  ],
+  "repeatability": {
+    "visits": [
+      "001",
+      "003"
+    ],
+    "n_pairs": 31,
+    "same_mean": 0.5209479854747877,
+    "different_mean": 1.0179401796557797,
+    "ratio": 0.5117667971913126
+  },
+  "incremental": {
+    "auc_base": 0.6511627906976745,
+    "auc_plus_tma": 0.5,
+    "delta_auc": -0.15116279069767447,
+    "n": 85,
+    "base": [
+      "typing_speed_calc",
+      "median_ipi",
+      "ipi_cv",
+      "hold_mean",
+      "hold_sd",
+      "pause_fraction"
+    ],
+    "tma": [
+      "mean_H",
+      "mean_D",
+      "mean_lambda",
+      "multilevel",
+      "pivot_rate",
+      "compound_pivot_fraction",
+      "pivot_depth",
+      "tree_span_events",
+      "tree_span_time"
+    ]
+  },
+  "max_projection_error_ms": 3.000000000916708
+}
