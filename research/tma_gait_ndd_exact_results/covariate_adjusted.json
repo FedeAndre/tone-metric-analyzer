@@ -1,0 +1,184 @@
+{
+  "pd_vs_control_adjusted": [
+    {
+      "feature": "mean_D",
+      "n": 30,
+      "pd_beta_standardized": -0.41950473076772005,
+      "se": 0.3714903209638365,
+      "t": -1.1292480775254374,
+      "p": 0.2691047120804093,
+      "covariates": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "compound_pivot_fraction",
+      "n": 30,
+      "pd_beta_standardized": 0.7069537402221869,
+      "se": 0.45893455909504377,
+      "t": 1.5404238495706297,
+      "p": 0.13554080748053102,
+      "covariates": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "LHS_mean_H",
+      "n": 30,
+      "pd_beta_standardized": -0.36746642903439014,
+      "se": 0.4355308125419557,
+      "t": -0.843720853846572,
+      "p": 0.4065214207221054,
+      "covariates": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "LHS_mean_D",
+      "n": 30,
+      "pd_beta_standardized": -0.36746642903439014,
+      "se": 0.4355308125419557,
+      "t": -0.843720853846572,
+      "p": 0.4065214207221054,
+      "covariates": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "tree_span_time",
+      "n": 30,
+      "pd_beta_standardized": 0.421853956375731,
+      "se": 0.44729585704579544,
+      "t": 0.943120643150827,
+      "p": 0.35430101982887224,
+      "covariates": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "pivot_depth",
+      "n": 30,
+      "pd_beta_standardized": 0.481064231580971,
+      "se": 0.4759193032838894,
+      "t": 1.0108105056079488,
+      "p": 0.3214221203053122,
+      "covariates": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "RHS_multilevel",
+      "n": 30,
+      "pd_beta_standardized": -0.16723187352454547,
+      "se": 0.5238374984945676,
+      "t": -0.319243799852331,
+      "p": 0.7520925178670985,
+      "covariates": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "RHS_mean_D",
+      "n": 30,
+      "pd_beta_standardized": -0.27434521435348086,
+      "se": 0.5074588108461411,
+      "t": -0.5406255808151904,
+      "p": 0.5933674141966631,
+      "covariates": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "RHS_mean_lambda",
+      "n": 30,
+      "pd_beta_standardized": 0.2714246755843031,
+      "se": 0.5365638286021935,
+      "t": 0.5058571993035639,
+      "p": 0.6172191105942119,
+      "covariates": [
+        "age",
+        "gait_speed"
+      ]
+    }
+  ],
+  "severity_adjusted": [
+    {
+      "feature": "tree_span_time",
+      "n": 14,
+      "partial_spearman_like_r": 0.7831593417408651,
+      "p": 0.0009236413269034396,
+      "controlled": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "RHS_multilevel",
+      "n": 14,
+      "partial_spearman_like_r": -0.5860060990966591,
+      "p": 0.027650046015979247,
+      "controlled": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "RHS_mean_D",
+      "n": 14,
+      "partial_spearman_like_r": -0.5368151646903618,
+      "p": 0.04778562058287824,
+      "controlled": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "RHS_mean_lambda",
+      "n": 14,
+      "partial_spearman_like_r": 0.5341522906066486,
+      "p": 0.049116315935279986,
+      "controlled": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "tree_span_events",
+      "n": 14,
+      "partial_spearman_like_r": 0.5926562356675388,
+      "p": 0.025517519282180275,
+      "controlled": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "mean_D",
+      "n": 14,
+      "partial_spearman_like_r": -0.029797096092292606,
+      "p": 0.9194575640104496,
+      "controlled": [
+        "age",
+        "gait_speed"
+      ]
+    },
+    {
+      "feature": "multilevel",
+      "n": 14,
+      "partial_spearman_like_r": -0.1689480870307134,
+      "p": 0.5636791883670624,
+      "controlled": [
+        "age",
+        "gait_speed"
+      ]
+    }
+  ]
+}
