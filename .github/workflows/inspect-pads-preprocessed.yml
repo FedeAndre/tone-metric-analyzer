@@ -1,0 +1,15 @@
+name: Inspect PADS preprocessed
+on:
+  push:
+    branches: [tma-pd-remaining-datasets-20260925]
+    paths: ['research/inspect_pads_preprocessed.py','.github/workflows/inspect-pads-preprocessed.yml']
+permissions: {contents: read}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install requests
+      - run: python research/inspect_pads_preprocessed.py
