@@ -1,0 +1,27 @@
+name: Exact TMA neuroQWERTY fix
+on:
+  push:
+    branches: [tma-pd-remaining-datasets-20260925]
+    paths: ['research/tma_neuroqwerty_exact_fix.py','.github/workflows/tma-neuroqwerty-fix.yml']
+permissions: {contents: write}
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'scikit-learn>=1.6,<2'
+      - run: PYTHONPATH=. python research/tma_neuroqwerty_exact_fix.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-neuroqwerty-fixed-results
+          path: research/tma_neuroqwerty_exact_results/
+      - run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_neuroqwerty_exact_results/
+          git commit -m 'Add corrected neuroQWERTY exact results' || exit 0
+          git pull --rebase origin tma-pd-remaining-datasets-20260925 || true
+          git push origin HEAD:tma-pd-remaining-datasets-20260925 || true
