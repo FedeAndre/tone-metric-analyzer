@@ -56,7 +56,9 @@ def download_temp(key: str):
 def read_events_for_bold(key: str):
     ekey = key.replace("_bold.nii.gz", "_events.tsv")
     b = S3.get_object(Bucket=BUCKET, Key=ekey)["Body"].read()
-    return pd.read_csv(io.BytesIO(b), sep="\t")
+    df = pd.read_csv(io.BytesIO(b), sep="\t")
+    df.columns = [str(x).strip() for x in df.columns]
+    return df
 
 def _sample_indices(mask, maxn=3000):
     idx = np.flatnonzero(mask.ravel())
@@ -175,8 +177,10 @@ def preprocess_task_bold(path: Path, events: pd.DataFrame, key: str):
         raise RuntimeError(f"only {len(peaks)} coactivation peaks")
     peak_times = np.array([_quadratic_peak_time(coact, int(i), tr) for i in peaks], float)
 
-    rt = pd.to_numeric(events.get("response_time"), errors="coerce")
-    target_rows = events[rt.notna()].copy()
+    if "trial_type" not in events.columns:
+        raise RuntimeError(f"events columns missing trial_type: {list(events.columns)}")
+    tt = events["trial_type"].astype(str).str.strip()
+    target_rows = events[tt.isin(["Congruent","Incongruent"])].copy()
     targets = pd.to_numeric(target_rows["onset"], errors="coerce").dropna().to_numpy(float)
     targets = np.sort(targets[(targets >= 0) & (targets < run_duration)])
     if len(targets) < 25:
@@ -191,9 +195,10 @@ def preprocess_task_bold(path: Path, events: pd.DataFrame, key: str):
     feat, evdf, piv, tree = _safe_analyze(frames, tol)
     surr = _surrogate_z(targets, peak_times, feat, tol, run_duration, key)
 
-    rtv = pd.to_numeric(target_rows["response_time"], errors="coerce").dropna().to_numpy(float)
-    # Dataset response_time is in milliseconds.
-    acc = pd.to_numeric(target_rows.get("accuracy"), errors="coerce").dropna().to_numpy(float)
+    # Behavioral columns differ slightly across dataset revisions; use them when present.
+    rtv = pd.to_numeric(target_rows["response_time"], errors="coerce").dropna().to_numpy(float) if "response_time" in target_rows.columns else np.array([],float)
+    # Dataset response_time is in milliseconds when present.
+    acc = pd.to_numeric(target_rows["accuracy"], errors="coerce").dropna().to_numpy(float) if "accuracy" in target_rows.columns else np.array([],float)
     iti = np.diff(targets)
     iti = iti[(iti >= 2.0) & (iti <= 25.0)]
 
