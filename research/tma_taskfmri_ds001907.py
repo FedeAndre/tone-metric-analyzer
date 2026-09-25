@@ -106,6 +106,13 @@ def _safe_analyze(frames, tol):
         events = []
         for ev in fr["events"]:
             q, _, _ = project_offset(float(ev["offset_s"]), float(fr["duration_s"]), tol)
+            # A peak strictly inside a target-to-target interval can round to the
+            # right boundary under the finite fMRI timing tolerance.  That
+            # boundary belongs to the next TMA frame, so do not register it in
+            # the current frame.  This prevents measure/event-count mismatch
+            # without altering the frozen TMA engine.
+            if q < 0 or q >= Fraction(2):
+                continue
             onset = Fraction(2*i) + q
             if onset in seen_global:
                 continue
