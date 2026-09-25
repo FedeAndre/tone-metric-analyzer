@@ -1,0 +1,74 @@
+name: Exact TMA remaining PD datasets
+
+on:
+  push:
+    branches: [tma-pd-remaining-datasets-20260925]
+    paths:
+      - 'research/tma_clinical_exact_utils.py'
+      - 'research/tma_neuroqwerty_exact.py'
+      - 'research/tma_daphnet_exact.py'
+      - 'research/tma_gaitdb_exact.py'
+      - 'research/tma_pads_exact.py'
+      - '.github/workflows/tma-pd-remaining.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    strategy:
+      fail-fast: false
+      matrix:
+        dataset: [neuroqwerty, daphnet, gaitdb, pads]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install
+        run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'scikit-learn>=1.6,<2'
+      - name: Run exact TMA analysis
+        run: PYTHONPATH=. python research/tma_${{ matrix.dataset }}_exact.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-${{ matrix.dataset }}-exact-results
+          path: research/tma_${{ matrix.dataset }}_exact_results/
+          if-no-files-found: error
+
+  aggregate:
+    needs: analyze
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tma-*-exact-results
+          path: /tmp/results
+      - name: Collect results
+        run: |
+          for d in /tmp/results/tma-*-exact-results; do
+            [ -d "$d" ] || continue
+            name=$(basename "$d")
+            case "$name" in
+              tma-neuroqwerty-exact-results) dest=research/tma_neuroqwerty_exact_results ;;
+              tma-daphnet-exact-results) dest=research/tma_daphnet_exact_results ;;
+              tma-gaitdb-exact-results) dest=research/tma_gaitdb_exact_results ;;
+              tma-pads-exact-results) dest=research/tma_pads_exact_results ;;
+              *) continue ;;
+            esac
+            mkdir -p "$dest"
+            cp -r "$d"/* "$dest"/
+          done
+      - name: Commit available results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_*_exact_results/ || true
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add remaining PD exact TMA results'
+            git pull --rebase origin tma-pd-remaining-datasets-20260925 || true
+            git push origin HEAD:tma-pd-remaining-datasets-20260925 || true
+          fi
