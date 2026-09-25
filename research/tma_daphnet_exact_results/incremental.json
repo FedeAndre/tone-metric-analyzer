@@ -1,0 +1,23 @@
+{
+  "auc_base": 0.359375,
+  "auc_plus_tma": 0.609375,
+  "delta_auc": 0.25,
+  "n_predictions": 16,
+  "base": [
+    "cycle_period_mean",
+    "cycle_period_cv",
+    "cycle_amp_mean",
+    "cycle_amp_cv"
+  ],
+  "tma": [
+    "mean_H",
+    "mean_D",
+    "mean_lambda",
+    "multilevel",
+    "pivot_rate",
+    "compound_pivot_fraction",
+    "pivot_depth",
+    "tree_span_events",
+    "tree_span_time"
+  ]
+}
