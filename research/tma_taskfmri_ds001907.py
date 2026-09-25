@@ -13,7 +13,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
-from research.tma_clinical_exact_utils import analyze_event_frames, bh_adjust, group_contrast
+from research.tma_clinical_exact_utils import analyze_event_frames, bh_adjust, group_contrast, project_offset
 from research.tma_mri_exact_utils import S3, BUCKET, math_audit
 
 DS = "ds001907"
@@ -41,7 +41,10 @@ def list_ant_bold(run: int):
         r = S3.list_objects_v2(**kw)
         for x in r.get("Contents", []):
             k = x["Key"]
-            if pat.search(k):
+            # Use the AFNI-preprocessed derivatives, which cover the full cohort
+            # and are already slice-timing corrected. Raw task files are only
+            # partially mirrored as direct S3 keys in this dataset snapshot.
+            if "/derivatives/" in k and pat.search(k):
                 out.append({"key": k, "size": int(x["Size"])})
         if not r.get("IsTruncated"):
             break
@@ -55,7 +58,7 @@ def download_temp(key: str):
     return Path(p)
 
 def read_events_for_bold(key: str):
-    ekey = key.replace("_bold.nii.gz", "_events.tsv")
+    ekey = key.replace(f"{DS}/derivatives/", f"{DS}/").replace("_bold.nii.gz", "_events.tsv")
     b = S3.get_object(Bucket=BUCKET, Key=ekey)["Body"].read()
     df = pd.read_csv(io.BytesIO(b), sep="\t")
     df.columns = [str(x).strip() for x in df.columns]
@@ -93,9 +96,23 @@ def _build_frames(targets, peak_times):
     return frames
 
 def _safe_analyze(frames, tol):
-    if sum(len(fr["events"]) for fr in frames) < 8:
+    # If two sampled BOLD peaks project to the same admissible TMA position,
+    # they are simultaneous in the projected metric representation and count
+    # as one event, matching the frozen attack/hit rule.
+    clean = []
+    for fr in frames:
+        seen = set()
+        events = []
+        for ev in fr["events"]:
+            q, _, _ = project_offset(float(ev["offset_s"]), float(fr["duration_s"]), tol)
+            if q in seen:
+                continue
+            seen.add(q)
+            events.append(ev)
+        clean.append({"duration_s": fr["duration_s"], "events": events})
+    if sum(len(fr["events"]) for fr in clean) < 8:
         raise RuntimeError("too few task-locked BOLD events")
-    return analyze_event_frames(frames, tol_s=tol, label_features=False)
+    return analyze_event_frames(clean, tol_s=tol, label_features=False)
 
 def _surrogate_z(targets, peak_times, observed, tol, run_duration, key, n_surr=20):
     seed = int(hashlib.sha256(key.encode()).hexdigest()[:16], 16) % (2**32)
