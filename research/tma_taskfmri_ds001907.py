@@ -16,7 +16,7 @@ from sklearn.preprocessing import StandardScaler
 from research.tma_clinical_exact_utils import analyze_event_frames, bh_adjust, group_contrast
 from research.tma_mri_exact_utils import S3, BUCKET, math_audit
 
-DS = "ds001907"
+DS = "ds001907"\n# Frozen task-fMRI validation branch; push triggers the analysis workflow.
 OUT = Path("research/tma_taskfmri_ds001907_results")
 TMA_CORE = [
     "mean_H","sd_H","mean_D","sd_D","mean_lambda","sd_lambda","multilevel",
