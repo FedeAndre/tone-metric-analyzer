@@ -89,6 +89,7 @@ def run_task(task):
             if len(worked)<2: worked[key]=ex
         except Exception as e:
             fails[key]=repr(e)
+            print("FAIL",key,repr(e),flush=True)
         finally:
             if p and p.exists(): p.unlink()
     pd.DataFrame(rows).to_csv(OUT/f"{task}_scan_features.csv",index=False)
@@ -109,16 +110,33 @@ def summarize(df):
     return z
 
 def aggregate():
-    files=[OUT/f"{t}_scan_features.csv" for t in TASKS if (OUT/f"{t}_scan_features.csv").exists()]
-    scan=pd.concat([pd.read_csv(p) for p in files],ignore_index=True); scan.to_csv(OUT/"all_scan_features.csv",index=False)
+    pairs=[]
+    for t in TASKS:
+        p=OUT/f"{t}_scan_features.csv"
+        if not p.exists() or p.stat().st_size<=1:
+            continue
+        try:
+            q=pd.read_csv(p)
+        except pd.errors.EmptyDataError:
+            continue
+        if len(q):
+            pairs.append((t,q))
+    if not pairs:
+        raise RuntimeError("no successful task scans")
+    scan=pd.concat([q for _,q in pairs],ignore_index=True); scan.to_csv(OUT/"all_scan_features.csv",index=False)
     tabs={}; reps=[]
     for task in TASKS:
-        z=scan[scan.task==task]; tab=summarize(z); tab.to_csv(OUT/f"{task}_task_locking.csv",index=False); tabs[task]=tab.to_dict(orient="records")
+        z=scan[scan.task==task]
+        if not len(z):
+            continue
+        tab=summarize(z); tab.to_csv(OUT/f"{task}_task_locking.csv",index=False); tabs[task]=tab.to_dict(orient="records")
     # Across tasks, require the same direction; count independent task replication.
     feats=[f"surz_{x}" for x in SURR_BASE]
     for f in feats:
         row={"feature":f}; signs=[]; fdr=0; nominal=0
         for task in TASKS:
+            if task not in tabs:
+                continue
             tab=pd.DataFrame(tabs[task])
             q=tab[tab.feature==f]
             if len(q):
