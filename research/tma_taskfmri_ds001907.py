@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import argparse, io, json, math, os, re, tempfile, hashlib\nfrom fractions import Fraction
+import argparse, io, json, math, os, re, tempfile, hashlib
+from fractions import Fraction
 from pathlib import Path
 
 import numpy as np
