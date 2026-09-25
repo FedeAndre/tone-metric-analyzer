@@ -1,0 +1,67 @@
+name: General healthy affective-fMRI TMA ds005256
+
+on:
+  push:
+    branches: [tma-general-fmri-20260925]
+    paths:
+      - 'research/tma_general_fmri_ds005256.py'
+      - '.github/workflows/tma-general-fmri-ds005256.yml'
+      - 'research/tma_general_fmri_ds004796.py'
+      - 'research/tma_mri_exact_utils.py'
+      - 'research/tma_clinical_exact_utils.py'
+      - 'tone_metric/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        run: [1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - run: PYTHONPATH=. python research/tma_general_fmri_ds005256.py --run ${{ matrix.run }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-general-fmri-ds005256-run-${{ matrix.run }}
+          path: research/tma_general_fmri_ds005256_results/run-0${{ matrix.run }}_*
+          if-no-files-found: error
+
+  aggregate:
+    needs: analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tma-general-fmri-ds005256-run-*
+          path: research/tma_general_fmri_ds005256_results
+          merge-multiple: true
+      - run: PYTHONPATH=. python research/tma_general_fmri_ds005256.py --aggregate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-general-fmri-ds005256-results
+          path: research/tma_general_fmri_ds005256_results/
+          if-no-files-found: error
+      - name: Commit results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_general_fmri_ds005256_results/
+          git commit -m 'Add healthy affective-fMRI TMA results' || exit 0
+          git pull --rebase origin tma-general-fmri-20260925 || true
+          git push origin HEAD:tma-general-fmri-20260925 || true
