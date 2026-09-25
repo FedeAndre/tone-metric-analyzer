@@ -1,0 +1,4 @@
+{
+  "ds004796/sub-58/func/sub-58_task-msit_dir-PA_bold.nii.gz": "RuntimeError('only 0 task anchors')",
+  "ds004796/sub-77/func/sub-77_task-msit_dir-PA_bold.nii.gz": "RuntimeError('only 0 task anchors')"
+}
