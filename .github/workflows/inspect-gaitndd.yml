@@ -1,0 +1,16 @@
+name: Inspect GaitNDD format
+on:
+  push:
+    branches: [tma-gait-ndd-exact-20260925]
+    paths: ['research/inspect_gaitndd.py','.github/workflows/inspect-gaitndd.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install requests
+      - run: python research/inspect_gaitndd.py
