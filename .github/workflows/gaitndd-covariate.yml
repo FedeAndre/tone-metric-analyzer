@@ -1,0 +1,22 @@
+name: GaitNDD covariate check
+on:
+  push:
+    branches: [tma-gait-ndd-exact-20260925]
+    paths: ['research/gaitndd_covariate_check.py','.github/workflows/gaitndd-covariate.yml']
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install numpy pandas scipy
+      - run: python research/gaitndd_covariate_check.py
+      - run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_gait_ndd_exact_results/covariate_adjusted.json
+          git commit -m 'Add GaitNDD covariate-adjusted checks' || exit 0
+          git push origin HEAD:tma-gait-ndd-exact-20260925
