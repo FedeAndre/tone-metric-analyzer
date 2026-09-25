@@ -310,7 +310,8 @@ def main():
 
     # Four-group omnibus and pairwise PD contrasts.
     numeric=[c for c in featdf.columns if c not in {"record","group","sex"} and pd.api.types.is_numeric_dtype(featdf[c])]
-    tma=[c for c in numeric if c not in {"age","height_m","weight_kg","gait_speed","severity","n_cycles","n_events"}]
+    diagnostics={"projection_depth_mean","projection_error_ms_mean","projection_error_ms_max"}
+    tma=[c for c in numeric if c not in {"age","height_m","weight_kg","gait_speed","severity","n_cycles","n_events"}|diagnostics]
     omni=[]
     for c in tma:
         groups=[featdf.loc[featdf.group==g,c].dropna().values for g in ["control","pd","hd","als"]]
