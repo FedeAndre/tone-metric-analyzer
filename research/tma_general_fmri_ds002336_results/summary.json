@@ -1,0 +1,305 @@
+{
+  "dataset": "ds002336",
+  "description": "Healthy motor/motor-imagery exact TMA task-locking validation",
+  "math_audit": {
+    "boundary_match": true,
+    "lucas_pascal_mismatches": 0
+  },
+  "n_scans": 28,
+  "n_subjects": 10,
+  "tasks": [
+    "motorloc",
+    "fmriNF",
+    "MIpre",
+    "MIpost"
+  ],
+  "task_locking": {
+    "motorloc": [
+      {
+        "feature": "surz_mean_D",
+        "n": 10,
+        "mean_z": -0.45480625280129316,
+        "t": -2.3630291346577192,
+        "p": 0.042390444169314416,
+        "positive_fraction": 0.3,
+        "q_BH": 0.28376295309910954
+      },
+      {
+        "feature": "surz_multilevel",
+        "n": 10,
+        "mean_z": -0.5259152746604673,
+        "t": -1.9643525867130995,
+        "p": 0.08107512945688844,
+        "positive_fraction": 0.3,
+        "q_BH": 0.28376295309910954
+      },
+      {
+        "feature": "surz_mean_lambda",
+        "n": 10,
+        "mean_z": 0.5327289562340166,
+        "t": 1.6886262903695457,
+        "p": 0.12555891355452176,
+        "positive_fraction": 0.7,
+        "q_BH": 0.2929707982938841
+      },
+      {
+        "feature": "surz_mean_H",
+        "n": 10,
+        "mean_z": 0.48852363630853707,
+        "t": 1.4678618620157944,
+        "p": 0.1762003199470043,
+        "positive_fraction": 0.7,
+        "q_BH": 0.3083505599072575
+      },
+      {
+        "feature": "surz_tree_span_time",
+        "n": 10,
+        "mean_z": -0.3192138128722619,
+        "t": -1.1595617480452205,
+        "p": 0.2760647569231913,
+        "positive_fraction": 0.3,
+        "q_BH": 0.3864906596924679
+      },
+      {
+        "feature": "surz_pivot_rate",
+        "n": 10,
+        "mean_z": 0.18486294569259046,
+        "t": 0.5149291161797418,
+        "p": 0.6190096041830273,
+        "positive_fraction": 0.4,
+        "q_BH": 0.7221778715468652
+      },
+      {
+        "feature": "surz_tree_span_events",
+        "n": 10,
+        "mean_z": -0.06104060230935484,
+        "t": -0.20632328043152562,
+        "p": 0.8411303351597736,
+        "positive_fraction": 0.5,
+        "q_BH": 0.8411303351597736
+      }
+    ],
+    "fmriNF": [
+      {
+        "feature": "surz_tree_span_time",
+        "n": 10,
+        "mean_z": 0.8256292008381522,
+        "t": 2.445335980757208,
+        "p": 0.037039017718780355,
+        "positive_fraction": 0.8,
+        "q_BH": 0.18451141228891818
+      },
+      {
+        "feature": "surz_tree_span_events",
+        "n": 10,
+        "mean_z": 0.6184879661647369,
+        "t": 2.22975876390537,
+        "p": 0.052717546368262334,
+        "positive_fraction": 0.8,
+        "q_BH": 0.18451141228891818
+      },
+      {
+        "feature": "surz_mean_D",
+        "n": 10,
+        "mean_z": -0.19841174728250938,
+        "t": -1.0933022866451594,
+        "p": 0.30265912723028415,
+        "positive_fraction": 0.4,
+        "q_BH": 0.4649597666640613
+      },
+      {
+        "feature": "surz_pivot_rate",
+        "n": 10,
+        "mean_z": 0.4117317536407176,
+        "t": 1.0671327425951367,
+        "p": 0.3136993482682148,
+        "positive_fraction": 0.7,
+        "q_BH": 0.4649597666640613
+      },
+      {
+        "feature": "surz_mean_H",
+        "n": 10,
+        "mean_z": -0.3418282174970436,
+        "t": -1.0250194576228655,
+        "p": 0.33211411904575805,
+        "positive_fraction": 0.4,
+        "q_BH": 0.4649597666640613
+      },
+      {
+        "feature": "surz_multilevel",
+        "n": 10,
+        "mean_z": -0.18203477874157478,
+        "t": -0.7137800972768789,
+        "p": 0.4934566685283074,
+        "positive_fraction": 0.3,
+        "q_BH": 0.5756994466163586
+      },
+      {
+        "feature": "surz_mean_lambda",
+        "n": 10,
+        "mean_z": -0.14182619648706235,
+        "t": -0.49601869436721574,
+        "p": 0.6317683959080277,
+        "positive_fraction": 0.4,
+        "q_BH": 0.6317683959080277
+      }
+    ],
+    "MIpre": [
+      {
+        "feature": "surz_pivot_rate",
+        "n": 8,
+        "mean_z": 0.25851060846270635,
+        "t": 1.0368018610956047,
+        "p": 0.33431079662094987,
+        "positive_fraction": 0.625,
+        "q_BH": 0.7470114678306434
+      },
+      {
+        "feature": "surz_mean_D",
+        "n": 8,
+        "mean_z": 0.5890657088692098,
+        "t": 0.9974109420309827,
+        "p": 0.3517867467953996,
+        "positive_fraction": 0.75,
+        "q_BH": 0.7470114678306434
+      },
+      {
+        "feature": "surz_mean_lambda",
+        "n": 8,
+        "mean_z": -0.5177116912224103,
+        "t": -0.9845220495956192,
+        "p": 0.3576567652151538,
+        "positive_fraction": 0.25,
+        "q_BH": 0.7470114678306434
+      },
+      {
+        "feature": "surz_mean_H",
+        "n": 8,
+        "mean_z": -0.28603942699517604,
+        "t": -0.6516752829221849,
+        "p": 0.5354127148521582,
+        "positive_fraction": 0.5,
+        "q_BH": 0.7470114678306434
+      },
+      {
+        "feature": "surz_multilevel",
+        "n": 8,
+        "mean_z": 0.3076656100749734,
+        "t": 0.6078121439821713,
+        "p": 0.5625041690263652,
+        "positive_fraction": 0.75,
+        "q_BH": 0.7470114678306434
+      },
+      {
+        "feature": "surz_tree_span_time",
+        "n": 8,
+        "mean_z": -0.09817170387555282,
+        "t": -0.3580419273357063,
+        "p": 0.7308653173577432,
+        "positive_fraction": 0.5,
+        "q_BH": 0.7470114678306434
+      },
+      {
+        "feature": "surz_tree_span_events",
+        "n": 8,
+        "mean_z": -0.0877773645626744,
+        "t": -0.3355931266906588,
+        "p": 0.7470114678306434,
+        "positive_fraction": 0.5,
+        "q_BH": 0.7470114678306434
+      }
+    ]
+  },
+  "cross_task_replication": [
+    {
+      "feature": "surz_mean_H",
+      "motorloc_mean_z": 0.48852363630853707,
+      "motorloc_q": 0.3083505599072575,
+      "fmriNF_mean_z": -0.3418282174970436,
+      "fmriNF_q": 0.4649597666640613,
+      "MIpre_mean_z": -0.28603942699517604,
+      "MIpre_q": 0.7470114678306434,
+      "same_direction_all": false,
+      "n_fdr_tasks": 0,
+      "n_nominal_tasks": 0
+    },
+    {
+      "feature": "surz_mean_D",
+      "motorloc_mean_z": -0.45480625280129316,
+      "motorloc_q": 0.28376295309910954,
+      "fmriNF_mean_z": -0.19841174728250938,
+      "fmriNF_q": 0.4649597666640613,
+      "MIpre_mean_z": 0.5890657088692098,
+      "MIpre_q": 0.7470114678306434,
+      "same_direction_all": false,
+      "n_fdr_tasks": 0,
+      "n_nominal_tasks": 1
+    },
+    {
+      "feature": "surz_mean_lambda",
+      "motorloc_mean_z": 0.5327289562340166,
+      "motorloc_q": 0.2929707982938841,
+      "fmriNF_mean_z": -0.14182619648706235,
+      "fmriNF_q": 0.6317683959080277,
+      "MIpre_mean_z": -0.5177116912224103,
+      "MIpre_q": 0.7470114678306434,
+      "same_direction_all": false,
+      "n_fdr_tasks": 0,
+      "n_nominal_tasks": 0
+    },
+    {
+      "feature": "surz_multilevel",
+      "motorloc_mean_z": -0.5259152746604673,
+      "motorloc_q": 0.28376295309910954,
+      "fmriNF_mean_z": -0.18203477874157478,
+      "fmriNF_q": 0.5756994466163586,
+      "MIpre_mean_z": 0.3076656100749734,
+      "MIpre_q": 0.7470114678306434,
+      "same_direction_all": false,
+      "n_fdr_tasks": 0,
+      "n_nominal_tasks": 0
+    },
+    {
+      "feature": "surz_pivot_rate",
+      "motorloc_mean_z": 0.18486294569259046,
+      "motorloc_q": 0.7221778715468652,
+      "fmriNF_mean_z": 0.4117317536407176,
+      "fmriNF_q": 0.4649597666640613,
+      "MIpre_mean_z": 0.25851060846270635,
+      "MIpre_q": 0.7470114678306434,
+      "same_direction_all": true,
+      "n_fdr_tasks": 0,
+      "n_nominal_tasks": 0
+    },
+    {
+      "feature": "surz_tree_span_events",
+      "motorloc_mean_z": -0.06104060230935484,
+      "motorloc_q": 0.8411303351597736,
+      "fmriNF_mean_z": 0.6184879661647369,
+      "fmriNF_q": 0.18451141228891818,
+      "MIpre_mean_z": -0.0877773645626744,
+      "MIpre_q": 0.7470114678306434,
+      "same_direction_all": false,
+      "n_fdr_tasks": 0,
+      "n_nominal_tasks": 0
+    },
+    {
+      "feature": "surz_tree_span_time",
+      "motorloc_mean_z": -0.3192138128722619,
+      "motorloc_q": 0.3864906596924679,
+      "fmriNF_mean_z": 0.8256292008381522,
+      "fmriNF_q": 0.18451141228891818,
+      "MIpre_mean_z": -0.09817170387555282,
+      "MIpre_q": 0.7470114678306434,
+      "same_direction_all": false,
+      "n_fdr_tasks": 0,
+      "n_nominal_tasks": 1
+    }
+  ],
+  "failures": {
+    "fmriNF_failures.json": 0,
+    "MIpost_failures.json": 8,
+    "motorloc_failures.json": 0,
+    "MIpre_failures.json": 0
+  }
+}

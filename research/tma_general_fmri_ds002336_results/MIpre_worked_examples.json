@@ -1,0 +1,326 @@
+{
+  "ds002336/sub-xp102/func/sub-xp102_task-MIpre_bold.nii.gz": {
+    "anchors": [
+      2.0,
+      22.0,
+      42.0,
+      62.0,
+      82.0,
+      102.0,
+      122.0,
+      142.0,
+      162.0,
+      182.0
+    ],
+    "peaks": [
+      6.835759551011622,
+      10.213824052767833,
+      15.439099693779317,
+      19.317257547970026,
+      27.38688930241858,
+      34.65846698132638,
+      37.71132371454598,
+      42.125351377212475,
+      50.42909877796943,
+      59.52569087247384,
+      68.82042553607695,
+      71.26372820551956
+    ],
+    "events": [
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 2,
+        "lambda": 2,
+        "levels": "2;3",
+        "projection_depth": 1,
+        "projection_error_ms": 164.24044898837863,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 2,
+        "projection_error_ms": 713.824052767833,
+        "projected_phase": 0.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 2,
+        "projection_error_ms": 939.0996937793172,
+        "projected_phase": 1.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 2,
+        "projection_error_ms": 182.74245202997363,
+        "projected_phase": 1.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 386.8893024185804,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 158.46698132637727,
+        "projected_phase": 1.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 4,
+        "D": 2,
+        "lambda": 3,
+        "levels": "3;4",
+        "projection_depth": 1,
+        "projection_error_ms": 711.3237145459839,
+        "projected_phase": 1.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 3,
+        "D": 3,
+        "lambda": 1,
+        "levels": "1;2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 125.3513772124748,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 929.0987779694293,
+        "projected_phase": 0.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 25.690872473838056,
+        "projected_phase": 1.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 3,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 2,
+        "projection_error_ms": 679.5744639230461,
+        "projected_phase": 0.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 3,
+        "H": 5,
+        "D": 3,
+        "lambda": 3,
+        "levels": "3;4;5",
+        "projection_depth": 0,
+        "projection_error_ms": 736.2717944804442,
+        "projected_phase": 1.0
+      }
+    ]
+  },
+  "ds002336/sub-xp103/func/sub-xp103_task-MIpre_bold.nii.gz": {
+    "anchors": [
+      2.0,
+      22.0,
+      42.0,
+      62.0,
+      82.0,
+      102.0,
+      122.0,
+      142.0,
+      162.0,
+      182.0
+    ],
+    "peaks": [
+      5.269950308800671,
+      15.407957819582133,
+      34.00598378218558,
+      42.5706932179429,
+      47.782917019618985,
+      62.03777538699322,
+      69.14748399599024,
+      74.39836532138473,
+      82.22226611363338,
+      87.9312037028841,
+      95.46111438521305,
+      101.75349671353034
+    ],
+    "events": [
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 2,
+        "projection_error_ms": 769.950308800671,
+        "projected_phase": 0.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 0,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 2,
+        "projection_error_ms": 907.9578195821325,
+        "projected_phase": 1.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 1,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 494.0162178144192,
+        "projected_phase": 1.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 3,
+        "D": 3,
+        "lambda": 1,
+        "levels": "1;2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 570.6932179429032,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 2,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 782.917019618985,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 3,
+        "H": 4,
+        "D": 3,
+        "lambda": 2,
+        "levels": "2;3;4",
+        "projection_depth": 0,
+        "projection_error_ms": 37.77538699321781,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 3,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 2,
+        "projection_error_ms": 352.51600400975747,
+        "projected_phase": 0.75
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 3,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 2,
+        "projection_error_ms": 101.63467861526998,
+        "projected_phase": 1.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 4,
+        "H": 4,
+        "D": 4,
+        "lambda": 1,
+        "levels": "1;2;3;4",
+        "projection_depth": 0,
+        "projection_error_ms": 222.26611363338122,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 4,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 931.2037028841047,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 4,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 2,
+        "projection_error_ms": 961.114385213051,
+        "projected_phase": 1.25
+      },
+      {
+        "label": "BOLD",
+        "frame_index": 5,
+        "H": 5,
+        "D": 3,
+        "lambda": 3,
+        "levels": "3;4;5",
+        "projection_depth": 0,
+        "projection_error_ms": 337.1484639186517,
+        "projected_phase": 1.0
+      }
+    ]
+  }
+}
