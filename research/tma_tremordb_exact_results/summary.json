@@ -1,0 +1,318 @@
+{
+  "randomly_selected_dataset": "Effect of Deep Brain Stimulation on Parkinsonian Tremor",
+  "paper_math_audit": {
+    "boundary_match": true,
+    "lucas_pascal_mismatches": 0
+  },
+  "n_records_analyzed": 101,
+  "n_failures": 0,
+  "failures": {},
+  "records_by_condition": {
+    "r15of": 11,
+    "r30of": 12,
+    "r45of": 11,
+    "r60of": 12,
+    "ref": 13,
+    "ren": 13,
+    "rof": 14,
+    "ron": 15
+  },
+  "primary_dbs_off_med_off_pairs": 12,
+  "top_primary_tma": [
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "POSPEAK_mean_lambda",
+      "n_pairs": 12,
+      "ref_mean": 6.001302083333333,
+      "rof_mean": 6.216145833333333,
+      "mean_difference": -0.21484375,
+      "paired_t_p": 0.0577894178756627,
+      "wilcoxon_p": 0.05078125,
+      "dz": -0.6113581744367943,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "POSPEAK_mean_H",
+      "n_pairs": 12,
+      "ref_mean": 6.067708333333333,
+      "rof_mean": 6.26953125,
+      "mean_difference": -0.20182291666666666,
+      "paired_t_p": 0.06924478972548602,
+      "wilcoxon_p": 0.083984375,
+      "dz": -0.5810992969116363,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "mean_H",
+      "n_pairs": 12,
+      "ref_mean": 6.026692708333333,
+      "rof_mean": 6.126302083333333,
+      "mean_difference": -0.099609375,
+      "paired_t_p": 0.2074942050975642,
+      "wilcoxon_p": 0.43505859375,
+      "dz": -0.38661788273235426,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "mean_lambda",
+      "n_pairs": 12,
+      "ref_mean": 5.062825520833333,
+      "rof_mean": 5.156901041666667,
+      "mean_difference": -0.09407552083333333,
+      "paired_t_p": 0.24127333447636928,
+      "wilcoxon_p": 0.45751953125,
+      "dz": -0.3575536962177531,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "NEGPEAK_mean_lambda",
+      "n_pairs": 12,
+      "ref_mean": 5.877604166666667,
+      "rof_mean": 5.95703125,
+      "mean_difference": -0.07942708333333333,
+      "paired_t_p": 0.25480030715655305,
+      "wilcoxon_p": 0.23974609375,
+      "dz": -0.34683325261516434,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "pivot_rate",
+      "n_pairs": 12,
+      "ref_mean": 0.17936197916666666,
+      "rof_mean": 0.19563802083333334,
+      "mean_difference": -0.016276041666666668,
+      "paired_t_p": 0.29112971040917157,
+      "wilcoxon_p": 0.3203125,
+      "dz": -0.32011128304087955,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "NEGPEAK_mean_H",
+      "n_pairs": 12,
+      "ref_mean": 6.096354166666667,
+      "rof_mean": 6.203125,
+      "mean_difference": -0.10677083333333333,
+      "paired_t_p": 0.29874179386830607,
+      "wilcoxon_p": 0.5341796875,
+      "dz": -0.31484312406922255,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "UP0_mean_D",
+      "n_pairs": 12,
+      "ref_mean": 3.8294270833333335,
+      "rof_mean": 3.8802083333333335,
+      "mean_difference": -0.05078125,
+      "paired_t_p": 0.32442747567439795,
+      "wilcoxon_p": 0.3095703125,
+      "dz": -0.2977848639944513,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "UP0_mean_H",
+      "n_pairs": 12,
+      "ref_mean": 5.845052083333333,
+      "rof_mean": 5.895833333333333,
+      "mean_difference": -0.05078125,
+      "paired_t_p": 0.32442747567439795,
+      "wilcoxon_p": 0.3095703125,
+      "dz": -0.2977848639944513,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "compound_pivot_fraction",
+      "n_pairs": 12,
+      "ref_mean": 0.5597718157940036,
+      "rof_mean": 0.5839689754982081,
+      "mean_difference": -0.024197159704204687,
+      "paired_t_p": 0.4029644697069268,
+      "wilcoxon_p": 0.5185546875,
+      "dz": -0.25110422836042795,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "POSPEAK_mean_D",
+      "n_pairs": 12,
+      "ref_mean": 1.06640625,
+      "rof_mean": 1.0533854166666667,
+      "mean_difference": 0.013020833333333334,
+      "paired_t_p": 0.4991280865985601,
+      "wilcoxon_p": 0.23828125,
+      "dz": 0.20175370854236604,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    },
+    {
+      "contrast": "ref-minus-rof",
+      "feature": "NEGPEAK_multilevel",
+      "n_pairs": 12,
+      "ref_mean": 0.18229166666666666,
+      "rof_mean": 0.20572916666666666,
+      "mean_difference": -0.0234375,
+      "paired_t_p": 0.5330208870772137,
+      "wilcoxon_p": 0.38818359375,
+      "dz": -0.18579243378534777,
+      "q_BH": 0.8379729020307268,
+      "ren_mean": NaN,
+      "ron_mean": NaN
+    }
+  ],
+  "top_washout": [
+    {
+      "feature": "pivot_rate",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": -0.35244460293492225,
+      "p": 0.016294335184395062,
+      "q_BH": 0.27839569632164957
+    },
+    {
+      "feature": "multilevel",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": 0.3281818261808264,
+      "p": 0.02597052940914719,
+      "q_BH": 0.27839569632164957
+    },
+    {
+      "feature": "mean_lambda",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": -0.3225474862097748,
+      "p": 0.02879955479189478,
+      "q_BH": 0.27839569632164957
+    },
+    {
+      "feature": "mean_D",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": 0.24778200405792802,
+      "p": 0.09685534374292877,
+      "q_BH": 0.44705887296075186
+    },
+    {
+      "feature": "NEGPEAK_mean_lambda",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": -0.24235017930136002,
+      "p": 0.10464126471681906,
+      "q_BH": 0.44705887296075186
+    },
+    {
+      "feature": "DOWN0_mean_H",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": -0.2357520637695708,
+      "p": 0.11473397385052696,
+      "q_BH": 0.44705887296075186
+    },
+    {
+      "feature": "mean_H",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": -0.22045447703245963,
+      "p": 0.14095936223301622,
+      "q_BH": 0.44705887296075186
+    },
+    {
+      "feature": "rms_mm_s",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": -0.21660166235192882,
+      "p": 0.14821568197987342,
+      "q_BH": 0.44705887296075186
+    },
+    {
+      "feature": "cycle_period_mean",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": -0.21500486147227946,
+      "p": 0.15130246982769768,
+      "q_BH": 0.44705887296075186
+    },
+    {
+      "feature": "NEGPEAK_mean_H",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": -0.2135487696621741,
+      "p": 0.15415823205543167,
+      "q_BH": 0.44705887296075186
+    },
+    {
+      "feature": "NEGPEAK_multilevel",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": 0.16645900716200884,
+      "p": 0.26888003955600626,
+      "q_BH": 0.708865558829471
+    },
+    {
+      "feature": "DOWN0_mean_lambda",
+      "n_obs": 46,
+      "n_subjects": 12,
+      "within_subject_r": -0.1542399419668269,
+      "p": 0.3060916380000478,
+      "q_BH": 0.7397214585001155
+    }
+  ],
+  "incremental": {
+    "contrast": "ref(DBS on, med off) vs rof(DBS off, med off)",
+    "conventional": [
+      "rms_mm_s",
+      "dominant_freq_hz",
+      "spectral_entropy_2_12",
+      "cycle_period_mean",
+      "cycle_period_cv"
+    ],
+    "tma": [
+      "mean_H",
+      "mean_D",
+      "mean_lambda",
+      "multilevel",
+      "pivot_rate",
+      "compound_pivot_fraction",
+      "pivot_depth",
+      "tree_span_events",
+      "tree_span_time",
+      "POSPEAK_mean_D",
+      "NEGPEAK_mean_D"
+    ],
+    "n_predictions_base": 27,
+    "n_predictions_plus_tma": 27,
+    "auc_base": 0.5989010989010989,
+    "auc_plus_tma": 0.5879120879120879,
+    "delta_auc": -0.01098901098901095
+  },
+  "max_projection_error_ms": 5.000000000000001
+}

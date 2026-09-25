@@ -1,0 +1,28 @@
+{
+  "contrast": "ref(DBS on, med off) vs rof(DBS off, med off)",
+  "conventional": [
+    "rms_mm_s",
+    "dominant_freq_hz",
+    "spectral_entropy_2_12",
+    "cycle_period_mean",
+    "cycle_period_cv"
+  ],
+  "tma": [
+    "mean_H",
+    "mean_D",
+    "mean_lambda",
+    "multilevel",
+    "pivot_rate",
+    "compound_pivot_fraction",
+    "pivot_depth",
+    "tree_span_events",
+    "tree_span_time",
+    "POSPEAK_mean_D",
+    "NEGPEAK_mean_D"
+  ],
+  "n_predictions_base": 27,
+  "n_predictions_plus_tma": 27,
+  "auc_base": 0.5989010989010989,
+  "auc_plus_tma": 0.5879120879120879,
+  "delta_auc": -0.01098901098901095
+}
