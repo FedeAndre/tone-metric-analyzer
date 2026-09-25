@@ -1,0 +1,32 @@
+{
+  "boundary_closed": [
+    1,
+    2,
+    3,
+    5,
+    9,
+    17,
+    33,
+    65,
+    129,
+    257,
+    513,
+    1025
+  ],
+  "boundary_recurrence": [
+    1,
+    2,
+    3,
+    5,
+    9,
+    17,
+    33,
+    65,
+    129,
+    257,
+    513,
+    1025
+  ],
+  "boundary_match": true,
+  "lucas_pascal_mismatches": 0
+}

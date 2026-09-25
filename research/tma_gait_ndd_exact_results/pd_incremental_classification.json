@@ -1,0 +1,29 @@
+{
+  "base_features": [
+    "age",
+    "gait_speed",
+    "L_stride_mean",
+    "L_stride_sd",
+    "R_stride_mean",
+    "R_stride_sd",
+    "L_swing_pct_mean",
+    "R_swing_pct_mean",
+    "double_support_pct_mean"
+  ],
+  "tma_features": [
+    "mean_H",
+    "mean_D",
+    "mean_lambda",
+    "multilevel",
+    "pivot_rate",
+    "pivot_depth",
+    "tree_span_events",
+    "RHS_mean_D",
+    "LTO_mean_D"
+  ],
+  "n_base": 30,
+  "n_plus_tma": 30,
+  "auc_base": 0.8705357142857143,
+  "auc_plus_tma": 0.8839285714285714,
+  "delta_auc": 0.013392857142857095
+}
