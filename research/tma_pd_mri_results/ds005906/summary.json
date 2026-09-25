@@ -1,0 +1,162 @@
+{
+  "dataset": "ds005906",
+  "description": "PD DBS ON/OFF repeated resting-state fMRI",
+  "math_audit": {
+    "boundary_match": true,
+    "lucas_pascal_mismatches": 0
+  },
+  "n_scans": 48,
+  "n_subjects": 10,
+  "conditions": {
+    "OFF": 24,
+    "ON": 24
+  },
+  "failures": {},
+  "top_dbs_effects": [
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "B3_mean_H",
+      "n_pairs": 10,
+      "OFF_mean": 4.7508928571428575,
+      "ON_mean": 4.989642857142857,
+      "mean_difference": 0.23874999999999993,
+      "paired_p": 0.007549452005974675,
+      "dz": 1.0835665543711006,
+      "q_BH": 0.21893410817326556
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "B3_mean_lambda",
+      "n_pairs": 10,
+      "OFF_mean": 4.664583333333335,
+      "ON_mean": 4.92154761904762,
+      "mean_difference": 0.25696428571428587,
+      "paired_p": 0.025475778172984877,
+      "dz": 0.8454361225638514,
+      "q_BH": 0.3693987835082807
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "B2_mean_D",
+      "n_pairs": 10,
+      "OFF_mean": 1.322172619047619,
+      "ON_mean": 1.5040476190476189,
+      "mean_difference": 0.18187499999999998,
+      "paired_p": 0.08834971967047718,
+      "dz": 0.6042450878002762,
+      "q_BH": 0.5840800908133075
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "tree_span_events",
+      "n_pairs": 10,
+      "OFF_mean": 2.0327544160385385,
+      "ON_mean": 1.9811488261717094,
+      "mean_difference": -0.051605589866828436,
+      "paired_p": 0.10588993925475824,
+      "dz": -0.5682655409985973,
+      "q_BH": 0.5840800908133075
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "compound_pivot_fraction",
+      "n_pairs": 10,
+      "OFF_mean": 0.6244047619047619,
+      "ON_mean": 0.6858928571428572,
+      "mean_difference": 0.06148809523809523,
+      "paired_p": 0.11368843266523052,
+      "dz": 0.5540255955707857,
+      "q_BH": 0.5840800908133075
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "B2_mean_lambda",
+      "n_pairs": 10,
+      "OFF_mean": 4.475446428571428,
+      "ON_mean": 4.172261904761905,
+      "mean_difference": -0.30318452380952393,
+      "paired_p": 0.12084415671999466,
+      "dz": -0.5417311276844635,
+      "q_BH": 0.5840800908133075
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "tree_span_time",
+      "n_pairs": 10,
+      "OFF_mean": 1.0147842178909365,
+      "ON_mean": 0.9910761107932876,
+      "mean_difference": -0.023708107097649034,
+      "paired_p": 0.19367259732016076,
+      "dz": -0.44420311049045125,
+      "q_BH": 0.6842831859696439
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "mean_D",
+      "n_pairs": 10,
+      "OFF_mean": 1.7361383928571428,
+      "ON_mean": 1.7884226190476191,
+      "mean_difference": 0.052284226190476145,
+      "paired_p": 0.21465944753746266,
+      "dz": 0.42216423257821545,
+      "q_BH": 0.6842831859696439
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "B2_multilevel",
+      "n_pairs": 10,
+      "OFF_mean": 0.24074404761904758,
+      "ON_mean": 0.3257142857142857,
+      "mean_difference": 0.0849702380952381,
+      "paired_p": 0.21799442574490596,
+      "dz": 0.41883233983343715,
+      "q_BH": 0.6842831859696439
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "B2_mean_H",
+      "n_pairs": 10,
+      "OFF_mean": 4.7976190476190474,
+      "ON_mean": 4.676309523809524,
+      "mean_difference": -0.12130952380952378,
+      "paired_p": 0.25589887257610466,
+      "dz": -0.3836769648041186,
+      "q_BH": 0.6842831859696439
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "B0_mean_lambda",
+      "n_pairs": 10,
+      "OFF_mean": 1.3493452380952382,
+      "ON_mean": 1.3266666666666667,
+      "mean_difference": -0.022678571428571437,
+      "paired_p": 0.3246828050844447,
+      "dz": -0.3294442019584666,
+      "q_BH": 0.6842831859696439
+    },
+    {
+      "contrast": "ON-minus-OFF",
+      "feature": "multilevel",
+      "n_pairs": 10,
+      "OFF_mean": 0.3549851190476191,
+      "ON_mean": 0.3766071428571428,
+      "mean_difference": 0.021622023809523806,
+      "paired_p": 0.3274644086140579,
+      "dz": 0.3274479333917853,
+      "q_BH": 0.6842831859696439
+    }
+  ],
+  "repeatability": {
+    "n_pairs": 24,
+    "same_mean": 1.3208025229215137,
+    "different_mean": 1.3715111641351179,
+    "ratio": 0.9630271757608467
+  },
+  "incremental": {
+    "n_predictions": 48,
+    "auc_base": 0.5677083333333334,
+    "auc_plus_tma": 0.5121527777777778,
+    "delta_auc": -0.05555555555555558
+  },
+  "max_projection_error_ms": 1075.0000476837192
+}

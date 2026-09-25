@@ -1,0 +1,473 @@
+{
+  "ds005906/sub-01/ses-01/func/sub-01_ses-01_task-restOFF_acq-36slices_run-01_bold.nii.gz": {
+    "first_frame": {
+      "duration_s": 51.60000228881836,
+      "events": [
+        {
+          "label": "B0",
+          "offset_s": 0.0
+        },
+        {
+          "label": "B1",
+          "offset_s": 8.600000381469727
+        },
+        {
+          "label": "B2",
+          "offset_s": 17.200000762939453
+        },
+        {
+          "label": "B3",
+          "offset_s": 34.400001525878906
+        }
+      ]
+    },
+    "first_events": [
+      {
+        "label": "B0",
+        "frame_index": 0,
+        "H": 3,
+        "D": 3,
+        "lambda": 1,
+        "levels": "1;2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "B1",
+        "frame_index": 0,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 3,
+        "projection_error_ms": 1075.0000476837163,
+        "projected_phase": 0.375
+      },
+      {
+        "label": "B2",
+        "frame_index": 0,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 3,
+        "projection_error_ms": 1075.000047683715,
+        "projected_phase": 0.625
+      },
+      {
+        "label": "B3",
+        "frame_index": 0,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 3,
+        "projection_error_ms": 1075.0000476837179,
+        "projected_phase": 1.375
+      },
+      {
+        "label": "B0",
+        "frame_index": 1,
+        "H": 3,
+        "D": 3,
+        "lambda": 1,
+        "levels": "1;2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "B1",
+        "frame_index": 1,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 4,
+        "projection_error_ms": 134.375005960464,
+        "projected_phase": 0.6875
+      },
+      {
+        "label": "B2",
+        "frame_index": 1,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 4,
+        "projection_error_ms": 403.125017881392,
+        "projected_phase": 1.0625
+      },
+      {
+        "label": "B3",
+        "frame_index": 1,
+        "H": 4,
+        "D": 2,
+        "lambda": 3,
+        "levels": "3;4",
+        "projection_depth": 1,
+        "projection_error_ms": 1075.0000476837183,
+        "projected_phase": 1.5
+      },
+      {
+        "label": "B0",
+        "frame_index": 2,
+        "H": 3,
+        "D": 3,
+        "lambda": 1,
+        "levels": "1;2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "B1",
+        "frame_index": 2,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 4,
+        "projection_error_ms": 604.6875268220913,
+        "projected_phase": 0.6875
+      },
+      {
+        "label": "B2",
+        "frame_index": 2,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 4,
+        "projection_error_ms": 67.18750298023416,
+        "projected_phase": 1.1875
+      },
+      {
+        "label": "B3",
+        "frame_index": 2,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 4,
+        "projection_error_ms": 201.562508940696,
+        "projected_phase": 1.5625
+      }
+    ]
+  },
+  "ds005906/sub-01/ses-01/func/sub-01_ses-01_task-restOFF_acq-36slices_run-02_bold.nii.gz": {
+    "first_frame": {
+      "duration_s": 60.200002670288086,
+      "events": [
+        {
+          "label": "B0",
+          "offset_s": 0.0
+        },
+        {
+          "label": "B1",
+          "offset_s": 10.750000476837158
+        },
+        {
+          "label": "B2",
+          "offset_s": 25.80000114440918
+        },
+        {
+          "label": "B3",
+          "offset_s": 43.00000190734863
+        }
+      ]
+    },
+    "first_events": [
+      {
+        "label": "B0",
+        "frame_index": 0,
+        "H": 3,
+        "D": 3,
+        "lambda": 1,
+        "levels": "1;2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "B1",
+        "frame_index": 0,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 3,
+        "projection_error_ms": 537.5000238418577,
+        "projected_phase": 0.375
+      },
+      {
+        "label": "B2",
+        "frame_index": 0,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 3,
+        "projection_error_ms": 537.5000238418594,
+        "projected_phase": 0.875
+      },
+      {
+        "label": "B3",
+        "frame_index": 0,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 4,
+        "projection_error_ms": 268.750011920928,
+        "projected_phase": 1.4375
+      },
+      {
+        "label": "B0",
+        "frame_index": 1,
+        "H": 4,
+        "D": 4,
+        "lambda": 1,
+        "levels": "1;2;3;4",
+        "projection_depth": 0,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "B1",
+        "frame_index": 1,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 3,
+        "projection_error_ms": 268.7500119209296,
+        "projected_phase": 0.375
+      },
+      {
+        "label": "B2",
+        "frame_index": 1,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 4,
+        "projection_error_ms": 403.125017881392,
+        "projected_phase": 0.9375
+      },
+      {
+        "label": "B3",
+        "frame_index": 1,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 1075.0000476837183,
+        "projected_phase": 1.5
+      },
+      {
+        "label": "B0",
+        "frame_index": 2,
+        "H": 3,
+        "D": 3,
+        "lambda": 1,
+        "levels": "1;2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "B1",
+        "frame_index": 2,
+        "H": 4,
+        "D": 2,
+        "lambda": 3,
+        "levels": "3;4",
+        "projection_depth": 1,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "B2",
+        "frame_index": 2,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 3,
+        "projection_error_ms": 537.5000238418594,
+        "projected_phase": 0.875
+      },
+      {
+        "label": "B3",
+        "frame_index": 2,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 4,
+        "projection_error_ms": 268.750011920928,
+        "projected_phase": 1.4375
+      }
+    ]
+  },
+  "ds005906/sub-01/ses-01/func/sub-01_ses-01_task-restON_acq-36slices_run-01_bold.nii.gz": {
+    "first_frame": {
+      "duration_s": 43.00000190734863,
+      "events": [
+        {
+          "label": "B0",
+          "offset_s": 0.0
+        },
+        {
+          "label": "B1",
+          "offset_s": 10.750000476837158
+        },
+        {
+          "label": "B2",
+          "offset_s": 21.500000953674316
+        },
+        {
+          "label": "B3",
+          "offset_s": 30.100001335144043
+        }
+      ]
+    },
+    "first_events": [
+      {
+        "label": "B0",
+        "frame_index": 0,
+        "H": 2,
+        "D": 2,
+        "lambda": 1,
+        "levels": "1;2",
+        "projection_depth": 0,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "B1",
+        "frame_index": 0,
+        "H": 2,
+        "D": 1,
+        "lambda": 2,
+        "levels": "2",
+        "projection_depth": 1,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "B2",
+        "frame_index": 0,
+        "H": 3,
+        "D": 3,
+        "lambda": 1,
+        "levels": "1;2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 0.0,
+        "projected_phase": 1.0
+      },
+      {
+        "label": "B3",
+        "frame_index": 0,
+        "H": 4,
+        "D": 1,
+        "lambda": 4,
+        "levels": "4",
+        "projection_depth": 3,
+        "projection_error_ms": 537.500023841856,
+        "projected_phase": 1.375
+      },
+      {
+        "label": "B0",
+        "frame_index": 1,
+        "H": 4,
+        "D": 4,
+        "lambda": 1,
+        "levels": "1;2;3;4",
+        "projection_depth": 0,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "B1",
+        "frame_index": 1,
+        "H": 6,
+        "D": 1,
+        "lambda": 6,
+        "levels": "6",
+        "projection_depth": 4,
+        "projection_error_ms": 134.375005960464,
+        "projected_phase": 0.3125
+      },
+      {
+        "label": "B2",
+        "frame_index": 1,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 3,
+        "projection_error_ms": 806.2500357627871,
+        "projected_phase": 0.875
+      },
+      {
+        "label": "B3",
+        "frame_index": 1,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 1075.0000476837183,
+        "projected_phase": 1.5
+      },
+      {
+        "label": "B0",
+        "frame_index": 2,
+        "H": 3,
+        "D": 3,
+        "lambda": 1,
+        "levels": "1;2;3",
+        "projection_depth": 0,
+        "projection_error_ms": 0.0,
+        "projected_phase": 0.0
+      },
+      {
+        "label": "B1",
+        "frame_index": 2,
+        "H": 3,
+        "D": 1,
+        "lambda": 3,
+        "levels": "3",
+        "projection_depth": 1,
+        "projection_error_ms": 537.500023841857,
+        "projected_phase": 0.5
+      },
+      {
+        "label": "B2",
+        "frame_index": 2,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 3,
+        "projection_error_ms": 403.125017881392,
+        "projected_phase": 1.125
+      },
+      {
+        "label": "B3",
+        "frame_index": 2,
+        "H": 5,
+        "D": 1,
+        "lambda": 5,
+        "levels": "5",
+        "projection_depth": 3,
+        "projection_error_ms": 940.6250417232524,
+        "projected_phase": 1.375
+      }
+    ]
+  }
+}
