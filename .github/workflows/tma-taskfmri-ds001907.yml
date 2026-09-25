@@ -1,0 +1,66 @@
+name: Exact task-fMRI TMA ds001907
+
+on:
+  push:
+    branches: [tma-task-fmri-ds001907-20260925]
+    paths:
+      - 'research/tma_taskfmri_ds001907.py'
+      - '.github/workflows/tma-taskfmri-ds001907.yml'
+      - 'research/tma_mri_exact_utils.py'
+      - 'research/tma_clinical_exact_utils.py'
+      - 'tone_metric/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        run: [1, 2, 3, 4, 5, 6]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.6,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - run: PYTHONPATH=. python research/tma_taskfmri_ds001907.py --run ${{ matrix.run }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-taskfmri-ds001907-run-${{ matrix.run }}
+          path: research/tma_taskfmri_ds001907_results/run-0${{ matrix.run }}_*
+          if-no-files-found: error
+
+  aggregate:
+    needs: analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.6,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tma-taskfmri-ds001907-run-*
+          path: research/tma_taskfmri_ds001907_results
+          merge-multiple: true
+      - run: PYTHONPATH=. python research/tma_taskfmri_ds001907.py --aggregate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-taskfmri-ds001907-results
+          path: research/tma_taskfmri_ds001907_results/
+          if-no-files-found: error
+      - name: Commit results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_taskfmri_ds001907_results/
+          git commit -m 'Add exact task-fMRI TMA ds001907 results' || exit 0
+          git pull --rebase origin tma-task-fmri-ds001907-20260925 || true
+          git push origin HEAD:tma-task-fmri-ds001907-20260925 || true
