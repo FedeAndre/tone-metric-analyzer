@@ -1,0 +1,68 @@
+name: Healthy task-fMRI TMA ds004796
+
+on:
+  push:
+    branches: [tma-healthy-fmri-broad-20260925]
+    paths:
+      - 'research/tma_healthy_fmri_ds004796.py'
+      - '.github/workflows/tma-healthy-fmri-ds004796.yml'
+      - 'research/tma_mri_exact_utils.py'
+      - 'research/tma_clinical_exact_utils.py'
+      - 'tone_metric/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {task: msit, direction: AP}
+          - {task: msit, direction: PA}
+          - {task: sternberg, direction: AP}
+          - {task: sternberg, direction: PA}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - run: PYTHONPATH=. python research/tma_healthy_fmri_ds004796.py --task ${{ matrix.task }} --direction ${{ matrix.direction }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: healthy-fmri-${{ matrix.task }}-${{ matrix.direction }}
+          path: research/tma_healthy_fmri_ds004796_results/${{ matrix.task }}_${{ matrix.direction }}_*
+          if-no-files-found: error
+
+  aggregate:
+    needs: analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: healthy-fmri-*
+          path: research/tma_healthy_fmri_ds004796_results
+          merge-multiple: true
+      - run: PYTHONPATH=. python research/tma_healthy_fmri_ds004796.py --aggregate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: healthy-fmri-ds004796-results
+          path: research/tma_healthy_fmri_ds004796_results/
+          if-no-files-found: error
+      - name: Commit results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_healthy_fmri_ds004796_results/
+          git commit -m 'Add healthy task-fMRI TMA ds004796 results' || exit 0
+          git pull --rebase origin tma-healthy-fmri-broad-20260925 || true
+          git push origin HEAD:tma-healthy-fmri-broad-20260925 || true
