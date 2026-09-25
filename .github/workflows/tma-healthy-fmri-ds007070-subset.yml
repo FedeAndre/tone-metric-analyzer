@@ -1,0 +1,52 @@
+name: Healthy preprocessed multi-task subset ds007070
+on:
+  push:
+    branches: [tma-healthy-fmri-broad-20260925]
+    paths:
+      - 'research/tma_healthy_fmri_ds007070_subset.py'
+      - '.github/workflows/tma-healthy-fmri-ds007070-subset.yml'
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix: {task: [faces, narratives, shortvideo, fractional]}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - run: PYTHONPATH=. python research/tma_healthy_fmri_ds007070_subset.py --task ${{ matrix.task }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ds007070-${{ matrix.task }}
+          path: research/tma_healthy_fmri_ds007070_subset_results/${{ matrix.task }}_*
+  aggregate:
+    needs: analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ds007070-*
+          path: research/tma_healthy_fmri_ds007070_subset_results
+          merge-multiple: true
+      - run: PYTHONPATH=. python research/tma_healthy_fmri_ds007070_subset.py --aggregate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ds007070-subset-results
+          path: research/tma_healthy_fmri_ds007070_subset_results/
+      - name: Commit
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_healthy_fmri_ds007070_subset_results/
+          git commit -m 'Add preprocessed healthy multi-task subset results' || exit 0
+          git pull --rebase origin tma-healthy-fmri-broad-20260925 || true
+          git push origin HEAD:tma-healthy-fmri-broad-20260925 || true
