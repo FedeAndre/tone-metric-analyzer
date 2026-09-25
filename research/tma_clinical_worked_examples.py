@@ -17,6 +17,20 @@ def native_example(record, group):
     cycles, fs, integrity=g.extract_cycles(arr, record)
     sample=cycles[:8]
     feat, event_df, pivots, tree=g.analyze_cycles(sample)
+
+    # Raw force waveform for the first analyzed cycle: time, left total force,
+    # right total force. This is the signal from which threshold crossings
+    # generate LHS/RTO/RHS/LTO events.
+    c0=sample[0]
+    a0,b0=c0["start_sample"],c0["end_sample"]
+    wave=pd.DataFrame({
+        "sample":np.arange(a0,b0+1,dtype=int),
+        "time_s":arr[a0:b0+1,0],
+        "left_total_force_N":arr[a0:b0+1,17],
+        "right_total_force_N":arr[a0:b0+1,18],
+    })
+    wave.to_csv(OUT/f"{record}_first_cycle_raw_force.csv",index=False)
+
     # raw/projection table for the exact same 8 cycles
     raw=[]
     for ci, cyc in enumerate(sample,1):
