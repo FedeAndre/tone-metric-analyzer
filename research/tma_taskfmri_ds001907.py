@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import argparse, io, json, math, os, re, tempfile, hashlib
+import argparse, io, json, math, os, re, tempfile, hashlib\nfrom fractions import Fraction
 from pathlib import Path
 
 import numpy as np
@@ -100,14 +100,15 @@ def _safe_analyze(frames, tol):
     # they are simultaneous in the projected metric representation and count
     # as one event, matching the frozen attack/hit rule.
     clean = []
-    for fr in frames:
-        seen = set()
+    seen_global = set()
+    for i, fr in enumerate(frames):
         events = []
         for ev in fr["events"]:
             q, _, _ = project_offset(float(ev["offset_s"]), float(fr["duration_s"]), tol)
-            if q in seen:
+            onset = Fraction(2*i) + q
+            if onset in seen_global:
                 continue
-            seen.add(q)
+            seen_global.add(onset)
             events.append(ev)
         clean.append({"duration_s": fr["duration_s"], "events": events})
     if sum(len(fr["events"]) for fr in clean) < 8:
