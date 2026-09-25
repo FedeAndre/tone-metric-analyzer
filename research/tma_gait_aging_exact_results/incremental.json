@@ -1,8 +1,8 @@
 {
   "pd_vs_old": {
-    "n": 7,
+    "n": 10,
     "auc_base": 0.8,
-    "auc_plus_tma": 1.0,
-    "delta_auc": 0.19999999999999996
+    "auc_plus_tma": 0.88,
+    "delta_auc": 0.07999999999999996
   }
 }
