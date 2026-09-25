@@ -1,0 +1,29 @@
+name: Exact TMA PADS S3
+on:
+  push:
+    branches: [tma-pd-remaining-datasets-20260925]
+    paths: ['.github/workflows/tma-pads-s3.yml']
+permissions: {contents: write}
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'scikit-learn>=1.6,<2'
+      - name: Fetch PADS official preprocessed movement binaries
+        run: |
+          mkdir -p /tmp/pads_pre
+          aws s3 sync --no-sign-request s3://physionet-open/parkinsons-disease-smartwatch/1.0.0/preprocessed/movement/ /tmp/pads_pre/ --only-show-errors
+      - run: PYTHONPATH=. python research/tma_pads_preprocessed_exact.py
+      - uses: actions/upload-artifact@v4
+        with: {name: tma-pads-s3-results, path: research/tma_pads_preprocessed_exact_results/}
+      - run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_pads_preprocessed_exact_results/
+          git commit -m 'Add PADS S3 exact TMA results' || exit 0
+          git pull --rebase origin tma-pd-remaining-datasets-20260925 || true
+          git push origin HEAD:tma-pd-remaining-datasets-20260925 || true
