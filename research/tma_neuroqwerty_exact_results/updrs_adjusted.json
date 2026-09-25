@@ -1,0 +1,86 @@
+[
+  {
+    "feature": "pivot_rate",
+    "n": 42,
+    "partial_rank_r": 0.2795551901141666,
+    "p": 0.07297490935319878,
+    "controls": [
+      "typing_speed_calc",
+      "median_ipi",
+      "ipi_cv",
+      "hold_mean",
+      "hold_sd",
+      "pause_fraction"
+    ]
+  },
+  {
+    "feature": "tree_root_fraction",
+    "n": 42,
+    "partial_rank_r": -0.27556945009808953,
+    "p": 0.07733259486045632,
+    "controls": [
+      "typing_speed_calc",
+      "median_ipi",
+      "ipi_cv",
+      "hold_mean",
+      "hold_sd",
+      "pause_fraction"
+    ]
+  },
+  {
+    "feature": "mean_lambda",
+    "n": 42,
+    "partial_rank_r": 0.049650467457240756,
+    "p": 0.7548476262641435,
+    "controls": [
+      "typing_speed_calc",
+      "median_ipi",
+      "ipi_cv",
+      "hold_mean",
+      "hold_sd",
+      "pause_fraction"
+    ]
+  },
+  {
+    "feature": "mean_H",
+    "n": 42,
+    "partial_rank_r": -0.017855275737201096,
+    "p": 0.9106393569466987,
+    "controls": [
+      "typing_speed_calc",
+      "median_ipi",
+      "ipi_cv",
+      "hold_mean",
+      "hold_sd",
+      "pause_fraction"
+    ]
+  },
+  {
+    "feature": "multilevel",
+    "n": 42,
+    "partial_rank_r": 0.16789427830215042,
+    "p": 0.2878682997567341,
+    "controls": [
+      "typing_speed_calc",
+      "median_ipi",
+      "ipi_cv",
+      "hold_mean",
+      "hold_sd",
+      "pause_fraction"
+    ]
+  },
+  {
+    "feature": "mean_D",
+    "n": 42,
+    "partial_rank_r": 0.05961095687588129,
+    "p": 0.7076617745027877,
+    "controls": [
+      "typing_speed_calc",
+      "median_ipi",
+      "ipi_cv",
+      "hold_mean",
+      "hold_sd",
+      "pause_fraction"
+    ]
+  }
+]
