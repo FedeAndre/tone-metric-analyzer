@@ -1,0 +1,36 @@
+name: Exact TMA MRI ds005892
+on:
+  push:
+    branches: [tma-pd-mri-multidataset-20260925]
+    paths:
+      - 'research/tma_mri_exact_utils.py'
+      - 'research/tma_pd_mri_multidataset.py'
+      - '.github/workflows/tma-mri-ds005892.yml'
+      - 'research/tma_clinical_exact_utils.py'
+      - 'tone_metric/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.6,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - run: PYTHONPATH=. python research/tma_pd_mri_multidataset.py --dataset ds005892
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-mri-ds005892-results
+          path: research/tma_pd_mri_results/ds005892/
+          if-no-files-found: error
+      - name: Commit results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_pd_mri_results/ds005892/
+          git commit -m 'Add exact TMA MRI ds005892 results' || exit 0
+          git pull --rebase origin tma-pd-mri-multidataset-20260925 || true
+          git push origin HEAD:tma-pd-mri-multidataset-20260925 || true
