@@ -14,7 +14,7 @@ from tone_metric.theory import boundary_sequence,boundary_sequence_recurrence,pa
 
 URL="https://physionet.org/content/gaitdb/get-zip/1.0.0/"
 OUT=Path("research/tma_gait_aging_exact_results");OUT.mkdir(parents=True,exist_ok=True)
-N_FRAMES=64
+N_FRAMES=48
 STRIDES_PER_FRAME=4
 TOL=0.005
 SEED=20260925
