@@ -1,0 +1,470 @@
+sid,condition,group,age,gender
+001,Healthy,healthy,56,male
+002,Other Movement Disorders,other,81,male
+003,Healthy,healthy,45,female
+004,Parkinson's,pd,67,female
+005,Parkinson's,pd,75,male
+006,Parkinson's,pd,72,female
+007,Other Movement Disorders,other,74,male
+008,Parkinson's,pd,73,female
+009,Parkinson's,pd,47,male
+010,Parkinson's,pd,56,male
+011,Other Movement Disorders,other,51,male
+012,Parkinson's,pd,52,male
+013,Parkinson's,pd,64,male
+014,Parkinson's,pd,72,female
+015,Atypical Parkinsonism,pd,64,female
+016,Other Movement Disorders,other,69,male
+017,Multiple Sclerosis,other,51,male
+018,Atypical Parkinsonism,pd,54,female
+019,Parkinson's,pd,64,male
+020,Parkinson's,pd,71,male
+021,Healthy,healthy,64,male
+022,Parkinson's,pd,57,female
+023,Other Movement Disorders,other,56,female
+024,Other Movement Disorders,other,68,male
+025,Parkinson's,pd,71,female
+026,Parkinson's,pd,74,male
+027,Healthy,healthy,76,female
+028,Parkinson's,pd,67,male
+029,Parkinson's,pd,48,male
+030,Parkinson's,pd,61,male
+031,Parkinson's,pd,70,male
+032,Atypical Parkinsonism,pd,77,male
+033,Parkinson's,pd,77,male
+034,Healthy,healthy,51,female
+035,Other Movement Disorders,other,72,male
+036,Multiple Sclerosis,other,40,male
+037,Other Movement Disorders,other,70,male
+038,Parkinson's,pd,51,male
+039,Parkinson's,pd,78,male
+040,Parkinson's,pd,56,male
+041,Parkinson's,pd,64,male
+042,Other Movement Disorders,other,80,female
+043,Other Movement Disorders,other,73,male
+044,Multiple Sclerosis,other,55,male
+045,Healthy,healthy,49,female
+046,Healthy,healthy,60,male
+047,Parkinson's,pd,72,male
+048,Parkinson's,pd,69,male
+049,Parkinson's,pd,61,male
+050,Other Movement Disorders,other,45,female
+051,Parkinson's,pd,70,female
+052,Healthy,healthy,49,male
+053,Parkinson's,pd,70,female
+054,Healthy,healthy,40,female
+055,Parkinson's,pd,63,male
+056,Parkinson's,pd,53,female
+057,Parkinson's,pd,75,male
+058,Other Movement Disorders,other,60,male
+059,Parkinson's,pd,59,female
+060,Parkinson's,pd,53,male
+061,Parkinson's,pd,70,male
+062,Healthy,healthy,79,female
+063,Parkinson's,pd,58,male
+064,Atypical Parkinsonism,pd,58,male
+065,Parkinson's,pd,47,male
+066,Essential Tremor,other,64,male
+067,Parkinson's,pd,65,male
+068,Parkinson's,pd,60,male
+069,Parkinson's,pd,57,female
+070,Essential Tremor,other,78,female
+071,Parkinson's,pd,46,male
+072,Essential Tremor,other,62,male
+073,Parkinson's,pd,49,male
+074,Parkinson's,pd,83,female
+075,Other Movement Disorders,other,66,female
+076,Parkinson's,pd,66,male
+077,Other Movement Disorders,other,41,female
+078,Healthy,healthy,63,female
+079,Essential Tremor,other,69,male
+080,Healthy,healthy,71,female
+081,Healthy,healthy,67,male
+082,Parkinson's,pd,81,male
+083,Parkinson's,pd,75,female
+084,Healthy,healthy,90,male
+085,Parkinson's,pd,69,male
+086,Parkinson's,pd,46,female
+087,Parkinson's,pd,56,male
+088,Essential Tremor,other,70,male
+089,Parkinson's,pd,69,male
+090,Parkinson's,pd,73,male
+091,Essential Tremor,other,69,male
+092,Parkinson's,pd,55,male
+093,Parkinson's,pd,62,male
+094,Parkinson's,pd,69,male
+095,Parkinson's,pd,77,female
+096,Parkinson's,pd,70,male
+097,Healthy,healthy,67,female
+098,Multiple Sclerosis,other,59,male
+099,Parkinson's,pd,68,male
+100,Essential Tremor,other,49,male
+101,Healthy,healthy,58,female
+102,Parkinson's,pd,80,male
+103,Other Movement Disorders,other,53,male
+104,Essential Tremor,other,63,male
+105,Parkinson's,pd,76,male
+106,Atypical Parkinsonism,pd,74,female
+107,Parkinson's,pd,49,female
+108,Healthy,healthy,61,female
+109,Parkinson's,pd,79,male
+110,Atypical Parkinsonism,pd,67,female
+111,Other Movement Disorders,other,46,female
+112,Essential Tremor,other,64,female
+113,Parkinson's,pd,66,male
+114,Atypical Parkinsonism,pd,61,female
+115,Parkinson's,pd,57,male
+116,Parkinson's,pd,56,male
+117,Other Movement Disorders,other,82,male
+118,Atypical Parkinsonism,pd,67,female
+119,Parkinson's,pd,54,male
+120,Parkinson's,pd,67,male
+121,Healthy,healthy,48,female
+122,Parkinson's,pd,72,male
+123,Other Movement Disorders,other,69,male
+124,Essential Tremor,other,59,female
+125,Parkinson's,pd,52,male
+126,Essential Tremor,other,63,male
+127,Parkinson's,pd,51,female
+128,Parkinson's,pd,56,female
+129,Parkinson's,pd,70,male
+130,Other Movement Disorders,other,59,female
+131,Parkinson's,pd,75,male
+132,Healthy,healthy,63,male
+133,Parkinson's,pd,68,female
+134,Healthy,healthy,48,male
+135,Parkinson's,pd,69,female
+136,Parkinson's,pd,63,female
+137,Other Movement Disorders,other,69,male
+138,Other Movement Disorders,other,55,female
+139,Parkinson's,pd,70,male
+140,Other Movement Disorders,other,54,female
+141,Healthy,healthy,64,male
+142,Multiple Sclerosis,other,60,female
+143,Essential Tremor,other,61,female
+144,Parkinson's,pd,49,male
+145,Parkinson's,pd,70,male
+146,Parkinson's,pd,71,male
+147,Parkinson's,pd,66,female
+148,Healthy,healthy,80,male
+149,Parkinson's,pd,72,male
+150,Parkinson's,pd,58,female
+151,Parkinson's,pd,56,male
+152,Healthy,healthy,56,male
+153,Healthy,healthy,77,male
+154,Parkinson's,pd,61,male
+155,Parkinson's,pd,51,male
+156,Parkinson's,pd,69,female
+157,Parkinson's,pd,75,male
+158,Atypical Parkinsonism,pd,79,male
+159,Parkinson's,pd,50,female
+160,Healthy,healthy,76,female
+161,Other Movement Disorders,other,70,male
+162,Parkinson's,pd,46,female
+163,Parkinson's,pd,71,male
+164,Other Movement Disorders,other,68,male
+165,Healthy,healthy,56,male
+166,Parkinson's,pd,75,male
+167,Healthy,healthy,58,female
+168,Atypical Parkinsonism,pd,67,male
+169,Parkinson's,pd,56,female
+170,Parkinson's,pd,71,male
+171,Essential Tremor,other,70,male
+172,Parkinson's,pd,65,female
+173,Parkinson's,pd,78,female
+174,Parkinson's,pd,66,male
+175,Parkinson's,pd,61,female
+176,Other Movement Disorders,other,43,female
+177,Healthy,healthy,69,female
+178,Other Movement Disorders,other,41,female
+179,Parkinson's,pd,75,male
+180,Parkinson's,pd,73,female
+181,Parkinson's,pd,67,male
+182,Parkinson's,pd,66,male
+183,Other Movement Disorders,other,54,female
+184,Healthy,healthy,54,female
+185,Parkinson's,pd,72,male
+186,Parkinson's,pd,65,female
+187,Parkinson's,pd,60,female
+188,Essential Tremor,other,79,female
+189,Parkinson's,pd,69,male
+190,Parkinson's,pd,67,female
+191,Other Movement Disorders,other,56,female
+192,Parkinson's,pd,74,male
+193,Healthy,healthy,40,male
+194,Parkinson's,pd,53,male
+195,Multiple Sclerosis,other,57,male
+196,Other Movement Disorders,other,69,male
+197,Parkinson's,pd,77,male
+198,Parkinson's,pd,65,male
+199,Healthy,healthy,70,male
+200,Essential Tremor,other,54,male
+201,Parkinson's,pd,48,female
+202,Parkinson's,pd,56,male
+203,Healthy,healthy,88,female
+204,Healthy,healthy,56,male
+205,Healthy,healthy,78,female
+206,Parkinson's,pd,61,male
+207,Other Movement Disorders,other,78,female
+208,Parkinson's,pd,67,male
+209,Other Movement Disorders,other,48,female
+210,Parkinson's,pd,61,male
+211,Parkinson's,pd,69,male
+212,Healthy,healthy,71,female
+213,Other Movement Disorders,other,69,female
+214,Healthy,healthy,76,female
+215,Parkinson's,pd,70,male
+216,Parkinson's,pd,78,male
+217,Parkinson's,pd,73,male
+218,Parkinson's,pd,57,male
+219,Parkinson's,pd,72,male
+220,Parkinson's,pd,74,male
+221,Parkinson's,pd,56,male
+222,Essential Tremor,other,85,male
+223,Parkinson's,pd,65,female
+224,Other Movement Disorders,other,51,female
+225,Multiple Sclerosis,other,67,female
+226,Parkinson's,pd,54,male
+227,Healthy,healthy,65,female
+228,Parkinson's,pd,70,female
+229,Healthy,healthy,68,male
+230,Healthy,healthy,70,female
+231,Healthy,healthy,52,female
+232,Healthy,healthy,54,female
+233,Parkinson's,pd,73,male
+234,Parkinson's,pd,68,male
+235,Parkinson's,pd,78,male
+236,Parkinson's,pd,81,male
+237,Parkinson's,pd,60,female
+238,Atypical Parkinsonism,pd,61,male
+239,Parkinson's,pd,83,male
+240,Parkinson's,pd,78,male
+241,Other Movement Disorders,other,82,male
+242,Parkinson's,pd,59,male
+243,Parkinson's,pd,48,female
+244,Parkinson's,pd,53,male
+245,Parkinson's,pd,63,female
+246,Parkinson's,pd,77,male
+247,Healthy,healthy,68,male
+248,Parkinson's,pd,70,female
+249,Parkinson's,pd,64,female
+250,Healthy,healthy,42,female
+251,Healthy,healthy,52,female
+252,Parkinson's,pd,49,female
+253,Healthy,healthy,61,female
+254,Healthy,healthy,57,male
+255,Parkinson's,pd,77,male
+256,Parkinson's,pd,54,female
+257,Parkinson's,pd,78,male
+258,Parkinson's,pd,66,male
+259,Parkinson's,pd,62,male
+260,Parkinson's,pd,68,male
+261,Parkinson's,pd,72,male
+262,Parkinson's,pd,68,male
+263,Parkinson's,pd,54,male
+264,Parkinson's,pd,59,male
+265,Parkinson's,pd,75,male
+266,Parkinson's,pd,75,male
+267,Parkinson's,pd,73,female
+268,Parkinson's,pd,46,female
+269,Parkinson's,pd,85,female
+270,Parkinson's,pd,58,female
+271,Parkinson's,pd,74,male
+272,Healthy,healthy,70,female
+273,Other Movement Disorders,other,51,female
+274,Parkinson's,pd,67,male
+275,Essential Tremor,other,64,male
+276,Other Movement Disorders,other,42,female
+277,Parkinson's,pd,53,male
+278,Essential Tremor,other,61,male
+279,Parkinson's,pd,69,male
+280,Atypical Parkinsonism,pd,77,female
+281,Parkinson's,pd,71,male
+282,Parkinson's,pd,78,male
+283,Healthy,healthy,61,female
+284,Healthy,healthy,83,male
+285,Healthy,healthy,79,female
+286,Parkinson's,pd,55,male
+287,Other Movement Disorders,other,44,female
+288,Other Movement Disorders,other,48,female
+289,Parkinson's,pd,84,male
+290,Parkinson's,pd,75,female
+291,Atypical Parkinsonism,pd,66,male
+292,Parkinson's,pd,81,female
+293,Parkinson's,pd,79,female
+294,Healthy,healthy,62,female
+295,Healthy,healthy,64,male
+296,Parkinson's,pd,63,male
+297,Other Movement Disorders,other,65,female
+298,Other Movement Disorders,other,67,female
+299,Parkinson's,pd,59,male
+300,Parkinson's,pd,65,male
+301,Multiple Sclerosis,other,54,male
+302,Essential Tremor,other,82,male
+303,Parkinson's,pd,74,male
+304,Atypical Parkinsonism,pd,64,male
+305,Parkinson's,pd,47,male
+306,Parkinson's,pd,74,male
+307,Parkinson's,pd,42,male
+308,Healthy,healthy,40,female
+309,Parkinson's,pd,63,male
+310,Other Movement Disorders,other,60,female
+311,Healthy,healthy,66,female
+312,Parkinson's,pd,58,female
+313,Parkinson's,pd,63,male
+314,Other Movement Disorders,other,52,male
+315,Other Movement Disorders,other,56,female
+316,Parkinson's,pd,63,female
+317,Other Movement Disorders,other,52,female
+318,Other Movement Disorders,other,85,female
+319,Healthy,healthy,54,female
+320,Healthy,healthy,72,female
+321,Other Movement Disorders,other,66,female
+322,Parkinson's,pd,59,male
+323,Parkinson's,pd,71,male
+324,Parkinson's,pd,72,female
+325,Parkinson's,pd,73,male
+326,Other Movement Disorders,other,63,male
+327,Parkinson's,pd,68,male
+328,Parkinson's,pd,78,male
+329,Healthy,healthy,61,female
+330,Essential Tremor,other,72,male
+331,Parkinson's,pd,53,male
+332,Parkinson's,pd,49,male
+333,Parkinson's,pd,69,male
+334,Other Movement Disorders,other,77,female
+335,Healthy,healthy,67,female
+336,Parkinson's,pd,82,female
+337,Healthy,healthy,55,female
+338,Parkinson's,pd,65,male
+339,Parkinson's,pd,50,female
+340,Essential Tremor,other,78,female
+341,Parkinson's,pd,76,female
+342,Parkinson's,pd,72,male
+343,Parkinson's,pd,53,male
+344,Parkinson's,pd,75,male
+345,Parkinson's,pd,64,male
+346,Parkinson's,pd,50,male
+347,Parkinson's,pd,67,male
+348,Parkinson's,pd,67,male
+349,Parkinson's,pd,81,male
+350,Essential Tremor,other,52,female
+351,Parkinson's,pd,85,male
+352,Parkinson's,pd,55,female
+353,Parkinson's,pd,64,male
+354,Parkinson's,pd,74,male
+355,Parkinson's,pd,80,male
+356,Parkinson's,pd,76,male
+357,Parkinson's,pd,74,male
+358,Parkinson's,pd,68,male
+359,Other Movement Disorders,other,71,male
+360,Parkinson's,pd,49,male
+361,Parkinson's,pd,55,female
+362,Parkinson's,pd,77,male
+363,Parkinson's,pd,62,male
+364,Parkinson's,pd,69,male
+365,Parkinson's,pd,74,female
+366,Parkinson's,pd,70,male
+367,Other Movement Disorders,other,42,female
+368,Parkinson's,pd,68,female
+369,Parkinson's,pd,66,male
+370,Healthy,healthy,85,male
+371,Healthy,healthy,48,female
+372,Parkinson's,pd,66,male
+373,Other Movement Disorders,other,53,female
+374,Parkinson's,pd,72,male
+375,Parkinson's,pd,76,male
+376,Parkinson's,pd,66,male
+377,Parkinson's,pd,58,male
+378,Parkinson's,pd,70,female
+379,Healthy,healthy,81,male
+380,Parkinson's,pd,47,male
+381,Parkinson's,pd,71,male
+382,Essential Tremor,other,72,male
+383,Parkinson's,pd,75,male
+384,Parkinson's,pd,78,female
+385,Parkinson's,pd,55,female
+386,Essential Tremor,other,57,female
+387,Parkinson's,pd,61,male
+388,Parkinson's,pd,68,female
+389,Healthy,healthy,67,female
+390,Parkinson's,pd,63,male
+391,Healthy,healthy,54,female
+392,Parkinson's,pd,55,female
+393,Parkinson's,pd,54,female
+394,Parkinson's,pd,64,male
+395,Parkinson's,pd,54,female
+396,Essential Tremor,other,79,male
+397,Atypical Parkinsonism,pd,54,male
+398,Parkinson's,pd,75,male
+399,Other Movement Disorders,other,55,male
+400,Parkinson's,pd,69,male
+401,Parkinson's,pd,57,female
+402,Healthy,healthy,80,male
+403,Parkinson's,pd,65,male
+404,Other Movement Disorders,other,83,female
+405,Parkinson's,pd,51,male
+406,Parkinson's,pd,58,male
+407,Healthy,healthy,52,female
+408,Healthy,healthy,44,female
+409,Parkinson's,pd,79,female
+410,Parkinson's,pd,63,female
+411,Parkinson's,pd,59,male
+412,Parkinson's,pd,47,female
+413,Parkinson's,pd,66,male
+414,Other Movement Disorders,other,69,male
+415,Parkinson's,pd,55,female
+416,Healthy,healthy,72,female
+417,Parkinson's,pd,78,male
+418,Parkinson's,pd,78,male
+419,Healthy,healthy,65,male
+420,Healthy,healthy,57,female
+421,Multiple Sclerosis,other,49,female
+422,Parkinson's,pd,57,male
+423,Essential Tremor,other,50,female
+424,Parkinson's,pd,55,male
+425,Parkinson's,pd,51,male
+426,Parkinson's,pd,74,male
+427,Healthy,healthy,50,female
+428,Parkinson's,pd,67,male
+429,Essential Tremor,other,82,male
+430,Parkinson's,pd,66,female
+431,Parkinson's,pd,50,male
+432,Multiple Sclerosis,other,60,female
+433,Parkinson's,pd,79,female
+434,Other Movement Disorders,other,75,female
+435,Parkinson's,pd,78,male
+436,Healthy,healthy,75,male
+437,Parkinson's,pd,65,male
+438,Multiple Sclerosis,other,43,male
+439,Other Movement Disorders,other,69,male
+440,Parkinson's,pd,69,male
+441,Parkinson's,pd,65,male
+442,Parkinson's,pd,67,female
+443,Parkinson's,pd,69,male
+444,Healthy,healthy,42,female
+445,Essential Tremor,other,45,female
+446,Parkinson's,pd,63,female
+447,Parkinson's,pd,73,male
+448,Parkinson's,pd,56,male
+449,Healthy,healthy,45,male
+450,Other Movement Disorders,other,59,male
+451,Other Movement Disorders,other,47,female
+452,Parkinson's,pd,62,male
+453,Other Movement Disorders,other,48,female
+454,Parkinson's,pd,73,female
+455,Healthy,healthy,60,female
+456,Parkinson's,pd,73,male
+457,Healthy,healthy,69,female
+458,Parkinson's,pd,51,female
+459,Healthy,healthy,81,male
+460,Parkinson's,pd,67,female
+461,Parkinson's,pd,78,male
+462,Other Movement Disorders,other,58,female
+463,Healthy,healthy,65,male
+464,Parkinson's,pd,51,male
+465,Parkinson's,pd,65,male
+466,Healthy,healthy,84,female
+467,Parkinson's,pd,57,male
+468,Parkinson's,pd,76,male
+469,Parkinson's,pd,54,female
