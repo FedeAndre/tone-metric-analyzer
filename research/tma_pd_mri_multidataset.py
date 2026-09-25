@@ -31,7 +31,7 @@ def loocv_auc(df,features,group_col,g0,g1,subject_col=None):
         for i in range(len(q)):
             tr=np.arange(len(q))!=i
             m=make_pipeline(StandardScaler(),LogisticRegression(C=1,max_iter=5000,class_weight="balanced"))
-            m.fit(q.iloc[tr][features],q.iloc[tr].y);pred[i]=m.predict_proba(q.iloc[[i]][features])[:,1]
+            m.fit(q.iloc[tr][features],q.iloc[tr].y);pred[i]=m.predict_proba(q.iloc[[i]][features])[0,1]
     ok=np.isfinite(pred)
     if ok.sum()<5:return np.nan,int(ok.sum())
     return float(roc_auc_score(q.loc[ok,"y"],pred[ok])),int(ok.sum())
