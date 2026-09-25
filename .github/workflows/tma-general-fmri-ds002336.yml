@@ -1,0 +1,67 @@
+name: General healthy motor-fMRI TMA ds002336
+
+on:
+  push:
+    branches: [tma-general-fmri-20260925]
+    paths:
+      - 'research/tma_general_fmri_ds002336.py'
+      - '.github/workflows/tma-general-fmri-ds002336.yml'
+      - 'research/tma_general_fmri_ds004796.py'
+      - 'research/tma_mri_exact_utils.py'
+      - 'research/tma_clinical_exact_utils.py'
+      - 'tone_metric/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [motorloc, fmriNF, MIpre, MIpost]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - run: PYTHONPATH=. python research/tma_general_fmri_ds002336.py --task ${{ matrix.task }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-general-fmri-ds002336-${{ matrix.task }}
+          path: research/tma_general_fmri_ds002336_results/${{ matrix.task }}_*
+          if-no-files-found: error
+
+  aggregate:
+    needs: analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'nibabel>=5.3,<6' 'boto3>=1.35,<2'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tma-general-fmri-ds002336-*
+          path: research/tma_general_fmri_ds002336_results
+          merge-multiple: true
+      - run: PYTHONPATH=. python research/tma_general_fmri_ds002336.py --aggregate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-general-fmri-ds002336-results
+          path: research/tma_general_fmri_ds002336_results/
+          if-no-files-found: error
+      - name: Commit results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_general_fmri_ds002336_results/
+          git commit -m 'Add healthy motor-fMRI TMA results' || exit 0
+          git pull --rebase origin tma-general-fmri-20260925 || true
+          git push origin HEAD:tma-general-fmri-20260925 || true
