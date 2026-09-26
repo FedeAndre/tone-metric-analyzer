@@ -2,9 +2,8 @@ name: TMA EEG-gait translational transform
 
 on:
   push:
-    branches: [tma-eeg-gait-translation-20260926]
+    branches: [tma-eeg-gait-multifrontend-20260926]
     paths:
-      - 'research/tma_eeg_gait_translation.py'
       - 'research/tma_eeg_gait_multifrontend.py'
       - '.github/workflows/tma-eeg-gait-translation.yml'
   workflow_dispatch:
@@ -40,6 +39,6 @@ jobs:
           git add research/tma_eeg_gait_multifrontend_results/
           if ! git diff --cached --quiet; then
             git commit -m 'Add multi-front-end EEG-gait TMA results'
-            git pull --rebase origin tma-eeg-gait-translation-20260926
-            git push origin HEAD:tma-eeg-gait-translation-20260926
+            git pull --rebase origin tma-eeg-gait-multifrontend-20260926
+            git push origin HEAD:tma-eeg-gait-multifrontend-20260926
           fi
