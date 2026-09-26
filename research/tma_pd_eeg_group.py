@@ -97,6 +97,8 @@ def get_bytes(url, timeout=240):
     for a in range(6):
         try:
             r = SESSION.get(url, timeout=timeout)
+            if r.status_code == 404:
+                raise FileNotFoundError(url)
             r.raise_for_status()
             return r.content
         except Exception as e:
@@ -114,10 +116,17 @@ def read_eeg_set(subject, condition):
     url = f"{S3_ROOT}/{subject}/eeg/{subject}_task-{condition}_eeg.set"
     blob = get_bytes(url)
     mat = loadmat(io.BytesIO(blob), squeeze_me=True, struct_as_record=False)
-    if "EEG" not in mat:
-        raise RuntimeError("EEG struct not found")
-    eeg = mat["EEG"]
-    data = np.asarray(eeg.data)
+    if "EEG" in mat:
+        eeg = mat["EEG"]
+        data = np.asarray(eeg.data)
+        srate = float(np.asarray(eeg.srate).squeeze())
+    elif "data" in mat and "srate" in mat:
+        # Some EEGLAB .set files save EEG fields directly at MAT-file top level.
+        data = np.asarray(mat["data"])
+        srate = float(np.asarray(mat["srate"]).squeeze())
+    else:
+        keys = [k for k in mat.keys() if not k.startswith("__")]
+        raise RuntimeError(f"EEG data fields not found; mat keys={keys[:30]}")
     if data.dtype.kind in ("U", "S", "O") and data.ndim == 0:
         raise RuntimeError("external .fdt data not expected in this dataset")
     data = np.asarray(data, dtype=np.float64)
@@ -126,7 +135,6 @@ def read_eeg_set(subject, condition):
     # EEGLAB normally channels x samples. If reversed, fix.
     if data.shape[0] > data.shape[1] and data.shape[1] <= 256:
         data = data.T
-    srate = float(np.asarray(eeg.srate).squeeze())
     return data, srate
 
 def channel_table(subject, condition):
