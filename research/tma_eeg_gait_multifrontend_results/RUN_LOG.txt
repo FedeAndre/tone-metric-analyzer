@@ -1,0 +1,35 @@
+1/30 S18: OK
+2/30 S19: OK
+3/30 S20: OK
+4/30 S21: OK
+5/30 S22: OK
+6/30 S23: OK
+7/30 S24: OK
+8/30 S25: OK
+9/30 S26: OK
+10/30 S27: OK
+11/30 S28: OK
+12/30 S29: OK
+13/30 S30: OK
+14/30 S31: OK
+15/30 S32: OK
+16/30 S33: OK
+17/30 S34: OK
+18/30 S35: OK
+19/30 S36: OK
+20/30 S37: OK
+21/30 S38: OK
+22/30 S39: OK
+23/30 S40: OK
+24/30 S41: OK
+25/30 S42: OK
+26/30 S43: OK
+27/30 S44: OK
+28/30 S46: OK
+29/30 S47: OK
+30/30 S48: OK
+phase control theta_global: {'frontend': 'theta_global', 'condition': 'late_abrupt', 'B': 300, 'observed_cosine': 0.011927482565484334, 'null_mean': -0.0037802105396595085, 'null_sd': 0.0558327942750407, 'p': 0.3953488372093023}
+phase control alpha_global: {'frontend': 'alpha_global', 'condition': 'late_abrupt', 'B': 300, 'observed_cosine': 0.07146836617334523, 'null_mean': 8.372506977320856e-05, 'null_sd': 0.054817157631220734, 'p': 0.08970099667774087}
+phase control beta_global: {'frontend': 'beta_global', 'condition': 'late_abrupt', 'B': 300, 'observed_cosine': 0.017817687496624466, 'null_mean': 0.007913775087659544, 'null_sd': 0.060496347436116094, 'p': 0.4318936877076412}
+phase control mu_central: {'frontend': 'mu_central', 'condition': 'late_abrupt', 'B': 300, 'observed_cosine': -0.002711266472555424, 'null_mean': 0.005379762285248071, 'null_sd': 0.05643283081616055, 'p': 0.5382059800664452}
+phase control beta_central: {'frontend': 'beta_central', 'condition': 'late_abrupt', 'B': 300, 'observed_cosine': 0.057614051259492656, 'null_mean': 0.002933786082715275, 'null_sd': 0.05768046389644983, 'p': 0.16611295681063123}
