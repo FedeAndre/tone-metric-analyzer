@@ -1,0 +1,42 @@
+name: TMA PD ON-OFF exact clinical validation
+
+on:
+  push:
+    branches:
+      - tma-clinical-onoff-validation-20260927
+    paths:
+      - 'research/tma_pd_onoff_exact.py'
+      - '.github/workflows/tma-pd-onoff-exact.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install analysis dependencies
+        run: python -m pip install --upgrade pip && pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' ezc3d openpyxl tabulate scikit-learn
+      - name: Run exact ON/OFF TMA analysis
+        run: PYTHONPATH=.:research python research/tma_pd_onoff_exact.py
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: tma-pd-onoff-exact-results
+          path: research/tma_pd_onoff_results/
+          if-no-files-found: error
+      - name: Commit final results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_pd_onoff_results/ONOFF_EXACT_RESULTS.md research/tma_pd_onoff_results/onoff_tma_*.csv research/tma_pd_onoff_results/onoff_paired_changes_*.csv research/tma_pd_onoff_results/onoff_incremental_prediction_*.csv
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add exact ON/OFF levodopa TMA results'
+            git push origin HEAD:tma-clinical-onoff-validation-20260927
+          fi
