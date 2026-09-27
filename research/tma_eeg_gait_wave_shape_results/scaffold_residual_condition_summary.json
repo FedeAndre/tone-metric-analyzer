@@ -1,0 +1,816 @@
+{
+  "condition_matching": [
+    {
+      "frontend": "theta_global",
+      "mean_same_condition_cosine": 0.1193211273434216,
+      "mean_cross_condition_cosine": 0.17067013197784314,
+      "difference": -0.05134900463442155,
+      "exact_condition_permutation_p": 0.7333333333333333,
+      "correct_condition_top1_count": 0,
+      "late_abrupt_same_cosine": 0.1905748979732539,
+      "late_abrupt_other_mean": 0.23625712038711089,
+      "late_abrupt_rank_among_5": 4,
+      "q_fdr": 0.8583333333333332
+    },
+    {
+      "frontend": "alpha_global",
+      "mean_same_condition_cosine": 0.18744255427260179,
+      "mean_cross_condition_cosine": 0.10684973724620943,
+      "difference": 0.08059281702639236,
+      "exact_condition_permutation_p": 0.10833333333333334,
+      "correct_condition_top1_count": 2,
+      "late_abrupt_same_cosine": 0.321517299314712,
+      "late_abrupt_other_mean": 0.2293895525621391,
+      "late_abrupt_rank_among_5": 3,
+      "q_fdr": 0.5416666666666667
+    },
+    {
+      "frontend": "beta_global",
+      "mean_same_condition_cosine": 0.1428327658223567,
+      "mean_cross_condition_cosine": 0.21346627328763304,
+      "difference": -0.07063350746527633,
+      "exact_condition_permutation_p": 0.8583333333333333,
+      "correct_condition_top1_count": 1,
+      "late_abrupt_same_cosine": 0.4369389663163357,
+      "late_abrupt_other_mean": 0.31873952943066103,
+      "late_abrupt_rank_among_5": 1,
+      "q_fdr": 0.8583333333333332
+    },
+    {
+      "frontend": "mu_central",
+      "mean_same_condition_cosine": 0.17601705541124532,
+      "mean_cross_condition_cosine": 0.13848037823599746,
+      "difference": 0.03753667717524786,
+      "exact_condition_permutation_p": 0.225,
+      "correct_condition_top1_count": 1,
+      "late_abrupt_same_cosine": 0.2601482593010077,
+      "late_abrupt_other_mean": 0.21395142640347042,
+      "late_abrupt_rank_among_5": 2,
+      "q_fdr": 0.5625
+    },
+    {
+      "frontend": "beta_central",
+      "mean_same_condition_cosine": 0.14645715274209067,
+      "mean_cross_condition_cosine": 0.15959023875558456,
+      "difference": -0.013133086013493889,
+      "exact_condition_permutation_p": 0.5583333333333333,
+      "correct_condition_top1_count": 1,
+      "late_abrupt_same_cosine": 0.46253189270192924,
+      "late_abrupt_other_mean": 0.2982905765781222,
+      "late_abrupt_rank_among_5": 1,
+      "q_fdr": 0.8583333333333332
+    }
+  ],
+  "matrix_rows": [
+    {
+      "frontend": "theta_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "baseline",
+      "cosine": 0.04329479963371934
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.2536176907675442
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.12021742832368949
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "early_gradual",
+      "cosine": -0.046657225366081384
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "late_gradual",
+      "cosine": -0.311846872689412
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "baseline",
+      "cosine": 0.17542218903455653
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.09838377844448364
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.31342538540949616
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.25578204615733563
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.4990715238830997
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "baseline",
+      "cosine": 0.3169006317182707
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.20825129154774494
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.1905748979732539
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.31490319724519805
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.10497336103722993
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "baseline",
+      "cosine": 0.25880281100598485
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.12196114837636439
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.07434945174791953
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.09314449648377601
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.07500905560498791
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "baseline",
+      "cosine": 0.36670575759055357
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.03619424595706394
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.18075077375393594
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.09556874845138105
+    },
+    {
+      "frontend": "theta_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.17120766418187516
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "baseline",
+      "cosine": 0.06778199354039549
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "early_abrupt",
+      "cosine": -0.12448759985998517
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "late_abrupt",
+      "cosine": -0.13085309329827258
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "early_gradual",
+      "cosine": -0.15885375123085932
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "late_gradual",
+      "cosine": -0.11769852924315277
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "baseline",
+      "cosine": -0.07210206878531275
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.14505065991552618
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.21221454238218387
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.32528489982669695
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.38075059033108216
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "baseline",
+      "cosine": 0.3298208848044847
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.15727661380576496
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.321517299314712
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.3594586398225928
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.07100207181571405
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "baseline",
+      "cosine": 0.08918724556749918
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.06195352583659612
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.15121827638193042
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.050353144654069995
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "late_gradual",
+      "cosine": -0.05283566820605999
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "baseline",
+      "cosine": 0.2722853207834021
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.18395015991673233
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.10987797946618445
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.08954470480696723
+    },
+    {
+      "frontend": "alpha_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.3525096739383053
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "baseline",
+      "cosine": 0.05821733744079233
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.21783030159802533
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "late_abrupt",
+      "cosine": -0.13912980926811505
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "early_gradual",
+      "cosine": -0.12281507183307162
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "baseline",
+      "eeg_condition": "late_gradual",
+      "cosine": -0.004166985860381266
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "baseline",
+      "cosine": 0.24784011087140337
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.12394019982014602
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.16980389906566135
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.3181405647415695
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.3832205580077373
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "baseline",
+      "cosine": 0.15504946591609325
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.39095100523197407
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.4369389663163357
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.3681569363233382
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.3608007102512387
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "baseline",
+      "cosine": 0.1384732215286359
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.10593811304198678
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.08309525960852573
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "early_gradual",
+      "cosine": -0.0442799958477492
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.20054598404982968
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "baseline",
+      "cosine": 0.10100418273731708
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.47952533196443026
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.4291323348417711
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.38592935293469144
+    },
+    {
+      "frontend": "beta_global",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.13934732138225872
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "baseline",
+      "eeg_condition": "baseline",
+      "cosine": 0.08197146354649405
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "baseline",
+      "eeg_condition": "early_abrupt",
+      "cosine": -0.2837988762219765
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "baseline",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.07897064764074346
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "baseline",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.14711892577386845
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "baseline",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.09050789432935218
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "baseline",
+      "cosine": 0.064271828437872
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.21778394467293086
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.27665074029609804
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.06040497044222623
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.3194530580330166
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "baseline",
+      "cosine": 0.2645798381923977
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.1496893004293329
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.2601482593010077
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.2095619900401216
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.23197457695202942
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "baseline",
+      "cosine": 0.05216056394308148
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.03998935760929437
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.20123075193105233
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.01700614510373545
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.0036364423699252646
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "baseline",
+      "cosine": 0.21048063438044132
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.160089770992724
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.2630470651859055
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.2295880839624426
+    },
+    {
+      "frontend": "mu_central",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.3031754644320586
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "baseline",
+      "eeg_condition": "baseline",
+      "cosine": 0.15532199379445571
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "baseline",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.3011699637678774
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "baseline",
+      "eeg_condition": "late_abrupt",
+      "cosine": -0.136635033756408
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "baseline",
+      "eeg_condition": "early_gradual",
+      "cosine": -0.17531576169794658
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "baseline",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.03078438236033623
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "baseline",
+      "cosine": 0.21271263322080886
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "early_abrupt",
+      "cosine": -0.016981549241624785
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.19743230249345023
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.4241110754184362
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "early_abrupt",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.04921911948052835
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "baseline",
+      "cosine": 0.21378379363315478
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.3434836294574858
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.46253189270192924
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.45793797007263537
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "late_abrupt",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.17795691314921278
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "baseline",
+      "cosine": 0.0633678559880638
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.0848656825946343
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "late_abrupt",
+      "cosine": -0.018355093294424005
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.02158872578529098
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "early_gradual",
+      "eeg_condition": "late_gradual",
+      "cosine": -0.025658172595921715
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "baseline",
+      "cosine": 0.09225607305031125
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "early_abrupt",
+      "cosine": 0.11097904663004778
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "late_abrupt",
+      "cosine": 0.33035154491664315
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "early_gradual",
+      "cosine": 0.45735685022276484
+    },
+    {
+      "frontend": "beta_central",
+      "gait_condition": "late_gradual",
+      "eeg_condition": "late_gradual",
+      "cosine": 0.10982470067040218
+    }
+  ]
+}
