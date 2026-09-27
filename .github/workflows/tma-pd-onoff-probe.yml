@@ -1,0 +1,42 @@
+name: TMA PD ON-OFF clinical probe
+
+on:
+  push:
+    branches:
+      - tma-clinical-onoff-validation-20260927
+    paths:
+      - 'research/tma_pd_onoff_figshare_probe.py'
+      - '.github/workflows/tma-pd-onoff-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install --upgrade pip && pip install requests openpyxl
+      - name: Probe Figshare dataset
+        run: python research/tma_pd_onoff_figshare_probe.py
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: tma-pd-onoff-probe
+          path: research/tma_pd_onoff_results/
+          if-no-files-found: error
+      - name: Commit text results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_pd_onoff_results/PROBE.md research/tma_pd_onoff_results/figshare_article.json research/tma_pd_onoff_results/*.members.txt || true
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add ON/OFF gait dataset probe results'
+            git push origin HEAD:tma-clinical-onoff-validation-20260927
+          fi
