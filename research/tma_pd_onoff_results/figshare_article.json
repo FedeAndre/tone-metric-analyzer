@@ -1,0 +1,153 @@
+{
+  "files": [
+    {
+      "id": 28739484,
+      "name": "C3Dfiles.zip",
+      "size": 1346134299,
+      "is_link_only": false,
+      "download_url": "https://ndownloader.figshare.com/files/28739484",
+      "supplied_md5": "a3f2989cbcd2873738d1c9050d0296ee",
+      "computed_md5": "a3f2989cbcd2873738d1c9050d0296ee",
+      "mimetype": "application/zip"
+    },
+    {
+      "id": 30420402,
+      "name": "Gait cycles.zip",
+      "size": 116175881,
+      "is_link_only": false,
+      "download_url": "https://ndownloader.figshare.com/files/30420402",
+      "supplied_md5": "63b29b7f695ca114e05dbdc45ed91db2",
+      "computed_md5": "63b29b7f695ca114e05dbdc45ed91db2",
+      "mimetype": "application/zip"
+    },
+    {
+      "id": 37907001,
+      "name": "PDGinfo.xlsx",
+      "size": 21301,
+      "is_link_only": false,
+      "download_url": "https://ndownloader.figshare.com/files/37907001",
+      "supplied_md5": "532dfce5e7150b4946b7c3cd7a443363",
+      "computed_md5": "532dfce5e7150b4946b7c3cd7a443363",
+      "mimetype": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    },
+    {
+      "id": 38431859,
+      "name": "Supplementary_material.docx",
+      "size": 16657,
+      "is_link_only": false,
+      "download_url": "https://ndownloader.figshare.com/files/38431859",
+      "supplied_md5": "b9790caa1210f067ac330cf69b738d5a",
+      "computed_md5": "b9790caa1210f067ac330cf69b738d5a",
+      "mimetype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    }
+  ],
+  "folder_structure": {},
+  "authors": [
+    {
+      "id": 9947048,
+      "full_name": "Daniel Boari",
+      "first_name": "Daniel",
+      "last_name": "Boari",
+      "is_active": true,
+      "url_name": "Daniel_Boari",
+      "orcid_id": ""
+    }
+  ],
+  "custom_fields": [],
+  "figshare_url": "https://figshare.com/articles/dataset/A_dataset_of_overground_walking_full-body_kinematics_and_kinetics_in_individuals_with_Parkinson_s_disease/14896881",
+  "download_disabled": false,
+  "description": "<p>The data set comprises raw and processed (both in c3d and csv formats) full-body kinematics and kinetics signals of 26 individuals with Parkinson's disease walking in overground in ON and OFF medication. The data were collected using a three-dimensional (3D) motion-capture system while the subjects walked barefoot. A file of metadata (xls), including anthropometrics and information related to each file in the data set is also provided. In addition, a model file (mdh) and a pipeline file (v3s) for the Visual 3D software program are also provided. \u00a0The data collection was performed in the <strong>Laboratory of Biomechanics and Motor Control at the Federal University of ABC, Brazil</strong>. Standard gait analysis was collected using a motion-capture system that had 12 cameras (Raptor-4; Motion Analysis Corporation, Santa Rosa, CA, USA), five force platforms (three 40 \u00d7 60-cm Optima models; AMTI, Watertown, MA, USA; two 40 \u00d7 60-cm 9281EA models; Kistler, Winterthur, Switzerland) embedded in the floor. \u00a0The marker-set protocol adopted for this study comprised: (a) in the lower limb, 26 anatomical reflective markers (Leardini et al., 2007); and (b) trunk and upper limb, 18 anatomical reflective markers following the recommendations of the International Society of Biomechanics (Wu et al., 2002;Wu et al., 2005); totaling 44 anatomical reflective markers \u00a0<br>\n</p>",
+  "funding": null,
+  "funding_list": [],
+  "version": 4,
+  "status": "public",
+  "size": 1462348138,
+  "created_date": "2022-12-05T18:38:15Z",
+  "modified_date": "2022-12-05T18:38:15Z",
+  "is_public": true,
+  "is_confidential": false,
+  "is_metadata_record": false,
+  "confidential_reason": "",
+  "metadata_reason": "",
+  "license": {
+    "value": 1,
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "tags": [
+    "gait control",
+    "biomechanics, general",
+    "KINEMATICS",
+    "Parkinson Disease Patients",
+    "Movement disorders",
+    "Biomechanics",
+    "Biomedical Engineering not elsewhere classified",
+    "Neuroscience"
+  ],
+  "keywords": [
+    "gait control",
+    "biomechanics, general",
+    "KINEMATICS",
+    "Parkinson Disease Patients",
+    "Movement disorders",
+    "Biomechanics",
+    "Biomedical Engineering not elsewhere classified",
+    "Neuroscience"
+  ],
+  "categories": [
+    {
+      "id": 24484,
+      "title": "Clinical microbiology",
+      "parent_id": 24475,
+      "path": "/24457/24475/24484",
+      "source_id": "320203",
+      "taxonomy_id": 100
+    },
+    {
+      "id": 26299,
+      "title": "Biomedical engineering not elsewhere classified",
+      "parent_id": 26263,
+      "path": "/26212/26263/26299",
+      "source_id": "400399",
+      "taxonomy_id": 100
+    },
+    {
+      "id": 24748,
+      "title": "Neurosciences not elsewhere classified",
+      "parent_id": 24724,
+      "path": "/24457/24724/24748",
+      "source_id": "320999",
+      "taxonomy_id": 100
+    }
+  ],
+  "references": [],
+  "has_linked_file": false,
+  "citation": "Boari, Daniel (2021). A dataset of overground walking full-body kinematics and kinetics in individuals with Parkinson\u2019s disease. figshare. Dataset. https://doi.org/10.6084/m9.figshare.14896881.v4",
+  "related_materials": [],
+  "is_embargoed": false,
+  "embargo_date": null,
+  "embargo_type": "file",
+  "embargo_title": "",
+  "embargo_reason": "",
+  "embargo_options": [],
+  "id": 14896881,
+  "title": "A dataset of overground walking full-body kinematics and kinetics in individuals with Parkinson\u2019s disease",
+  "doi": "10.6084/m9.figshare.14896881.v4",
+  "handle": "",
+  "url": "https://api.figshare.com/v2/articles/14896881",
+  "published_date": "2022-12-05T18:38:15Z",
+  "thumb": "https://s3-eu-west-1.amazonaws.com/pfigshare-u-previews/38431859/thumb.png",
+  "defined_type": 3,
+  "defined_type_name": "dataset",
+  "group_id": null,
+  "url_private_api": "https://api.figshare.com/v2/account/articles/14896881",
+  "url_public_api": "https://api.figshare.com/v2/articles/14896881",
+  "url_private_html": "https://figshare.com/account/articles/14896881",
+  "url_public_html": "https://figshare.com/articles/dataset/A_dataset_of_overground_walking_full-body_kinematics_and_kinetics_in_individuals_with_Parkinson_s_disease/14896881",
+  "timeline": {
+    "posted": "2022-12-05T18:38:15",
+    "firstOnline": "2021-07-09"
+  },
+  "resource_title": null,
+  "resource_doi": null
+}
