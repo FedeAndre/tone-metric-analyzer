@@ -16,52 +16,44 @@ if not ZIP.exists() or ZIP.stat().st_size < 1_000_000_000:
             for chunk in r.iter_content(4*1024*1024):
                 if chunk: f.write(chunk)
 
-lines=["# Raw C3D archive probe v2","",f"archive_bytes: {ZIP.stat().st_size}",""]
+lines=["# Raw C3D archive probe v3","",f"archive_bytes: {ZIP.stat().st_size}",""]
 with zipfile.ZipFile(ZIP) as z:
     names=z.namelist()
-    (OUT/"C3D_MEMBERS.txt").write_text("\n".join(names),encoding="utf-8")
     c3d=[n for n in names if n.lower().endswith(".c3d")]
-    csv=[n for n in names if n.lower().endswith(".csv")]
-    txt=[n for n in names if n.lower().endswith(".txt")]
-    lines += [f"members: {len(names)}",f"c3d: {len(c3d)}",f"csv: {len(csv)}",f"txt: {len(txt)}",""]
-
     for cond in ("off","on"):
-        cand=[n for n in c3d if f"C3Dfiles/SUB01_{cond}/SUB01_{cond}_walk_" in n]
-        lines += [f"## SUB01 {cond} walk C3D candidates ({len(cand)})"]
-        lines += [f"- {n}" for n in cand[:5]]
-        if cand:
-            n=sorted(cand)[0]
+        cand=sorted([n for n in c3d if f"C3Dfiles/SUB01_{cond}/SUB01_{cond}_walk_" in n])
+        lines += [f"## SUB01 {cond} walking C3D"]
+        for n in cand[:3]:
             dest=Path("/tmp")/Path(n).name
             with z.open(n) as src, open(dest,"wb") as dst:
                 while True:
                     b=src.read(1024*1024)
                     if not b: break
                     dst.write(b)
-            try:
-                import ezc3d
-                c=ezc3d.c3d(str(dest))
-                pl=list(c["parameters"]["POINT"]["LABELS"]["value"])
-                rate=float(c["parameters"]["POINT"]["RATE"]["value"][0])
-                pts=c["data"]["points"]
-                lines += [
-                    f"sample_walk_file: {n}",
-                    f"point_rate: {rate}; point_frames: {pts.shape[2]}; n_points: {len(pl)}",
-                    "point_labels: "+", ".join(pl),
-                ]
-            except Exception as e:
-                lines.append(f"ezc3d error for {n}: {e!r}")
-
-        tnames=sorted([n for n in txt if f"C3Dfiles/SUB01_{cond}/SUB01_{cond}_walk_" in n and n.endswith("_temporal_distance.txt")])
-        lines += ["",f"## SUB01 {cond} temporal_distance samples ({len(tnames)})"]
-        for n in tnames[:3]:
-            raw=z.read(n)
-            text=raw.decode("utf-8",errors="replace")
-            lines += [f"### {n}","~~~",text[:8000],"~~~"]
-
-        lnames=sorted([n for n in csv if f"C3Dfiles/SUB01_{cond}/SUB01_{cond}_walk_" in n and n.endswith("_linear_kinematics.csv")])
-        if lnames:
-            raw=z.read(lnames[0]).decode("utf-8",errors="replace")
-            lines += ["",f"## Linear kinematics header sample {lnames[0]}","~~~",raw[:5000],"~~~"]
+            import ezc3d
+            c=ezc3d.c3d(str(dest))
+            lines += [f"### {n}", "parameter_groups: "+", ".join(c["parameters"].keys())]
+            if "EVENT" in c["parameters"]:
+                ev=c["parameters"]["EVENT"]
+                lines.append("EVENT keys: "+", ".join(ev.keys()))
+                for key,val in ev.items():
+                    try:
+                        lines.append(f"{key}: {val.get('value')}")
+                    except Exception:
+                        lines.append(f"{key}: {val}")
+            else:
+                lines.append("EVENT group: absent")
+            for gname in c["parameters"].keys():
+                if any(x in gname.upper() for x in ("EVENT","ANALYSIS","TRIAL","PROCESSING")) and gname!="EVENT":
+                    lines.append(f"{gname} keys: "+", ".join(c["parameters"][gname].keys()))
+                    for key,val in c["parameters"][gname].items():
+                        try:
+                            v=val.get("value")
+                            s=str(v)
+                            if len(s)>2500: s=s[:2500]+"..."
+                            lines.append(f"{gname}.{key}: {s}")
+                        except Exception:
+                            pass
 
 (OUT/"C3D_PROBE.md").write_text("\n".join(lines)+"\n",encoding="utf-8")
 print((OUT/"C3D_PROBE.md").read_text(encoding="utf-8"))
