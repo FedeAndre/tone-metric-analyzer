@@ -1,0 +1,61 @@
+ID
+Gender
+Age
+Height (cm)
+Weight (kg)
+BMI (kg/m2)
+Ortho-Prosthesis
+Years of formal study
+Disease duration (years)
+L-Dopa equivalent units (mg•day-1)
+FoG group
+FoG-Q (score)
+Initial symptoms
+Is there a family history of PD? Who?
+Do you feel improvement after using the antiparkinsonian medicine?
+Have you ever had any type of surgery? Which?
+Any rehabilitation or physical activity?
+Other disease (cardiovascular, bone, etc.)
+Handedness
+ON - Hoehn & Yahr 
+ON - MoCA
+ON - mini-BESTest
+ON - FES-I
+ON - UPDRS-II
+ON - UPDRS-II - walking
+ON - UPDRS-III
+ON - UPDRS-III - rigidity
+ON - UPDRS-III - walking
+ON - PIGD or TD
+ON - UPDRS-III asymmetry
+ON - Stroop-I time (s)
+ON - Stroop-I error
+ON - Stroop-II time (s)
+ON - Stroop-II error
+ON - Stroop-III time (s)
+ON - Stroop-III error
+ON - TMTA time (s)
+ON - TMTA error
+ON - TMTB time(s)
+ON - TMTB error
+OFF - Hoehn & Yahr 
+OFF - MoCA
+OFF - mini-BESTest
+OFF - FES-I
+OFF - UPDRS-II
+OFF - UPDRS-II - walking
+OFF - UPDRS-III
+OFF - UPDRS-III - rigidity
+OFF - UPDRS-III - walking
+OFF - PIGD or TD
+OFF - UPDRS-III asymmetry
+OFF - Stroop-I time (s)
+OFF - Stroop-I error
+OFF - Stroop-II time (s)
+OFF - Stroop-II error
+OFF - Stroop-III time (s)
+OFF - Stroop-III error
+OFF - TMTA time (s)
+OFF - TMTA error
+OFF - TMTB time(s)
+OFF - TMTB error
