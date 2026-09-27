@@ -1,0 +1,42 @@
+name: TMA PD ON-OFF event QC
+
+on:
+  push:
+    branches:
+      - tma-clinical-onoff-validation-20260927
+    paths:
+      - 'research/tma_pd_onoff_event_qc.py'
+      - '.github/workflows/tma-pd-onoff-event-qc.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  qc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install --upgrade pip && pip install requests ezc3d numpy pandas scipy openpyxl tabulate
+      - name: Reconstruct gait events and validate
+        run: PYTHONPATH=.:research python research/tma_pd_onoff_event_qc.py
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: tma-pd-onoff-event-qc
+          path: research/tma_pd_onoff_results/
+          if-no-files-found: error
+      - name: Commit text/CSV QC results
+        run: |
+          git config user.name 'TMA analysis bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_pd_onoff_results/EVENT_QC.md research/tma_pd_onoff_results/onoff_event_qc_*.csv research/tma_pd_onoff_results/PDGinfo.csv research/tma_pd_onoff_results/PDGINFO_COLUMNS.txt
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add ON/OFF gait-event reconstruction QC'
+            git push origin HEAD:tma-clinical-onoff-validation-20260927
+          fi
