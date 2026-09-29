@@ -14,9 +14,9 @@ from research.tma_gait_gauge_validation import (
     transitions,
     first_between,
     project_phase,
-    analyze_cycles,
     icc3_1,
 )
+from research.tma_gait_fast_exact import fast_analyze_cycles
 
 SEED = 20260929
 THRESHOLD_N = 20.0
@@ -115,7 +115,7 @@ def extract_cycles_n(arr: np.ndarray, record: str, n_cycles: int):
 def analyze_record(record: str, n_cycles: int):
     arr = download_record(record)
     cycles, fs = extract_cycles_n(arr, record, n_cycles)
-    feat, events, pivots, tree = analyze_cycles(cycles)
+    feat, events, pivots, tree = fast_analyze_cycles(cycles)
     durs = np.asarray([c["duration_s"] for c in cycles], float)
     feat = dict(feat)
     feat.update({
@@ -541,6 +541,7 @@ def main():
             "primary_cycles": PRIMARY_N_CYCLES,
             "sensitivity_cycles": SENSITIVITY_N_CYCLES,
         },
+        "implementation": "specialized binary evaluator previously gated to exact repository-engine equality; current run additionally checks frozen GaCo01_01 32-cycle regression",
         "regression_gate": regression,
         "N32": n32,
         "N24": n24,
