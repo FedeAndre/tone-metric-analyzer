@@ -26,6 +26,23 @@ PAIR_IDS_WITH_02 = [
     "JuPt01", "JuPt03", "JuPt06", "JuPt09", "JuPt10", "JuPt11",
     "JuPt15", "JuPt20", "JuPt21", "JuPt23", "JuPt24", "JuPt28", "JuPt29",
 ]
+# Availability inferred from the public PhysioNet record listing. Avoid probing
+# known-absent files, which otherwise incurs long HTTP timeouts.
+AVAILABLE_SUFFIXES = {
+    "JuPt01": ("01","02","03","04","05","06"),
+    "JuPt03": ("01","02","03","04","05","06","07"),
+    "JuPt06": ("01","02","03","04","05","06","07"),
+    "JuPt09": ("01","02","03","04","05"),
+    "JuPt10": ("01","02","03","04","05","06","07"),
+    "JuPt11": ("01","02","03","04","05","06","07"),
+    "JuPt15": ("01","02","03","04","05","06","07"),
+    "JuPt20": ("01","02","03","04","05","06","07"),
+    "JuPt21": ("01","02","03","04","05","06","07"),
+    "JuPt23": ("01","02","03","04","05","06","07"),
+    "JuPt24": ("01","02"),
+    "JuPt28": ("01","02","03","04","05","06","07"),
+    "JuPt29": ("01","02","03","04","05","06","07"),
+}
 REPEAT_SUFFIXES = ("02", "03", "04", "05", "06", "07")
 CANONICAL = [
     "mean_H", "mean_D", "mean_lambda", "multilevel",
@@ -335,16 +352,11 @@ def regression_gate():
 def run_n_cycles(n_cycles: int):
     record_rows = []
     failures = {}
-    all_candidates = [f"{sid}_01" for sid in PAIR_IDS_WITH_02]
-    for sid in PAIR_IDS_WITH_02:
-        all_candidates.extend(f"{sid}_{sfx}" for sfx in REPEAT_SUFFIXES)
-    # Preserve first occurrence, since 01 is added separately.
-    seen = set()
-    records = []
-    for rec in all_candidates:
-        if rec not in seen:
-            seen.add(rec)
-            records.append(rec)
+    records = [
+        f"{sid}_{sfx}"
+        for sid in PAIR_IDS_WITH_02
+        for sfx in AVAILABLE_SUFFIXES[sid]
+    ]
 
     for i, rec in enumerate(records, 1):
         print(f"[{n_cycles} cycles] {i:03d}/{len(records)} {rec}", flush=True)
