@@ -1,0 +1,268 @@
+{
+  "n_independent_target_beat_controls": 200,
+  "frozen_horizon_bars": 16,
+  "target_beat_earlier_perturbation_unchanged_count": 126,
+  "target_beat_later_perturbation_unchanged_count": 200,
+  "cross_beat_boundary_mismatches": {
+    "past": 74,
+    "future": 0
+  },
+  "cross_beat_interior_mismatches": {
+    "past": 0,
+    "future": 0
+  },
+  "cross_beat_mismatch_examples": [
+    {
+      "changed": "earlier",
+      "target": "8",
+      "original": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "perturbed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "changed": "earlier",
+      "target": "8",
+      "original": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "perturbed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "changed": "earlier",
+      "target": "8",
+      "original": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "perturbed": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "changed": "earlier",
+      "target": "8",
+      "original": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "perturbed": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "changed": "earlier",
+      "target": "8",
+      "original": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "perturbed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "changed": "earlier",
+      "target": "8",
+      "original": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "perturbed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    }
+  ],
+  "example_unchanged_levels": [
+    {
+      "beat": 8,
+      "held_phase_pattern": [
+        "0",
+        "3/8"
+      ],
+      "levels": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          5
+        ]
+      ]
+    },
+    {
+      "beat": 8,
+      "held_phase_pattern": [
+        "0",
+        "1/4",
+        "3/4"
+      ],
+      "levels": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          4
+        ],
+        [
+          4
+        ]
+      ]
+    },
+    {
+      "beat": 8,
+      "held_phase_pattern": [
+        "0",
+        "1/2"
+      ],
+      "levels": [
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          3
+        ]
+      ]
+    }
+  ],
+  "whole_record_pivot_tree_sensitivity_to_earlier_history": [
+    {
+      "pivot_count_base": 22,
+      "pivot_count_earlier_shuffled": 21,
+      "tree_count_base": 146,
+      "tree_count_earlier_shuffled": 143,
+      "different_pivot_recovery": true,
+      "different_tree_endpoints": true
+    },
+    {
+      "pivot_count_base": 27,
+      "pivot_count_earlier_shuffled": 27,
+      "tree_count_base": 156,
+      "tree_count_earlier_shuffled": 157,
+      "different_pivot_recovery": true,
+      "different_tree_endpoints": true
+    },
+    {
+      "pivot_count_base": 22,
+      "pivot_count_earlier_shuffled": 22,
+      "tree_count_base": 148,
+      "tree_count_earlier_shuffled": 147,
+      "different_pivot_recovery": true,
+      "different_tree_endpoints": true
+    },
+    {
+      "pivot_count_base": 17,
+      "pivot_count_earlier_shuffled": 18,
+      "tree_count_base": 153,
+      "tree_count_earlier_shuffled": 152,
+      "different_pivot_recovery": true,
+      "different_tree_endpoints": true
+    }
+  ],
+  "whole_record_pivot_tree_sensitivity_to_later_history": [
+    {
+      "pivot_count_base": 22,
+      "pivot_count_later_shuffled": 23,
+      "tree_count_base": 146,
+      "tree_count_later_shuffled": 153,
+      "different_pivot_recovery": true,
+      "different_tree_endpoints": true
+    },
+    {
+      "pivot_count_base": 27,
+      "pivot_count_later_shuffled": 27,
+      "tree_count_base": 156,
+      "tree_count_later_shuffled": 155,
+      "different_pivot_recovery": true,
+      "different_tree_endpoints": true
+    },
+    {
+      "pivot_count_base": 22,
+      "pivot_count_later_shuffled": 22,
+      "tree_count_base": 148,
+      "tree_count_later_shuffled": 151,
+      "different_pivot_recovery": true,
+      "different_tree_endpoints": true
+    },
+    {
+      "pivot_count_base": 17,
+      "pivot_count_later_shuffled": 17,
+      "tree_count_base": 153,
+      "tree_count_later_shuffled": 153,
+      "different_pivot_recovery": true,
+      "different_tree_endpoints": true
+    }
+  ],
+  "interpretation": [
+    "Level membership may depend on neighboring beats at boundaries; report measured effects",
+    "Do not assume long-memory event conditioning; evaluate boundary effects separately from interior effects",
+    "Changes in global pivots and predecessor trees are a separate layer that can retain temporal history",
+    "Whole-record pivot or tree summaries may change when later events arrive; causality must be tested separately",
+    "Boundary scale and parent Level are defined by metric scaffold which is origin dependent"
+  ],
+  "limits": [
+    "Synthetic 4/4 binary quarter-note reference; no triplets or mixed arities",
+    "TMA invariance demonstrated for chosen beat subdivisions, beyond mathematical proof by implementation source",
+    "Pivots and trees compared as whole-record summaries, not local retroactive change counts"
+  ]
+}
