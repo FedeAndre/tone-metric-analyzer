@@ -1,0 +1,31 @@
+name: TMA Fourier morphological contrast audit
+on:
+  push:
+    branches: [research-tma-fourier-20261008]
+    paths: ['research/tma_fourier_morphology_report.py','.github/workflows/tma-fourier-morphology-report.yml']
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  morphology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --upgrade pip && pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2'
+      - run: python research/tma_fourier_morphology_report.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-fourier-spectral-contrasts
+          path: research/tma_fourier_results/spectral_morphology.json
+          if-no-files-found: error
+      - name: Archive audited report
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_fourier_results/spectral_morphology.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Archive TMA amplitude-spectrum divergence from onset and static templates'
+            git push origin HEAD:research-tma-fourier-20261008
+          fi
