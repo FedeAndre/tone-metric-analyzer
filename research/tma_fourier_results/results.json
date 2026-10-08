@@ -1,0 +1,2178 @@
+{
+  "dataset": "Groove MIDI 1.0; 97 performances, 10 drummers, 32 bars each",
+  "n_tracks": 97,
+  "n_drummers": 10,
+  "n_windows": 679,
+  "FFT_grid_per_quarter_note": 64,
+  "FFT_timebase": "metronome quarter-note beat; 1024 slots per 4-bar window",
+  "spectral_model": "mean-centered TMA H and D at attack times, zero elsewhere; extra event-index H/D and onset spectral features",
+  "engine_gate": "28 engine-equivalence checks; 28 origin-prefix equivalence checks",
+  "sample_context_ablation": {
+    "fraction_contextual_stack": {
+      "mean": 0.23105895909069818,
+      "median": 0.23271742593182543,
+      "p90": 0.3200502246893999
+    },
+    "fraction_contextual_H": {
+      "mean": 0.23105895909069818,
+      "median": 0.23271742593182543,
+      "p90": 0.3200502246893999
+    },
+    "fraction_contextual_D": {
+      "mean": 0.23105895909069818,
+      "median": 0.23271742593182543,
+      "p90": 0.3200502246893999
+    },
+    "context_H_mean_abs": {
+      "mean": 0.53010821244969,
+      "median": 0.5086232530478739,
+      "p90": 0.8383498854087089
+    },
+    "context_D_mean_abs": {
+      "mean": 0.53010821244969,
+      "median": 0.5086232530478739,
+      "p90": 0.8383498854087089
+    }
+  },
+  "n_features": {
+    "timing": 62,
+    "timing_onsetFFT": 100,
+    "timing_onset_singleFFT": 154,
+    "timing_onset_TMAFFT": 192,
+    "timing_onset_single_TMAFFT": 246,
+    "timing_onset_contextFFT": 154,
+    "timing_onset_timeTMA": 139,
+    "timing_onset_timeTMA_TMAFFT": 231,
+    "TMA_FFT_only": 94,
+    "onset_FFT_only": 40,
+    "static_template_FFT_only": 56
+  },
+  "model_results": {
+    "change": {
+      "30": {
+        "metrics": {
+          "timing": {
+            "all": {
+              "MAE": 0.08155070641011869,
+              "R2": 0.006626909997819341
+            },
+            "regular": {
+              "MAE": 0.0676617561059356,
+              "R2": 0.07959475352573142
+            },
+            "variable": {
+              "MAE": 0.09460631969605078,
+              "R2": -0.12931013643062683
+            }
+          },
+          "timing_onsetFFT": {
+            "all": {
+              "MAE": 0.08224251695238141,
+              "R2": -0.00012966019364135661
+            },
+            "regular": {
+              "MAE": 0.07139044129401027,
+              "R2": 0.013902116866407188
+            },
+            "variable": {
+              "MAE": 0.09244346807125031,
+              "R2": -0.09662746539454647
+            }
+          },
+          "timing_onset_singleFFT": {
+            "all": {
+              "MAE": 0.08471905939456967,
+              "R2": -0.0785860925572095
+            },
+            "regular": {
+              "MAE": 0.07215346955368471,
+              "R2": -0.010606907739252103
+            },
+            "variable": {
+              "MAE": 0.09653071384500152,
+              "R2": -0.2185449098147989
+            }
+          },
+          "timing_onset_TMAFFT": {
+            "all": {
+              "MAE": 0.08953377783936294,
+              "R2": -0.13669931323784956
+            },
+            "regular": {
+              "MAE": 0.07998927088038967,
+              "R2": -0.21656006202264377
+            },
+            "variable": {
+              "MAE": 0.09850561438079782,
+              "R2": -0.18130512155265865
+            }
+          },
+          "timing_onset_single_TMAFFT": {
+            "all": {
+              "MAE": 0.09172620095271526,
+              "R2": -0.18625618382940723
+            },
+            "regular": {
+              "MAE": 0.08109657205308547,
+              "R2": -0.2041474898272868
+            },
+            "variable": {
+              "MAE": 0.10171805211836726,
+              "R2": -0.27725820325076
+            }
+          },
+          "timing_onset_contextFFT": {
+            "all": {
+              "MAE": 0.08447361716715934,
+              "R2": -0.04376706740957603
+            },
+            "regular": {
+              "MAE": 0.07313381706613241,
+              "R2": -0.04720950378251998
+            },
+            "variable": {
+              "MAE": 0.09513302926212464,
+              "R2": -0.1321917272806592
+            }
+          },
+          "timing_onset_timeTMA": {
+            "all": {
+              "MAE": 0.08396494653222601,
+              "R2": -0.04497253720454353
+            },
+            "regular": {
+              "MAE": 0.07165126247673935,
+              "R2": -0.0091020413985885
+            },
+            "variable": {
+              "MAE": 0.09553980954438349,
+              "R2": -0.1602016263110837
+            }
+          },
+          "timing_onset_timeTMA_TMAFFT": {
+            "all": {
+              "MAE": 0.09094632420185107,
+              "R2": -0.14322761568688347
+            },
+            "regular": {
+              "MAE": 0.08063546280677983,
+              "R2": -0.19045090820546684
+            },
+            "variable": {
+              "MAE": 0.10063853391321805,
+              "R2": -0.2105670214484523
+            }
+          },
+          "TMA_FFT_only": {
+            "all": {
+              "MAE": 0.086656336415118,
+              "R2": -0.026901605496539194
+            },
+            "regular": {
+              "MAE": 0.08354836391566066,
+              "R2": -0.1586872699836257
+            },
+            "variable": {
+              "MAE": 0.0895778305646079,
+              "R2": -0.02669465293886586
+            }
+          },
+          "onset_FFT_only": {
+            "all": {
+              "MAE": 0.08259578436216684,
+              "R2": 0.021040405349124436
+            },
+            "regular": {
+              "MAE": 0.07684266941777651,
+              "R2": -0.044871619174679855
+            },
+            "variable": {
+              "MAE": 0.08800371240989376,
+              "R2": -0.019322223725413368
+            }
+          },
+          "static_template_FFT_only": {
+            "all": {
+              "MAE": 0.08414050621236277,
+              "R2": -0.0012553181424486137
+            },
+            "regular": {
+              "MAE": 0.07871231460462946,
+              "R2": -0.0301336944205568
+            },
+            "variable": {
+              "MAE": 0.0892430063236321,
+              "R2": -0.06870832786647152
+            }
+          }
+        },
+        "comparisons": {
+          "TMA_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.007291260886981516,
+              "drummer_bootstrap_95CI": [
+                -0.009464473653537489,
+                -0.003830783274853998
+              ],
+              "fraction_bootstrap_positive": 0.0
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.008598829586379385,
+              "drummer_bootstrap_95CI": [
+                -0.012335832554406238,
+                -0.0030918411467493355
+              ],
+              "fraction_bootstrap_positive": 0.001001001001001001
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.006062146309547518,
+              "drummer_bootstrap_95CI": [
+                -0.008744329063679711,
+                -0.0026639934087130646
+              ],
+              "fraction_bootstrap_positive": 0.001001001001001001
+            }
+          },
+          "TMA_FFT_beyond_time_TMA": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.006981377669625061,
+              "drummer_bootstrap_95CI": [
+                -0.009461707881220357,
+                -0.003246687105514752
+              ],
+              "fraction_bootstrap_positive": 0.0
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.008984200330040498,
+              "drummer_bootstrap_95CI": [
+                -0.012462713335000633,
+                -0.004576942059594414
+              ],
+              "fraction_bootstrap_positive": 0.0
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.005098724368834548,
+              "drummer_bootstrap_95CI": [
+                -0.008186031839055192,
+                -0.0008876462112114644
+              ],
+              "fraction_bootstrap_positive": 0.008008008008008008
+            }
+          },
+          "TMA_FFT_beyond_static_template": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.007007141558145594,
+              "drummer_bootstrap_95CI": [
+                -0.01036813735619386,
+                -0.0030685005773486503
+              ],
+              "fraction_bootstrap_positive": 0.003003003003003003
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.008943102499400758,
+              "drummer_bootstrap_95CI": [
+                -0.01387846213816783,
+                -0.00403444038865862
+              ],
+              "fraction_bootstrap_positive": 0.001001001001001001
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.005187338273365743,
+              "drummer_bootstrap_95CI": [
+                -0.009542257293110581,
+                -0.0007335276614108178
+              ],
+              "fraction_bootstrap_positive": 0.008008008008008008
+            }
+          },
+          "context_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.002231100214777903,
+              "drummer_bootstrap_95CI": [
+                -0.0034251165339326014,
+                -0.0005889794175955338
+              ],
+              "fraction_bootstrap_positive": 0.005005005005005005
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0017433757721221307,
+              "drummer_bootstrap_95CI": [
+                -0.0036593022806507367,
+                0.0006487802060566412
+              ],
+              "fraction_bootstrap_positive": 0.06606606606606606
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.00268956119087433,
+              "drummer_bootstrap_95CI": [
+                -0.004616124613993208,
+                -0.00044291819461280487
+              ],
+              "fraction_bootstrap_positive": 0.01001001001001001
+            }
+          }
+        }
+      },
+      "100": {
+        "metrics": {
+          "timing": {
+            "all": {
+              "MAE": 0.07987834954912024,
+              "R2": 0.05006922376136069
+            },
+            "regular": {
+              "MAE": 0.06733971222827463,
+              "R2": 0.09100473969373235
+            },
+            "variable": {
+              "MAE": 0.0916646686307151,
+              "R2": -0.060335278751718846
+            }
+          },
+          "timing_onsetFFT": {
+            "all": {
+              "MAE": 0.08013827465480625,
+              "R2": 0.050340746847273854
+            },
+            "regular": {
+              "MAE": 0.06977086085587485,
+              "R2": 0.049267363618202165
+            },
+            "variable": {
+              "MAE": 0.08988364362580176,
+              "R2": -0.03150955783381426
+            }
+          },
+          "timing_onset_singleFFT": {
+            "all": {
+              "MAE": 0.08199839816512058,
+              "R2": 0.005259402819141723
+            },
+            "regular": {
+              "MAE": 0.071065789122887,
+              "R2": 0.03824026201174224
+            },
+            "variable": {
+              "MAE": 0.0922750506648202,
+              "R2": -0.10363916571072984
+            }
+          },
+          "timing_onset_TMAFFT": {
+            "all": {
+              "MAE": 0.08457557277742381,
+              "R2": -0.020704032740008538
+            },
+            "regular": {
+              "MAE": 0.07637658131003669,
+              "R2": -0.09129726924722359
+            },
+            "variable": {
+              "MAE": 0.0922826247567677,
+              "R2": -0.06151735100332889
+            }
+          },
+          "timing_onset_single_TMAFFT": {
+            "all": {
+              "MAE": 0.08599683179760331,
+              "R2": -0.04791901212108218
+            },
+            "regular": {
+              "MAE": 0.0767320988870717,
+              "R2": -0.07995826855501709
+            },
+            "variable": {
+              "MAE": 0.09470568073350301,
+              "R2": -0.11728301578792033
+            }
+          },
+          "timing_onset_contextFFT": {
+            "all": {
+              "MAE": 0.08132073877905124,
+              "R2": 0.02463410446262959
+            },
+            "regular": {
+              "MAE": 0.07119524151744963,
+              "R2": 0.00418285063269086
+            },
+            "variable": {
+              "MAE": 0.09083870620495677,
+              "R2": -0.04629097374952518
+            }
+          },
+          "timing_onset_timeTMA": {
+            "all": {
+              "MAE": 0.08126051302436516,
+              "R2": 0.023234960538265348
+            },
+            "regular": {
+              "MAE": 0.0705006803224778,
+              "R2": 0.03391039373302285
+            },
+            "variable": {
+              "MAE": 0.09137475576413925,
+              "R2": -0.06895165239760725
+            }
+          },
+          "timing_onset_timeTMA_TMAFFT": {
+            "all": {
+              "MAE": 0.08542132105723109,
+              "R2": -0.026650512375343327
+            },
+            "regular": {
+              "MAE": 0.07657726998475292,
+              "R2": -0.08091881422996838
+            },
+            "variable": {
+              "MAE": 0.09373472906536057,
+              "R2": -0.07906809116432578
+            }
+          },
+          "TMA_FFT_only": {
+            "all": {
+              "MAE": 0.0850287983948782,
+              "R2": 0.006966591629613994
+            },
+            "regular": {
+              "MAE": 0.08168778948185504,
+              "R2": -0.1006942750087505
+            },
+            "variable": {
+              "MAE": 0.08816934677312,
+              "R2": -0.006265882982676496
+            }
+          },
+          "onset_FFT_only": {
+            "all": {
+              "MAE": 0.08142864250374295,
+              "R2": 0.03988729866101115
+            },
+            "regular": {
+              "MAE": 0.07570917486791212,
+              "R2": -0.016472751312124112
+            },
+            "variable": {
+              "MAE": 0.08680494208142389,
+              "R2": -0.005323744303126432
+            }
+          },
+          "static_template_FFT_only": {
+            "all": {
+              "MAE": 0.08349281614506741,
+              "R2": 0.011852331855940035
+            },
+            "regular": {
+              "MAE": 0.07886337753136709,
+              "R2": -0.019170413806932185
+            },
+            "variable": {
+              "MAE": 0.08784448844194574,
+              "R2": -0.05300451810968698
+            }
+          }
+        },
+        "comparisons": {
+          "TMA_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0044372981226175655,
+              "drummer_bootstrap_95CI": [
+                -0.006356693825352222,
+                -0.0015783203867545319
+              ],
+              "fraction_bootstrap_positive": 0.001001001001001001
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.006605720454161852,
+              "drummer_bootstrap_95CI": [
+                -0.009986945862447501,
+                -0.00256328647548816
+              ],
+              "fraction_bootstrap_positive": 0.0
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0023989811309659366,
+              "drummer_bootstrap_95CI": [
+                -0.00439340498837434,
+                0.0003089442384266282
+              ],
+              "fraction_bootstrap_positive": 0.043043043043043044
+            }
+          },
+          "TMA_FFT_beyond_time_TMA": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.004160808032865946,
+              "drummer_bootstrap_95CI": [
+                -0.006313896509265541,
+                -0.0009900486516934775
+              ],
+              "fraction_bootstrap_positive": 0.002002002002002002
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.006076589662275113,
+              "drummer_bootstrap_95CI": [
+                -0.009519276185271926,
+                -0.002039892823696589
+              ],
+              "fraction_bootstrap_positive": 0.0
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.00235997330122133,
+              "drummer_bootstrap_95CI": [
+                -0.004553550997246825,
+                0.0004983630554406739
+              ],
+              "fraction_bootstrap_positive": 0.057057057057057055
+            }
+          },
+          "TMA_FFT_beyond_static_template": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.003998433632482709,
+              "drummer_bootstrap_95CI": [
+                -0.007171028954585388,
+                -0.0005286233942396585
+              ],
+              "fraction_bootstrap_positive": 0.014014014014014014
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.005666309764184719,
+              "drummer_bootstrap_95CI": [
+                -0.010756898857784155,
+                -0.0008578489704192461
+              ],
+              "fraction_bootstrap_positive": 0.007007007007007007
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.002430630068682818,
+              "drummer_bootstrap_95CI": [
+                -0.005162128998721259,
+                0.000629154859447832
+              ],
+              "fraction_bootstrap_positive": 0.07207207207207207
+            }
+          },
+          "context_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0011824641242449948,
+              "drummer_bootstrap_95CI": [
+                -0.00209061173215328,
+                5.572323332246922e-05
+              ],
+              "fraction_bootstrap_positive": 0.031031031031031032
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0014243806615747748,
+              "drummer_bootstrap_95CI": [
+                -0.0037719785380147326,
+                0.0011912252021593467
+              ],
+              "fraction_bootstrap_positive": 0.14314314314314314
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0009550625791550011,
+              "drummer_bootstrap_95CI": [
+                -0.0024828559152526666,
+                0.0010412996966220397
+              ],
+              "fraction_bootstrap_positive": 0.16416416416416416
+            }
+          }
+        }
+      },
+      "300": {
+        "metrics": {
+          "timing": {
+            "all": {
+              "MAE": 0.0792993928343178,
+              "R2": 0.07000693477423703
+            },
+            "regular": {
+              "MAE": 0.06888115853078516,
+              "R2": 0.0869862621934182
+            },
+            "variable": {
+              "MAE": 0.08909253307963849,
+              "R2": -0.02239386471775595
+            }
+          },
+          "timing_onsetFFT": {
+            "all": {
+              "MAE": 0.07930965326414534,
+              "R2": 0.07157843435255051
+            },
+            "regular": {
+              "MAE": 0.06994955970698494,
+              "R2": 0.06157641800637703
+            },
+            "variable": {
+              "MAE": 0.08810814120787612,
+              "R2": -0.0023611767978206633
+            }
+          },
+          "timing_onset_singleFFT": {
+            "all": {
+              "MAE": 0.08058344140208458,
+              "R2": 0.05008692635228518
+            },
+            "regular": {
+              "MAE": 0.07115673514563924,
+              "R2": 0.056938751495682505
+            },
+            "variable": {
+              "MAE": 0.0894445452831432,
+              "R2": -0.03716790088515909
+            }
+          },
+          "timing_onset_TMAFFT": {
+            "all": {
+              "MAE": 0.08163702776043488,
+              "R2": 0.04689073531323307
+            },
+            "regular": {
+              "MAE": 0.07396208193318077,
+              "R2": -0.0033909388396278217
+            },
+            "variable": {
+              "MAE": 0.08885147683805376,
+              "R2": -0.001839475563588655
+            }
+          },
+          "timing_onset_single_TMAFFT": {
+            "all": {
+              "MAE": 0.08284884761201884,
+              "R2": 0.02793499167014646
+            },
+            "regular": {
+              "MAE": 0.07480758501054202,
+              "R2": -0.007100494733679463
+            },
+            "variable": {
+              "MAE": 0.09040763445740706,
+              "R2": -0.032798086076616384
+            }
+          },
+          "timing_onset_contextFFT": {
+            "all": {
+              "MAE": 0.07984741146588718,
+              "R2": 0.06082029446481374
+            },
+            "regular": {
+              "MAE": 0.07070406930903664,
+              "R2": 0.034700242639552514
+            },
+            "variable": {
+              "MAE": 0.08844215309332668,
+              "R2": -0.0031081526515281954
+            }
+          },
+          "timing_onset_timeTMA": {
+            "all": {
+              "MAE": 0.07993674297890976,
+              "R2": 0.05909637961853309
+            },
+            "regular": {
+              "MAE": 0.07064904555480434,
+              "R2": 0.05435662351022963
+            },
+            "variable": {
+              "MAE": 0.0886671785575689,
+              "R2": -0.019502525171005924
+            }
+          },
+          "timing_onset_timeTMA_TMAFFT": {
+            "all": {
+              "MAE": 0.08181704279465074,
+              "R2": 0.04422923650550281
+            },
+            "regular": {
+              "MAE": 0.07438430619197531,
+              "R2": 4.6795379364916734e-05
+            },
+            "variable": {
+              "MAE": 0.08880381520116563,
+              "R2": -0.008874739124581366
+            }
+          },
+          "TMA_FFT_only": {
+            "all": {
+              "MAE": 0.08298144471684052,
+              "R2": 0.03791175131015678
+            },
+            "regular": {
+              "MAE": 0.07930103045620304,
+              "R2": -0.038729532554341306
+            },
+            "variable": {
+              "MAE": 0.08644103412183975,
+              "R2": 0.006303038542649242
+            }
+          },
+          "onset_FFT_only": {
+            "all": {
+              "MAE": 0.0802062058856336,
+              "R2": 0.057182200352306034
+            },
+            "regular": {
+              "MAE": 0.074613467437195,
+              "R2": 0.011881939540206998
+            },
+            "variable": {
+              "MAE": 0.08546338002716586,
+              "R2": 0.005963746302047657
+            }
+          },
+          "static_template_FFT_only": {
+            "all": {
+              "MAE": 0.08281324092405577,
+              "R2": 0.023036613774171433
+            },
+            "regular": {
+              "MAE": 0.07894920918845193,
+              "R2": -0.011412262464840728
+            },
+            "variable": {
+              "MAE": 0.08644543075552337,
+              "R2": -0.03852081077104441
+            }
+          }
+        },
+        "comparisons": {
+          "TMA_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.00232737449628955,
+              "drummer_bootstrap_95CI": [
+                -0.004028742047162585,
+                -0.00029530699894360975
+              ],
+              "fraction_bootstrap_positive": 0.015015015015015015
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.004012522226195831,
+              "drummer_bootstrap_95CI": [
+                -0.006797912024602033,
+                -0.001325012922081652
+              ],
+              "fraction_bootstrap_positive": 0.001001001001001001
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0007433356301776461,
+              "drummer_bootstrap_95CI": [
+                -0.002770019849575202,
+                0.0012627422097100072
+              ],
+              "fraction_bootstrap_positive": 0.23823823823823823
+            }
+          },
+          "TMA_FFT_beyond_time_TMA": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0018802998157409663,
+              "drummer_bootstrap_95CI": [
+                -0.0038443869926670215,
+                0.0005955105318923381
+              ],
+              "fraction_bootstrap_positive": 0.05805805805805806
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0037352606371709785,
+              "drummer_bootstrap_95CI": [
+                -0.006567680692046334,
+                -0.0008539205318155441
+              ],
+              "fraction_bootstrap_positive": 0.004004004004004004
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0001366366435967546,
+              "drummer_bootstrap_95CI": [
+                -0.002355597758404223,
+                0.00226192289960705
+              ],
+              "fraction_bootstrap_positive": 0.45545545545545546
+            }
+          },
+          "TMA_FFT_beyond_static_template": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0022654062099342663,
+              "drummer_bootstrap_95CI": [
+                -0.004436843800543848,
+                -8.213408205608836e-05
+              ],
+              "fraction_bootstrap_positive": 0.021021021021021023
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.003650849864902779,
+              "drummer_bootstrap_95CI": [
+                -0.007291647873140953,
+                -0.000902587649315498
+              ],
+              "fraction_bootstrap_positive": 0.004004004004004004
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0009630891742638653,
+              "drummer_bootstrap_95CI": [
+                -0.002357939225119354,
+                0.0008830311708023363
+              ],
+              "fraction_bootstrap_positive": 0.14014014014014015
+            }
+          },
+          "context_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0005377582017418373,
+              "drummer_bootstrap_95CI": [
+                -0.001407598246319724,
+                0.0007488533381972437
+              ],
+              "fraction_bootstrap_positive": 0.2032032032032032
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0007545096020517087,
+              "drummer_bootstrap_95CI": [
+                -0.002628154671809371,
+                0.001377647476787875
+              ],
+              "fraction_bootstrap_positive": 0.23923923923923923
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.00033401188545055803,
+              "drummer_bootstrap_95CI": [
+                -0.0016382640424131836,
+                0.001356510232171028
+              ],
+              "fraction_bootstrap_positive": 0.3383383383383383
+            }
+          }
+        }
+      },
+      "1000": {
+        "metrics": {
+          "timing": {
+            "all": {
+              "MAE": 0.07985681739192532,
+              "R2": 0.06835374523669646
+            },
+            "regular": {
+              "MAE": 0.07253033832470625,
+              "R2": 0.06177480002019209
+            },
+            "variable": {
+              "MAE": 0.08674370771511125,
+              "R2": -0.008191073030626939
+            }
+          },
+          "timing_onsetFFT": {
+            "all": {
+              "MAE": 0.07938438466251731,
+              "R2": 0.07222247249213665
+            },
+            "regular": {
+              "MAE": 0.07154249884974265,
+              "R2": 0.05770878188531958
+            },
+            "variable": {
+              "MAE": 0.08675575732652549,
+              "R2": 0.0014029945096449836
+            }
+          },
+          "timing_onset_singleFFT": {
+            "all": {
+              "MAE": 0.08002813837196286,
+              "R2": 0.0665211808407874
+            },
+            "regular": {
+              "MAE": 0.07227246707135064,
+              "R2": 0.05899450844447718
+            },
+            "variable": {
+              "MAE": 0.08731846939453834,
+              "R2": -0.009539336902377293
+            }
+          },
+          "timing_onset_TMAFFT": {
+            "all": {
+              "MAE": 0.080068148549175,
+              "R2": 0.07189735455441071
+            },
+            "regular": {
+              "MAE": 0.07312500454222315,
+              "R2": 0.044997223216818316
+            },
+            "variable": {
+              "MAE": 0.08659470391570977,
+              "R2": 0.009461928296409905
+            }
+          },
+          "timing_onset_single_TMAFFT": {
+            "all": {
+              "MAE": 0.08090768172379248,
+              "R2": 0.06263645590466338
+            },
+            "regular": {
+              "MAE": 0.07392191292454349,
+              "R2": 0.03835178278434215
+            },
+            "variable": {
+              "MAE": 0.08747430439508652,
+              "R2": -0.0023805717559348682
+            }
+          },
+          "timing_onset_contextFFT": {
+            "all": {
+              "MAE": 0.07950101614665765,
+              "R2": 0.07210894381777688
+            },
+            "regular": {
+              "MAE": 0.07152385244147973,
+              "R2": 0.04867108249485097
+            },
+            "variable": {
+              "MAE": 0.0869995500295249,
+              "R2": 0.007340495954085147
+            }
+          },
+          "timing_onset_timeTMA": {
+            "all": {
+              "MAE": 0.07948553630778699,
+              "R2": 0.06884142080605116
+            },
+            "regular": {
+              "MAE": 0.07181167292069296,
+              "R2": 0.05647476190935108
+            },
+            "variable": {
+              "MAE": 0.08669896789165536,
+              "R2": -0.0037302315180993695
+            }
+          },
+          "timing_onset_timeTMA_TMAFFT": {
+            "all": {
+              "MAE": 0.08010678607869895,
+              "R2": 0.07181981740030052
+            },
+            "regular": {
+              "MAE": 0.07342747916594472,
+              "R2": 0.044669933538761364
+            },
+            "variable": {
+              "MAE": 0.08638533457668793,
+              "R2": 0.009547269634497701
+            }
+          },
+          "TMA_FFT_only": {
+            "all": {
+              "MAE": 0.08154991917234289,
+              "R2": 0.04963947390862167
+            },
+            "regular": {
+              "MAE": 0.07813746498795476,
+              "R2": -0.0009083317897846666
+            },
+            "variable": {
+              "MAE": 0.08475762610566771,
+              "R2": 0.0013290292352745592
+            }
+          },
+          "onset_FFT_only": {
+            "all": {
+              "MAE": 0.07970588480092496,
+              "R2": 0.06315936503117914
+            },
+            "regular": {
+              "MAE": 0.07455696519006269,
+              "R2": 0.026568265266767033
+            },
+            "variable": {
+              "MAE": 0.08454586923513546,
+              "R2": 0.006545788757351012
+            }
+          },
+          "static_template_FFT_only": {
+            "all": {
+              "MAE": 0.08249994657335867,
+              "R2": 0.026112821691073207
+            },
+            "regular": {
+              "MAE": 0.07938027619009895,
+              "R2": -0.014838032985076577
+            },
+            "variable": {
+              "MAE": 0.08543243673362282,
+              "R2": -0.030761249460143913
+            }
+          }
+        },
+        "comparisons": {
+          "TMA_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0006837638866576939,
+              "drummer_bootstrap_95CI": [
+                -0.00196560237911131,
+                0.00036043847170742413
+              ],
+              "fraction_bootstrap_positive": 0.0990990990990991
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0015825056924804954,
+              "drummer_bootstrap_95CI": [
+                -0.003542160436514873,
+                -0.00013815779109450013
+              ],
+              "fraction_bootstrap_positive": 0.011011011011011011
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": 0.00016105341081573942,
+              "drummer_bootstrap_95CI": [
+                -0.0016549894748915878,
+                0.0019768875791179885
+              ],
+              "fraction_bootstrap_positive": 0.5565565565565566
+            }
+          },
+          "TMA_FFT_beyond_time_TMA": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0006212497709119631,
+              "drummer_bootstrap_95CI": [
+                -0.0020114244502813456,
+                0.0006877424902507579
+              ],
+              "fraction_bootstrap_positive": 0.15215215215215216
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0016158062452517488,
+              "drummer_bootstrap_95CI": [
+                -0.0035814849004801082,
+                -1.7901112338432458e-05
+              ],
+              "fraction_bootstrap_positive": 0.024024024024024024
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": 0.00031363331496743566,
+              "drummer_bootstrap_95CI": [
+                -0.0015217063991902664,
+                0.002178712414798684
+              ],
+              "fraction_bootstrap_positive": 0.6226226226226226
+            }
+          },
+          "TMA_FFT_beyond_static_template": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0008795433518296164,
+              "drummer_bootstrap_95CI": [
+                -0.0023464351798202472,
+                0.0001549643799199175
+              ],
+              "fraction_bootstrap_positive": 0.05205205205205205
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0016494458531928571,
+              "drummer_bootstrap_95CI": [
+                -0.0039129696520912825,
+                -0.00022678072592810224
+              ],
+              "fraction_bootstrap_positive": 0.007007007007007007
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0001558350005481702,
+              "drummer_bootstrap_95CI": [
+                -0.0015108798673588053,
+                0.0012696249816849811
+              ],
+              "fraction_bootstrap_positive": 0.4034034034034034
+            }
+          },
+          "context_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.00011663148414034662,
+              "drummer_bootstrap_95CI": [
+                -0.0008571313900021837,
+                0.0008757796921255384
+              ],
+              "fraction_bootstrap_positive": 0.4064064064064064
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": 1.8646408262909516e-05,
+              "drummer_bootstrap_95CI": [
+                -0.001482172415573707,
+                0.0017583123722631495
+              ],
+              "fraction_bootstrap_positive": 0.5125125125125125
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.00024379270299940738,
+              "drummer_bootstrap_95CI": [
+                -0.0013666044161439786,
+                0.0011767583933734195
+              ],
+              "fraction_bootstrap_positive": 0.36736736736736736
+            }
+          }
+        }
+      }
+    },
+    "drift": {
+      "30": {
+        "metrics": {
+          "timing": {
+            "all": {
+              "MAE": 0.12015669585589239,
+              "R2": -0.04385899299380136
+            },
+            "regular": {
+              "MAE": 0.10335699026924562,
+              "R2": 0.09352392418549982
+            },
+            "variable": {
+              "MAE": 0.13594841910734037,
+              "R2": -0.20916382425549207
+            }
+          },
+          "timing_onsetFFT": {
+            "all": {
+              "MAE": 0.12182705054109857,
+              "R2": -0.06941748600391562
+            },
+            "regular": {
+              "MAE": 0.10558903873317534,
+              "R2": 0.05580604772451425
+            },
+            "variable": {
+              "MAE": 0.13709078164054642,
+              "R2": -0.22695795117592543
+            }
+          },
+          "timing_onset_singleFFT": {
+            "all": {
+              "MAE": 0.12890466139840304,
+              "R2": -0.16307959645196446
+            },
+            "regular": {
+              "MAE": 0.11416638036097865,
+              "R2": -0.09531759470905565
+            },
+            "variable": {
+              "MAE": 0.14275864557358195,
+              "R2": -0.28234927839899693
+            }
+          },
+          "timing_onset_TMAFFT": {
+            "all": {
+              "MAE": 0.1315822442691739,
+              "R2": -0.19519764953635543
+            },
+            "regular": {
+              "MAE": 0.12087906963429539,
+              "R2": -0.18595881984453855
+            },
+            "variable": {
+              "MAE": 0.14164322842595964,
+              "R2": -0.27180594833915794
+            }
+          },
+          "timing_onset_single_TMAFFT": {
+            "all": {
+              "MAE": 0.13531656897216948,
+              "R2": -0.2597862314667405
+            },
+            "regular": {
+              "MAE": 0.12232927185618059,
+              "R2": -0.23965968177868335
+            },
+            "variable": {
+              "MAE": 0.14752462826119905,
+              "R2": -0.34843917413975944
+            }
+          },
+          "timing_onset_contextFFT": {
+            "all": {
+              "MAE": 0.1266450877813632,
+              "R2": -0.12959844434601653
+            },
+            "regular": {
+              "MAE": 0.11205209697316992,
+              "R2": -0.04254290847951503
+            },
+            "variable": {
+              "MAE": 0.14036249914106488,
+              "R2": -0.2615997544438744
+            }
+          },
+          "timing_onset_timeTMA": {
+            "all": {
+              "MAE": 0.13003329666242242,
+              "R2": -0.1551331012777446
+            },
+            "regular": {
+              "MAE": 0.1143099821092777,
+              "R2": -0.05351369796106287
+            },
+            "variable": {
+              "MAE": 0.14481321234237846,
+              "R2": -0.2997027681036013
+            }
+          },
+          "timing_onset_timeTMA_TMAFFT": {
+            "all": {
+              "MAE": 0.13695018500033918,
+              "R2": -0.25749457771194995
+            },
+            "regular": {
+              "MAE": 0.12358180298234656,
+              "R2": -0.2248924721568515
+            },
+            "variable": {
+              "MAE": 0.14951646409725225,
+              "R2": -0.35550694391681836
+            }
+          },
+          "TMA_FFT_only": {
+            "all": {
+              "MAE": 0.12626729728652275,
+              "R2": -0.056326871728589634
+            },
+            "regular": {
+              "MAE": 0.12137760011332396,
+              "R2": -0.09477997246299497
+            },
+            "variable": {
+              "MAE": 0.1308636126293296,
+              "R2": -0.08856133514843867
+            }
+          },
+          "onset_FFT_only": {
+            "all": {
+              "MAE": 0.11839872608585146,
+              "R2": 0.026848620630341435
+            },
+            "regular": {
+              "MAE": 0.10849407850405048,
+              "R2": 0.09024900796188562
+            },
+            "variable": {
+              "MAE": 0.12770909481274442,
+              "R2": -0.07804558895996339
+            }
+          },
+          "static_template_FFT_only": {
+            "all": {
+              "MAE": 0.1207441719224098,
+              "R2": -0.011173169335739752
+            },
+            "regular": {
+              "MAE": 0.1152390612297428,
+              "R2": -0.026572919459242783
+            },
+            "variable": {
+              "MAE": 0.12591897597351678,
+              "R2": -0.05832064336331633
+            }
+          }
+        },
+        "comparisons": {
+          "TMA_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.009755193728075295,
+              "drummer_bootstrap_95CI": [
+                -0.0176796676697578,
+                -0.0012747291659226255
+              ],
+              "fraction_bootstrap_positive": 0.01001001001001001
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.015290030901120046,
+              "drummer_bootstrap_95CI": [
+                -0.023422834118977866,
+                -0.006727660325729866
+              ],
+              "fraction_bootstrap_positive": 0.0
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.004552446785413226,
+              "drummer_bootstrap_95CI": [
+                -0.012910511500376386,
+                0.00507209872825455
+              ],
+              "fraction_bootstrap_positive": 0.17917917917917917
+            }
+          },
+          "TMA_FFT_beyond_time_TMA": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.00691688833791676,
+              "drummer_bootstrap_95CI": [
+                -0.0135270227819934,
+                -0.0009130608075802794
+              ],
+              "fraction_bootstrap_positive": 0.009009009009009009
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.009271820873068846,
+              "drummer_bootstrap_95CI": [
+                -0.0155801905540521,
+                -0.0027987799766859283
+              ],
+              "fraction_bootstrap_positive": 0.0
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.004703251754873797,
+              "drummer_bootstrap_95CI": [
+                -0.012778679952764289,
+                0.004243979946483157
+              ],
+              "fraction_bootstrap_positive": 0.15415415415415415
+            }
+          },
+          "TMA_FFT_beyond_static_template": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0064119075737664516,
+              "drummer_bootstrap_95CI": [
+                -0.012021269060191658,
+                -0.0021471172399360394
+              ],
+              "fraction_bootstrap_positive": 0.0
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.008162891495201937,
+              "drummer_bootstrap_95CI": [
+                -0.016858108884827847,
+                -0.0014350381678817756
+              ],
+              "fraction_bootstrap_positive": 0.004004004004004004
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.004765982687617097,
+              "drummer_bootstrap_95CI": [
+                -0.00915313495664643,
+                0.00031427001652563726
+              ],
+              "fraction_bootstrap_positive": 0.03003003003003003
+            }
+          },
+          "context_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.004818037240264622,
+              "drummer_bootstrap_95CI": [
+                -0.009149212767935492,
+                -0.0015835140104551175
+              ],
+              "fraction_bootstrap_positive": 0.004004004004004004
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.006463058239994598,
+              "drummer_bootstrap_95CI": [
+                -0.009751498489584263,
+                -0.0008922988850413821
+              ],
+              "fraction_bootstrap_positive": 0.013013013013013013
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0032717175005184465,
+              "drummer_bootstrap_95CI": [
+                -0.009308173375957648,
+                0.0009320490657497533
+              ],
+              "fraction_bootstrap_positive": 0.12212212212212212
+            }
+          }
+        }
+      },
+      "100": {
+        "metrics": {
+          "timing": {
+            "all": {
+              "MAE": 0.11630331650783503,
+              "R2": 0.04826598799484627
+            },
+            "regular": {
+              "MAE": 0.10228721008058013,
+              "R2": 0.11843974586197559
+            },
+            "variable": {
+              "MAE": 0.12947845654945458,
+              "R2": -0.06053536740121723
+            }
+          },
+          "timing_onsetFFT": {
+            "all": {
+              "MAE": 0.1163685547697325,
+              "R2": 0.04626974198209388
+            },
+            "regular": {
+              "MAE": 0.10271707622265537,
+              "R2": 0.1059855016055753
+            },
+            "variable": {
+              "MAE": 0.129200944603985,
+              "R2": -0.054690181694271534
+            }
+          },
+          "timing_onset_singleFFT": {
+            "all": {
+              "MAE": 0.12094705695395006,
+              "R2": -0.017675590030644006
+            },
+            "regular": {
+              "MAE": 0.10883643496284043,
+              "R2": 0.0004204073819860099
+            },
+            "variable": {
+              "MAE": 0.13233104162559312,
+              "R2": -0.09068900363921317
+            }
+          },
+          "timing_onset_TMAFFT": {
+            "all": {
+              "MAE": 0.12311426372200422,
+              "R2": -0.03324171726904179
+            },
+            "regular": {
+              "MAE": 0.11417129300206176,
+              "R2": -0.05874842214835718
+            },
+            "variable": {
+              "MAE": 0.13152065619875014,
+              "R2": -0.07398338118066405
+            }
+          },
+          "timing_onset_single_TMAFFT": {
+            "all": {
+              "MAE": 0.1255466335086405,
+              "R2": -0.07697935553000113
+            },
+            "regular": {
+              "MAE": 0.1152216748463084,
+              "R2": -0.10476061948752458
+            },
+            "variable": {
+              "MAE": 0.13525209465123267,
+              "R2": -0.11853645757785314
+            }
+          },
+          "timing_onset_contextFFT": {
+            "all": {
+              "MAE": 0.1206123086262783,
+              "R2": -0.008486438643492189
+            },
+            "regular": {
+              "MAE": 0.10840902310791571,
+              "R2": 0.018136502822177936
+            },
+            "variable": {
+              "MAE": 0.1320833970135391,
+              "R2": -0.0874531823104654
+            }
+          },
+          "timing_onset_timeTMA": {
+            "all": {
+              "MAE": 0.1215991059778276,
+              "R2": -0.01180912527512068
+            },
+            "regular": {
+              "MAE": 0.10946843118301725,
+              "R2": 0.024658313755759664
+            },
+            "variable": {
+              "MAE": 0.13300194028494933,
+              "R2": -0.09846012032227258
+            }
+          },
+          "timing_onset_timeTMA_TMAFFT": {
+            "all": {
+              "MAE": 0.1266065678284232,
+              "R2": -0.07968177126856468
+            },
+            "regular": {
+              "MAE": 0.11643920010632315,
+              "R2": -0.10084992968418449
+            },
+            "variable": {
+              "MAE": 0.13616389348719726,
+              "R2": -0.12642820246726827
+            }
+          },
+          "TMA_FFT_only": {
+            "all": {
+              "MAE": 0.12238386584094381,
+              "R2": -0.00429289453056847
+            },
+            "regular": {
+              "MAE": 0.11687796457186703,
+              "R2": -0.023815178001744597
+            },
+            "variable": {
+              "MAE": 0.127559413033876,
+              "R2": -0.047902938284724916
+            }
+          },
+          "onset_FFT_only": {
+            "all": {
+              "MAE": 0.1165329168109304,
+              "R2": 0.05201513399209867
+            },
+            "regular": {
+              "MAE": 0.10661303136794092,
+              "R2": 0.11021450141619882
+            },
+            "variable": {
+              "MAE": 0.12585760912734056,
+              "R2": -0.04745647724413504
+            }
+          },
+          "static_template_FFT_only": {
+            "all": {
+              "MAE": 0.11899553305327328,
+              "R2": 0.023922732316313255
+            },
+            "regular": {
+              "MAE": 0.11397811966094759,
+              "R2": 0.008919678124251429
+            },
+            "variable": {
+              "MAE": 0.12371190164205939,
+              "R2": -0.021483488213110302
+            }
+          }
+        },
+        "comparisons": {
+          "TMA_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.006745708952271723,
+              "drummer_bootstrap_95CI": [
+                -0.012849667288305383,
+                4.5627746354918314e-05
+              ],
+              "fraction_bootstrap_positive": 0.028028028028028028
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.011454216779406376,
+              "drummer_bootstrap_95CI": [
+                -0.018327080079714717,
+                -0.003992385638880013
+              ],
+              "fraction_bootstrap_positive": 0.001001001001001001
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0023197115947651476,
+              "drummer_bootstrap_95CI": [
+                -0.008258187303498456,
+                0.0049666063547556955
+              ],
+              "fraction_bootstrap_positive": 0.2682682682682683
+            }
+          },
+          "TMA_FFT_beyond_time_TMA": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.005007461850595605,
+              "drummer_bootstrap_95CI": [
+                -0.010441986966092233,
+                0.0006133469909083634
+              ],
+              "fraction_bootstrap_positive": 0.04004004004004004
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.006970768923305908,
+              "drummer_bootstrap_95CI": [
+                -0.013021259062830956,
+                -0.00166469476137297
+              ],
+              "fraction_bootstrap_positive": 0.005005005005005005
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0031619532022479184,
+              "drummer_bootstrap_95CI": [
+                -0.008821241948875085,
+                0.0038726466095107405
+              ],
+              "fraction_bootstrap_positive": 0.18018018018018017
+            }
+          },
+          "TMA_FFT_beyond_static_template": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.004599576554690434,
+              "drummer_bootstrap_95CI": [
+                -0.008024718552727671,
+                -0.0018848102189426795
+              ],
+              "fraction_bootstrap_positive": 0.0
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.006385239883467965,
+              "drummer_bootstrap_95CI": [
+                -0.011806286057231722,
+                -0.0020298213971965025
+              ],
+              "fraction_bootstrap_positive": 0.0
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.002921053025639557,
+              "drummer_bootstrap_95CI": [
+                -0.006213537123799636,
+                0.001390606329183391
+              ],
+              "fraction_bootstrap_positive": 0.08208208208208208
+            }
+          },
+          "context_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.004243753856545782,
+              "drummer_bootstrap_95CI": [
+                -0.008998796120044951,
+                -0.0010384949415215567
+              ],
+              "fraction_bootstrap_positive": 0.004004004004004004
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.005691946885260345,
+              "drummer_bootstrap_95CI": [
+                -0.009880910310172733,
+                -0.0010931968762438453
+              ],
+              "fraction_bootstrap_positive": 0.007007007007007007
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.002882452409554093,
+              "drummer_bootstrap_95CI": [
+                -0.00829933147094852,
+                0.0008657830642164297
+              ],
+              "fraction_bootstrap_positive": 0.15115115115115116
+            }
+          }
+        }
+      },
+      "300": {
+        "metrics": {
+          "timing": {
+            "all": {
+              "MAE": 0.11397361944621412,
+              "R2": 0.09220270067257907
+            },
+            "regular": {
+              "MAE": 0.10274211485452622,
+              "R2": 0.13343581988039388
+            },
+            "variable": {
+              "MAE": 0.12453123376240077,
+              "R2": 0.007980470653257576
+            }
+          },
+          "timing_onsetFFT": {
+            "all": {
+              "MAE": 0.11341813529337312,
+              "R2": 0.09594455686386982
+            },
+            "regular": {
+              "MAE": 0.10265014993134217,
+              "R2": 0.12768726383148654
+            },
+            "variable": {
+              "MAE": 0.12354004153368223,
+              "R2": 0.019161551472540506
+            }
+          },
+          "timing_onset_singleFFT": {
+            "all": {
+              "MAE": 0.11594590361924757,
+              "R2": 0.06291974303882841
+            },
+            "regular": {
+              "MAE": 0.10595374471024832,
+              "R2": 0.06932300905342126
+            },
+            "variable": {
+              "MAE": 0.1253385329937068,
+              "R2": 0.003495349970389139
+            }
+          },
+          "timing_onset_TMAFFT": {
+            "all": {
+              "MAE": 0.11768979553821164,
+              "R2": 0.05183336737105948
+            },
+            "regular": {
+              "MAE": 0.10948904327073569,
+              "R2": 0.034621307749975405
+            },
+            "variable": {
+              "MAE": 0.12539850266963906,
+              "R2": 0.009732826677788964
+            }
+          },
+          "timing_onset_single_TMAFFT": {
+            "all": {
+              "MAE": 0.1190993002615001,
+              "R2": 0.026190692625660317
+            },
+            "regular": {
+              "MAE": 0.10990493312370327,
+              "R2": 0.00046897131788914415
+            },
+            "variable": {
+              "MAE": 0.1277420053710291,
+              "R2": -0.010927509004861058
+            }
+          },
+          "timing_onset_contextFFT": {
+            "all": {
+              "MAE": 0.11691017072680114,
+              "R2": 0.049995120062524157
+            },
+            "regular": {
+              "MAE": 0.10694664834240039,
+              "R2": 0.06232534207736662
+            },
+            "variable": {
+              "MAE": 0.12627588176813784,
+              "R2": -0.014691585991972955
+            }
+          },
+          "timing_onset_timeTMA": {
+            "all": {
+              "MAE": 0.11649789078322449,
+              "R2": 0.06356944803921982
+            },
+            "regular": {
+              "MAE": 0.1071358295635323,
+              "R2": 0.07190002048958288
+            },
+            "variable": {
+              "MAE": 0.1252982283297351,
+              "R2": 0.0027163619879716494
+            }
+          },
+          "timing_onset_timeTMA_TMAFFT": {
+            "all": {
+              "MAE": 0.11973918877706127,
+              "R2": 0.026424767009314065
+            },
+            "regular": {
+              "MAE": 0.11170396252981393,
+              "R2": -0.0014028063903455124
+            },
+            "variable": {
+              "MAE": 0.1272923014494738,
+              "R2": -0.009077434502237303
+            }
+          },
+          "TMA_FFT_only": {
+            "all": {
+              "MAE": 0.11916052547167105,
+              "R2": 0.03898898300191456
+            },
+            "regular": {
+              "MAE": 0.11304311434511469,
+              "R2": 0.0337892199856662
+            },
+            "variable": {
+              "MAE": 0.12491089193063402,
+              "R2": -0.01299962380065689
+            }
+          },
+          "onset_FFT_only": {
+            "all": {
+              "MAE": 0.11568512169203043,
+              "R2": 0.0667419104308491
+            },
+            "regular": {
+              "MAE": 0.1065635066252984,
+              "R2": 0.11243735769378171
+            },
+            "variable": {
+              "MAE": 0.12425943985475855,
+              "R2": -0.022357967870005213
+            }
+          },
+          "static_template_FFT_only": {
+            "all": {
+              "MAE": 0.11814528319080904,
+              "R2": 0.04869682571167899
+            },
+            "regular": {
+              "MAE": 0.11348909726304603,
+              "R2": 0.03696727244900966
+            },
+            "variable": {
+              "MAE": 0.12252209796290625,
+              "R2": 0.0022419726295052067
+            }
+          }
+        },
+        "comparisons": {
+          "TMA_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.004271660244838517,
+              "drummer_bootstrap_95CI": [
+                -0.0078088077379814165,
+                -0.0002102265733317422
+              ],
+              "fraction_bootstrap_positive": 0.013013013013013013
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.006838893339393505,
+              "drummer_bootstrap_95CI": [
+                -0.011766774574936276,
+                -0.001346160925809686
+              ],
+              "fraction_bootstrap_positive": 0.006006006006006006
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0018584611359568292,
+              "drummer_bootstrap_95CI": [
+                -0.0051470829893351675,
+                0.002572957556029825
+              ],
+              "fraction_bootstrap_positive": 0.1981981981981982
+            }
+          },
+          "TMA_FFT_beyond_time_TMA": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.003241297993836801,
+              "drummer_bootstrap_95CI": [
+                -0.006677629848997664,
+                0.00048481130410598294
+              ],
+              "fraction_bootstrap_positive": 0.06606606606606606
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.004568132966281634,
+              "drummer_bootstrap_95CI": [
+                -0.00890182603638039,
+                -0.00021794243014230165
+              ],
+              "fraction_bootstrap_positive": 0.018018018018018018
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.00199407311973866,
+              "drummer_bootstrap_95CI": [
+                -0.00536092940601398,
+                0.0023818714646498896
+              ],
+              "fraction_bootstrap_positive": 0.17917917917917917
+            }
+          },
+          "TMA_FFT_beyond_static_template": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0031533966422525347,
+              "drummer_bootstrap_95CI": [
+                -0.005240151714751423,
+                -0.0009864453454938972
+              ],
+              "fraction_bootstrap_positive": 0.001001001001001001
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.003951188413454938,
+              "drummer_bootstrap_95CI": [
+                -0.007122767273904957,
+                -0.0007126334817169817
+              ],
+              "fraction_bootstrap_positive": 0.008008008008008008
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0024034723773222757,
+              "drummer_bootstrap_95CI": [
+                -0.004758866429672218,
+                0.001091668039297314
+              ],
+              "fraction_bootstrap_positive": 0.07907907907907907
+            }
+          },
+          "context_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.003492035433428013,
+              "drummer_bootstrap_95CI": [
+                -0.007912744020784256,
+                -0.000444465954994329
+              ],
+              "fraction_bootstrap_positive": 0.007007007007007007
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.004296498411058216,
+              "drummer_bootstrap_95CI": [
+                -0.008552211231919207,
+                -0.00034706265701421406
+              ],
+              "fraction_bootstrap_positive": 0.01001001001001001
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0027358402344556223,
+              "drummer_bootstrap_95CI": [
+                -0.007231607900270613,
+                0.0007444762843879333
+              ],
+              "fraction_bootstrap_positive": 0.1031031031031031
+            }
+          }
+        }
+      },
+      "1000": {
+        "metrics": {
+          "timing": {
+            "all": {
+              "MAE": 0.11441802802602172,
+              "R2": 0.09541345608216434
+            },
+            "regular": {
+              "MAE": 0.10635061213012562,
+              "R2": 0.11938054872675052
+            },
+            "variable": {
+              "MAE": 0.12200139896816406,
+              "R2": 0.024516110773201927
+            }
+          },
+          "timing_onsetFFT": {
+            "all": {
+              "MAE": 0.11382304840673589,
+              "R2": 0.09759830206348585
+            },
+            "regular": {
+              "MAE": 0.10512764701466909,
+              "R2": 0.11912339978010988
+            },
+            "variable": {
+              "MAE": 0.12199672571527866,
+              "R2": 0.028686296866235805
+            }
+          },
+          "timing_onset_singleFFT": {
+            "all": {
+              "MAE": 0.11490324281235127,
+              "R2": 0.08357547059087012
+            },
+            "regular": {
+              "MAE": 0.10614751557288765,
+              "R2": 0.094995861194059
+            },
+            "variable": {
+              "MAE": 0.1231336264174471,
+              "R2": 0.021535946008201412
+            }
+          },
+          "timing_onset_TMAFFT": {
+            "all": {
+              "MAE": 0.11579231870559259,
+              "R2": 0.07887944892083809
+            },
+            "regular": {
+              "MAE": 0.10773370764992707,
+              "R2": 0.07791687125908431
+            },
+            "variable": {
+              "MAE": 0.12336741309791821,
+              "R2": 0.025988926523936473
+            }
+          },
+          "timing_onset_single_TMAFFT": {
+            "all": {
+              "MAE": 0.11638127507250438,
+              "R2": 0.06868153733389537
+            },
+            "regular": {
+              "MAE": 0.10799284887111187,
+              "R2": 0.06148619469657268
+            },
+            "variable": {
+              "MAE": 0.1242663957018133,
+              "R2": 0.01993994585798109
+            }
+          },
+          "timing_onset_contextFFT": {
+            "all": {
+              "MAE": 0.11637515024145986,
+              "R2": 0.06591605862383598
+            },
+            "regular": {
+              "MAE": 0.10771985540039788,
+              "R2": 0.07885456486930587
+            },
+            "variable": {
+              "MAE": 0.12451112739205811,
+              "R2": 0.001693336456546124
+            }
+          },
+          "timing_onset_timeTMA": {
+            "all": {
+              "MAE": 0.11433602656244704,
+              "R2": 0.09349740350735125
+            },
+            "regular": {
+              "MAE": 0.10689231524794164,
+              "R2": 0.096667057341561
+            },
+            "variable": {
+              "MAE": 0.12133311519808213,
+              "R2": 0.03831358913866545
+            }
+          },
+          "timing_onset_timeTMA_TMAFFT": {
+            "all": {
+              "MAE": 0.11578451097234589,
+              "R2": 0.07953222714682429
+            },
+            "regular": {
+              "MAE": 0.1086707963356292,
+              "R2": 0.06522297147282186
+            },
+            "variable": {
+              "MAE": 0.12247140273085957,
+              "R2": 0.03683538767723438
+            }
+          },
+          "TMA_FFT_only": {
+            "all": {
+              "MAE": 0.11876056823037677,
+              "R2": 0.05208427690595108
+            },
+            "regular": {
+              "MAE": 0.11302411556532156,
+              "R2": 0.049003187575540674
+            },
+            "variable": {
+              "MAE": 0.12415283373552866,
+              "R2": -0.0007541180075107956
+            }
+          },
+          "onset_FFT_only": {
+            "all": {
+              "MAE": 0.11684784114961509,
+              "R2": 0.06257605200265248
+            },
+            "regular": {
+              "MAE": 0.10905060717731135,
+              "R2": 0.09232185193116704
+            },
+            "variable": {
+              "MAE": 0.12417724108358057,
+              "R2": -0.014630022701214829
+            }
+          },
+          "static_template_FFT_only": {
+            "all": {
+              "MAE": 0.11935174458006273,
+              "R2": 0.04232164964971652
+            },
+            "regular": {
+              "MAE": 0.11561652931080431,
+              "R2": 0.032002376964384904
+            },
+            "variable": {
+              "MAE": 0.1228628469331656,
+              "R2": -0.00557743682540357
+            }
+          }
+        },
+        "comparisons": {
+          "TMA_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0019692702988567275,
+              "drummer_bootstrap_95CI": [
+                -0.003063409567371334,
+                -0.0004514834895287702
+              ],
+              "fraction_bootstrap_positive": 0.013013013013013013
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0026060606352579785,
+              "drummer_bootstrap_95CI": [
+                -0.004594080243035478,
+                0.00039635140625743516
+              ],
+              "fraction_bootstrap_positive": 0.03403403403403404
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0013706873826395511,
+              "drummer_bootstrap_95CI": [
+                -0.0035678115370180938,
+                0.001284821030914955
+              ],
+              "fraction_bootstrap_positive": 0.16016016016016016
+            }
+          },
+          "TMA_FFT_beyond_time_TMA": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0014484844098988346,
+              "drummer_bootstrap_95CI": [
+                -0.00272640989918209,
+                0.00037755019696916064
+              ],
+              "fraction_bootstrap_positive": 0.057057057057057055
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0017784810876875562,
+              "drummer_bootstrap_95CI": [
+                -0.003731645625198858,
+                0.0008843278898577006
+              ],
+              "fraction_bootstrap_positive": 0.0920920920920921
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.001138287532777436,
+              "drummer_bootstrap_95CI": [
+                -0.0030101951548936906,
+                0.0013078683083609876
+              ],
+              "fraction_bootstrap_positive": 0.1831831831831832
+            }
+          },
+          "TMA_FFT_beyond_static_template": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0014780322601530868,
+              "drummer_bootstrap_95CI": [
+                -0.0023504642186059814,
+                3.875307436809605e-05
+              ],
+              "fraction_bootstrap_positive": 0.03003003003003003
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0018453332982242172,
+              "drummer_bootstrap_95CI": [
+                -0.0034994894614307575,
+                0.0005982589198848841
+              ],
+              "fraction_bootstrap_positive": 0.07407407407407407
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0011327692843662238,
+              "drummer_bootstrap_95CI": [
+                -0.003095710866345906,
+                0.0014708373743764053
+              ],
+              "fraction_bootstrap_positive": 0.1971971971971972
+            }
+          },
+          "context_FFT_beyond_onset_FFT": {
+            "all": {
+              "gain_MAE_positive_if_Fourier_better": -0.0025521018347239976,
+              "drummer_bootstrap_95CI": [
+                -0.005503606901911377,
+                -7.814231362483163e-05
+              ],
+              "fraction_bootstrap_positive": 0.021021021021021023
+            },
+            "regular": {
+              "gain_MAE_positive_if_Fourier_better": -0.0025922083857288017,
+              "drummer_bootstrap_95CI": [
+                -0.0056695939726115465,
+                0.0004284413661355093
+              ],
+              "fraction_bootstrap_positive": 0.06106106106106106
+            },
+            "variable": {
+              "gain_MAE_positive_if_Fourier_better": -0.0025144016767794835,
+              "drummer_bootstrap_95CI": [
+                -0.0053762862187528605,
+                -4.64126309266601e-06
+              ],
+              "fraction_bootstrap_positive": 0.024024024024024024
+            }
+          }
+        }
+      }
+    }
+  },
+  "runtime_s": 25.340626646000004,
+  "limitations": [
+    "Music TMA H(t) and D(t) are only defined at attacks; zero-filled impulse encoding is a chosen Fourier representation",
+    "Four-bar spectra have limited low-frequency resolution, and power spectra discard temporal phase unless separately included",
+    "Fourier features deterministically derive from note events and cannot add Shannon information to complete raw timing",
+    "Pitches used only as independent orchestration-change outcome, held out from all timing/TMA descriptors",
+    "Endogenous same-performance outcome, not prospective prediction, and only ten independent drummer groups",
+    "Dyadic 1/64-quarter metrical projection does not represent non-dyadic tuplets exactly",
+    "Alpha grid and many spectral features exploratory; evidence requires replication"
+  ]
+}
