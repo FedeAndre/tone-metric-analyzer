@@ -122,10 +122,10 @@ def main():
                     m:{k:v for k,v in loo(rows,m,target,alpha,sample).items() if k in ('n','mae','r2')}
                     for m in modes}
     filename=OUT/'ablation_results.json'
-    filename.write_text(json.dumps(result,indent=2),encoding='utf-8')
+    filename.write_text(json.dumps(result,indent=2,default=lambda x:x.item() if isinstance(x,np.generic) else str(x)),encoding='utf-8')
     assert result['identification']['order_residual']['top1_count']==1
     assert result['identification']['expected']['top1_count']==6
     assert result['identification']['conventional']['top1_count']==3
     print('PASS identity regression checks and 5 clinical phenotypes')
-    print(json.dumps(result,indent=2),flush=True)
+    print(json.dumps(result,indent=2,default=lambda x:x.item() if isinstance(x,np.generic) else str(x)),flush=True)
 if __name__=='__main__':main()
