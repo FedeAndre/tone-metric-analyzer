@@ -1,0 +1,101 @@
+{
+  "n_events": 316,
+  "beats": 128,
+  "n_final_pivots": 46,
+  "n_final_tree_branches": 315,
+  "previous_levels_checked": 20333,
+  "previous_levels_equal_final": 20333,
+  "retroactive_tree_edge_reassignments_at_completed_beats": [],
+  "n_retroactive_tree_edge_reassignments": 0,
+  "retroactive_confirmed_pivot_reassignments_at_completed_beats": [],
+  "n_retroactive_confirmed_pivot_reassignments": 0,
+  "first_confirmed_pivot_observed": [
+    3,
+    7
+  ],
+  "pivot_confirmation_events_quantiles": [
+    2.0,
+    2.0,
+    3.0,
+    5.0,
+    7.0,
+    9.0
+  ],
+  "pivot_confirmation_beats_quantiles": [
+    0.75,
+    1.0,
+    1.5,
+    2.375,
+    2.9375,
+    3.625
+  ],
+  "fraction_pivots_confirmed_by_2_events_after_crest": 0.32608695652173914,
+  "fraction_pivots_confirmed_by_4_events_after_crest": 0.6739130434782609,
+  "fraction_pivots_confirmed_by_8_events_after_crest": 0.9782608695652174,
+  "tree_branch_event_span_quantiles": [
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    3.0,
+    75.0
+  ],
+  "online_summary_milestones": [
+    {
+      "beat": 1,
+      "events": 2,
+      "confirmed_pivots": 0,
+      "tree_branches": 1
+    },
+    {
+      "beat": 2,
+      "events": 5,
+      "confirmed_pivots": 0,
+      "tree_branches": 4
+    },
+    {
+      "beat": 4,
+      "events": 10,
+      "confirmed_pivots": 1,
+      "tree_branches": 9
+    },
+    {
+      "beat": 8,
+      "events": 18,
+      "confirmed_pivots": 3,
+      "tree_branches": 17
+    },
+    {
+      "beat": 16,
+      "events": 37,
+      "confirmed_pivots": 6,
+      "tree_branches": 36
+    },
+    {
+      "beat": 32,
+      "events": 81,
+      "confirmed_pivots": 11,
+      "tree_branches": 80
+    },
+    {
+      "beat": 64,
+      "events": 156,
+      "confirmed_pivots": 23,
+      "tree_branches": 155
+    },
+    {
+      "beat": 128,
+      "events": 316,
+      "confirmed_pivots": 46,
+      "tree_branches": 315
+    }
+  ],
+  "runtime_s": 0.9968447990000016,
+  "notes": [
+    "Pivot is a crest identified only upon first renewed ascent; never assign its finalized value at crest during causal streaming",
+    "Tree rule selects closest admissible earlier event, but predecessor assignments may change if underlying Level of target revised",
+    "Completed-beat rather than mid-beat prefix to avoid provisional Level-stack revisions",
+    "Number of observed events required for the FIRST pivot is descriptively informative, not evidence of superior inferential efficiency",
+    "Only binary 4/4 quarter note tactus and synthetic variable rhythm tested"
+  ]
+}
