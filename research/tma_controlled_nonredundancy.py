@@ -8,7 +8,7 @@ onset autocorrelation and same circular IOI histogram. Strong subset: same
 isolated-event TMA density power. Compare online one-number and finite-vector
 descriptors, full complex onset phase, full TMA wave, root-shift baseline.
 
-A measured TMA difference that ordinary *phase-aware* signal already exposes
+A TMA difference that ordinary *phase-aware* signal already exposes
 is not unique source information. Do not infer clinical utility.
 """
 from fractions import Fraction
