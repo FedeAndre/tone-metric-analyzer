@@ -20,7 +20,7 @@ OUT=Path('research/tma_online_measurement_results');OUT.mkdir(parents=True,exist
 NB=16
 BEATS=NB*4
 TARGET_BEATS=(8,17,29,42,55)
-TRIALS=40
+TRIALS=40 # fixed predeclared contexts, no outcome sampling
 RNG=np.random.default_rng(20261008)
 def generate(patterns):
     return tuple(sorted(Fraction(b)+x for b,s in enumerate(patterns) for x in s))
