@@ -1,0 +1,32 @@
+name: Variable TMA advantage - robustness audit
+on:
+  push:
+    branches: [research-tma-variable-drums-sensitivity-20261008]
+    paths: ['research/tma_variable_drums_sensitivity.py','.github/workflows/tma-variable-drums-sensitivity.yml']
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.5,<2'
+      - name: Heldout robustness
+        run: python research/tma_variable_drums_sensitivity.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: variable-tma-robustness
+          path: research/tma_variable_drums_results/robustness.json
+          if-no-files-found: error
+      - name: Commit robustness
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_variable_drums_results/robustness.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record variable rhythm CV interaction robustness'
+            git push origin HEAD:research-tma-variable-drums-sensitivity-20261008
+          fi
