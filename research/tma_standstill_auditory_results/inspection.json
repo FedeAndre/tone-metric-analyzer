@@ -78,6 +78,40 @@
         "K\t5\t3\t4\t2\t6\t1"
       ]
     },
+    "/sound_data/segments.tsv": {
+      "file": "Standstill2019/sound_data/segments.tsv",
+      "head": [
+        "# Protocol segment timing for NM2019. First 15s skipped; silence 30s then 6x(music[31-32s by id]+30s silence). 120 Hz OptiTrack.",
+        "group\tsegment_index\tonset_s\toffset_s\tduration_s\tcondition\tstimulus_id\tstimulus_label",
+        "A\t1\t15\t45\t30\tsilence\t\t",
+        "A\t2\t45\t77\t32\tmusic\t2\tDrums 120",
+        "A\t3\t77\t107\t30\tsilence\t\t",
+        "A\t4\t107\t138\t31\tmusic\t6\tMetronome 140",
+        "A\t5\t138\t168\t30\tsilence\t\t",
+        "A\t6\t168\t200\t32\tmusic\t4\tMetronome 90",
+        "A\t7\t200\t230\t30\tsilence\t\t",
+        "A\t8\t230\t262\t32\tmusic\t1\tDrums 90",
+        "A\t9\t262\t292\t30\tsilence\t\t",
+        "A\t10\t292\t324\t32\tmusic\t5\tMetronome 120"
+      ]
+    },
+    "/metadata/segments_dictionary.tsv": {
+      "file": "Standstill2019/metadata/segments_dictionary.tsv",
+      "head": [
+        "# Data dictionary for sound_data/segments.tsv.",
+        "#",
+        "# The protocol's timing: which stretch of each recording was silence and which was a stimulus, in",
+        "# seconds from the start of the mocap file. One row per segment per group. It is what makes a",
+        "# condition-level analysis possible. Every championship edition deposits it.",
+        "#",
+        "# Times are protocol times, taken from the edition's own run documents and stimulus files, not",
+        "# detected from the signal. Where a group is given as ALL the same timing applied to every group in",
+        "# that edition.",
+        "column\tdescription\tunit\ttype",
+        "group\tthe group this timing applies to, matching the mocap filename. ALL means every group in the edition\t\tstring",
+        "segment_index\tposition of the segment within the round, counting from 1\t\tinteger"
+      ]
+    },
     "/demographics/participant_marker_key.tsv": {
       "file": "Standstill2019/demographics/participant_marker_key.tsv",
       "head": [
@@ -218,5 +252,5 @@
     "Standstill2019/study_documents/information_letter_2019.pdf",
     "Standstill2019/study_documents/protocol_2019.pdf"
   ],
-  "duration_s": 79.24630530200001
+  "duration_s": 47.124920114000005
 }
