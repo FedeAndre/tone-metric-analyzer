@@ -1,0 +1,26 @@
+name: Scout human-drumming rhythmic variability
+on:
+  push:
+    branches: [research-tma-variable-drums-20261008]
+    paths: ['research/scout_groove_midi.py','.github/workflows/tma-drum-scout.yml']
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install requests mido
+      - run: python research/scout_groove_midi.py
+      - uses: actions/upload-artifact@v4
+        with: {name: groove-tma-scout, path: groove_scout.json}
+      - name: Commit results
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add groove_scout.json
+          git commit -m 'Archive exact groove MIDI variability scout' || true
+          git push origin HEAD:research-tma-variable-drums-20261008
