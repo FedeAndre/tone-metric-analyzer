@@ -1,0 +1,31 @@
+name: Inspect anosmia raw data access
+on:
+  push:
+    branches: [research-tma-physio-spectral-20261008]
+    paths: ['research/anosmia_scout.py','.github/workflows/anosmia-scout.yml']
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install requests
+      - run: python research/anosmia_scout.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: anosmia-scout
+          path: |
+            research/anosmia_index.json
+            research/anosmia_participants_preview.json
+          if-no-files-found: warn
+      - name: Commit results
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/anosmia_index.json research/anosmia_participants_preview.json || true
+          git commit -m 'Inspect raw anosmia dataset accessibility' || true
+          git push origin HEAD:research-tma-physio-spectral-20261008
