@@ -1,0 +1,123 @@
+{
+  "dataset": "PhysioNet Fantasia, peak-to-peak respiration as tactus and ECG R events as rhythm",
+  "n_subjects": 12,
+  "n_windows": 84,
+  "engine_equivalence": "8 exact comparisons: 2 subjects x 4 prefixes; plus prefix invariance",
+  "results": {
+    "wave_drift": {
+      "conventional": {
+        "MAE": 0.049850785788006245,
+        "R2": -0.46531543598672975
+      },
+      "origin_TMA_only": {
+        "MAE": 0.042759459727782854,
+        "R2": -0.19383234458307141
+      },
+      "reset_TMA_only": {
+        "MAE": 0.04492597825326391,
+        "R2": -0.26289064480054325
+      },
+      "conventional_plus_origin": {
+        "MAE": 0.048568783661193604,
+        "R2": -0.41561087937452834
+      },
+      "conventional_plus_reset": {
+        "MAE": 0.049760041284941395,
+        "R2": -0.49966068535950914
+      },
+      "incremental_origin": {
+        "MAE_improvement": 0.001282002126812641,
+        "bootstrap_95CI": [
+          -0.008400102636117068,
+          0.012111833147546637
+        ]
+      },
+      "incremental_reset": {
+        "MAE_improvement": 9.074450306485043e-05,
+        "bootstrap_95CI": [
+          -0.008819556273988921,
+          0.010434395744816655
+        ]
+      }
+    },
+    "wave_step": {
+      "conventional": {
+        "MAE": 0.052910986852728804,
+        "R2": -0.2378500420823626
+      },
+      "origin_TMA_only": {
+        "MAE": 0.05306945038663376,
+        "R2": -0.1959004676767011
+      },
+      "reset_TMA_only": {
+        "MAE": 0.05544225540559307,
+        "R2": -0.3831609845722226
+      },
+      "conventional_plus_origin": {
+        "MAE": 0.05610902810856602,
+        "R2": -0.3479744832541989
+      },
+      "conventional_plus_reset": {
+        "MAE": 0.05620468813949561,
+        "R2": -0.37783551797294535
+      },
+      "incremental_origin": {
+        "MAE_improvement": -0.003198041255837218,
+        "bootstrap_95CI": [
+          -0.013018705170681601,
+          0.005791005269524634
+        ]
+      },
+      "incremental_reset": {
+        "MAE_improvement": -0.003293701286766808,
+        "bootstrap_95CI": [
+          -0.013356216294407763,
+          0.005504798030197537
+        ]
+      }
+    },
+    "wave_texture": {
+      "conventional": {
+        "MAE": 0.09982368596616775,
+        "R2": -0.02907751471880271
+      },
+      "origin_TMA_only": {
+        "MAE": 0.11459389125441348,
+        "R2": -0.28875820535319163
+      },
+      "reset_TMA_only": {
+        "MAE": 0.1336310126551435,
+        "R2": -0.5549994790878836
+      },
+      "conventional_plus_origin": {
+        "MAE": 0.11433602440068669,
+        "R2": -0.22046440737629536
+      },
+      "conventional_plus_reset": {
+        "MAE": 0.11077636590142309,
+        "R2": -0.1941160825887167
+      },
+      "incremental_origin": {
+        "MAE_improvement": -0.014512338434518934,
+        "bootstrap_95CI": [
+          -0.03378838996211925,
+          0.0040796883648824495
+        ]
+      },
+      "incremental_reset": {
+        "MAE_improvement": -0.010952679935255338,
+        "bootstrap_95CI": [
+          -0.028116358096271266,
+          0.0057437429648101645
+        ]
+      }
+    }
+  },
+  "seconds": 149.45227650500001,
+  "limitations": [
+    "12 prespecified recordings; first 64 valid breaths; first 1200 s downloaded",
+    "Heartbeats constitute rhythm within respiratory reference; does not measure breathing-alone rhythm",
+    "Respiration waveforms define beat anchors and independent morphology criterion",
+    "Small sample, exploratory; not full EEG recordings"
+  ]
+}
