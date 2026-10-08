@@ -1,0 +1,16 @@
+name: Inspect authors official inhalation peak algorithm
+on:
+  push:
+    branches: [research-tma-physio-spectral-20261008]
+    paths: ['research/anosmia_method_scout.py','.github/workflows/anosmia-method-scout.yml']
+  workflow_dispatch:
+jobs:
+  methods:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install requests
+      - run: python research/anosmia_method_scout.py
