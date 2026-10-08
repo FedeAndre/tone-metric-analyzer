@@ -1,7 +1,7 @@
 name: Fixed-origin fractal gait validation
 on:
   push:
-    branches: [research-gait-origin-fractal-20261008]
+    branches: [research-gait-origin-fast-20261008]
     paths:
       - 'research/tma_gait_origin_validation.py'
       - '.github/workflows/tma-gait-origin.yml'
@@ -34,5 +34,5 @@ jobs:
           git add research/tma_gait_origin_results/
           if ! git diff --cached --quiet; then
             git commit -m 'Record fixed-origin TMA gait validation results'
-            git push origin HEAD:research-gait-origin-fractal-20261008
+            git push origin HEAD:research-gait-origin-fast-20261008
           fi
