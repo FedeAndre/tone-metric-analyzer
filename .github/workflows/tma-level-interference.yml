@@ -1,7 +1,7 @@
 name: Verify Fourier interference between Tone Metric Levels
 on:
   push:
-    branches: [research-tma-level-interference-20261008]
+    branches: [research-tma-level-interference-variation-20261008]
     paths:
       - research/tma_level_interference.py
       - .github/workflows/tma-level-interference.yml
@@ -29,5 +29,5 @@ jobs:
           git add research/tma_level_interference_results/results.json
           if ! git diff --cached --quiet; then
             git commit -m 'Verify TMA Level-Fourier coherence and interference'
-            git push origin HEAD:research-tma-level-interference-20261008
+            git push origin HEAD:research-tma-level-interference-variation-20261008
           fi
