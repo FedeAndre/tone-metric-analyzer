@@ -1,0 +1,240 @@
+{
+  "method": "frozen engine binary 4/4 rhythmic attacks with fixed quarter-note tactus",
+  "events_128beats": 316,
+  "engine_exact_gates": [
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "causal_prefix_fixed_horizon": {
+    "first_bar_events": 10,
+    "first_bar_reassigned_final": 0,
+    "first_three_examples": []
+  },
+  "per_new_beat_earlier_event_reassignments": {
+    "n_checks": 127,
+    "checks_with_any_reassignments": 0,
+    "total_prior_level_reassignments": 0,
+    "total_prior_height_reassignments": 0,
+    "total_prior_density_reassignments": 0,
+    "examples": []
+  },
+  "per_new_event_fixed_horizon": {
+    "prior_event_comparisons": 7139,
+    "reassigned_levels_count": 24,
+    "reassigned_H_count": 24,
+    "reassigned_D_count": 24,
+    "examples": [
+      {
+        "arrival": "9/8",
+        "previous_event": "1",
+        "old_levels": [
+          1,
+          2,
+          3
+        ],
+        "new_levels": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "arrival": "31/8",
+        "previous_event": "7/2",
+        "old_levels": [
+          3
+        ],
+        "new_levels": [
+          3,
+          4
+        ]
+      },
+      {
+        "arrival": "13/2",
+        "previous_event": "6",
+        "old_levels": [
+          2,
+          3
+        ],
+        "new_levels": [
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "arrival": "59/8",
+        "previous_event": "7",
+        "old_levels": [
+          3,
+          4
+        ],
+        "new_levels": [
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "arrival": "73/8",
+        "previous_event": "9",
+        "old_levels": [
+          2,
+          3
+        ],
+        "new_levels": [
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "arrival": "87/8",
+        "previous_event": "21/2",
+        "old_levels": [
+          4
+        ],
+        "new_levels": [
+          4,
+          5
+        ]
+      },
+      {
+        "arrival": "57/4",
+        "previous_event": "14",
+        "old_levels": [
+          3,
+          4
+        ],
+        "new_levels": [
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      {
+        "arrival": "121/8",
+        "previous_event": "15",
+        "old_levels": [
+          4,
+          5
+        ],
+        "new_levels": [
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "processed_events": 120
+  },
+  "variable_horizon_reassignment": [
+    {
+      "bars": 2,
+      "shared": 10,
+      "levels_reassigned": 0,
+      "H_reassigned": 0,
+      "D_reassigned": 0
+    },
+    {
+      "bars": 4,
+      "shared": 18,
+      "levels_reassigned": 0,
+      "H_reassigned": 0,
+      "D_reassigned": 0
+    },
+    {
+      "bars": 8,
+      "shared": 37,
+      "levels_reassigned": 0,
+      "H_reassigned": 0,
+      "D_reassigned": 0
+    },
+    {
+      "bars": 12,
+      "shared": 81,
+      "levels_reassigned": 0,
+      "H_reassigned": 0,
+      "D_reassigned": 0
+    },
+    {
+      "bars": 16,
+      "shared": 121,
+      "levels_reassigned": 0,
+      "H_reassigned": 0,
+      "D_reassigned": 0
+    },
+    {
+      "bars": 24,
+      "shared": 156,
+      "levels_reassigned": 0,
+      "H_reassigned": 0,
+      "D_reassigned": 0
+    },
+    {
+      "bars": 32,
+      "shared": 236,
+      "levels_reassigned": 0,
+      "H_reassigned": 0,
+      "D_reassigned": 0
+    }
+  ],
+  "runtime": [
+    {
+      "beats": 16,
+      "events": 40,
+      "median_full_TMA_ms": 0.6838200000061079,
+      "median_Welford_phasehist_ms": 0.0805310000089321,
+      "full_batch_runtime_ratio": 8.491388408566415,
+      "one_new_event_prefix_recompute_total_s": 0.014054944999998042
+    },
+    {
+      "beats": 32,
+      "events": 81,
+      "median_full_TMA_ms": 1.4832749999982298,
+      "median_Welford_phasehist_ms": 0.1575850000108403,
+      "full_batch_runtime_ratio": 9.412539263865185,
+      "one_new_event_prefix_recompute_total_s": 0.06383247200000142
+    },
+    {
+      "beats": 64,
+      "events": 155,
+      "median_full_TMA_ms": 2.716212000009932,
+      "median_Welford_phasehist_ms": 0.30177399999331556,
+      "full_batch_runtime_ratio": 9.000815179803752,
+      "one_new_event_prefix_recompute_total_s": null
+    },
+    {
+      "beats": 128,
+      "events": 316,
+      "median_full_TMA_ms": 6.201722000000132,
+      "median_Welford_phasehist_ms": 0.633835999991561,
+      "full_batch_runtime_ratio": 9.7844268865806,
+      "one_new_event_prefix_recompute_total_s": null
+    },
+    {
+      "beats": 256,
+      "events": 615,
+      "median_full_TMA_ms": 11.56629900000894,
+      "median_Welford_phasehist_ms": 1.2264049999970439,
+      "full_batch_runtime_ratio": 9.43105988644601,
+      "one_new_event_prefix_recompute_total_s": null
+    }
+  ],
+  "seconds": 1.3725379840000045,
+  "caveats": [
+    "All 128 beat events have a reference beat and variable rhythmic attacks, no isolated event-only sequence",
+    "Offline complete-horizon engine may revise earlier Level stacks; never call it online causal without proof",
+    "Full recomputation per new event is a correctness reference, not an optimized streaming algorithm",
+    "Different methods have different feature counts; report clock times but do not infer theoretical big-O from five samples",
+    "The 'provisional horizon' test is not the same as event-conditioned changes within a fixed metric horizon",
+    "Origin remains fixed; metric length changes only in the variable-horizon sensitivity"
+  ]
+}
