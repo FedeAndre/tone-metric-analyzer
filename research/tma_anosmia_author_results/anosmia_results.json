@@ -1,0 +1,415 @@
+{
+  "n": 41,
+  "groups": {
+    "normosmic": 22,
+    "anosmic": 19
+  },
+  "excluded": [
+    {
+      "record": "Ano 02",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Ano 18",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Nor 03",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Nor 10",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Nor 13",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Nor 14",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Nor 15",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Nor 16",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Nor 21",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Nor 19",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Nor 28",
+      "error": "No valid 128-breath wake segment after signal QC"
+    }
+  ],
+  "n_cycles": 128,
+  "B_cycle": 39,
+  "B_block": 19,
+  "bands": [
+    [
+      "64to128_breath",
+      1,
+      2
+    ],
+    [
+      "32to42_breath",
+      3,
+      4
+    ],
+    [
+      "16to25_breath",
+      5,
+      8
+    ],
+    [
+      "8to14_breath",
+      9,
+      16
+    ],
+    [
+      "4to7_breath",
+      17,
+      32
+    ],
+    [
+      "2to4_breath",
+      33,
+      64
+    ]
+  ],
+  "QC": {
+    "breaths_per_minute": {
+      "count": 41.0,
+      "unique": 0.0,
+      "top": 0.0,
+      "freq": 0.0,
+      "mean": 18.317536725264112,
+      "std": 2.7201137468544703,
+      "min": 11.03353159210413,
+      "25%": 16.550297388156192,
+      "50%": 18.079096045197733,
+      "75%": 20.095944177158312,
+      "max": 22.959641263836858
+    },
+    "minor_peak_mean": {
+      "count": 41.0,
+      "unique": 0.0,
+      "top": 0.0,
+      "freq": 0.0,
+      "mean": 0.42016006097560976,
+      "std": 0.22131939812427184,
+      "min": 0.015625,
+      "25%": 0.234375,
+      "50%": 0.421875,
+      "75%": 0.5703125,
+      "max": 0.859375
+    },
+    "fraction_multi": {
+      "count": 41.0,
+      "unique": 0.0,
+      "top": 0.0,
+      "freq": 0.0,
+      "mean": 0.3902439024390244,
+      "std": 0.20091155198171842,
+      "min": 0.015625,
+      "25%": 0.2265625,
+      "50%": 0.3828125,
+      "75%": 0.5546875,
+      "max": 0.859375
+    },
+    "breath_CV": {
+      "count": 41.0,
+      "unique": 0.0,
+      "top": 0.0,
+      "freq": 0.0,
+      "mean": 0.20444843701782056,
+      "std": 0.07261346352413685,
+      "min": 0.0697719666469006,
+      "25%": 0.15067781746024875,
+      "50%": 0.20141926677614214,
+      "75%": 0.24837897554835497,
+      "max": 0.36591731074349537
+    },
+    "selected_wake_section": {
+      "count": 41,
+      "unique": 2,
+      "top": "pre_sleep",
+      "freq": 22,
+      "mean": 0,
+      "std": 0,
+      "min": 0,
+      "25%": 0,
+      "50%": 0,
+      "75%": 0,
+      "max": 0
+    },
+    "amplitude_scale": {
+      "count": 41.0,
+      "unique": 0.0,
+      "top": 0.0,
+      "freq": 0.0,
+      "mean": 0.49634681834777056,
+      "std": 0.34169550183055747,
+      "min": 0.07369305286110363,
+      "25%": 0.2455543222902962,
+      "50%": 0.41646944611612235,
+      "75%": 0.7138953642233721,
+      "max": 1.5294534799316575
+    }
+  },
+  "raw_feature_comparisons": {
+    "breaths_per_minute": {
+      "difference": 1.097073931091451,
+      "permutation_p": 0.2108
+    },
+    "minor_peak_mean": {
+      "difference": -0.12477571770334928,
+      "permutation_p": 0.0716
+    },
+    "fraction_multi": {
+      "difference": -0.13185930023923448,
+      "permutation_p": 0.0348
+    },
+    "breath_CV": {
+      "difference": 0.03492810028808435,
+      "permutation_p": 0.1292
+    },
+    "minor_peak_sd": {
+      "difference": -0.020810963170161456,
+      "permutation_p": 0.5848
+    },
+    "amp_CV": {
+      "difference": 0.0521683071703985,
+      "permutation_p": 0.3746
+    },
+    "PSD_64to128_breath": {
+      "difference": 0.15187432202770434,
+      "permutation_p": 0.4078
+    },
+    "PSD_32to42_breath": {
+      "difference": 0.0642035453168619,
+      "permutation_p": 0.6854
+    },
+    "PSD_16to25_breath": {
+      "difference": -0.19690363337000427,
+      "permutation_p": 0.0606
+    },
+    "PSD_8to14_breath": {
+      "difference": 0.1336463976705664,
+      "permutation_p": 0.0452
+    },
+    "PSD_4to7_breath": {
+      "difference": 0.05513854842989563,
+      "permutation_p": 0.381
+    },
+    "PSD_2to4_breath": {
+      "difference": -0.0028871305114108736,
+      "permutation_p": 0.9548
+    }
+  },
+  "TMA": {
+    "H_64to128_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.019043515571453916,
+        "permutation_p": 0.9304,
+        "q_BH12": 0.9304
+      },
+      "adjusted": {
+        "adjusted_difference": -0.13506657344594397,
+        "t": -0.39348549414547124,
+        "Freedman_Lane_p": 0.6986,
+        "q_BH12": 0.9220363636363637
+      }
+    },
+    "D_64to128_breath_cycle_resid": {
+      "simple": {
+        "difference": -0.05680677294971842,
+        "permutation_p": 0.8384,
+        "q_BH12": 0.9304
+      },
+      "adjusted": {
+        "adjusted_difference": -0.03382850006979863,
+        "t": -0.08343896992269695,
+        "Freedman_Lane_p": 0.9368,
+        "q_BH12": 0.9368
+      }
+    },
+    "H_32to42_breath_cycle_resid": {
+      "simple": {
+        "difference": -0.1981147770658943,
+        "permutation_p": 0.3724,
+        "q_BH12": 0.6593142857142856
+      },
+      "adjusted": {
+        "adjusted_difference": -0.3283801176887164,
+        "t": -1.1105557570625713,
+        "Freedman_Lane_p": 0.2726,
+        "q_BH12": 0.8616
+      }
+    },
+    "D_32to42_breath_cycle_resid": {
+      "simple": {
+        "difference": -0.029522976843218293,
+        "permutation_p": 0.9226,
+        "q_BH12": 0.9304
+      },
+      "adjusted": {
+        "adjusted_difference": 0.08325378536213747,
+        "t": 0.20546372129909163,
+        "Freedman_Lane_p": 0.8452,
+        "q_BH12": 0.9220363636363637
+      }
+    },
+    "H_16to25_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.08573615870870901,
+        "permutation_p": 0.64,
+        "q_BH12": 0.8541333333333333
+      },
+      "adjusted": {
+        "adjusted_difference": 0.2091649029667744,
+        "t": 0.8016336640088212,
+        "Freedman_Lane_p": 0.4308,
+        "q_BH12": 0.8616
+      }
+    },
+    "D_16to25_breath_cycle_resid": {
+      "simple": {
+        "difference": -0.1832324341474508,
+        "permutation_p": 0.3042,
+        "q_BH12": 0.6593142857142856
+      },
+      "adjusted": {
+        "adjusted_difference": 0.045557827727314135,
+        "t": 0.19822861904962233,
+        "Freedman_Lane_p": 0.8452,
+        "q_BH12": 0.9220363636363637
+      }
+    },
+    "H_8to14_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.18393907359144868,
+        "permutation_p": 0.0542,
+        "q_BH12": 0.6504
+      },
+      "adjusted": {
+        "adjusted_difference": 0.2569374002140208,
+        "t": 1.8546095623437366,
+        "Freedman_Lane_p": 0.0754,
+        "q_BH12": 0.8616
+      }
+    },
+    "D_8to14_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.16876975306473957,
+        "permutation_p": 0.1886,
+        "q_BH12": 0.6593142857142856
+      },
+      "adjusted": {
+        "adjusted_difference": 0.2559055585153851,
+        "t": 1.2815207735647458,
+        "Freedman_Lane_p": 0.2064,
+        "q_BH12": 0.8616
+      }
+    },
+    "H_4to7_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.07053808493063453,
+        "permutation_p": 0.3768,
+        "q_BH12": 0.6593142857142856
+      },
+      "adjusted": {
+        "adjusted_difference": -0.0486158050368735,
+        "t": -0.587478342100745,
+        "Freedman_Lane_p": 0.5658,
+        "q_BH12": 0.9220363636363637
+      }
+    },
+    "D_4to7_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.027437787256383683,
+        "permutation_p": 0.6406,
+        "q_BH12": 0.8541333333333333
+      },
+      "adjusted": {
+        "adjusted_difference": -0.04123926858039549,
+        "t": -0.5027479849011566,
+        "Freedman_Lane_p": 0.6236,
+        "q_BH12": 0.9220363636363637
+      }
+    },
+    "H_2to4_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.082511072659998,
+        "permutation_p": 0.2156,
+        "q_BH12": 0.6593142857142856
+      },
+      "adjusted": {
+        "adjusted_difference": -0.07200852441732807,
+        "t": -0.8490354398646858,
+        "Freedman_Lane_p": 0.3966,
+        "q_BH12": 0.8616
+      }
+    },
+    "D_2to4_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.04671174401789878,
+        "permutation_p": 0.3846,
+        "q_BH12": 0.6593142857142856
+      },
+      "adjusted": {
+        "adjusted_difference": 0.0767575981879934,
+        "t": 1.0094447234567996,
+        "Freedman_Lane_p": 0.3182,
+        "q_BH12": 0.8616
+      }
+    }
+  },
+  "incremental_auc": {
+    "delta": -0.11244019138755978,
+    "boot95": [
+      -0.20289855072463758,
+      -0.03864734299516903
+    ]
+  },
+  "cv": {
+    "traditional_timing": {
+      "AUC": 0.7799043062200957,
+      "balanced_accuracy": 0.7057416267942584,
+      "n_features": 9
+    },
+    "traditional_spectral": {
+      "AUC": 0.8181818181818181,
+      "balanced_accuracy": 0.7320574162679425,
+      "n_features": 15
+    },
+    "TMA_only": {
+      "AUC": 0.38755980861244016,
+      "balanced_accuracy": 0.4569377990430622,
+      "n_features": 12
+    },
+    "traditional_plus_TMA": {
+      "AUC": 0.7057416267942583,
+      "balanced_accuracy": 0.6411483253588517,
+      "n_features": 27
+    }
+  },
+  "limits": [
+    "Wake subsections chosen by signal QC without diagnosis labels",
+    "Breath boundary detection is independently implemented; minor inhalation peaks approximate published GetPeaksData MATLAB normalization and findpeaks settings",
+    "Temporal frequency in cycles/breath, with dyadic onset projection to 1/64 beat",
+    "FFT is of per-breath aggregate full TMA event H and D, not direct event-time impulse wave",
+    "Only 128 breaths per person, so long-scale resolution limited",
+    "Surrogates preserve each breath-internal peak pattern while scrambling longer order",
+    "No causal or clinical validation; 12 nominal spectral disease comparisons FDR corrected"
+  ],
+  "runtime_seconds": 50.50193763799999
+}
