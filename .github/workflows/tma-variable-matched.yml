@@ -1,0 +1,33 @@
+name: Variable-bar exact onset power matched TMA rhythms
+on:
+  push:
+    branches: [research-tma-controlled-spectra-20261008]
+    paths:
+      - research/tma_variable_matched_rhythms.py
+      - .github/workflows/tma-variable-matched.yml
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  matched:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'mido>=1.3,<2' 'scikit-learn>=1.5,<2'
+      - run: PYTHONPATH=.:research python research/tma_variable_matched_rhythms.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: variable-bar-homometric-TMA-motifs
+          path: research/tma_controlled_spectra_results/variable_bar_results.json
+          if-no-files-found: error
+      - name: Commit verified controls
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_controlled_spectra_results/variable_bar_results.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Validate variable-event homometric auditory-rhythm stimuli'
+            git push origin HEAD:research-tma-controlled-spectra-20261008
+          fi
