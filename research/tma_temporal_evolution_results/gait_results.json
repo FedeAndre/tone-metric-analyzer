@@ -1,0 +1,193 @@
+{
+  "dataset": "PhysioNet gaitpdb 47 recordings, 64 cycles each",
+  "subject_count": 47,
+  "windows": 329,
+  "method": "8-cycle online prefixes; full-registered TMA wave/pivots/tree; true subject-held-out Ridge(alpha=30)",
+  "targets": "Independent force waveform evolution (mean bilateral normalized force shapes)",
+  "models": {
+    "force_step": {
+      "conventional_timing": {
+        "MAE": 0.02324870098584223,
+        "RMSE": 0.032210978547722494,
+        "R2": 0.22507740728815961,
+        "Spearman_r": 0.5510180011996307
+      },
+      "origin_TMA_only": {
+        "MAE": 0.02849967197760137,
+        "RMSE": 0.037997671557271205,
+        "R2": -0.07836169985975494,
+        "Spearman_r": 0.13488094676470394
+      },
+      "reset_TMA_only": {
+        "MAE": 0.027684811128249748,
+        "RMSE": 0.037726170947492026,
+        "R2": -0.06300655427086399,
+        "Spearman_r": 0.1803587434879599
+      },
+      "timing_plus_origin_TMA": {
+        "MAE": 0.024679231873828384,
+        "RMSE": 0.034195504139422475,
+        "R2": 0.12664963241151672,
+        "Spearman_r": 0.48804648905842474
+      },
+      "timing_plus_reset_TMA": {
+        "MAE": 0.024831765405600587,
+        "RMSE": 0.03421062197521548,
+        "R2": 0.12587724514364984,
+        "Spearman_r": 0.47965615080301127
+      }
+    },
+    "force_drift": {
+      "conventional_timing": {
+        "MAE": 0.026816512197784834,
+        "RMSE": 0.04555362358637924,
+        "R2": -0.13626077472446552,
+        "Spearman_r": 0.3874476846454013
+      },
+      "origin_TMA_only": {
+        "MAE": 0.030145798710455304,
+        "RMSE": 0.044923211370930916,
+        "R2": -0.10502917885004814,
+        "Spearman_r": 0.10320463138314721
+      },
+      "reset_TMA_only": {
+        "MAE": 0.030378960252543167,
+        "RMSE": 0.044848086924383995,
+        "R2": -0.10133641999362464,
+        "Spearman_r": 0.14311391773768525
+      },
+      "timing_plus_origin_TMA": {
+        "MAE": 0.029131847350089512,
+        "RMSE": 0.04876694461660178,
+        "R2": -0.3022166688443384,
+        "Spearman_r": 0.3607400642948127
+      },
+      "timing_plus_reset_TMA": {
+        "MAE": 0.029423756888580004,
+        "RMSE": 0.04896760107986395,
+        "R2": -0.3129549163183043,
+        "Spearman_r": 0.3454602740279959
+      }
+    },
+    "force_texture": {
+      "conventional_timing": {
+        "MAE": 0.01185056162425221,
+        "RMSE": 0.01594899650870109,
+        "R2": 0.8453811977323592,
+        "Spearman_r": 0.8661528922556427
+      },
+      "origin_TMA_only": {
+        "MAE": 0.03183704543966535,
+        "RMSE": 0.04019013655637293,
+        "R2": 0.01817396868185084,
+        "Spearman_r": 0.1838046489058425
+      },
+      "reset_TMA_only": {
+        "MAE": 0.03095154378352691,
+        "RMSE": 0.038482776752961814,
+        "R2": 0.09982202753330882,
+        "Spearman_r": 0.2806104637448696
+      },
+      "timing_plus_origin_TMA": {
+        "MAE": 0.01253810380006979,
+        "RMSE": 0.016900987032161963,
+        "R2": 0.8263720187281028,
+        "Spearman_r": 0.8505209632090796
+      },
+      "timing_plus_reset_TMA": {
+        "MAE": 0.012466567562592075,
+        "RMSE": 0.016682943023949015,
+        "R2": 0.8308231587100243,
+        "Spearman_r": 0.8519972502847438
+      }
+    }
+  },
+  "paired_subject_bootstrap": {
+    "force_step": {
+      "origin_incremental": {
+        "MAE_gain_positive_if_second_better": -0.0014305308879861527,
+        "subject_bootstrap_95CI": [
+          -0.002736457047999163,
+          -0.00020707103650071973
+        ],
+        "P_bootstrap_nonpositive": 0.9901980396079216
+      },
+      "reset_incremental": {
+        "MAE_gain_positive_if_second_better": -0.0015830644197583552,
+        "subject_bootstrap_95CI": [
+          -0.00289184375488337,
+          -0.00039198606575474587
+        ],
+        "P_bootstrap_nonpositive": 0.9961992398479695
+      },
+      "origin_minus_reset": {
+        "MAE_gain_positive_if_second_better": 0.0001525335317722025,
+        "subject_bootstrap_95CI": [
+          -0.00029853074211520726,
+          0.0005992581465530827
+        ],
+        "P_bootstrap_nonpositive": 0.2508501700340068
+      }
+    },
+    "force_drift": {
+      "origin_incremental": {
+        "MAE_gain_positive_if_second_better": -0.0023153351523046775,
+        "subject_bootstrap_95CI": [
+          -0.004628901916265255,
+          -0.0003396953348008709
+        ],
+        "P_bootstrap_nonpositive": 0.9917983596719344
+      },
+      "reset_incremental": {
+        "MAE_gain_positive_if_second_better": -0.002607244690795169,
+        "subject_bootstrap_95CI": [
+          -0.0046742113107929705,
+          -0.0007426176104618841
+        ],
+        "P_bootstrap_nonpositive": 0.9983996799359872
+      },
+      "origin_minus_reset": {
+        "MAE_gain_positive_if_second_better": 0.0002919095384904917,
+        "subject_bootstrap_95CI": [
+          -0.0001991288859164348,
+          0.0007650036118321226
+        ],
+        "P_bootstrap_nonpositive": 0.1210242048409682
+      }
+    },
+    "force_texture": {
+      "origin_incremental": {
+        "MAE_gain_positive_if_second_better": -0.0006875421758175803,
+        "subject_bootstrap_95CI": [
+          -0.001310597758309207,
+          -0.00010343689594576384
+        ],
+        "P_bootstrap_nonpositive": 0.9897979595919184
+      },
+      "reset_incremental": {
+        "MAE_gain_positive_if_second_better": -0.0006160059383398652,
+        "subject_bootstrap_95CI": [
+          -0.0012865683946836773,
+          2.8444486448098214e-05
+        ],
+        "P_bootstrap_nonpositive": 0.9707941588317663
+      },
+      "origin_minus_reset": {
+        "MAE_gain_positive_if_second_better": -7.153623747771509e-05,
+        "subject_bootstrap_95CI": [
+          -0.0003874315136987742,
+          0.00023153766586839317
+        ],
+        "P_bootstrap_nonpositive": 0.6779355871174235
+      }
+    }
+  },
+  "time_seconds": 362.580070537,
+  "limits": [
+    "Retrospective sample; outcomes are force signals from which step events are thresholded",
+    "Limited 64 cycles and 8-cycle windows; overlapping hypotheses exploratory",
+    "Group labels unused",
+    "Baseline includes phase autocorrelations and dyadic phase entropies",
+    "Bilateral force profile is physiological proxy, not clinical ground truth"
+  ]
+}
