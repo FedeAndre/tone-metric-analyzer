@@ -1,0 +1,10 @@
+{
+  "header": "Code,Group,Gender,Age,SampleLength,SleepIndex,WakeUpIndex",
+  "sample": [
+    "Ano 01,Anosmic,M,29,0.18,308477,495476",
+    "Ano 02,Anosmic,F,29,0.18,16723,165388",
+    "Ano 03,Anosmic,F,29,0.18,6705,160371",
+    "Ano 04,Anosmic,M,47,0.18,30017,170350"
+  ],
+  "nrows": 53
+}
