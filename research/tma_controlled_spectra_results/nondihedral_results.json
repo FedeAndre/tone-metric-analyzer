@@ -1,0 +1,898 @@
+{
+  "N_motifs": 9828,
+  "N_non_dihedrally_equivalent_pairs_matching_exact_onset_PSD_and_IOI_histogram": 1696,
+  "n_matching_exact_singleton_density_Fourier_power": 40,
+  "n_matching_both_singleton_H_and_D_Fourier_power": 0,
+  "static_template_TV_quantiles": [
+    0.017209815842248823,
+    0.05699927313209215,
+    0.15095273630539427,
+    0.22370125940778035,
+    0.2829304648054322,
+    0.46313704267530886
+  ],
+  "best_static_template_matched_nontrivial_pair": {
+    "A": [
+      0,
+      2,
+      3,
+      6,
+      9,
+      11,
+      15
+    ],
+    "B": [
+      0,
+      2,
+      5,
+      6,
+      9,
+      13,
+      15
+    ],
+    "same_singleton_H_power": false,
+    "same_singleton_D_power": true,
+    "static_H_TV": 0.034419631684497645,
+    "static_D_TV": 0.0,
+    "mean_static_TV": 0.017209815842248823,
+    "metrics": {
+      "raw": {
+        "power_tv_distance": 0.0,
+        "maximum_absolute_power_difference": 0.0,
+        "exact_power_equal": true,
+        "power_A": 8192.0,
+        "power_B": 8192.0
+      },
+      "H": {
+        "power_tv_distance": 0.049417555368243146,
+        "maximum_absolute_power_difference": 9394.481166899539,
+        "exact_power_equal": false,
+        "power_A": 264512.00000000006,
+        "power_B": 264512.0
+      },
+      "D": {
+        "power_tv_distance": 0.13728402932611167,
+        "maximum_absolute_power_difference": 3303.602881703553,
+        "exact_power_equal": false,
+        "power_A": 48128.0,
+        "power_B": 48128.0
+      },
+      "sH": {
+        "power_tv_distance": 0.034419631684497645,
+        "maximum_absolute_power_difference": 3488.569114762622,
+        "exact_power_equal": false,
+        "power_A": 242912.00000000006,
+        "power_B": 242912.0
+      },
+      "sD": {
+        "power_tv_distance": 0.0,
+        "maximum_absolute_power_difference": 0.0,
+        "exact_power_equal": true,
+        "power_A": 18944.0,
+        "power_B": 18944.0
+      },
+      "cH": {
+        "power_tv_distance": 0.28467935346471396,
+        "maximum_absolute_power_difference": 1402.89985387411,
+        "exact_power_equal": false,
+        "power_A": 9856.0,
+        "power_B": 9855.999999999998
+      },
+      "cD": {
+        "power_tv_distance": 0.28467935346471396,
+        "maximum_absolute_power_difference": 1402.89985387411,
+        "exact_power_equal": false,
+        "power_A": 9856.0,
+        "power_B": 9855.999999999998
+      },
+      "context_affected_fraction": {
+        "A": 0.2857142857142857,
+        "B": 0.2857142857142857
+      },
+      "level_individual_power_TV": 0.19541450776516744,
+      "level_interference_delta_norm": 0.3840716898914054
+    }
+  },
+  "lexicographically_first_nontrivial_pair": {
+    "A": [
+      0,
+      1,
+      2,
+      3,
+      6,
+      10,
+      11
+    ],
+    "B": [
+      0,
+      1,
+      2,
+      3,
+      7,
+      8,
+      11
+    ],
+    "same_singleton_H_power": false,
+    "same_singleton_D_power": false,
+    "static_H_TV": 0.16920221646039257,
+    "static_D_TV": 0.38956358774382277,
+    "mean_static_TV": 0.2793829021021077,
+    "metrics": {
+      "raw": {
+        "power_tv_distance": 5.724587470723463e-17,
+        "maximum_absolute_power_difference": 6.821210263296962e-13,
+        "exact_power_equal": true,
+        "power_A": 8192.0,
+        "power_B": 8192.0
+      },
+      "H": {
+        "power_tv_distance": 0.09942530169003858,
+        "maximum_absolute_power_difference": 21826.293777808118,
+        "exact_power_equal": false,
+        "power_A": 236160.0,
+        "power_B": 234464.0
+      },
+      "D": {
+        "power_tv_distance": 0.3576341544708057,
+        "maximum_absolute_power_difference": 6911.999999999999,
+        "exact_power_equal": false,
+        "power_A": 43776.0,
+        "power_B": 49408.0
+      },
+      "sH": {
+        "power_tv_distance": 0.16920221646039257,
+        "maximum_absolute_power_difference": 22080.0,
+        "exact_power_equal": false,
+        "power_A": 198784.0,
+        "power_B": 209824.0
+      },
+      "sD": {
+        "power_tv_distance": 0.38956358774382277,
+        "maximum_absolute_power_difference": 4096.000000000001,
+        "exact_power_equal": false,
+        "power_A": 19776.0,
+        "power_B": 23040.0
+      },
+      "cH": {
+        "power_tv_distance": 0.08333333333333329,
+        "maximum_absolute_power_difference": 384.0,
+        "exact_power_equal": false,
+        "power_A": 9216.0,
+        "power_B": 9216.0
+      },
+      "cD": {
+        "power_tv_distance": 0.08333333333333329,
+        "maximum_absolute_power_difference": 384.0,
+        "exact_power_equal": false,
+        "power_A": 9216.0,
+        "power_B": 9216.0
+      },
+      "context_affected_fraction": {
+        "A": 0.4017857142857143,
+        "B": 0.4017857142857143
+      },
+      "level_individual_power_TV": 0.24188734266556058,
+      "level_interference_delta_norm": 0.6427774563043276
+    }
+  },
+  "most_context_discriminated_among_25_closest_static_matches": {
+    "A": [
+      0,
+      1,
+      6,
+      9,
+      11,
+      13,
+      14
+    ],
+    "B": [
+      0,
+      2,
+      7,
+      10,
+      11,
+      13,
+      15
+    ],
+    "same_singleton_H_power": false,
+    "same_singleton_D_power": true,
+    "static_H_TV": 0.039232031279485824,
+    "static_D_TV": 0.0,
+    "mean_static_TV": 0.019616015639742912,
+    "results": {
+      "raw": {
+        "power_tv_distance": 0.0,
+        "maximum_absolute_power_difference": 0.0,
+        "exact_power_equal": true,
+        "power_A": 8191.999999999998,
+        "power_B": 8191.999999999998
+      },
+      "H": {
+        "power_tv_distance": 0.08205273600917105,
+        "maximum_absolute_power_difference": 11974.50235231626,
+        "exact_power_equal": false,
+        "power_A": 269952.0,
+        "power_B": 275264.0
+      },
+      "D": {
+        "power_tv_distance": 0.1789933416795797,
+        "maximum_absolute_power_difference": 4007.8383797157335,
+        "exact_power_equal": false,
+        "power_A": 40448.0,
+        "power_B": 48128.0
+      },
+      "sH": {
+        "power_tv_distance": 0.039232031279485824,
+        "maximum_absolute_power_difference": 6158.604320523038,
+        "exact_power_equal": false,
+        "power_A": 249567.99999999997,
+        "power_B": 249568.0
+      },
+      "sD": {
+        "power_tv_distance": 0.0,
+        "maximum_absolute_power_difference": 0.0,
+        "exact_power_equal": true,
+        "power_A": 18944.0,
+        "power_B": 18944.0
+      },
+      "cH": {
+        "power_tv_distance": 0.3330719080535217,
+        "maximum_absolute_power_difference": 1603.135351886293,
+        "exact_power_equal": false,
+        "power_A": 7552.0,
+        "power_B": 9856.0
+      },
+      "cD": {
+        "power_tv_distance": 0.3330719080535217,
+        "maximum_absolute_power_difference": 1603.135351886293,
+        "exact_power_equal": false,
+        "power_A": 7552.0,
+        "power_B": 9856.0
+      },
+      "context_affected_fraction": {
+        "A": 0.2857142857142857,
+        "B": 0.2857142857142857
+      },
+      "level_individual_power_TV": 0.1805161453415402,
+      "level_interference_delta_norm": 0.433306968696035
+    }
+  },
+  "first_25_control_matched_summary": [
+    {
+      "motifs": [
+        [
+          0,
+          2,
+          3,
+          6,
+          9,
+          11,
+          15
+        ],
+        [
+          0,
+          2,
+          5,
+          6,
+          9,
+          13,
+          15
+        ]
+      ],
+      "contextD_TV": 0.28467935346471396,
+      "fullD_TV": 0.13728402932611167,
+      "staticH_TV": 0.034419631684497645,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          3,
+          7,
+          10,
+          11,
+          14
+        ],
+        [
+          0,
+          1,
+          5,
+          7,
+          10,
+          13,
+          14
+        ]
+      ],
+      "contextD_TV": 0.2996215174519269,
+      "fullD_TV": 0.14992453904904648,
+      "staticH_TV": 0.037934048440798104,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          6,
+          9,
+          11,
+          13,
+          14
+        ],
+        [
+          0,
+          2,
+          7,
+          10,
+          11,
+          13,
+          15
+        ]
+      ],
+      "contextD_TV": 0.3330719080535217,
+      "fullD_TV": 0.1789933416795797,
+      "staticH_TV": 0.039232031279485824,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          2,
+          5,
+          9,
+          10,
+          15
+        ],
+        [
+          0,
+          1,
+          5,
+          6,
+          9,
+          14,
+          15
+        ]
+      ],
+      "contextD_TV": 0.0,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.042661329196379424,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          2,
+          3,
+          7,
+          10,
+          11,
+          13
+        ],
+        [
+          0,
+          3,
+          6,
+          7,
+          11,
+          13,
+          14
+        ]
+      ],
+      "contextD_TV": 0.0,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.04266132919637945,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          3,
+          5,
+          6,
+          9,
+          14
+        ],
+        [
+          0,
+          2,
+          3,
+          5,
+          7,
+          10,
+          15
+        ]
+      ],
+      "contextD_TV": 0.3330719080535217,
+      "fullD_TV": 0.17328011694604986,
+      "staticH_TV": 0.04622229551330162,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          2,
+          7,
+          10,
+          11,
+          15
+        ],
+        [
+          0,
+          1,
+          6,
+          7,
+          11,
+          14,
+          15
+        ]
+      ],
+      "contextD_TV": 0.0,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.046712321939646306,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          2,
+          3,
+          5,
+          9,
+          10,
+          13
+        ],
+        [
+          0,
+          3,
+          5,
+          6,
+          9,
+          13,
+          14
+        ]
+      ],
+      "contextD_TV": 0.0,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.04671232193964633,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          5,
+          6,
+          9,
+          13
+        ],
+        [
+          0,
+          3,
+          6,
+          7,
+          11,
+          15
+        ]
+      ],
+      "contextD_TV": 0.05456196346026859,
+      "fullD_TV": 0.04457092103117614,
+      "staticH_TV": 0.05020980967664907,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          2,
+          5,
+          10,
+          12,
+          13
+        ],
+        [
+          0,
+          3,
+          6,
+          11,
+          12,
+          14
+        ]
+      ],
+      "contextD_TV": 0.0,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.05030447361661566,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          6,
+          9,
+          12,
+          14
+        ],
+        [
+          0,
+          2,
+          7,
+          10,
+          12,
+          15
+        ]
+      ],
+      "contextD_TV": 0.05456196346026853,
+      "fullD_TV": 0.03497156236529743,
+      "staticH_TV": 0.050575561583405496,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          5,
+          9,
+          10,
+          13
+        ],
+        [
+          0,
+          3,
+          7,
+          10,
+          11,
+          15
+        ]
+      ],
+      "contextD_TV": 0.05456196346026853,
+      "fullD_TV": 0.04457092103117614,
+      "staticH_TV": 0.051130067544365554,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          2,
+          4,
+          5,
+          10,
+          13
+        ],
+        [
+          0,
+          3,
+          4,
+          6,
+          11,
+          14
+        ]
+      ],
+      "contextD_TV": 0.0,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.05204937961551921,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          4,
+          6,
+          9,
+          14
+        ],
+        [
+          0,
+          2,
+          4,
+          7,
+          10,
+          15
+        ]
+      ],
+      "contextD_TV": 0.05456196346026853,
+      "fullD_TV": 0.03497156236529743,
+      "staticH_TV": 0.05229494335118508,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          4,
+          6,
+          12,
+          13,
+          14
+        ],
+        [
+          0,
+          3,
+          4,
+          6,
+          12,
+          14,
+          15
+        ]
+      ],
+      "contextD_TV": 0.10807871767685136,
+      "fullD_TV": 0.05089549415121876,
+      "staticH_TV": 0.052336220410079654,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          2,
+          8,
+          9,
+          10,
+          12,
+          13
+        ],
+        [
+          0,
+          6,
+          8,
+          9,
+          12,
+          13,
+          14
+        ]
+      ],
+      "contextD_TV": 0.08279447089559781,
+      "fullD_TV": 0.02667647989341598,
+      "staticH_TV": 0.0524687378172175,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          2,
+          8,
+          10,
+          11,
+          12,
+          15
+        ],
+        [
+          0,
+          6,
+          8,
+          11,
+          12,
+          14,
+          15
+        ]
+      ],
+      "contextD_TV": 0.08209268312147892,
+      "fullD_TV": 0.03757214997157835,
+      "staticH_TV": 0.05250082797537207,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          2,
+          3,
+          4,
+          7,
+          8,
+          10
+        ],
+        [
+          0,
+          3,
+          4,
+          6,
+          7,
+          8,
+          14
+        ]
+      ],
+      "contextD_TV": 0.08556547619047625,
+      "fullD_TV": 0.047425799400849705,
+      "staticH_TV": 0.05341289159962133,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          2,
+          4,
+          5,
+          8,
+          10
+        ],
+        [
+          0,
+          1,
+          4,
+          5,
+          6,
+          8,
+          14
+        ]
+      ],
+      "contextD_TV": 0.1868013211382114,
+      "fullD_TV": 0.08485415197882826,
+      "staticH_TV": 0.05352674595872864,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          2,
+          4,
+          10,
+          12,
+          13
+        ],
+        [
+          0,
+          2,
+          3,
+          4,
+          10,
+          12,
+          15
+        ]
+      ],
+      "contextD_TV": 0.12052104934415808,
+      "fullD_TV": 0.055075478251462355,
+      "staticH_TV": 0.05610971866761129,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          3,
+          6,
+          7,
+          11,
+          15
+        ],
+        [
+          0,
+          3,
+          7,
+          10,
+          11,
+          15
+        ]
+      ],
+      "contextD_TV": 8.581460195222768e-17,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.07324661418334247,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          5,
+          6,
+          9,
+          13
+        ],
+        [
+          0,
+          1,
+          5,
+          9,
+          10,
+          13
+        ]
+      ],
+      "contextD_TV": 0.0,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.07496745736857517,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          1,
+          4,
+          6,
+          9,
+          14
+        ],
+        [
+          0,
+          1,
+          6,
+          9,
+          12,
+          14
+        ]
+      ],
+      "contextD_TV": 0.0,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.0814923348496765,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          2,
+          4,
+          7,
+          10,
+          15
+        ],
+        [
+          0,
+          2,
+          7,
+          10,
+          12,
+          15
+        ]
+      ],
+      "contextD_TV": 0.0,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.0823299483540037,
+      "staticD_TV": 0.0
+    },
+    {
+      "motifs": [
+        [
+          0,
+          3,
+          4,
+          6,
+          11,
+          14
+        ],
+        [
+          0,
+          3,
+          6,
+          11,
+          12,
+          14
+        ]
+      ],
+      "contextD_TV": 0.0,
+      "fullD_TV": 0.0,
+      "staticH_TV": 0.08776484504512252,
+      "staticD_TV": 0.0
+    }
+  ],
+  "runtime_seconds": 1.1933475200000032,
+  "guardrails": [
+    "Dihedral equivalence excluded: motif rotations and reversals are not counted",
+    "Circular IOI histogram and complete onset power exactly equal, complex Fourier phase differs",
+    "Frozen-TMA contextual terms are deterministic of original event time series; no Shannon information gain",
+    "If singleton H cannot be matched, full TMA differences are not uniquely attributable to contextual effects",
+    "Picking maximum among 25 comparisons is mathematical construction, not an inferential or neural result"
+  ]
+}
