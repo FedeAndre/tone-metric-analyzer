@@ -154,5 +154,5 @@ def main():
         'The onset stream is beat-anchored and contains variable within-bar attack rhythms, satisfying TMA input requirements']}
     OUT.joinpath('controlled_nonredundancy.json').write_text(json.dumps(output,indent=2,default=lambda v:v.item() if isinstance(v,np.generic) else str(v)))
     print('PASS all 40 strict pairs frozen engine checked')
-    print('FINAL',json.dumps(output,indent=2),flush=True)
+    print('FINAL',json.dumps(output,indent=2,default=lambda v:v.item() if isinstance(v,np.generic) else str(v)),flush=True)
 if __name__=='__main__':main()
