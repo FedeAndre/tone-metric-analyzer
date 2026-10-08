@@ -197,7 +197,8 @@ def half_reliability(df,kind,subset='pd'):
     cols2=[k.replace('half1_','half2_') for k in cols1]
     a=rec[cols1].to_numpy(float);b=rec[cols2].to_numpy(float)
     d=np.maximum(a.std(axis=0),1e-8)
-    mu=a.mean(axis=0)\n    a=(a-mu)/d;b=(b-mu)/d
+    mu=a.mean(axis=0)
+    a=(a-mu)/d;b=(b-mu)/d
     dist=np.sqrt(np.mean((b[:,None,:]-a[None,:,:])**2,axis=2))
     return {'n':len(rec),'top1':float(np.mean(np.argmin(dist,axis=1)==np.arange(len(rec)))),
             'within':float(np.mean(np.diag(dist))),'other':float(np.mean(dist[~np.eye(len(rec),dtype=bool)]))}
