@@ -1,0 +1,396 @@
+{
+  "dataset": "2019 University of Oslo Standstill 2026 data deposit 2.0.5",
+  "n_participants": 98,
+  "n_groups": 16,
+  "n_segments": 588,
+  "n_mocap_audio_windows": 3528,
+  "stimulant_onsets": {
+    "1": 5,
+    "2": 4,
+    "3": 6,
+    "4": 6,
+    "5": 8,
+    "6": 9
+  },
+  "num_features": {
+    "sound_design": 5,
+    "ordinary": 16,
+    "ordinary_plus_static": 25,
+    "ordinary_plus_TMA": 30,
+    "ordinary_plus_context": 25,
+    "ordinary_plus_static_and_context": 34
+  },
+  "models": {
+    "motion_log_change": {
+      "group": {
+        "100": {
+          "scores": {
+            "sound_design": {
+              "mae": 0.18474390628765733,
+              "R2": -0.0033540743319846467
+            },
+            "ordinary": {
+              "mae": 0.18493452396623083,
+              "R2": -0.004230357437173371
+            },
+            "ordinary_plus_static": {
+              "mae": 0.1850087839631596,
+              "R2": -0.005055067465423724
+            },
+            "ordinary_plus_TMA": {
+              "mae": 0.18498151060240317,
+              "R2": -0.0056525853865077025
+            },
+            "ordinary_plus_context": {
+              "mae": 0.18503104898502779,
+              "R2": -0.005286968895071853
+            },
+            "ordinary_plus_static_and_context": {
+              "mae": 0.18509092367750876,
+              "R2": -0.006009015761577752
+            }
+          },
+          "incremental_effects": {
+            "ordinary_plus_static": {
+              "MAE_improvement": -7.425999692877232e-05,
+              "group_cluster_boot95": [
+                -0.0001896115917654752,
+                3.636604735629492e-05
+              ]
+            },
+            "ordinary_plus_TMA": {
+              "MAE_improvement": -4.698663617237136e-05,
+              "group_cluster_boot95": [
+                -0.0003307040773170456,
+                0.000257923460206855
+              ]
+            },
+            "ordinary_plus_context": {
+              "MAE_improvement": -9.652501879696031e-05,
+              "group_cluster_boot95": [
+                -0.00028063351269230503,
+                6.991652368949025e-05
+              ]
+            },
+            "ordinary_plus_static_and_context": {
+              "MAE_improvement": -0.00015639971127795433,
+              "group_cluster_boot95": [
+                -0.00030009488808166646,
+                -2.801256696797536e-06
+              ]
+            }
+          }
+        },
+        "300": {
+          "scores": {
+            "sound_design": {
+              "mae": 0.18469880059467667,
+              "R2": -0.0029925321906041358
+            },
+            "ordinary": {
+              "mae": 0.1848050799338066,
+              "R2": -0.003052628998785778
+            },
+            "ordinary_plus_static": {
+              "mae": 0.18492003758612152,
+              "R2": -0.004282837255588534
+            },
+            "ordinary_plus_TMA": {
+              "mae": 0.18490150898683624,
+              "R2": -0.004851104499620673
+            },
+            "ordinary_plus_context": {
+              "mae": 0.1848872765116836,
+              "R2": -0.003873541687034354
+            },
+            "ordinary_plus_static_and_context": {
+              "mae": 0.18501082696436133,
+              "R2": -0.005101583430782375
+            }
+          },
+          "incremental_effects": {
+            "ordinary_plus_static": {
+              "MAE_improvement": -0.00011495765231491083,
+              "group_cluster_boot95": [
+                -0.0002011794967341518,
+                -3.166446256544687e-05
+              ]
+            },
+            "ordinary_plus_TMA": {
+              "MAE_improvement": -9.642905302966342e-05,
+              "group_cluster_boot95": [
+                -0.0003207740832062819,
+                0.00017311007684988564
+              ]
+            },
+            "ordinary_plus_context": {
+              "MAE_improvement": -8.219657787700472e-05,
+              "group_cluster_boot95": [
+                -0.00026753010094183105,
+                9.031555286382943e-05
+              ]
+            },
+            "ordinary_plus_static_and_context": {
+              "MAE_improvement": -0.0002057470305547526,
+              "group_cluster_boot95": [
+                -0.0003492424907040904,
+                -5.756709452237251e-05
+              ]
+            }
+          }
+        }
+      },
+      "stimulus_id": {
+        "100": {
+          "scores": {
+            "sound_design": {
+              "mae": 0.18479683341408612,
+              "R2": -0.005457917682773594
+            },
+            "ordinary": {
+              "mae": 0.18656270086676288,
+              "R2": -0.0204449325872742
+            },
+            "ordinary_plus_static": {
+              "mae": 0.185817594030674,
+              "R2": -0.011974252293549315
+            },
+            "ordinary_plus_TMA": {
+              "mae": 0.18690318094740868,
+              "R2": -0.02156981349827891
+            },
+            "ordinary_plus_context": {
+              "mae": 0.18632975489227185,
+              "R2": -0.017133699583442352
+            },
+            "ordinary_plus_static_and_context": {
+              "mae": 0.18638833121550474,
+              "R2": -0.016966637582442434
+            }
+          },
+          "incremental_effects": {}
+        },
+        "300": {
+          "scores": {
+            "sound_design": {
+              "mae": 0.18464668377334684,
+              "R2": -0.004028138295539829
+            },
+            "ordinary": {
+              "mae": 0.18559340496868415,
+              "R2": -0.010858037142880583
+            },
+            "ordinary_plus_static": {
+              "mae": 0.1857514006932766,
+              "R2": -0.012272701309658629
+            },
+            "ordinary_plus_TMA": {
+              "mae": 0.1862405957929505,
+              "R2": -0.01669404697863497
+            },
+            "ordinary_plus_context": {
+              "mae": 0.18554775993863817,
+              "R2": -0.009750952003965141
+            },
+            "ordinary_plus_static_and_context": {
+              "mae": 0.18602210008001718,
+              "R2": -0.014375347810498207
+            }
+          },
+          "incremental_effects": {}
+        }
+      }
+    },
+    "movement_beat_lock": {
+      "group": {
+        "100": {
+          "scores": {
+            "sound_design": {
+              "mae": 0.04631838303258273,
+              "R2": 0.10115841136965964
+            },
+            "ordinary": {
+              "mae": 0.046364324030312404,
+              "R2": 0.09995619659467736
+            },
+            "ordinary_plus_static": {
+              "mae": 0.046441733343433315,
+              "R2": 0.09941237954794202
+            },
+            "ordinary_plus_TMA": {
+              "mae": 0.04644812499855023,
+              "R2": 0.09984776491608327
+            },
+            "ordinary_plus_context": {
+              "mae": 0.046410451574789395,
+              "R2": 0.09897734468325126
+            },
+            "ordinary_plus_static_and_context": {
+              "mae": 0.04647580760728916,
+              "R2": 0.09845428895802644
+            }
+          },
+          "incremental_effects": {
+            "ordinary_plus_static": {
+              "MAE_improvement": -7.74093131209062e-05,
+              "group_cluster_boot95": [
+                -0.0001532796963721416,
+                1.0515125207043264e-07
+              ]
+            },
+            "ordinary_plus_TMA": {
+              "MAE_improvement": -8.380096823782877e-05,
+              "group_cluster_boot95": [
+                -0.00021704760588095435,
+                2.7028719672812124e-05
+              ]
+            },
+            "ordinary_plus_context": {
+              "MAE_improvement": -4.612754447699448e-05,
+              "group_cluster_boot95": [
+                -9.864836632466439e-05,
+                2.4711880844601093e-06
+              ]
+            },
+            "ordinary_plus_static_and_context": {
+              "MAE_improvement": -0.00011148357697675209,
+              "group_cluster_boot95": [
+                -0.00020215955978287794,
+                -2.5718294194561873e-05
+              ]
+            }
+          }
+        },
+        "300": {
+          "scores": {
+            "sound_design": {
+              "mae": 0.0463590289352127,
+              "R2": 0.10063290790398738
+            },
+            "ordinary": {
+              "mae": 0.046385605779138826,
+              "R2": 0.10000687717980816
+            },
+            "ordinary_plus_static": {
+              "mae": 0.04643478662794486,
+              "R2": 0.09932761345115293
+            },
+            "ordinary_plus_TMA": {
+              "mae": 0.04644438430457698,
+              "R2": 0.09962052853209002
+            },
+            "ordinary_plus_context": {
+              "mae": 0.04643503385662025,
+              "R2": 0.09847229454061768
+            },
+            "ordinary_plus_static_and_context": {
+              "mae": 0.046473797335596076,
+              "R2": 0.0980531247916413
+            }
+          },
+          "incremental_effects": {
+            "ordinary_plus_static": {
+              "MAE_improvement": -4.918084880603173e-05,
+              "group_cluster_boot95": [
+                -0.00012735863741856508,
+                2.5756524580440297e-05
+              ]
+            },
+            "ordinary_plus_TMA": {
+              "MAE_improvement": -5.877852543814579e-05,
+              "group_cluster_boot95": [
+                -0.00017559800106901565,
+                3.4647165105863594e-05
+              ]
+            },
+            "ordinary_plus_context": {
+              "MAE_improvement": -4.942807748141558e-05,
+              "group_cluster_boot95": [
+                -0.00011220873960127899,
+                4.302540035585067e-06
+              ]
+            },
+            "ordinary_plus_static_and_context": {
+              "MAE_improvement": -8.819155645724423e-05,
+              "group_cluster_boot95": [
+                -0.00017287006432125526,
+                -4.025287443048331e-06
+              ]
+            }
+          }
+        }
+      },
+      "stimulus_id": {
+        "100": {
+          "scores": {
+            "sound_design": {
+              "mae": 0.04662209126602595,
+              "R2": 0.09513479580844353
+            },
+            "ordinary": {
+              "mae": 0.046909368764117325,
+              "R2": 0.08953845132019667
+            },
+            "ordinary_plus_static": {
+              "mae": 0.04721991818348479,
+              "R2": 0.0806488797653393
+            },
+            "ordinary_plus_TMA": {
+              "mae": 0.04697649552172156,
+              "R2": 0.09594380940901548
+            },
+            "ordinary_plus_context": {
+              "mae": 0.04716361287073098,
+              "R2": 0.07916722028544754
+            },
+            "ordinary_plus_static_and_context": {
+              "mae": 0.04740614399072713,
+              "R2": 0.06839575606247095
+            }
+          },
+          "incremental_effects": {}
+        },
+        "300": {
+          "scores": {
+            "sound_design": {
+              "mae": 0.046758366548973786,
+              "R2": 0.09142784813270566
+            },
+            "ordinary": {
+              "mae": 0.04700342610545934,
+              "R2": 0.08443310656086911
+            },
+            "ordinary_plus_static": {
+              "mae": 0.04734350640898049,
+              "R2": 0.07254711139672365
+            },
+            "ordinary_plus_TMA": {
+              "mae": 0.04740899478725769,
+              "R2": 0.07695694279547383
+            },
+            "ordinary_plus_context": {
+              "mae": 0.047181608933767404,
+              "R2": 0.0738223858243443
+            },
+            "ordinary_plus_static_and_context": {
+              "mae": 0.04736589263164115,
+              "R2": 0.05990968723863843
+            }
+          },
+          "incremental_effects": {}
+        }
+      }
+    }
+  },
+  "seconds": 53.34425027100001,
+  "limitations": [
+    "Observational stimulus responses to six non-homometric stimuli, not newly constructed matched rhythms",
+    "Only six acoustically distinct stimuli; group CV generalizes to new participants not new audio exemplars",
+    "Audio onset detection is automated from original WAV and TMA metrical anchoring is approximate onset-sampling",
+    "Head motion synchronized to music playback, physiological onset alignment assumed protocol timeline with 120-ms evaluation lag",
+    "Publication-eligible n=98, demographic exclusions archived",
+    "Six stimuli at three tempos; all variance across stimuli may reflect timbre, loudness or rhythm",
+    "Stimulus-heldout sixfold CV is essential control, only six folds",
+    "Repeated windows within participants correlated; 16 group cluster bootstrap for group heldout gains"
+  ]
+}
