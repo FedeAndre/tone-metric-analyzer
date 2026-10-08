@@ -1,0 +1,245 @@
+{
+  "fixed_beat": "16 bars of 4 quarter-note beats, sixteenth grid, exactly repeated motifs",
+  "enumeration": {
+    "4": 455,
+    "5": 1365,
+    "6": 3003,
+    "7": 5005
+  },
+  "n_patterns": 9828,
+  "groups_with_at_least_two_rhythms_same_onset_power_and_circular_IOI_histogram": 863,
+  "pairs_matching_onset_Fourier_power_and_circular_IOI_histogram": 56116,
+  "pairs_also_matching_exact_singleton_H_and_D_Fourier_power": 0,
+  "candidate_count_analyzed_frozen_TMA": 25,
+  "nearest_singleton_matched_pair": {
+    "A": [
+      0,
+      2,
+      4,
+      8,
+      10,
+      12
+    ],
+    "B": [
+      0,
+      4,
+      6,
+      8,
+      12,
+      14
+    ],
+    "singleton_TV_mean": 0.005488087877007894,
+    "static_H_power_equal": false,
+    "static_D_power_equal": true,
+    "metrics": {
+      "raw": {
+        "power_tv_distance": 0.0,
+        "maximum_absolute_power_difference": 0.0,
+        "exact_power_equal": true,
+        "power_A": 12288.0,
+        "power_B": 12288.0
+      },
+      "H": {
+        "power_tv_distance": 0.016877178765806956,
+        "maximum_absolute_power_difference": 8620.0,
+        "exact_power_equal": false,
+        "power_A": 268288.0,
+        "power_B": 258048.0
+      },
+      "D": {
+        "power_tv_distance": 0.07619122787103119,
+        "maximum_absolute_power_difference": 3800.0,
+        "exact_power_equal": false,
+        "power_A": 60544.0,
+        "power_B": 57216.0
+      },
+      "sH": {
+        "power_tv_distance": 0.010976175754015789,
+        "maximum_absolute_power_difference": 226.27416997969533,
+        "exact_power_equal": false,
+        "power_A": 208512.0,
+        "power_B": 208512.0
+      },
+      "sD": {
+        "power_tv_distance": 0.0,
+        "maximum_absolute_power_difference": 0.0,
+        "exact_power_equal": true,
+        "power_A": 32512.0,
+        "power_B": 32512.0
+      },
+      "cH": {
+        "power_tv_distance": 0.20864828294139603,
+        "maximum_absolute_power_difference": 1040.0,
+        "exact_power_equal": false,
+        "power_A": 7296.0,
+        "power_B": 6016.0
+      },
+      "cD": {
+        "power_tv_distance": 0.20864828294139603,
+        "maximum_absolute_power_difference": 1040.0,
+        "exact_power_equal": false,
+        "power_A": 7296.0,
+        "power_B": 6016.0
+      },
+      "context_affected_fraction": {
+        "A": 0.59375,
+        "B": 0.4895833333333333
+      },
+      "level_individual_power_TV": 0.07849658452293061,
+      "level_interference_delta_norm": 0.12008015407754254
+    }
+  },
+  "largest_context_difference_among_top_singleton_matched": {
+    "A": [
+      0,
+      2,
+      8,
+      10
+    ],
+    "B": [
+      0,
+      6,
+      8,
+      14
+    ],
+    "singleton_TV_mean": 0.007468751170965628,
+    "static_H_power_equal": false,
+    "static_D_power_equal": true,
+    "metrics": {
+      "raw": {
+        "power_tv_distance": 0.0,
+        "maximum_absolute_power_difference": 0.0,
+        "exact_power_equal": true,
+        "power_A": 8192.0,
+        "power_B": 8192.0
+      },
+      "H": {
+        "power_tv_distance": 0.0160263267761489,
+        "maximum_absolute_power_difference": 5740.0,
+        "exact_power_equal": false,
+        "power_A": 180224.0,
+        "power_B": 169984.0
+      },
+      "D": {
+        "power_tv_distance": 0.10712087138249057,
+        "maximum_absolute_power_difference": 2520.0,
+        "exact_power_equal": false,
+        "power_A": 44160.0,
+        "power_B": 40832.0
+      },
+      "sH": {
+        "power_tv_distance": 0.014937502341931256,
+        "maximum_absolute_power_difference": 226.27416997969513,
+        "exact_power_equal": false,
+        "power_A": 153216.0,
+        "power_B": 153216.0
+      },
+      "sD": {
+        "power_tv_distance": 0.0,
+        "maximum_absolute_power_difference": 0.0,
+        "exact_power_equal": true,
+        "power_A": 28416.0,
+        "power_B": 28416.0
+      },
+      "cH": {
+        "power_tv_distance": 0.4308333333333333,
+        "maximum_absolute_power_difference": 400.0,
+        "exact_power_equal": false,
+        "power_A": 3200.0,
+        "power_B": 1920.0
+      },
+      "cD": {
+        "power_tv_distance": 0.4308333333333333,
+        "maximum_absolute_power_difference": 400.0,
+        "exact_power_equal": false,
+        "power_A": 3200.0,
+        "power_B": 1920.0
+      },
+      "context_affected_fraction": {
+        "A": 0.390625,
+        "B": 0.234375
+      },
+      "level_individual_power_TV": 0.13719113412911346,
+      "level_interference_delta_norm": 0.18447041061539973
+    }
+  },
+  "prior_homometric_pair": {
+    "A": [
+      0,
+      1,
+      4,
+      9
+    ],
+    "B": [
+      0,
+      1,
+      5,
+      8
+    ],
+    "same_circular_ioi_histogram": false,
+    "metrics": {
+      "raw": {
+        "power_tv_distance": 1.1102230246251565e-16,
+        "maximum_absolute_power_difference": 4.547473508864641e-13,
+        "exact_power_equal": true,
+        "power_A": 6144.000000000002,
+        "power_B": 6144.000000000001
+      },
+      "H": {
+        "power_tv_distance": 0.11060510258488196,
+        "maximum_absolute_power_difference": 14471.32697862031,
+        "exact_power_equal": false,
+        "power_A": 167200.0,
+        "power_B": 149312.00000000003
+      },
+      "D": {
+        "power_tv_distance": 0.36601307189542487,
+        "maximum_absolute_power_difference": 8616.154687870048,
+        "exact_power_equal": false,
+        "power_A": 39168.00000000001,
+        "power_B": 39168.0
+      },
+      "sH": {
+        "power_tv_distance": 0.2437217392485969,
+        "maximum_absolute_power_difference": 18705.91745675431,
+        "exact_power_equal": false,
+        "power_A": 142176.00000000003,
+        "power_B": 132288.0
+      },
+      "sD": {
+        "power_tv_distance": 0.35545200372786584,
+        "maximum_absolute_power_difference": 4952.6256838944155,
+        "exact_power_equal": false,
+        "power_A": 18560.0,
+        "power_B": 23680.0
+      },
+      "cH": {
+        "power_tv_distance": 0.24866071428571435,
+        "maximum_absolute_power_difference": 960.0,
+        "exact_power_equal": false,
+        "power_A": 7168.0,
+        "power_B": 5120.0
+      },
+      "cD": {
+        "power_tv_distance": 0.24866071428571435,
+        "maximum_absolute_power_difference": 960.0,
+        "exact_power_equal": false,
+        "power_A": 7168.0,
+        "power_B": 5120.0
+      },
+      "context_affected_fraction": {
+        "A": 0.453125,
+        "B": 0.203125
+      },
+      "level_individual_power_TV": 0.2952438422407512,
+      "level_interference_delta_norm": 0.7372784624800641
+    }
+  },
+  "math_conclusions": [
+    "A complete onset complex DFT is invertible and therefore always determines TMA given beat, origin and rule",
+    "PSD equality or autocorrelation equality does not imply onset time series equality",
+    "TMA contextual Levels can introduce distinctions beyond a static singleton Level template, tested through explicit residual spectra",
+    "No biological outcome is implied by the existence of a constructed pair"
+  ],
+  "runtime_seconds": 2.465637881999996
+}
