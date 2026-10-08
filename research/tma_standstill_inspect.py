@@ -31,7 +31,7 @@ def main():
    b=z.read(name)
    fs,signal=wavfile.read(io.BytesIO(b))
    samples[name]={'fs':fs,'shape':list(signal.shape),'seconds':len(signal)/fs,'dtype':str(signal.dtype)}
- keys=['/sound_data/stimulus_order.tsv','/demographics/participant_marker_key.tsv','/demographics/qom.tsv']
+ keys=['/sound_data/stimulus_order.tsv','/sound_data/segments.tsv','/metadata/segments_dictionary.tsv','/demographics/participant_marker_key.tsv','/demographics/qom.tsv']
  tables={}
  for k in keys:
   file=next((x for x in names if x.endswith(k)),None)
