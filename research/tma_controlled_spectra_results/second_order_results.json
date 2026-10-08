@@ -1,0 +1,567 @@
+{
+  "N_patterns": 9828,
+  "non_dihedral_same_power_first_order_and_second_order_IOI_pairs": 98,
+  "exact_singleton_D_matched_count": 0,
+  "exact_singleton_H_D_matched_count": 0,
+  "same_gap_trigrams_count": 0,
+  "first_by_conventional_and_static_null_matching": {
+    "A": [
+      0,
+      1,
+      3,
+      6,
+      8,
+      12,
+      15
+    ],
+    "B": [
+      0,
+      3,
+      5,
+      8,
+      9,
+      10,
+      12
+    ],
+    "staticH_equal": false,
+    "staticD_equal": false,
+    "staticH_TV": 0.14115160418318007,
+    "staticD_TV": 0.12228595480905424,
+    "same_gap_trigrams": false,
+    "metrics": {
+      "raw": {
+        "power_tv_distance": 1.3530843112619095e-16,
+        "maximum_absolute_power_difference": 4.547473508864641e-13,
+        "exact_power_equal": true,
+        "power_A": 8192.0,
+        "power_B": 8192.000000000002
+      },
+      "H": {
+        "power_tv_distance": 0.10556398496826587,
+        "maximum_absolute_power_difference": 11881.285493413976,
+        "exact_power_equal": false,
+        "power_A": 220800.00000000003,
+        "power_B": 251904.0
+      },
+      "D": {
+        "power_tv_distance": 0.24467099083867208,
+        "maximum_absolute_power_difference": 5925.0,
+        "exact_power_equal": false,
+        "power_A": 55616.0,
+        "power_B": 59744.0
+      },
+      "sH": {
+        "power_tv_distance": 0.14115160418318007,
+        "maximum_absolute_power_difference": 15310.123211821698,
+        "exact_power_equal": false,
+        "power_A": 188544.0,
+        "power_B": 198784.0
+      },
+      "sD": {
+        "power_tv_distance": 0.12228595480905424,
+        "maximum_absolute_power_difference": 1900.7030278294405,
+        "exact_power_equal": false,
+        "power_A": 24384.0,
+        "power_B": 24384.0
+      },
+      "cH": {
+        "power_tv_distance": 0.3263347117441683,
+        "maximum_absolute_power_difference": 3025.0,
+        "exact_power_equal": false,
+        "power_A": 10240.0,
+        "power_B": 13440.0
+      },
+      "cD": {
+        "power_tv_distance": 0.3263347117441683,
+        "maximum_absolute_power_difference": 3025.0,
+        "exact_power_equal": false,
+        "power_A": 10240.0,
+        "power_B": 13440.0
+      },
+      "context_affected_fraction": {
+        "A": 0.2857142857142857,
+        "B": 0.5089285714285714
+      },
+      "level_individual_power_TV": 0.21623247585043026,
+      "level_interference_delta_norm": 0.4524935295397387
+    },
+    "interval_sequence_A": [
+      1,
+      2,
+      3,
+      2,
+      4,
+      3,
+      1
+    ],
+    "interval_sequence_B": [
+      3,
+      2,
+      3,
+      1,
+      1,
+      2,
+      4
+    ]
+  },
+  "best_15_static_control_pair_diagnostics": [
+    {
+      "A": [
+        0,
+        1,
+        3,
+        6,
+        8,
+        12,
+        15
+      ],
+      "B": [
+        0,
+        3,
+        5,
+        8,
+        9,
+        10,
+        12
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.14115160418318007,
+      "staticD_TV": 0.12228595480905424,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.3263347117441683,
+      "full_density_TV": 0.24467099083867208,
+      "max_abs_full_power": 5925.0,
+      "context_frac_A": 0.2857142857142857,
+      "context_frac_B": 0.5089285714285714
+    },
+    {
+      "A": [
+        0,
+        3,
+        4,
+        5,
+        7,
+        11,
+        14
+      ],
+      "B": [
+        0,
+        3,
+        5,
+        9,
+        12,
+        13,
+        14
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.14950764899303765,
+      "staticD_TV": 0.11476566583373578,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.3184433619633035,
+      "full_density_TV": 0.2389141314236733,
+      "max_abs_full_power": 5869.980940782423,
+      "context_frac_A": 0.2857142857142857,
+      "context_frac_B": 0.42857142857142855
+    },
+    {
+      "A": [
+        0,
+        2,
+        5,
+        7,
+        8,
+        9,
+        12
+      ],
+      "B": [
+        0,
+        4,
+        6,
+        7,
+        8,
+        11,
+        13
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.1512286780292475,
+      "staticD_TV": 0.1150672452324566,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.30543372658598594,
+      "full_density_TV": 0.18298469650245447,
+      "max_abs_full_power": 6135.999999999996,
+      "context_frac_A": 0.36607142857142855,
+      "context_frac_B": 0.5625
+    },
+    {
+      "A": [
+        0,
+        2,
+        5,
+        7,
+        8,
+        9,
+        12
+      ],
+      "B": [
+        0,
+        3,
+        5,
+        8,
+        12,
+        14,
+        15
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.14414261534839268,
+      "staticD_TV": 0.1222859548090543,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.33655854571120747,
+      "full_density_TV": 0.2468391733134934,
+      "max_abs_full_power": 6135.999999999996,
+      "context_frac_A": 0.36607142857142855,
+      "context_frac_B": 0.42857142857142855
+    },
+    {
+      "A": [
+        0,
+        1,
+        2,
+        4,
+        8,
+        11,
+        13
+      ],
+      "B": [
+        0,
+        4,
+        7,
+        8,
+        9,
+        11,
+        14
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.1477597035471256,
+      "staticD_TV": 0.12228595480905431,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.2738181668778513,
+      "full_density_TV": 0.20951090788928514,
+      "max_abs_full_power": 5544.0000000000055,
+      "context_frac_A": 0.5714285714285714,
+      "context_frac_B": 0.41964285714285715
+    },
+    {
+      "A": [
+        0,
+        1,
+        4,
+        8,
+        10,
+        13,
+        15
+      ],
+      "B": [
+        0,
+        4,
+        6,
+        7,
+        8,
+        11,
+        13
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.14907523502255265,
+      "staticD_TV": 0.12228595480905426,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.31303722444580406,
+      "full_density_TV": 0.182507687291065,
+      "max_abs_full_power": 8019.0,
+      "context_frac_A": 0.42857142857142855,
+      "context_frac_B": 0.5625
+    },
+    {
+      "A": [
+        0,
+        1,
+        2,
+        5,
+        7,
+        10,
+        14
+      ],
+      "B": [
+        0,
+        3,
+        5,
+        6,
+        7,
+        10,
+        14
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.0992037051063272,
+      "staticD_TV": 0.17849297389174984,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.38736605571751553,
+      "full_density_TV": 0.3093514126826341,
+      "max_abs_full_power": 6109.582413498718,
+      "context_frac_A": 0.2857142857142857,
+      "context_frac_B": 0.2857142857142857
+    },
+    {
+      "A": [
+        0,
+        2,
+        3,
+        4,
+        7,
+        11,
+        13
+      ],
+      "B": [
+        0,
+        2,
+        5,
+        9,
+        11,
+        12,
+        13
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.1640533175185948,
+      "staticD_TV": 0.11476566583373578,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.3184433619633035,
+      "full_density_TV": 0.2389141314236733,
+      "max_abs_full_power": 5869.980940782423,
+      "context_frac_A": 0.42857142857142855,
+      "context_frac_B": 0.2857142857142857
+    },
+    {
+      "A": [
+        0,
+        1,
+        2,
+        4,
+        8,
+        11,
+        13
+      ],
+      "B": [
+        0,
+        1,
+        3,
+        6,
+        8,
+        12,
+        15
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.1672481728571129,
+      "staticD_TV": 0.11506724523245661,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.37704326923076936,
+      "full_density_TV": 0.24235596094548223,
+      "max_abs_full_power": 5925.0,
+      "context_frac_A": 0.5714285714285714,
+      "context_frac_B": 0.2857142857142857
+    },
+    {
+      "A": [
+        0,
+        1,
+        4,
+        6,
+        9,
+        13,
+        15
+      ],
+      "B": [
+        0,
+        3,
+        7,
+        9,
+        12,
+        14,
+        15
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.1533357044329947,
+      "staticD_TV": 0.14326231133832326,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.32546851460090176,
+      "full_density_TV": 0.2600106041792415,
+      "max_abs_full_power": 9011.154289030514,
+      "context_frac_A": 0.2857142857142857,
+      "context_frac_B": 0.42857142857142855
+    },
+    {
+      "A": [
+        0,
+        3,
+        5,
+        8,
+        9,
+        10,
+        12
+      ],
+      "B": [
+        0,
+        4,
+        7,
+        8,
+        9,
+        11,
+        14
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.19239587372505962,
+      "staticD_TV": 0.1150672452324566,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.29520610898727606,
+      "full_density_TV": 0.20198085173670696,
+      "max_abs_full_power": 5544.0000000000055,
+      "context_frac_A": 0.5089285714285714,
+      "context_frac_B": 0.41964285714285715
+    },
+    {
+      "A": [
+        0,
+        2,
+        5,
+        6,
+        7,
+        9,
+        13
+      ],
+      "B": [
+        0,
+        2,
+        5,
+        7,
+        11,
+        14,
+        15
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.1330264969713866,
+      "staticD_TV": 0.17687639661363516,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.3510765993017211,
+      "full_density_TV": 0.27011886110641176,
+      "max_abs_full_power": 7650.023545333472,
+      "context_frac_A": 0.2857142857142857,
+      "context_frac_B": 0.2857142857142857
+    },
+    {
+      "A": [
+        0,
+        1,
+        2,
+        4,
+        7,
+        9,
+        13
+      ],
+      "B": [
+        0,
+        2,
+        5,
+        6,
+        7,
+        9,
+        13
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.11732469815449709,
+      "staticD_TV": 0.19446784800563605,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.5629692154876266,
+      "full_density_TV": 0.39290338370925754,
+      "max_abs_full_power": 7223.777079463511,
+      "context_frac_A": 0.42857142857142855,
+      "context_frac_B": 0.2857142857142857
+    },
+    {
+      "A": [
+        0,
+        1,
+        2,
+        5,
+        9,
+        11,
+        14
+      ],
+      "B": [
+        0,
+        3,
+        7,
+        9,
+        10,
+        11,
+        14
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.13604234567074397,
+      "staticD_TV": 0.17687639661363516,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.38736605571751553,
+      "full_density_TV": 0.29877533079844426,
+      "max_abs_full_power": 7663.75168411143,
+      "context_frac_A": 0.2857142857142857,
+      "context_frac_B": 0.2857142857142857
+    },
+    {
+      "A": [
+        0,
+        2,
+        5,
+        6,
+        7,
+        9,
+        13
+      ],
+      "B": [
+        0,
+        3,
+        5,
+        9,
+        12,
+        13,
+        14
+      ],
+      "staticH_equal": false,
+      "staticD_equal": false,
+      "staticH_TV": 0.11907739676468626,
+      "staticD_TV": 0.19446784800563605,
+      "same_gap_trigrams": false,
+      "context_density_TV": 0.5202200572599404,
+      "full_density_TV": 0.43068175408910625,
+      "max_abs_full_power": 7574.332991002335,
+      "context_frac_A": 0.2857142857142857,
+      "context_frac_B": 0.42857142857142855
+    }
+  ],
+  "runtime_s": 2.3762798010000097,
+  "interpretation_limits": [
+    "Pair has fixed 4/4 beat plus nonconstant sixteenth-grid attack rhythm",
+    "Onset power and both one- and two-event gap occurrence distributions are matched exactly",
+    "Higher order cyclic gap distributions or complex Fourier phase may still distinguish pairs",
+    "Result is an exact mathematical counterexample against chosen *summaries*, not added information beyond full event timing",
+    "No participant or biological system has been tested on these constructed stimuli"
+  ]
+}
