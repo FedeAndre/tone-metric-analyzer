@@ -1,0 +1,192 @@
+{
+  "B_per_subject_per_null": 119,
+  "n_subjects": 47,
+  "n_pd": 29,
+  "n_controls": 18,
+  "fixed_origin": true,
+  "checkpoints": [
+    16,
+    32,
+    48,
+    64
+  ],
+  "group_comparisons": {
+    "D_64": {
+      "control_mean": 2.125,
+      "pd_mean": 1.9342672413793103,
+      "PD_minus_control": -0.19073275862068972,
+      "group_permutation_p": 0.0001,
+      "q_BH_10": 0.001
+    },
+    "D_64_order_z": {
+      "control_mean": -0.03226475617210746,
+      "pd_mean": 0.032516948532490764,
+      "PD_minus_control": 0.06478170470459822,
+      "group_permutation_p": 0.8516,
+      "q_BH_10": 0.8516
+    },
+    "D_64_block_z": {
+      "control_mean": -0.07334683598443899,
+      "pd_mean": -0.010803057811956378,
+      "PD_minus_control": 0.0625437781724826,
+      "group_permutation_p": 0.8418,
+      "q_BH_10": 0.8516
+    },
+    "D_zchange_order": {
+      "control_mean": 0.3854043706858245,
+      "pd_mean": -0.3048412732744732,
+      "PD_minus_control": -0.6902456439602978,
+      "group_permutation_p": 0.2564,
+      "q_BH_10": 0.45966666666666667
+    },
+    "D_zchange_block": {
+      "control_mean": 0.34130461998641226,
+      "pd_mean": -0.3232929234000555,
+      "PD_minus_control": -0.6645975433864677,
+      "group_permutation_p": 0.2316,
+      "q_BH_10": 0.45966666666666667
+    },
+    "D_16_order_z": {
+      "control_mean": -0.417669126857932,
+      "pd_mean": 0.337358221806964,
+      "PD_minus_control": 0.755027348664896,
+      "group_permutation_p": 0.0472,
+      "q_BH_10": 0.236
+    },
+    "D_32_order_z": {
+      "control_mean": 0.13751427397888857,
+      "pd_mean": -0.358878719361106,
+      "PD_minus_control": -0.49639299333999454,
+      "group_permutation_p": 0.0764,
+      "q_BH_10": 0.25466666666666665
+    },
+    "D_48_order_z": {
+      "control_mean": 0.45258658131413615,
+      "pd_mean": 0.17854637738242038,
+      "PD_minus_control": -0.2740402039317158,
+      "group_permutation_p": 0.4004,
+      "q_BH_10": 0.572
+    },
+    "H_64_order_z": {
+      "control_mean": -0.4463251393206142,
+      "pd_mean": -0.06743932361457469,
+      "PD_minus_control": 0.3788858157060395,
+      "group_permutation_p": 0.2758,
+      "q_BH_10": 0.45966666666666667
+    },
+    "multilevel_64_order_z": {
+      "control_mean": 0.031804357242046055,
+      "pd_mean": 0.16414361784043224,
+      "PD_minus_control": 0.1323392605983862,
+      "group_permutation_p": 0.6957,
+      "q_BH_10": 0.8516
+    }
+  },
+  "within_subject_nulls": {
+    "D_16_order": {
+      "n_p_le_0p05": 4,
+      "n_p_le_0p10": 7,
+      "median_p": 0.4,
+      "control_mean_z": -0.417669126857932,
+      "pd_mean_z": 0.337358221806964
+    },
+    "D_16_block": {
+      "n_p_le_0p05": 3,
+      "n_p_le_0p10": 5,
+      "median_p": 0.425,
+      "control_mean_z": -0.4146514559708512,
+      "pd_mean_z": 0.31248986558809916
+    },
+    "D_32_order": {
+      "n_p_le_0p05": 1,
+      "n_p_le_0p10": 2,
+      "median_p": 0.65,
+      "control_mean_z": 0.13751427397888857,
+      "pd_mean_z": -0.358878719361106
+    },
+    "D_32_block": {
+      "n_p_le_0p05": 1,
+      "n_p_le_0p10": 5,
+      "median_p": 0.6583333333333333,
+      "control_mean_z": 0.061761673704368976,
+      "pd_mean_z": -0.4516452684856445
+    },
+    "D_48_order": {
+      "n_p_le_0p05": 4,
+      "n_p_le_0p10": 5,
+      "median_p": 0.425,
+      "control_mean_z": 0.45258658131413615,
+      "pd_mean_z": 0.17854637738242038
+    },
+    "D_48_block": {
+      "n_p_le_0p05": 2,
+      "n_p_le_0p10": 2,
+      "median_p": 0.5166666666666667,
+      "control_mean_z": 0.43382554050309297,
+      "pd_mean_z": 0.13085657607868478
+    },
+    "D_64_order": {
+      "n_p_le_0p05": 1,
+      "n_p_le_0p10": 2,
+      "median_p": 0.5666666666666667,
+      "control_mean_z": -0.03226475617210746,
+      "pd_mean_z": 0.032516948532490764
+    },
+    "D_64_block": {
+      "n_p_le_0p05": 2,
+      "n_p_le_0p10": 4,
+      "median_p": 0.5333333333333333,
+      "control_mean_z": -0.07334683598443899,
+      "pd_mean_z": -0.010803057811956378
+    }
+  },
+  "classification_LOOCV": {
+    "tempo_and_phase_summaries": {
+      "AUC": 0.8007662835249042,
+      "balanced_accuracy_0p5": 0.7298850574712643,
+      "n": 47
+    },
+    "conventional_with_serial_order": {
+      "AUC": 0.8563218390804598,
+      "balanced_accuracy_0p5": 0.7365900383141762,
+      "n": 47
+    },
+    "TMA_uncorrected": {
+      "AUC": 0.9386973180076628,
+      "balanced_accuracy_0p5": 0.882183908045977,
+      "n": 47
+    },
+    "TMA_order_corrected": {
+      "AUC": 0.5593869731800767,
+      "balanced_accuracy_0p5": 0.4626436781609195,
+      "n": 47
+    },
+    "conventional_plus_TMA_order": {
+      "AUC": 0.8314176245210728,
+      "balanced_accuracy_0p5": 0.7365900383141762,
+      "n": 47
+    },
+    "conventional_plus_raw_TMA": {
+      "AUC": 0.9540229885057472,
+      "balanced_accuracy_0p5": 0.8371647509578544,
+      "n": 47
+    }
+  },
+  "AUC_gain_paired_bootstrap": {
+    "observed": -0.02490421455938696,
+    "bootstrap_CI_95": [
+      -0.0740841384863125,
+      0.00766283524904221
+    ],
+    "n_bootstrap": 9999
+  },
+  "runtime_seconds": 542.93565972,
+  "limitations": [
+    "Temporal baseline grounded to each subject 64-cycle event multiset",
+    "Within-cycle beat events fixed by left heel strikes; cycle order permutations retain the durations and phase distribution",
+    "Block null retains 4-cycle local patterns, rearranges four-cycle blocks",
+    "No longitudinal clinical progression labels",
+    "Multiple analyses exploratory; fixed ten-feature FDR reported",
+    "External validation required"
+  ]
+}
