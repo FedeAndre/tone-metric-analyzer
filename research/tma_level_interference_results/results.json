@@ -8,6 +8,56 @@
     1,
     2
   ],
+  "rhythmic_variability_contrasts": {
+    "power_ratio_0p25": {
+      "regular_mean": 1.1721403860693496,
+      "variable_mean": 1.376964504244733,
+      "variable_minus_regular": 0.20482411817538337,
+      "within_drummer_label_permutation_p": 0.053
+    },
+    "power_ratio_0p25_minus_null": {
+      "regular_mean": -0.7807210772438969,
+      "variable_mean": -0.7488945104136501,
+      "variable_minus_regular": 0.03182656683024687,
+      "within_drummer_label_permutation_p": 0.7426
+    },
+    "power_ratio_0p5": {
+      "regular_mean": 2.205731942464406,
+      "variable_mean": 2.4974926666149058,
+      "variable_minus_regular": 0.2917607241504996,
+      "within_drummer_label_permutation_p": 0.0775
+    },
+    "power_ratio_0p5_minus_null": {
+      "regular_mean": 0.06530879451374767,
+      "variable_mean": 0.09163600168330001,
+      "variable_minus_regular": 0.026327207169552336,
+      "within_drummer_label_permutation_p": 0.8296
+    },
+    "power_ratio_1": {
+      "regular_mean": 3.7445456583026098,
+      "variable_mean": 4.375673459633346,
+      "variable_minus_regular": 0.6311278013307366,
+      "within_drummer_label_permutation_p": 0.0342
+    },
+    "power_ratio_1_minus_null": {
+      "regular_mean": 0.9223862391450226,
+      "variable_mean": 1.008568985527404,
+      "variable_minus_regular": 0.08618274638238144,
+      "within_drummer_label_permutation_p": 0.6807
+    },
+    "power_ratio_2": {
+      "regular_mean": 5.251674615736514,
+      "variable_mean": 5.533307609264507,
+      "variable_minus_regular": 0.2816329935279933,
+      "within_drummer_label_permutation_p": 0.2273
+    },
+    "power_ratio_2_minus_null": {
+      "regular_mean": 0.8656010792176009,
+      "variable_mean": 0.7146002785101089,
+      "variable_minus_regular": -0.151000800707492,
+      "within_drummer_label_permutation_p": 0.4113
+    }
+  },
   "results": {
     "0.25": {
       "median_power_ratio": 0.9531461803342391,
