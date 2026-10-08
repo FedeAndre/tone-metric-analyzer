@@ -300,9 +300,9 @@ def main():
         jobs={ex.submit(record,(row,i)):row['Code'] for i,row in enumerate(people)}
         for j,fut in enumerate(as_completed(jobs),1):
             try:records.append(fut.result())
-            except Exception as e:excluded.append({'record':jobs[fut],'error':str(e)})
+            except Exception as e:\n                print('RECORD_FAILURE',jobs[fut],repr(e),flush=True)\n                excluded.append({'record':jobs[fut],'error':str(e)})
             print(f'participant {j}/52 {jobs[fut]} success {not fut.exception()}',flush=True)
-    df=pd.DataFrame(records).sort_values('record').reset_index(drop=True)
+    if not records:raise RuntimeError('No usable data, first errors: '+repr(excluded[:5]))\n    df=pd.DataFrame(records).sort_values('record').reset_index(drop=True)
     df.to_csv(OUT/'anosmia_spectral_features.csv',index=False)
     labels=(df.group=='anosmic').astype(int).to_numpy()
     out={'n':len(df),'groups':df.group.value_counts().to_dict(),'excluded':excluded,
