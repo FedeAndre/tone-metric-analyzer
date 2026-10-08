@@ -133,7 +133,7 @@ def summarize_feature_groups(names):
     b={
         'onset_FFT':prefix('onset')+prefix('ioi_ordinal'),
         'single_event_FFT':prefix('singleH')+prefix('singleD'),
-        'TMA_FFT':prefix('H')+prefix('D')+prefix('H_ordinal')+prefix('D_ordinal'),
+        'TMA_FFT':prefix('H')+prefix('D'),
         'context_FFT':prefix('contextH')+prefix('contextD')}
     assert len(b['onset_FFT'])>30
     assert len(b['TMA_FFT'])>60
