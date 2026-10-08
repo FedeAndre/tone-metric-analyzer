@@ -1,0 +1,31 @@
+name: Inspect matched audio and independent 2019 human head-motion recordings
+on:
+  push:
+    branches: [research-tma-standstill-auditory-20261008]
+    paths: ['research/tma_standstill_inspect.py','.github/workflows/tma-standstill-inspect.yml']
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3'
+      - run: python research/tma_standstill_inspect.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verify-standstill-2019-mocap-audio
+          path: research/tma_standstill_auditory_results/inspection.json
+          if-no-files-found: error
+      - name: Commit metadata summary
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_standstill_auditory_results/inspection.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Validate Standstill 2019 original auditory and sensor files'
+            git push origin HEAD:research-tma-standstill-auditory-20261008
+          fi
