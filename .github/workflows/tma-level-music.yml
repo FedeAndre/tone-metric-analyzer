@@ -1,0 +1,33 @@
+name: Music Level-frequency hierarchical spectral validation
+on:
+  push:
+    branches: [research-tma-level-music-20261008]
+    paths:
+      - research/tma_level_music.py
+      - .github/workflows/tma-level-music.yml
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.5,<2' 'requests>=2.32,<3' 'mido>=1.3,<2'
+      - run: PYTHONPATH=.:research python research/tma_level_music.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-music-level-spectra
+          path: research/tma_level_music_results/
+          if-no-files-found: error
+      - name: Commit run outputs
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_level_music_results/
+          if ! git diff --cached --quiet; then
+            git commit -m 'Verify Level-frequency spectral morphology on variable human drumming'
+            git push origin HEAD:research-tma-level-music-20261008
+          fi
