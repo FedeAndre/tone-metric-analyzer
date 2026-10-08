@@ -1,0 +1,2027 @@
+{
+  "n_subjects": 47,
+  "n_pd": 29,
+  "n_recordings": 86,
+  "n_PD_pairs": 25,
+  "methods": "8-band shuffled-cycle-expected spectra versus phase histograms and phase quantiles from original gait waveforms",
+  "sets": {
+    "expected": [
+      "null_H_16to32_strides",
+      "null_H_8to16_strides",
+      "null_H_4to8_strides",
+      "null_H_2to4_strides",
+      "null_D_16to32_strides",
+      "null_D_8to16_strides",
+      "null_D_4to8_strides",
+      "null_D_2to4_strides"
+    ],
+    "order_residual": [
+      "tma_H_16to32_strides",
+      "tma_H_8to16_strides",
+      "tma_H_4to8_strides",
+      "tma_H_2to4_strides",
+      "tma_D_16to32_strides",
+      "tma_D_8to16_strides",
+      "tma_D_4to8_strides",
+      "tma_D_2to4_strides"
+    ],
+    "basic_phases": [
+      "stride_duration_mean",
+      "stride_duration_cv",
+      "ph_RTO_mean",
+      "ph_RTO_sd",
+      "ph_RHS_mean",
+      "ph_RHS_sd",
+      "ph_LTO_mean",
+      "ph_LTO_sd"
+    ],
+    "rich_phases": [
+      "stride_duration_mean",
+      "stride_duration_cv",
+      "ph_RTO_mean",
+      "ph_RTO_sd",
+      "ph_RHS_mean",
+      "ph_RHS_sd",
+      "ph_LTO_mean",
+      "ph_LTO_sd",
+      "ph_RTO_q10",
+      "ph_RTO_q50",
+      "ph_RTO_q90",
+      "ph_RHS_q10",
+      "ph_RHS_q50",
+      "ph_RHS_q90",
+      "ph_LTO_q10",
+      "ph_LTO_q50",
+      "ph_LTO_q90",
+      "hist_RTO_0",
+      "hist_RTO_1",
+      "hist_RTO_2",
+      "hist_RTO_3",
+      "hist_RTO_4",
+      "hist_RTO_5",
+      "hist_RTO_6",
+      "hist_RTO_7",
+      "hist_RHS_0",
+      "hist_RHS_1",
+      "hist_RHS_2",
+      "hist_RHS_3",
+      "hist_RHS_4",
+      "hist_RHS_5",
+      "hist_RHS_6",
+      "hist_RHS_7",
+      "hist_LTO_0",
+      "hist_LTO_1",
+      "hist_LTO_2",
+      "hist_LTO_3",
+      "hist_LTO_4",
+      "hist_LTO_5",
+      "hist_LTO_6",
+      "hist_LTO_7",
+      "phase_RTO_near_2",
+      "phase_RTO_near_3",
+      "phase_RTO_near_4",
+      "phase_RHS_near_2",
+      "phase_RHS_near_3",
+      "phase_RHS_near_4",
+      "phase_LTO_near_2",
+      "phase_LTO_near_3",
+      "phase_LTO_near_4",
+      "phase_crosscov_01",
+      "phase_crosscov_02",
+      "phase_crosscov_12",
+      "gap_LHS_to_RTO_mean",
+      "gap_LHS_to_RTO_sd",
+      "gap_RTO_to_RHS_mean",
+      "gap_RTO_to_RHS_sd",
+      "gap_RHS_to_LTO_mean",
+      "gap_RHS_to_LTO_sd",
+      "gap_LTO_to_LHS_mean",
+      "gap_LTO_to_LHS_sd"
+    ],
+    "conventional": [
+      "Age",
+      "Gender",
+      "conv_stride_mean",
+      "conv_stride_cv",
+      "conv_phase_sd",
+      "conv_phase_acf",
+      "conv_stance_mean",
+      "conv_phase_mean",
+      "conv_stride_16to32_strides",
+      "conv_stride_8to16_strides",
+      "conv_stride_4to8_strides",
+      "conv_stride_2to4_strides",
+      "conv_RTO_16to32_strides",
+      "conv_RTO_8to16_strides",
+      "conv_RTO_4to8_strides",
+      "conv_RTO_2to4_strides",
+      "conv_RHS_16to32_strides",
+      "conv_RHS_8to16_strides",
+      "conv_RHS_4to8_strides",
+      "conv_RHS_2to4_strides",
+      "conv_LTO_16to32_strides",
+      "conv_LTO_8to16_strides",
+      "conv_LTO_4to8_strides",
+      "conv_LTO_2to4_strides"
+    ],
+    "basic_phases_plus_expected": [
+      "stride_duration_mean",
+      "stride_duration_cv",
+      "ph_RTO_mean",
+      "ph_RTO_sd",
+      "ph_RHS_mean",
+      "ph_RHS_sd",
+      "ph_LTO_mean",
+      "ph_LTO_sd",
+      "null_H_16to32_strides",
+      "null_H_8to16_strides",
+      "null_H_4to8_strides",
+      "null_H_2to4_strides",
+      "null_D_16to32_strides",
+      "null_D_8to16_strides",
+      "null_D_4to8_strides",
+      "null_D_2to4_strides"
+    ],
+    "rich_phases_plus_expected": [
+      "stride_duration_mean",
+      "stride_duration_cv",
+      "ph_RTO_mean",
+      "ph_RTO_sd",
+      "ph_RHS_mean",
+      "ph_RHS_sd",
+      "ph_LTO_mean",
+      "ph_LTO_sd",
+      "ph_RTO_q10",
+      "ph_RTO_q50",
+      "ph_RTO_q90",
+      "ph_RHS_q10",
+      "ph_RHS_q50",
+      "ph_RHS_q90",
+      "ph_LTO_q10",
+      "ph_LTO_q50",
+      "ph_LTO_q90",
+      "hist_RTO_0",
+      "hist_RTO_1",
+      "hist_RTO_2",
+      "hist_RTO_3",
+      "hist_RTO_4",
+      "hist_RTO_5",
+      "hist_RTO_6",
+      "hist_RTO_7",
+      "hist_RHS_0",
+      "hist_RHS_1",
+      "hist_RHS_2",
+      "hist_RHS_3",
+      "hist_RHS_4",
+      "hist_RHS_5",
+      "hist_RHS_6",
+      "hist_RHS_7",
+      "hist_LTO_0",
+      "hist_LTO_1",
+      "hist_LTO_2",
+      "hist_LTO_3",
+      "hist_LTO_4",
+      "hist_LTO_5",
+      "hist_LTO_6",
+      "hist_LTO_7",
+      "phase_RTO_near_2",
+      "phase_RTO_near_3",
+      "phase_RTO_near_4",
+      "phase_RHS_near_2",
+      "phase_RHS_near_3",
+      "phase_RHS_near_4",
+      "phase_LTO_near_2",
+      "phase_LTO_near_3",
+      "phase_LTO_near_4",
+      "phase_crosscov_01",
+      "phase_crosscov_02",
+      "phase_crosscov_12",
+      "gap_LHS_to_RTO_mean",
+      "gap_LHS_to_RTO_sd",
+      "gap_RTO_to_RHS_mean",
+      "gap_RTO_to_RHS_sd",
+      "gap_RHS_to_LTO_mean",
+      "gap_RHS_to_LTO_sd",
+      "gap_LTO_to_LHS_mean",
+      "gap_LTO_to_LHS_sd",
+      "null_H_16to32_strides",
+      "null_H_8to16_strides",
+      "null_H_4to8_strides",
+      "null_H_2to4_strides",
+      "null_D_16to32_strides",
+      "null_D_8to16_strides",
+      "null_D_4to8_strides",
+      "null_D_2to4_strides"
+    ],
+    "conventional_plus_expected": [
+      "Age",
+      "Gender",
+      "conv_stride_mean",
+      "conv_stride_cv",
+      "conv_phase_sd",
+      "conv_phase_acf",
+      "conv_stance_mean",
+      "conv_phase_mean",
+      "conv_stride_16to32_strides",
+      "conv_stride_8to16_strides",
+      "conv_stride_4to8_strides",
+      "conv_stride_2to4_strides",
+      "conv_RTO_16to32_strides",
+      "conv_RTO_8to16_strides",
+      "conv_RTO_4to8_strides",
+      "conv_RTO_2to4_strides",
+      "conv_RHS_16to32_strides",
+      "conv_RHS_8to16_strides",
+      "conv_RHS_4to8_strides",
+      "conv_RHS_2to4_strides",
+      "conv_LTO_16to32_strides",
+      "conv_LTO_8to16_strides",
+      "conv_LTO_4to8_strides",
+      "conv_LTO_2to4_strides",
+      "null_H_16to32_strides",
+      "null_H_8to16_strides",
+      "null_H_4to8_strides",
+      "null_H_2to4_strides",
+      "null_D_16to32_strides",
+      "null_D_8to16_strides",
+      "null_D_4to8_strides",
+      "null_D_2to4_strides"
+    ],
+    "basic_clinical": [
+      "Age",
+      "Gender",
+      "stride_duration_mean",
+      "stride_duration_cv",
+      "ph_RTO_mean",
+      "ph_RTO_sd",
+      "ph_RHS_mean",
+      "ph_RHS_sd",
+      "ph_LTO_mean",
+      "ph_LTO_sd"
+    ],
+    "rich_clinical": [
+      "Age",
+      "Gender",
+      "stride_duration_mean",
+      "stride_duration_cv",
+      "ph_RTO_mean",
+      "ph_RTO_sd",
+      "ph_RHS_mean",
+      "ph_RHS_sd",
+      "ph_LTO_mean",
+      "ph_LTO_sd",
+      "ph_RTO_q10",
+      "ph_RTO_q50",
+      "ph_RTO_q90",
+      "ph_RHS_q10",
+      "ph_RHS_q50",
+      "ph_RHS_q90",
+      "ph_LTO_q10",
+      "ph_LTO_q50",
+      "ph_LTO_q90",
+      "hist_RTO_0",
+      "hist_RTO_1",
+      "hist_RTO_2",
+      "hist_RTO_3",
+      "hist_RTO_4",
+      "hist_RTO_5",
+      "hist_RTO_6",
+      "hist_RTO_7",
+      "hist_RHS_0",
+      "hist_RHS_1",
+      "hist_RHS_2",
+      "hist_RHS_3",
+      "hist_RHS_4",
+      "hist_RHS_5",
+      "hist_RHS_6",
+      "hist_RHS_7",
+      "hist_LTO_0",
+      "hist_LTO_1",
+      "hist_LTO_2",
+      "hist_LTO_3",
+      "hist_LTO_4",
+      "hist_LTO_5",
+      "hist_LTO_6",
+      "hist_LTO_7",
+      "phase_RTO_near_2",
+      "phase_RTO_near_3",
+      "phase_RTO_near_4",
+      "phase_RHS_near_2",
+      "phase_RHS_near_3",
+      "phase_RHS_near_4",
+      "phase_LTO_near_2",
+      "phase_LTO_near_3",
+      "phase_LTO_near_4",
+      "phase_crosscov_01",
+      "phase_crosscov_02",
+      "phase_crosscov_12",
+      "gap_LHS_to_RTO_mean",
+      "gap_LHS_to_RTO_sd",
+      "gap_RTO_to_RHS_mean",
+      "gap_RTO_to_RHS_sd",
+      "gap_RHS_to_LTO_mean",
+      "gap_RHS_to_LTO_sd",
+      "gap_LTO_to_LHS_mean",
+      "gap_LTO_to_LHS_sd"
+    ],
+    "basic_clinical_plus_expected": [
+      "Age",
+      "Gender",
+      "stride_duration_mean",
+      "stride_duration_cv",
+      "ph_RTO_mean",
+      "ph_RTO_sd",
+      "ph_RHS_mean",
+      "ph_RHS_sd",
+      "ph_LTO_mean",
+      "ph_LTO_sd",
+      "null_H_16to32_strides",
+      "null_H_8to16_strides",
+      "null_H_4to8_strides",
+      "null_H_2to4_strides",
+      "null_D_16to32_strides",
+      "null_D_8to16_strides",
+      "null_D_4to8_strides",
+      "null_D_2to4_strides"
+    ],
+    "rich_clinical_plus_expected": [
+      "Age",
+      "Gender",
+      "stride_duration_mean",
+      "stride_duration_cv",
+      "ph_RTO_mean",
+      "ph_RTO_sd",
+      "ph_RHS_mean",
+      "ph_RHS_sd",
+      "ph_LTO_mean",
+      "ph_LTO_sd",
+      "ph_RTO_q10",
+      "ph_RTO_q50",
+      "ph_RTO_q90",
+      "ph_RHS_q10",
+      "ph_RHS_q50",
+      "ph_RHS_q90",
+      "ph_LTO_q10",
+      "ph_LTO_q50",
+      "ph_LTO_q90",
+      "hist_RTO_0",
+      "hist_RTO_1",
+      "hist_RTO_2",
+      "hist_RTO_3",
+      "hist_RTO_4",
+      "hist_RTO_5",
+      "hist_RTO_6",
+      "hist_RTO_7",
+      "hist_RHS_0",
+      "hist_RHS_1",
+      "hist_RHS_2",
+      "hist_RHS_3",
+      "hist_RHS_4",
+      "hist_RHS_5",
+      "hist_RHS_6",
+      "hist_RHS_7",
+      "hist_LTO_0",
+      "hist_LTO_1",
+      "hist_LTO_2",
+      "hist_LTO_3",
+      "hist_LTO_4",
+      "hist_LTO_5",
+      "hist_LTO_6",
+      "hist_LTO_7",
+      "phase_RTO_near_2",
+      "phase_RTO_near_3",
+      "phase_RTO_near_4",
+      "phase_RHS_near_2",
+      "phase_RHS_near_3",
+      "phase_RHS_near_4",
+      "phase_LTO_near_2",
+      "phase_LTO_near_3",
+      "phase_LTO_near_4",
+      "phase_crosscov_01",
+      "phase_crosscov_02",
+      "phase_crosscov_12",
+      "gap_LHS_to_RTO_mean",
+      "gap_LHS_to_RTO_sd",
+      "gap_RTO_to_RHS_mean",
+      "gap_RTO_to_RHS_sd",
+      "gap_RHS_to_LTO_mean",
+      "gap_RHS_to_LTO_sd",
+      "gap_LTO_to_LHS_mean",
+      "gap_LTO_to_LHS_sd",
+      "null_H_16to32_strides",
+      "null_H_8to16_strides",
+      "null_H_4to8_strides",
+      "null_H_2to4_strides",
+      "null_D_16to32_strides",
+      "null_D_8to16_strides",
+      "null_D_4to8_strides",
+      "null_D_2to4_strides"
+    ]
+  },
+  "individual_identification": {
+    "expected": {
+      "n": 25,
+      "top1": 6,
+      "top1_rate": 0.24,
+      "median_rank": 9.0,
+      "within_distance": 0.8881886980974223,
+      "between_distance": 1.2771706893971666,
+      "permutation_p": 0.0001
+    },
+    "order_residual": {
+      "n": 25,
+      "top1": 1,
+      "top1_rate": 0.04,
+      "median_rank": 11.0,
+      "within_distance": 1.3701821086963222,
+      "between_distance": 1.4155144952456866,
+      "permutation_p": 0.2239
+    },
+    "basic_phases": {
+      "n": 25,
+      "top1": 11,
+      "top1_rate": 0.44,
+      "median_rank": 2.0,
+      "within_distance": 0.8736068135545223,
+      "between_distance": 1.4321816253797792,
+      "permutation_p": 0.0001
+    },
+    "rich_phases": {
+      "n": 25,
+      "top1": 11,
+      "top1_rate": 0.44,
+      "median_rank": 2.0,
+      "within_distance": 8003.376260915727,
+      "between_distance": 8003.908719455828,
+      "permutation_p": 0.0001
+    },
+    "conventional": {
+      "n": 25,
+      "top1": 6,
+      "top1_rate": 0.24,
+      "median_rank": 4.0,
+      "within_distance": 1.1866274542911603,
+      "between_distance": 1.4758230559418837,
+      "permutation_p": 0.0001
+    },
+    "basic_phases_plus_expected": {
+      "n": 25,
+      "top1": 11,
+      "top1_rate": 0.44,
+      "median_rank": 2.0,
+      "within_distance": 0.9252112773224027,
+      "between_distance": 1.3941730352674164,
+      "permutation_p": 0.0001
+    },
+    "rich_phases_plus_expected": {
+      "n": 25,
+      "top1": 12,
+      "top1_rate": 0.48,
+      "median_rank": 2.0,
+      "within_distance": 7525.191161293574,
+      "between_distance": 7525.705857918525,
+      "permutation_p": 0.0001
+    }
+  },
+  "clinical_models": {
+    "UPDRSM": {
+      "20": {
+        "trial_1": {
+          "models": {
+            "expected": {
+              "n": 29,
+              "mae": 7.110547791563567,
+              "r2": -0.022641100428926197
+            },
+            "basic_clinical": {
+              "n": 29,
+              "mae": 7.529097684370055,
+              "r2": -0.13576402851678182
+            },
+            "rich_clinical": {
+              "n": 29,
+              "mae": 8.230749106149375,
+              "r2": -0.4120495561539843
+            },
+            "conventional": {
+              "n": 29,
+              "mae": 7.35352449773628,
+              "r2": -0.08717140591594186
+            },
+            "basic_clinical_plus_expected": {
+              "n": 29,
+              "mae": 7.271447932683062,
+              "r2": -0.06620257595865242
+            },
+            "rich_clinical_plus_expected": {
+              "n": 29,
+              "mae": 8.441559214875193,
+              "r2": -0.43364648905477754
+            },
+            "conventional_plus_expected": {
+              "n": 29,
+              "mae": 7.447122831913406,
+              "r2": -0.13099976009168168
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.2576497516869934,
+              "boot95": [
+                -0.5631494276292622,
+                1.0887002130591437
+              ],
+              "bootstrap_fraction_improved": 0.7291458291658331
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.21081010872581807,
+              "boot95": [
+                -1.0081144397447557,
+                0.5360516932766209
+              ],
+              "bootstrap_fraction_improved": 0.29545909181836366
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": -0.09359833417712754,
+              "boot95": [
+                -1.008765492436714,
+                0.7487282331123123
+              ],
+              "bootstrap_fraction_improved": 0.4342868573714743
+            }
+          }
+        },
+        "trial_2": {
+          "models": {
+            "expected": {
+              "n": 25,
+              "mae": 7.161739054649946,
+              "r2": -0.257745668285301
+            },
+            "basic_clinical": {
+              "n": 25,
+              "mae": 7.604467696186881,
+              "r2": -0.25501326925694867
+            },
+            "rich_clinical": {
+              "n": 25,
+              "mae": 14.10139644368228,
+              "r2": -9.31242537849066
+            },
+            "conventional": {
+              "n": 25,
+              "mae": 7.3088055447978375,
+              "r2": -0.20973488655600536
+            },
+            "basic_clinical_plus_expected": {
+              "n": 25,
+              "mae": 7.578188439901303,
+              "r2": -0.38817964193847065
+            },
+            "rich_clinical_plus_expected": {
+              "n": 25,
+              "mae": 13.650758041986924,
+              "r2": -8.049320657300518
+            },
+            "conventional_plus_expected": {
+              "n": 25,
+              "mae": 7.89647715587984,
+              "r2": -0.4296554277490876
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.026279256285579464,
+              "boot95": [
+                -0.8079556557723875,
+                0.891730979420751
+              ],
+              "bootstrap_fraction_improved": 0.5211042208441689
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.45063840169535474,
+              "boot95": [
+                -0.5475415024270824,
+                1.5530721503281926
+              ],
+              "bootstrap_fraction_improved": 0.7971594318863773
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": -0.5876716110820014,
+              "boot95": [
+                -1.6585493347526243,
+                0.4000880742589091
+              ],
+              "bootstrap_fraction_improved": 0.120624124824965
+            }
+          }
+        }
+      },
+      "80": {
+        "trial_1": {
+          "models": {
+            "expected": {
+              "n": 29,
+              "mae": 6.774238599211298,
+              "r2": -0.002523195889627683
+            },
+            "basic_clinical": {
+              "n": 29,
+              "mae": 7.29939462286281,
+              "r2": -0.06643278937461328
+            },
+            "rich_clinical": {
+              "n": 29,
+              "mae": 7.6244082984960135,
+              "r2": -0.21519262645155335
+            },
+            "conventional": {
+              "n": 29,
+              "mae": 7.354557575994705,
+              "r2": -0.08234630521909003
+            },
+            "basic_clinical_plus_expected": {
+              "n": 29,
+              "mae": 6.861160828054653,
+              "r2": -0.008982316965545856
+            },
+            "rich_clinical_plus_expected": {
+              "n": 29,
+              "mae": 7.605257499882127,
+              "r2": -0.20046977117465858
+            },
+            "conventional_plus_expected": {
+              "n": 29,
+              "mae": 7.179397231485227,
+              "r2": -0.057860465067943956
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.43823379480815655,
+              "boot95": [
+                -0.025646404565927133,
+                0.9823850463878294
+              ],
+              "bootstrap_fraction_improved": 0.9663932786557311
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.019150798613884197,
+              "boot95": [
+                -0.3012476117940669,
+                0.3234344718141971
+              ],
+              "bootstrap_fraction_improved": 0.5479095819163833
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.17516034450947993,
+              "boot95": [
+                -0.12398994049882452,
+                0.48051649873250324
+              ],
+              "bootstrap_fraction_improved": 0.8745749149829966
+            }
+          }
+        },
+        "trial_2": {
+          "models": {
+            "expected": {
+              "n": 25,
+              "mae": 6.8190069303891185,
+              "r2": -0.15428543636363434
+            },
+            "basic_clinical": {
+              "n": 25,
+              "mae": 7.167947135160537,
+              "r2": -0.15022224693606034
+            },
+            "rich_clinical": {
+              "n": 25,
+              "mae": 9.816081834120729,
+              "r2": -2.3196236532154737
+            },
+            "conventional": {
+              "n": 25,
+              "mae": 7.1139900710416875,
+              "r2": -0.15961389606311127
+            },
+            "basic_clinical_plus_expected": {
+              "n": 25,
+              "mae": 7.048706594388849,
+              "r2": -0.191084908921608
+            },
+            "rich_clinical_plus_expected": {
+              "n": 25,
+              "mae": 9.8565361613139,
+              "r2": -2.253277129360769
+            },
+            "conventional_plus_expected": {
+              "n": 25,
+              "mae": 7.202514917592959,
+              "r2": -0.21454294257209772
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.11924054077168612,
+              "boot95": [
+                -0.3908851564382101,
+                0.7229872470287827
+              ],
+              "bootstrap_fraction_improved": 0.6389277855571114
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.040454327193168285,
+              "boot95": [
+                -0.41022613363422566,
+                0.32223196235813484
+              ],
+              "bootstrap_fraction_improved": 0.41248249649929986
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": -0.08852484655127121,
+              "boot95": [
+                -0.45794555664632514,
+                0.27029038121366955
+              ],
+              "bootstrap_fraction_improved": 0.3224644928985797
+            }
+          }
+        }
+      }
+    },
+    "UPDRS": {
+      "20": {
+        "trial_1": {
+          "models": {
+            "expected": {
+              "n": 29,
+              "mae": 9.267359572150632,
+              "r2": 0.063150783167782
+            },
+            "basic_clinical": {
+              "n": 29,
+              "mae": 10.185596022817542,
+              "r2": -0.15970747642119765
+            },
+            "rich_clinical": {
+              "n": 29,
+              "mae": 11.36949702187957,
+              "r2": -0.47618067855597546
+            },
+            "conventional": {
+              "n": 29,
+              "mae": 11.162379992492813,
+              "r2": -0.3436890192894446
+            },
+            "basic_clinical_plus_expected": {
+              "n": 29,
+              "mae": 9.268340543382457,
+              "r2": -0.012994397487629872
+            },
+            "rich_clinical_plus_expected": {
+              "n": 29,
+              "mae": 10.911561446502537,
+              "r2": -0.4130383008852192
+            },
+            "conventional_plus_expected": {
+              "n": 29,
+              "mae": 10.276734682810888,
+              "r2": -0.2544612266689419
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.9172554794350829,
+              "boot95": [
+                -0.5336290193167788,
+                2.434335060654466
+              ],
+              "bootstrap_fraction_improved": 0.8847769553910783
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.45793557537703233,
+              "boot95": [
+                -0.8125490035238115,
+                1.6902301607126113
+              ],
+              "bootstrap_fraction_improved": 0.7639527905581116
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.8856453096819242,
+              "boot95": [
+                -0.3400271955386048,
+                2.1948756406676972
+              ],
+              "bootstrap_fraction_improved": 0.9141828365673135
+            }
+          }
+        },
+        "trial_2": {
+          "models": {
+            "expected": {
+              "n": 25,
+              "mae": 10.130067169351253,
+              "r2": -0.2425167418138776
+            },
+            "basic_clinical": {
+              "n": 25,
+              "mae": 10.409795368735699,
+              "r2": -0.23963812019157626
+            },
+            "rich_clinical": {
+              "n": 25,
+              "mae": 18.395437278264744,
+              "r2": -8.588995220373207
+            },
+            "conventional": {
+              "n": 25,
+              "mae": 10.717036864049385,
+              "r2": -0.25086511833270575
+            },
+            "basic_clinical_plus_expected": {
+              "n": 25,
+              "mae": 10.602626756266625,
+              "r2": -0.3048414339985277
+            },
+            "rich_clinical_plus_expected": {
+              "n": 25,
+              "mae": 17.357505959780447,
+              "r2": -7.486352514009841
+            },
+            "conventional_plus_expected": {
+              "n": 25,
+              "mae": 10.997776431608743,
+              "r2": -0.4573843168822993
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.1928313875309283,
+              "boot95": [
+                -1.5049273719131813,
+                1.1648584376821658
+              ],
+              "bootstrap_fraction_improved": 0.3840768153630726
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 1.0379313184842933,
+              "boot95": [
+                -0.49551368774370674,
+                2.6348946908346687
+              ],
+              "bootstrap_fraction_improved": 0.9057811562312462
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": -0.28073956755935925,
+              "boot95": [
+                -1.648578846519996,
+                1.1687141647497759
+              ],
+              "bootstrap_fraction_improved": 0.34546909381876373
+            }
+          }
+        }
+      },
+      "80": {
+        "trial_1": {
+          "models": {
+            "expected": {
+              "n": 29,
+              "mae": 9.531023958149532,
+              "r2": 0.039285215837032594
+            },
+            "basic_clinical": {
+              "n": 29,
+              "mae": 10.03948203431285,
+              "r2": -0.07332593152384037
+            },
+            "rich_clinical": {
+              "n": 29,
+              "mae": 10.389340234813227,
+              "r2": -0.20360027907148615
+            },
+            "conventional": {
+              "n": 29,
+              "mae": 10.758106851635462,
+              "r2": -0.15951193776282246
+            },
+            "basic_clinical_plus_expected": {
+              "n": 29,
+              "mae": 9.454225205816057,
+              "r2": 0.014426373408548354
+            },
+            "rich_clinical_plus_expected": {
+              "n": 29,
+              "mae": 10.168475115852281,
+              "r2": -0.16175484697393205
+            },
+            "conventional_plus_expected": {
+              "n": 29,
+              "mae": 10.03265467300059,
+              "r2": -0.08109128876824667
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.5852568284967932,
+              "boot95": [
+                -0.08753875329732047,
+                1.3299594669010364
+              ],
+              "bootstrap_fraction_improved": 0.953990798159632
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.22086511896094493,
+              "boot95": [
+                -0.3051717178149156,
+                0.7650119584944595
+              ],
+              "bootstrap_fraction_improved": 0.780756151230246
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.7254521786348739,
+              "boot95": [
+                0.11117434491937926,
+                1.4421104623101428
+              ],
+              "bootstrap_fraction_improved": 0.9905981196239247
+            }
+          }
+        },
+        "trial_2": {
+          "models": {
+            "expected": {
+              "n": 25,
+              "mae": 10.140238500091797,
+              "r2": -0.1475025036521629
+            },
+            "basic_clinical": {
+              "n": 25,
+              "mae": 9.999954087338335,
+              "r2": -0.1427764446117299
+            },
+            "rich_clinical": {
+              "n": 25,
+              "mae": 13.556452262198805,
+              "r2": -2.4054416311178093
+            },
+            "conventional": {
+              "n": 25,
+              "mae": 10.690935150528368,
+              "r2": -0.21542224245935238
+            },
+            "basic_clinical_plus_expected": {
+              "n": 25,
+              "mae": 10.075038509780017,
+              "r2": -0.17984008627292192
+            },
+            "rich_clinical_plus_expected": {
+              "n": 25,
+              "mae": 13.626849496145987,
+              "r2": -2.3435666511614195
+            },
+            "conventional_plus_expected": {
+              "n": 25,
+              "mae": 10.57536608717391,
+              "r2": -0.25449978276033636
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.07508442244168165,
+              "boot95": [
+                -0.7633223945420916,
+                0.7079280027039596
+              ],
+              "bootstrap_fraction_improved": 0.40928185637127423
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.07039723394718635,
+              "boot95": [
+                -0.623996333991846,
+                0.47140266905485056
+              ],
+              "bootstrap_fraction_improved": 0.39947989597919586
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.11556906335446214,
+              "boot95": [
+                -0.6263923933721196,
+                0.987152716961577
+              ],
+              "bootstrap_fraction_improved": 0.5957191438287658
+            }
+          }
+        }
+      }
+    },
+    "HoehnYahr": {
+      "20": {
+        "trial_1": {
+          "models": {
+            "expected": {
+              "n": 29,
+              "mae": 0.32342920845557016,
+              "r2": 0.10773028792471373
+            },
+            "basic_clinical": {
+              "n": 29,
+              "mae": 0.3442893274738044,
+              "r2": 0.005117108493114864
+            },
+            "rich_clinical": {
+              "n": 29,
+              "mae": 0.396459521171166,
+              "r2": -0.33765249034525424
+            },
+            "conventional": {
+              "n": 29,
+              "mae": 0.3567805373397305,
+              "r2": -0.09226403393372595
+            },
+            "basic_clinical_plus_expected": {
+              "n": 29,
+              "mae": 0.32294406796411834,
+              "r2": 0.09746372894282074
+            },
+            "rich_clinical_plus_expected": {
+              "n": 29,
+              "mae": 0.4003713906197284,
+              "r2": -0.31397213402114477
+            },
+            "conventional_plus_expected": {
+              "n": 29,
+              "mae": 0.354232946774807,
+              "r2": -0.10980732102266688
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.021345259509685924,
+              "boot95": [
+                -0.012797125870839553,
+                0.05589354860317573
+              ],
+              "bootstrap_fraction_improved": 0.8867773554710943
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.003911869448562363,
+              "boot95": [
+                -0.04061373669156793,
+                0.030273882317099002
+              ],
+              "bootstrap_fraction_improved": 0.42568513702740546
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.002547590564923317,
+              "boot95": [
+                -0.04242515395111867,
+                0.04149313907920061
+              ],
+              "bootstrap_fraction_improved": 0.5631126225245049
+            }
+          }
+        },
+        "trial_2": {
+          "models": {
+            "expected": {
+              "n": 25,
+              "mae": 0.375376606894137,
+              "r2": -0.27628257751836327
+            },
+            "basic_clinical": {
+              "n": 25,
+              "mae": 0.3503615163214131,
+              "r2": -0.056277684459634214
+            },
+            "rich_clinical": {
+              "n": 25,
+              "mae": 0.5025439189361605,
+              "r2": -2.9231182119698853
+            },
+            "conventional": {
+              "n": 25,
+              "mae": 0.3824088599632674,
+              "r2": -0.34003866887226786
+            },
+            "basic_clinical_plus_expected": {
+              "n": 25,
+              "mae": 0.3611657653605016,
+              "r2": -0.20543901579857526
+            },
+            "rich_clinical_plus_expected": {
+              "n": 25,
+              "mae": 0.5203181009331811,
+              "r2": -3.14708649014974
+            },
+            "conventional_plus_expected": {
+              "n": 25,
+              "mae": 0.4055989739986087,
+              "r2": -0.4496104173213422
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.010804249039088382,
+              "boot95": [
+                -0.051699128725095946,
+                0.03087116763364516
+              ],
+              "bootstrap_fraction_improved": 0.2948589717943589
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.01777418199702062,
+              "boot95": [
+                -0.052942948263511494,
+                0.015945079046923598
+              ],
+              "bootstrap_fraction_improved": 0.14602920584116824
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": -0.02319011403534131,
+              "boot95": [
+                -0.058469864100138935,
+                0.01156312229855934
+              ],
+              "bootstrap_fraction_improved": 0.10762152430486097
+            }
+          }
+        }
+      },
+      "80": {
+        "trial_1": {
+          "models": {
+            "expected": {
+              "n": 29,
+              "mae": 0.3197419645547967,
+              "r2": 0.17266100265919948
+            },
+            "basic_clinical": {
+              "n": 29,
+              "mae": 0.34693149947230567,
+              "r2": 0.04770302088867906
+            },
+            "rich_clinical": {
+              "n": 29,
+              "mae": 0.35840790343586154,
+              "r2": -0.0518594923579454
+            },
+            "conventional": {
+              "n": 29,
+              "mae": 0.36230070426191924,
+              "r2": -0.05642416565084374
+            },
+            "basic_clinical_plus_expected": {
+              "n": 29,
+              "mae": 0.31867223845104026,
+              "r2": 0.16328656437737643
+            },
+            "rich_clinical_plus_expected": {
+              "n": 29,
+              "mae": 0.34666853162433214,
+              "r2": 0.009972866219577936
+            },
+            "conventional_plus_expected": {
+              "n": 29,
+              "mae": 0.32640258251760657,
+              "r2": 0.10739978586537824
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.028259261021265393,
+              "boot95": [
+                0.0045295647902241784,
+                0.05607995661229884
+              ],
+              "bootstrap_fraction_improved": 0.992998599719944
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.011739371811529509,
+              "boot95": [
+                -0.0011106771208539295,
+                0.02466653511288232
+              ],
+              "bootstrap_fraction_improved": 0.9621924384876975
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.035898121744312714,
+              "boot95": [
+                0.006367917376307682,
+                0.07301447658352887
+              ],
+              "bootstrap_fraction_improved": 0.993998799759952
+            }
+          }
+        },
+        "trial_2": {
+          "models": {
+            "expected": {
+              "n": 25,
+              "mae": 0.35114041984398964,
+              "r2": -0.043173609765803755
+            },
+            "basic_clinical": {
+              "n": 25,
+              "mae": 0.35561930808809306,
+              "r2": -0.03254690398402804
+            },
+            "rich_clinical": {
+              "n": 25,
+              "mae": 0.3461365009024163,
+              "r2": -0.11312802322694626
+            },
+            "conventional": {
+              "n": 25,
+              "mae": 0.3850544625452265,
+              "r2": -0.2169544363941298
+            },
+            "basic_clinical_plus_expected": {
+              "n": 25,
+              "mae": 0.3480024988498315,
+              "r2": -0.054551282701112314
+            },
+            "rich_clinical_plus_expected": {
+              "n": 25,
+              "mae": 0.3483254243346446,
+              "r2": -0.1202818139066304
+            },
+            "conventional_plus_expected": {
+              "n": 25,
+              "mae": 0.3653254284726448,
+              "r2": -0.1679845977929908
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.007616809238261535,
+              "boot95": [
+                -0.017385577192531063,
+                0.03463630334668911
+              ],
+              "bootstrap_fraction_improved": 0.7081416283256652
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.0021889234322282646,
+              "boot95": [
+                -0.016157143634292118,
+                0.0121875338039192
+              ],
+              "bootstrap_fraction_improved": 0.3750750150030006
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.019729034072581638,
+              "boot95": [
+                -0.01936660770881553,
+                0.07012696121898791
+              ],
+              "bootstrap_fraction_improved": 0.8103620724144829
+            }
+          }
+        }
+      }
+    },
+    "TUAG": {
+      "20": {
+        "trial_1": {
+          "models": {
+            "expected": {
+              "n": 27,
+              "mae": 3.0308485426018477,
+              "r2": 0.19438049343551655
+            },
+            "basic_clinical": {
+              "n": 27,
+              "mae": 3.1995623830246496,
+              "r2": 0.2319027159711936
+            },
+            "rich_clinical": {
+              "n": 27,
+              "mae": 3.8282492337746907,
+              "r2": 0.11582251081799466
+            },
+            "conventional": {
+              "n": 27,
+              "mae": 3.383847651108124,
+              "r2": 0.07973068786726267
+            },
+            "basic_clinical_plus_expected": {
+              "n": 27,
+              "mae": 3.0775007836291963,
+              "r2": 0.18505500479370374
+            },
+            "rich_clinical_plus_expected": {
+              "n": 27,
+              "mae": 3.700281161862817,
+              "r2": 0.13421379077299322
+            },
+            "conventional_plus_expected": {
+              "n": 27,
+              "mae": 3.3240606591626976,
+              "r2": 0.1493689795479094
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.12206159939545323,
+              "boot95": [
+                -0.26682002240699676,
+                0.5310686622866274
+              ],
+              "bootstrap_fraction_improved": 0.71374274854971
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.12796807191187287,
+              "boot95": [
+                -0.14919566370807247,
+                0.4181472015352174
+              ],
+              "bootstrap_fraction_improved": 0.8043608721744349
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.05978699194542676,
+              "boot95": [
+                -0.3794814079847375,
+                0.4962841772266885
+              ],
+              "bootstrap_fraction_improved": 0.5847169433886777
+            }
+          }
+        },
+        "trial_2": {
+          "models": {
+            "expected": {
+              "n": 23,
+              "mae": 3.150142968616759,
+              "r2": 0.013568251743844462
+            },
+            "basic_clinical": {
+              "n": 23,
+              "mae": 2.78492029701475,
+              "r2": 0.00999116661591093
+            },
+            "rich_clinical": {
+              "n": 23,
+              "mae": 3.558359580516968,
+              "r2": -0.5553894251345386
+            },
+            "conventional": {
+              "n": 23,
+              "mae": 3.4984278176299,
+              "r2": -0.6142178696462954
+            },
+            "basic_clinical_plus_expected": {
+              "n": 23,
+              "mae": 3.1038493683242616,
+              "r2": -0.13613594168329768
+            },
+            "rich_clinical_plus_expected": {
+              "n": 23,
+              "mae": 3.7252928959425398,
+              "r2": -0.6971028742957814
+            },
+            "conventional_plus_expected": {
+              "n": 23,
+              "mae": 3.865600253727976,
+              "r2": -0.8973025302848687
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.3189290713095118,
+              "boot95": [
+                -0.7330973921921488,
+                0.07555495281708505
+              ],
+              "bootstrap_fraction_improved": 0.059411882376475295
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.166933315425571,
+              "boot95": [
+                -0.5349445042384308,
+                0.22600284734907158
+              ],
+              "bootstrap_fraction_improved": 0.1840368073614723
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": -0.36717243609807526,
+              "boot95": [
+                -0.9057688039434348,
+                0.12265182325456102
+              ],
+              "bootstrap_fraction_improved": 0.07521504300860173
+            }
+          }
+        }
+      },
+      "80": {
+        "trial_1": {
+          "models": {
+            "expected": {
+              "n": 27,
+              "mae": 2.926448776055725,
+              "r2": 0.2005668474575899
+            },
+            "basic_clinical": {
+              "n": 27,
+              "mae": 3.152180540838247,
+              "r2": 0.1698413258163204
+            },
+            "rich_clinical": {
+              "n": 27,
+              "mae": 3.4877389866895605,
+              "r2": 0.14339451869332975
+            },
+            "conventional": {
+              "n": 27,
+              "mae": 3.4237961708516393,
+              "r2": 0.03224724836625492
+            },
+            "basic_clinical_plus_expected": {
+              "n": 27,
+              "mae": 2.925859592107573,
+              "r2": 0.22827348720331997
+            },
+            "rich_clinical_plus_expected": {
+              "n": 27,
+              "mae": 3.332436858152464,
+              "r2": 0.16888898474519498
+            },
+            "conventional_plus_expected": {
+              "n": 27,
+              "mae": 2.972498678502364,
+              "r2": 0.18827949387819243
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.2263209487306734,
+              "boot95": [
+                -0.13475435906377542,
+                0.7095892258782739
+              ],
+              "bootstrap_fraction_improved": 0.8549709941988398
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.15530212853709688,
+              "boot95": [
+                -0.014938738293593755,
+                0.35294731719262096
+              ],
+              "bootstrap_fraction_improved": 0.9603920784156831
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.4512974923492755,
+              "boot95": [
+                0.01854453934759914,
+                1.0322320941401046
+              ],
+              "bootstrap_fraction_improved": 0.9815963192638528
+            }
+          }
+        },
+        "trial_2": {
+          "models": {
+            "expected": {
+              "n": 23,
+              "mae": 2.6668333831887057,
+              "r2": 0.2505413713127205
+            },
+            "basic_clinical": {
+              "n": 23,
+              "mae": 2.7638939697890774,
+              "r2": 0.04603364375874075
+            },
+            "rich_clinical": {
+              "n": 23,
+              "mae": 3.102547625374504,
+              "r2": -0.27350569504945965
+            },
+            "conventional": {
+              "n": 23,
+              "mae": 3.3451894298787757,
+              "r2": -0.32632362291581085
+            },
+            "basic_clinical_plus_expected": {
+              "n": 23,
+              "mae": 2.7813511841332534,
+              "r2": 0.1184653164391738
+            },
+            "rich_clinical_plus_expected": {
+              "n": 23,
+              "mae": 3.0838410924238513,
+              "r2": -0.2571290321105133
+            },
+            "conventional_plus_expected": {
+              "n": 23,
+              "mae": 3.197073553201425,
+              "r2": -0.14683434941614704
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.01745721434417577,
+              "boot95": [
+                -0.4910834768696927,
+                0.6338867654052699
+              ],
+              "bootstrap_fraction_improved": 0.4452890578115623
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.01870653295065208,
+              "boot95": [
+                -0.19074350987405195,
+                0.2917242283058441
+              ],
+              "bootstrap_fraction_improved": 0.5263052610522104
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.14811587667734982,
+              "boot95": [
+                -0.4482065256780814,
+                0.9837842716481618
+              ],
+              "bootstrap_fraction_improved": 0.6257251450290058
+            }
+          }
+        }
+      }
+    },
+    "Speed_01": {
+      "20": {
+        "trial_1": {
+          "models": {
+            "expected": {
+              "n": 28,
+              "mae": 0.16192662683114925,
+              "r2": 0.3048203788480782
+            },
+            "basic_clinical": {
+              "n": 28,
+              "mae": 0.13555353935114203,
+              "r2": 0.5327640919100673
+            },
+            "rich_clinical": {
+              "n": 28,
+              "mae": 0.14546014824865733,
+              "r2": 0.35025054456549354
+            },
+            "conventional": {
+              "n": 28,
+              "mae": 0.17095640626265096,
+              "r2": 0.25547290736309103
+            },
+            "basic_clinical_plus_expected": {
+              "n": 28,
+              "mae": 0.14158964776545385,
+              "r2": 0.4923956878177822
+            },
+            "rich_clinical_plus_expected": {
+              "n": 28,
+              "mae": 0.1446195631501849,
+              "r2": 0.3996497935743154
+            },
+            "conventional_plus_expected": {
+              "n": 28,
+              "mae": 0.15368485820208036,
+              "r2": 0.3794084743412275
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.0060361084143118315,
+              "boot95": [
+                -0.022249176079278656,
+                0.010266978783259086
+              ],
+              "bootstrap_fraction_improved": 0.23084616923384677
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.0008405850984724374,
+              "boot95": [
+                -0.010359039370091366,
+                0.011611121138759482
+              ],
+              "bootstrap_fraction_improved": 0.5587117423484697
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.01727154806057058,
+              "boot95": [
+                -0.009919250695950763,
+                0.0506747692392838
+              ],
+              "bootstrap_fraction_improved": 0.8819763952790558
+            }
+          }
+        },
+        "trial_2": {
+          "models": {
+            "expected": {
+              "n": 25,
+              "mae": 0.19564519282852175,
+              "r2": -0.02258402538575255
+            },
+            "basic_clinical": {
+              "n": 25,
+              "mae": 0.1578206023462848,
+              "r2": 0.3154188326618137
+            },
+            "rich_clinical": {
+              "n": 25,
+              "mae": 0.2704924231866904,
+              "r2": -3.133563787746864
+            },
+            "conventional": {
+              "n": 25,
+              "mae": 0.19100158870266834,
+              "r2": 0.056779227595987525
+            },
+            "basic_clinical_plus_expected": {
+              "n": 25,
+              "mae": 0.18151545202406813,
+              "r2": 0.1648944405934054
+            },
+            "rich_clinical_plus_expected": {
+              "n": 25,
+              "mae": 0.27355987975657037,
+              "r2": -2.590968341248515
+            },
+            "conventional_plus_expected": {
+              "n": 25,
+              "mae": 0.20347659178390298,
+              "r2": -0.11364308969638448
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.023694849677783302,
+              "boot95": [
+                -0.0451854558568025,
+                -0.004145964938820474
+              ],
+              "bootstrap_fraction_improved": 0.007401480296059212
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": -0.003067456569879945,
+              "boot95": [
+                -0.025601290054442012,
+                0.02236130850510442
+              ],
+              "bootstrap_fraction_improved": 0.3900780156031206
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": -0.0124750030812346,
+              "boot95": [
+                -0.039251577539953425,
+                0.014478366317527575
+              ],
+              "bootstrap_fraction_improved": 0.1846369273854771
+            }
+          }
+        }
+      },
+      "80": {
+        "trial_1": {
+          "models": {
+            "expected": {
+              "n": 28,
+              "mae": 0.1748845706653719,
+              "r2": 0.26151226507224967
+            },
+            "basic_clinical": {
+              "n": 28,
+              "mae": 0.15909285400239437,
+              "r2": 0.3590117107937898
+            },
+            "rich_clinical": {
+              "n": 28,
+              "mae": 0.1516960052440933,
+              "r2": 0.40535819505022974
+            },
+            "conventional": {
+              "n": 28,
+              "mae": 0.18849669183977974,
+              "r2": 0.1130000667663017
+            },
+            "basic_clinical_plus_expected": {
+              "n": 28,
+              "mae": 0.1513583893989931,
+              "r2": 0.42016901184824706
+            },
+            "rich_clinical_plus_expected": {
+              "n": 28,
+              "mae": 0.148878211291424,
+              "r2": 0.4331541554813093
+            },
+            "conventional_plus_expected": {
+              "n": 28,
+              "mae": 0.16901381185443604,
+              "r2": 0.3286797115432143
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.007734464603401222,
+              "boot95": [
+                -0.008670384688631426,
+                0.02776171597177927
+              ],
+              "bootstrap_fraction_improved": 0.7893578715743149
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.0028177939526692858,
+              "boot95": [
+                -0.005351460970551508,
+                0.012126890064901284
+              ],
+              "bootstrap_fraction_improved": 0.7231446289257851
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.0194828799853437,
+              "boot95": [
+                -0.0014219749218978472,
+                0.044894450542551104
+              ],
+              "bootstrap_fraction_improved": 0.9645929185837168
+            }
+          }
+        },
+        "trial_2": {
+          "models": {
+            "expected": {
+              "n": 25,
+              "mae": 0.18915920225590122,
+              "r2": 0.13313856567686333
+            },
+            "basic_clinical": {
+              "n": 25,
+              "mae": 0.18310227484198613,
+              "r2": 0.2332419650764712
+            },
+            "rich_clinical": {
+              "n": 25,
+              "mae": 0.2215255808652083,
+              "r2": -0.5634558651995027
+            },
+            "conventional": {
+              "n": 25,
+              "mae": 0.2013111567537457,
+              "r2": 0.030771521261699353
+            },
+            "basic_clinical_plus_expected": {
+              "n": 25,
+              "mae": 0.17571464287056274,
+              "r2": 0.24112766321269774
+            },
+            "rich_clinical_plus_expected": {
+              "n": 25,
+              "mae": 0.21722926440986573,
+              "r2": -0.4578319714414778
+            },
+            "conventional_plus_expected": {
+              "n": 25,
+              "mae": 0.18810956029786116,
+              "r2": 0.12142965187033405
+            }
+          },
+          "comparisons": {
+            "basic_clinical_vs_basic_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.007387631971423403,
+              "boot95": [
+                -0.013551134109639746,
+                0.03558163203315497
+              ],
+              "bootstrap_fraction_improved": 0.7123424684936988
+            },
+            "rich_clinical_vs_rich_clinical_plus_expected": {
+              "mean_MAE_improvement": 0.004296316455342591,
+              "boot95": [
+                -0.00875219082323074,
+                0.019992707352903698
+              ],
+              "bootstrap_fraction_improved": 0.7249449889977996
+            },
+            "conventional_vs_conventional_plus_expected": {
+              "mean_MAE_improvement": 0.013201596455884519,
+              "boot95": [
+                -0.011181484711223552,
+                0.047442556945467854
+              ],
+              "bootstrap_fraction_improved": 0.8043608721744349
+            }
+          }
+        }
+      }
+    }
+  },
+  "reconstruct_expected_from_phases": {
+    "20": {
+      "trial_1": {
+        "core": {
+          "n": 47,
+          "mean_R2": 0.23549843654840785,
+          "median_R2": 0.2556830713183506,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": -0.07759404743944542,
+            "null_H_8to16_strides": -0.08217805468560924,
+            "null_H_4to8_strides": 0.2097668525244315,
+            "null_H_2to4_strides": 0.1431913513154699,
+            "null_D_16to32_strides": 0.3015992901122697,
+            "null_D_8to16_strides": 0.4201436060550905,
+            "null_D_4to8_strides": 0.3659498627794522,
+            "null_D_2to4_strides": 0.6031086317256037
+          }
+        },
+        "rich": {
+          "n": 47,
+          "mean_R2": 0.31862930590100685,
+          "median_R2": 0.5046348880864675,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": -0.04777973229516097,
+            "null_H_8to16_strides": -0.6156089033081065,
+            "null_H_4to8_strides": 0.34154633584513183,
+            "null_H_2to4_strides": 0.5315260996851495,
+            "null_D_16to32_strides": 0.4777436764877854,
+            "null_D_8to16_strides": 0.5318519208058132,
+            "null_D_4to8_strides": 0.5710443641916095,
+            "null_D_2to4_strides": 0.7587106857958326
+          }
+        }
+      },
+      "trial_2": {
+        "core": {
+          "n": 39,
+          "mean_R2": 0.29255676734166464,
+          "median_R2": 0.33454160463091076,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": 0.017258471386446872,
+            "null_H_8to16_strides": 0.1530943012248107,
+            "null_H_4to8_strides": 0.334601323105719,
+            "null_H_2to4_strides": 0.3344818861561025,
+            "null_D_16to32_strides": 0.17318518557670648,
+            "null_D_8to16_strides": 0.36022810900224744,
+            "null_D_4to8_strides": 0.3595613405309619,
+            "null_D_2to4_strides": 0.6080435217503221
+          }
+        },
+        "rich": {
+          "n": 39,
+          "mean_R2": 0.36092764985421494,
+          "median_R2": 0.39438717750822794,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": -0.1985955116667273,
+            "null_H_8to16_strides": 0.09494714155062467,
+            "null_H_4to8_strides": 0.5895073619192355,
+            "null_H_2to4_strides": 0.7318925922576944,
+            "null_D_16to32_strides": 0.27852354445275207,
+            "null_D_8to16_strides": 0.38248124289823515,
+            "null_D_4to8_strides": 0.4062931121182207,
+            "null_D_2to4_strides": 0.6023717153036843
+          }
+        }
+      }
+    },
+    "80": {
+      "trial_1": {
+        "core": {
+          "n": 47,
+          "mean_R2": 0.22235027585414813,
+          "median_R2": 0.21392469919341878,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": -0.04275411569832377,
+            "null_H_8to16_strides": -0.016712070529087297,
+            "null_H_4to8_strides": 0.16110282095796846,
+            "null_H_2to4_strides": 0.12860654652107872,
+            "null_D_16to32_strides": 0.2667465774288691,
+            "null_D_8to16_strides": 0.39826104594957523,
+            "null_D_4to8_strides": 0.34801490372874755,
+            "null_D_2to4_strides": 0.5355364984743571
+          }
+        },
+        "rich": {
+          "n": 47,
+          "mean_R2": 0.3580665804464648,
+          "median_R2": 0.438229792603664,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": 0.08653889877830478,
+            "null_H_8to16_strides": -0.17513252753124564,
+            "null_H_4to8_strides": 0.3225472403622649,
+            "null_H_2to4_strides": 0.44225817358008146,
+            "null_D_16to32_strides": 0.43420141162724657,
+            "null_D_8to16_strides": 0.5295455749173311,
+            "null_D_4to8_strides": 0.5121007650203839,
+            "null_D_2to4_strides": 0.7124731068173511
+          }
+        }
+      },
+      "trial_2": {
+        "core": {
+          "n": 39,
+          "mean_R2": 0.2528620611299141,
+          "median_R2": 0.25109780921733904,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": 0.011690747877201701,
+            "null_H_8to16_strides": 0.10704105572001144,
+            "null_H_4to8_strides": 0.2510565201114652,
+            "null_H_2to4_strides": 0.2511390983232129,
+            "null_D_16to32_strides": 0.1710452007138622,
+            "null_D_8to16_strides": 0.36153706793472307,
+            "null_D_4to8_strides": 0.32277021333020806,
+            "null_D_2to4_strides": 0.5466165850286282
+          }
+        },
+        "rich": {
+          "n": 39,
+          "mean_R2": 0.36458884240795736,
+          "median_R2": 0.37547113504553364,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": 0.05036805182416337,
+            "null_H_8to16_strides": 0.17143517650012197,
+            "null_H_4to8_strides": 0.5113201686305959,
+            "null_H_2to4_strides": 0.6050978097997766,
+            "null_D_16to32_strides": 0.25191761310885363,
+            "null_D_8to16_strides": 0.355582258420165,
+            "null_D_4to8_strides": 0.3953600116709023,
+            "null_D_2to4_strides": 0.5756296493090802
+          }
+        }
+      }
+    },
+    "300": {
+      "trial_1": {
+        "core": {
+          "n": 47,
+          "mean_R2": 0.12415479750382834,
+          "median_R2": 0.10950135314429538,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": -0.03701469029836346,
+            "null_H_8to16_strides": -0.012552496497253651,
+            "null_H_4to8_strides": 0.0721602434039269,
+            "null_H_2to4_strides": 0.06461971942582256,
+            "null_D_16to32_strides": 0.14684246288466385,
+            "null_D_8to16_strides": 0.23849963710685218,
+            "null_D_4to8_strides": 0.20671909418238088,
+            "null_D_2to4_strides": 0.31396440982259743
+          }
+        },
+        "rich": {
+          "n": 47,
+          "mean_R2": 0.30886046049937577,
+          "median_R2": 0.3252426836571207,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": 0.05797467539564616,
+            "null_H_8to16_strides": -0.05067813124202036,
+            "null_H_4to8_strides": 0.2117790520603804,
+            "null_H_2to4_strides": 0.2767808431463695,
+            "null_D_16to32_strides": 0.3737045241678719,
+            "null_D_8to16_strides": 0.5013913043244057,
+            "null_D_4to8_strides": 0.44956211708573046,
+            "null_D_2to4_strides": 0.6503692990566226
+          }
+        }
+      },
+      "trial_2": {
+        "core": {
+          "n": 39,
+          "mean_R2": 0.1389687845974214,
+          "median_R2": 0.12688871649967404,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": -0.017505806383861566,
+            "null_H_8to16_strides": 0.05093367335693366,
+            "null_H_4to8_strides": 0.126564538607575,
+            "null_H_2to4_strides": 0.12721289439177308,
+            "null_D_16to32_strides": 0.09412817948924423,
+            "null_D_8to16_strides": 0.21713697086577055,
+            "null_D_4to8_strides": 0.18613825787085259,
+            "null_D_2to4_strides": 0.3271415685810837
+          }
+        },
+        "rich": {
+          "n": 39,
+          "mean_R2": 0.30863984170431524,
+          "median_R2": 0.3551235954717911,
+          "by_TMA_band_R2": {
+            "null_H_16to32_strides": 0.040400295863338376,
+            "null_H_8to16_strides": 0.13402317930122032,
+            "null_H_4to8_strides": 0.3511428336531216,
+            "null_H_2to4_strides": 0.4128246737154201,
+            "null_D_16to32_strides": 0.21302754753056263,
+            "null_D_8to16_strides": 0.38507261378735724,
+            "null_D_4to8_strides": 0.35910435729046064,
+            "null_D_2to4_strides": 0.5735232324930412
+          }
+        }
+      }
+    }
+  },
+  "seconds": 718.39775889,
+  "limitations": [
+    "Case-control archival data, no prospective severity trajectory",
+    "_02 walking-task and speed equivalence not documented as definitely identical to _01",
+    "Data contain 64 normalized walking cycles per trial",
+    "Models exploratory; five severity/performance endpoints and several feature sets, two ridge alphas",
+    "Expected TMA null uses 39 shuffles first walk and 19 shuffles second walk",
+    "High-dimensional rich phase histograms potentially overfit n=29 despite penalization"
+  ]
+}
