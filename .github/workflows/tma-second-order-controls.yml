@@ -1,0 +1,33 @@
+name: TMA matched second-order rhythmic transitions
+on:
+  push:
+    branches: [research-tma-controlled-spectra-20261008]
+    paths:
+      - research/tma_second_order_controls.py
+      - .github/workflows/tma-second-order-controls.yml
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  contrasts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'mido>=1.3,<2' 'scikit-learn>=1.5,<2'
+      - run: PYTHONPATH=.:research python research/tma_second_order_controls.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-exact-second-order-rhythm-matching
+          path: research/tma_controlled_spectra_results/second_order_results.json
+          if-no-files-found: error
+      - name: Commit controlled results
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_controlled_spectra_results/second_order_results.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Verify strict second-order matched TMA Fourier counterexample'
+            git push origin HEAD:research-tma-controlled-spectra-20261008
+          fi
