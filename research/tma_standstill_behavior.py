@@ -65,7 +65,7 @@ def extract_audio(z,filename,tempo,kind):
  magnitude=np.log1p(30.0*np.abs(Z))
  delta=np.maximum(0.0,np.diff(magnitude,axis=1,prepend=magnitude[:,:1]))
  novelty=np.mean(delta[hz>=3000],axis=0)
- cut=float(np.quantile(novelty,.98))*.40
+ cut=float(np.quantile(novelty,.98))*.25
  peaks,_=signal.find_peaks(novelty,height=cut,prominence=cut,
                            distance=int(.085*sr/hop))
  ts=stamps[peaks]
@@ -252,7 +252,7 @@ def main():
    'n_segments':int(df[['participant','stimulus_id']].drop_duplicates().shape[0]),
    'n_mocap_audio_windows':len(df),
    'stimulant_onsets':{str(k):len(sound[k]) for k in sound},
-   'onset_detector':'audio-only frozen high-frequency spectral flux Q98 x0.40, exact click-count QC',
+   'onset_detector':'audio-only frozen high-frequency spectral flux Q98 x0.25, exact click-count QC',
    'num_features':{k:len(v) for k,v in reps.items()},'models':models,
    'seconds':time.monotonic()-tick,
    'limitations':[
