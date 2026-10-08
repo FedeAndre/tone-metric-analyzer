@@ -1,0 +1,33 @@
+name: Test TMA auditory rhythm hierarchy against independent human head motion
+on:
+  push:
+    branches: [research-tma-standstill-auditory-20261008]
+    paths: ['research/tma_standstill_behavior.py','.github/workflows/tma-standstill-behavior.yml']
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install frozen engine and statistics dependencies
+        run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.5,<2' 'requests>=2.32,<3' 'mido>=1.3,<2'
+      - name: Compute exact event-conditioned Level spectra, motion, heldouts
+        run: PYTHONPATH=.:research python research/tma_standstill_behavior.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frozen-tma-standstill-2019-behavioral-validation
+          path: research/tma_standstill_auditory_results/tma_mocap_*
+          if-no-files-found: error
+      - name: Archive result
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_standstill_auditory_results/tma_mocap_results.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Archive independent human micromotion versus auditory TMA timing results'
+            git push origin HEAD:research-tma-standstill-auditory-20261008
+          fi
