@@ -32,8 +32,9 @@ def events(beats=64,mode="variable"):
 def compare(actual,previous):
     common=set(actual).intersection(previous)
     changed={q for q in common if actual[q]!=previous[q]}
-    return len(common),len(changed),len([q for q in changed if max(actual[q])!=max(previous[q])]),
-       len([q for q in changed if len(actual[q])!=len(previous[q])])
+    return (len(common),len(changed),
+            len([q for q in changed if max(actual[q])!=max(previous[q])]),
+            len([q for q in changed if len(actual[q])!=len(previous[q])]))
 def prefix_audit(full,beats,horizon_bars):
     snapshot={}
     prev={}
