@@ -180,7 +180,7 @@
     ],
     "n_bootstrap": 9999
   },
-  "runtime_seconds": 542.93565972,
+  "runtime_seconds": 491.36079266300004,
   "limitations": [
     "Temporal baseline grounded to each subject 64-cycle event multiset",
     "Within-cycle beat events fixed by left heel strikes; cycle order permutations retain the durations and phase distribution",
