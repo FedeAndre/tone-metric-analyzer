@@ -1,0 +1,33 @@
+name: Frozen TMA origin-span robustness on matched rhythms
+on:
+  push:
+    branches: [research-tma-controlled-spectra-20261008]
+    paths:
+      - research/tma_controlled_span_robustness.py
+      - .github/workflows/tma-controlled-robustness.yml
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  exact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'mido>=1.3,<2' 'scikit-learn>=1.5,<2'
+      - run: PYTHONPATH=.:research python research/tma_controlled_span_robustness.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TMA-spectral-span-robustness
+          path: research/tma_controlled_spectra_results/length_robustness.json
+          if-no-files-found: error
+      - name: Commit robustness
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_controlled_spectra_results/length_robustness.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Validate frozen origin-span TMA spectral counterexample'
+            git push origin HEAD:research-tma-controlled-spectra-20261008
+          fi
