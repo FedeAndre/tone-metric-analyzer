@@ -1,0 +1,33 @@
+name: Non-dihedral exact Fourier and timing-control TMA motifs
+on:
+  push:
+    branches: [research-tma-controlled-spectra-20261008]
+    paths:
+      - research/tma_nondihedral_controls.py
+      - .github/workflows/tma-nondihedral.yml
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  exact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'mido>=1.3,<2' 'scikit-learn>=1.5,<2'
+      - run: PYTHONPATH=.:research python research/tma_nondihedral_controls.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nondihedral-matched-TMA
+          path: research/tma_controlled_spectra_results/nondihedral_results.json
+          if-no-files-found: error
+      - name: Commit exact controls
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_controlled_spectra_results/nondihedral_results.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Verify non-dihedral homometric rhythms with TMA Level controls'
+            git push origin HEAD:research-tma-controlled-spectra-20261008
+          fi
