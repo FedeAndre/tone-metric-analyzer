@@ -283,7 +283,9 @@ def main():
     meta=clinical_metadata()
     records=[x for x,_ in g.RECORDS]
     # same-person second walking trial _02, no _10 condition change.
-    eligible=[r for r in records if available_second(r[:6])]
+    with ThreadPoolExecutor(max_workers=12) as pool:
+        found=list(pool.map(lambda r:available_second(r[:6]),records))
+    eligible=[r for r,yes in zip(records,found) if yes]
     print('Primary recordings',len(records),'second trial accessible',len(eligible),flush=True)
     tasks=[(r,i,False) for i,r in enumerate(records)]+[(r[:6]+'_02',i,True) for i,r in enumerate(records) if r in eligible]
     result=[];failed=[]
