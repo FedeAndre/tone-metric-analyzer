@@ -44,7 +44,7 @@ def mean(x):return float(np.mean(x))
 def clinical_metadata():
     r=requests.get('https://physionet.org/files/gaitpdb/1.0.0/demographics.txt',timeout=50)
     r.raise_for_status()
-    tab=pd.read_csv(io.StringIO(r.text),sep='\t')
+    tab=pd.read_csv(io.StringIO(r.text),sep='\t',engine='python',on_bad_lines='skip')
     assert len(tab)>=150 and {'ID','UPDRS','UPDRSM','HoehnYahr','TUAG','Age','Gender'}.issubset(tab.columns)
     return tab.set_index('ID')
 
@@ -197,7 +197,7 @@ def half_reliability(df,kind,subset='pd'):
     cols2=[k.replace('half1_','half2_') for k in cols1]
     a=rec[cols1].to_numpy(float);b=rec[cols2].to_numpy(float)
     d=np.maximum(a.std(axis=0),1e-8)
-    a=(a-a.mean(axis=0))/d;b=(b-a.mean(axis=0))/d
+    mu=a.mean(axis=0)\n    a=(a-mu)/d;b=(b-mu)/d
     dist=np.sqrt(np.mean((b[:,None,:]-a[None,:,:])**2,axis=2))
     return {'n':len(rec),'top1':float(np.mean(np.argmin(dist,axis=1)==np.arange(len(rec)))),
             'within':float(np.mean(np.diag(dist))),'other':float(np.mean(dist[~np.eye(len(rec),dtype=bool)]))}
