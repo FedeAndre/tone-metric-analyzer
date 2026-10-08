@@ -22,8 +22,7 @@ SEED=20261008
 N_SHUFFLE=19
 BANDS={"slow_8to32":(1/32,1/8),"fast_2to8":(1/8,1/2+.001)}
 LEVEL_CLASSES={"L1to4":(1,4),"L5to8":(5,8),"L9plus":(9,100)}
-CORE=["Age","Gender","stride_duration_mean","stride_duration_cv"]
-CORE += [f"ph_{lab}_{x}" for lab in ("RTO","RHS","LTO") for x in ("mean","sd")]
+CORE=["Age","Gender","conv_stride_mean","conv_stride_cv","conv_phase_sd","conv_phase_mean"]
 FULL=["Age","Gender"]+[f"conv_{x}" for x in ("stride_mean","stride_cv","phase_sd","phase_acf","stance_mean","phase_mean")]
 FULL += [f"conv_{lab}_{freq}" for lab in ("stride","RTO","RHS","LTO") for freq in
  ("16to32_strides","8to16_strides","4to8_strides","2to4_strides")]
@@ -117,7 +116,7 @@ def predict(df,cols,outcome,alpha,trial):
       "R2":float(1-sum((a-b)**2)/sum((a-a.mean())**2)),"errors":list(abs(a-b))}
 def main():
     tick=time.monotonic()
-    df=pd.read_csv("research/tma_individual_fingerprint_results/phase_control_features.csv")
+    df=pd.read_csv("research/tma_individual_fingerprint_results/subject_spectral_fingerprints.csv")
     assert len(df)==86 and df.subject.nunique()==47
     with ThreadPoolExecutor(max_workers=10) as ex:
         jobs={ex.submit(load,(name,i)):name for i,name in enumerate(df.record)}
