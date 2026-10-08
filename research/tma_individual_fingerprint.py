@@ -312,7 +312,7 @@ def main():
     for subset in ('pd','control','all'):
         for representation in ('tma','conv'):
             fingerprint[f'{representation}_{subset}']=id_reliability(df,representation,subset)
-    halves={representation:half_reliability(df,representation,'pd') for representation in ('tma','conv')}
+    halves={} # no split-half in preliminary-only calculation
     outcome={'study':'Ga study, PhysioNet Gait Parkinson Disease gaitpdb/1.0.0',
       'n_pd_baseline':len(pdonly),'n_recordings':len(df),'second_eligible':len(eligible),
       'n_repeated_extracted':len(df[df.trial==2]),
