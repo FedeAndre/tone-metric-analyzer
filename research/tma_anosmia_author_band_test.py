@@ -54,7 +54,9 @@ def fetch(record):
 
 def get_segment(data,fs,awake):
     """Choose one signal-quality-controlled wake window; selection blind to diagnosis."""
-    # Normalize left and right nostrils separately, as in the authors' GetPeaksData.m\n    scale_channels=5./np.maximum(np.ptp(data,axis=0),1e-8)\n    z=(data*scale_channels).sum(axis=1)
+    # Normalize left and right nostrils separately, as in the authors' GetPeaksData.m
+    scale_channels=5./np.maximum(np.ptp(data,axis=0),1e-8)
+    z=(data*scale_channels).sum(axis=1)
     candidates=[]
     wsize=int(fs*1800)
     for start,end,label in awake:
@@ -101,7 +103,12 @@ def get_segment(data,fs,awake):
 
 def extract(data,fs,awake):
     quality,slow,fast,scale,major,fs,section,period,start=get_segment(data,fs,awake)
-    # Published GetPeaksData.m: findpeaks(Data,'MinPeakDistance',0.5*period,\n    # 'MinPeakProminence',0.1), followed by height >0.1 on normalized two-nostril flow.\n    normalized=(data*(5./np.maximum(np.ptp(data,axis=0),1e-8))).sum(axis=1)\n    segment=normalized[start:start+len(fast)]\n    extras,_=signal.find_peaks(segment,prominence=.1,\n        distance=max(1,int(.5*period*fs)),height=.1)
+    # Published GetPeaksData.m: findpeaks(Data,'MinPeakDistance',0.5*period,
+    # 'MinPeakProminence',0.1), followed by height >0.1 on normalized two-nostril flow.
+    normalized=(data*(5./np.maximum(np.ptp(data,axis=0),1e-8))).sum(axis=1)
+    segment=normalized[start:start+len(fast)]
+    extras,_=signal.find_peaks(segment,prominence=.1,
+        distance=max(1,int(.5*period*fs)),height=.1)
     events=[]
     rows=[]
     for i,(a,b) in enumerate(zip(major[:-1],major[1:])):
@@ -300,9 +307,12 @@ def main():
         jobs={ex.submit(record,(row,i)):row['Code'] for i,row in enumerate(people)}
         for j,fut in enumerate(as_completed(jobs),1):
             try:records.append(fut.result())
-            except Exception as e:\n                print('RECORD_FAILURE',jobs[fut],repr(e),flush=True)\n                excluded.append({'record':jobs[fut],'error':str(e)})
+            except Exception as e:
+                print('RECORD_FAILURE',jobs[fut],repr(e),flush=True)
+                excluded.append({'record':jobs[fut],'error':str(e)})
             print(f'participant {j}/52 {jobs[fut]} success {not fut.exception()}',flush=True)
-    if not records:raise RuntimeError('No usable data, first errors: '+repr(excluded[:5]))\n    df=pd.DataFrame(records).sort_values('record').reset_index(drop=True)
+    if not records:raise RuntimeError('No usable data, first errors: '+repr(excluded[:5]))
+    df=pd.DataFrame(records).sort_values('record').reset_index(drop=True)
     df.to_csv(OUT/'anosmia_spectral_features.csv',index=False)
     labels=(df.group=='anosmic').astype(int).to_numpy()
     out={'n':len(df),'groups':df.group.value_counts().to_dict(),'excluded':excluded,
