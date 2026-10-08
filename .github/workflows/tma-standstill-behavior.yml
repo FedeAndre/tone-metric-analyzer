@@ -1,7 +1,7 @@
-name: Test TMA auditory rhythm hierarchy against independent human head motion
+name: Sensitivity: TMA auditory response with denser verified onsets
 on:
   push:
-    branches: [research-tma-standstill-auditory-20261008]
+    branches: [research-tma-standstill-onset-sensitivity-20261008]
     paths: ['research/tma_standstill_behavior.py','.github/workflows/tma-standstill-behavior.yml']
   workflow_dispatch:
 permissions: {contents: write}
@@ -29,5 +29,5 @@ jobs:
           git add research/tma_standstill_auditory_results/tma_mocap_results.json
           if ! git diff --cached --quiet; then
             git commit -m 'Archive independent human micromotion versus auditory TMA timing results'
-            git push origin HEAD:research-tma-standstill-auditory-20261008
+            git push origin HEAD:research-tma-standstill-onset-sensitivity-20261008
           fi
