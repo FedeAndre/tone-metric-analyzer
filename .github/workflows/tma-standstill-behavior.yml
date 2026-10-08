@@ -1,4 +1,4 @@
-name: Sensitivity: TMA auditory response with denser verified onsets
+name: "Sensitivity: TMA auditory response with denser verified onsets"
 on:
   push:
     branches: [research-tma-standstill-onset-sensitivity-20261008]
