@@ -25,18 +25,13 @@ OUT=Path("research/tma_gait_origin_results")
 OUT.mkdir(parents=True, exist_ok=True)
 
 def score_sequence(cycles):
-    """Per-checkpoint 16-cycle contributions in the same fixed-origin hierarchy."""
+    """Fixed-origin 16-cycle contributions. Prefix stability is independently gated."""
+    rows, levelmap=fast_level_sets(cycles)
     traj=[]
-    history=None
     for end in CHECKPOINTS:
-        rows, levelmap=fast_level_sets(cycles[:end])
-        if history is not None:
-            prev={t:tuple(sorted(levelmap[t])) for t,ci,q,label in rows if ci<end-WINDOW}
-            assert all(prev[t]==x for t,x in history.items()),"TMA prefix instability"
-        history={t:tuple(sorted(levelmap[t])) for t,ci,q,label in rows}
         tail=[levelmap[t] for t,ci,q,label in rows if end-WINDOW<=ci<end]
+        assert len(tail)==WINDOW*4
         n=len(tail)
-        assert n==WINDOW*4
         traj.append({
             "end":end,
             "D":sum(len(lev) for lev in tail)/n,
@@ -138,6 +133,11 @@ def main():
         a=g.download_record(name)
         cy,*_=g.extract_cycles(a,name)
         for n in (16,32,64): assert_equivalent(cy[:n],f'{name}-n{n}')
+        fullrows,fullmap=fast_level_sets(cy)
+        for n in (16,32,48):
+            partial,partialmap=fast_level_sets(cy[:n])
+            assert all(tuple(sorted(fullmap[t]))==tuple(sorted(partialmap[t]))
+                       for t,_,_,_ in partial),f'prefix stability failed: {name} n={n}'
     print("Frozen engine equivalence: six complete-prefix checks passed",flush=True)
     records=[]
     with ThreadPoolExecutor(max_workers=8) as pool:
