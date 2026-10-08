@@ -1,0 +1,33 @@
+name: TMA Fourier spectral content validation
+on:
+  push:
+    branches: [research-tma-fourier-20261008]
+    paths: ['research/tma_fourier_validation.py','.github/workflows/tma-fourier-validation.yml']
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  spectral:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3' 'mido>=1.3,<2' 'scikit-learn>=1.5,<2'
+      - name: TMA Fourier against raw onset spectra and context-ablated metrical template
+        run: PYTHONPATH=.:research python research/tma_fourier_validation.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-fourier-validation
+          path: research/tma_fourier_results/
+          if-no-files-found: error
+      - name: Commit results
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_fourier_results/
+          if ! git diff --cached --quiet; then
+            git commit -m 'Archive spectral TMA morphology and metrical-template ablation'
+            git push origin HEAD:research-tma-fourier-20261008
+          fi
