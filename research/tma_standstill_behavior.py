@@ -54,26 +54,27 @@ def extract_audio(z,filename,tempo,kind):
  raw=z.read(next(q for q in z.namelist() if q.endswith('/sound_data/'+filename)))
  sr,y=wavfile.read(io.BytesIO(raw))
  assert sr==44100
- y=y.astype(np.float64)/np.iinfo(y.dtype).max if False else y.astype(np.float64)/(2**31)
- y=np.mean(np.abs(y),axis=1)
- hop=441
- trim=len(y)//hop*hop
- env=np.sqrt(np.mean(y[:trim].reshape(-1,hop)**2,axis=1))
- novelty=np.maximum(0.,np.diff(env,prepend=0))
- # Subtract slow background to exclude echo, return attacks only.
- thresh=max(.045*float(np.max(novelty)),float(np.quantile(novelty,.95))*1.5)
- peaks,_=signal.find_peaks(novelty,height=thresh,prominence=thresh/2,distance=7)
- # Merge onsets within 60 ms to suppress duplicate sample/cymbal transient.
- ts=peaks*hop/sr
- if len(ts)>0:
-  chosen=[ts[0]]
-  for a in ts[1:]:
-   if a-chosen[-1]>.065:chosen.append(a)
-  ts=np.array(chosen)
- # If onset extraction severely fails, force explicit exclusion rather than make up events.
+ # Predefined audio-only correction: high-band spectral flux, validated
+ # against exact 48,64,72 beat-aligned metronome attack counts before
+ # examining any head-motion target. See onset_detection_audit.json.
+ y=np.mean(y.astype(np.float64)/(2**31),axis=1)
+ hop=256
+ _,stamps,Z=signal.stft(y,fs=sr,nperseg=1024,noverlap=1024-hop,
+                         boundary=None,padded=False)
+ hz=np.fft.rfftfreq(1024,1/sr)
+ magnitude=np.log1p(30.0*np.abs(Z))
+ delta=np.maximum(0.0,np.diff(magnitude,axis=1,prepend=magnitude[:,:1]))
+ novelty=np.mean(delta[hz>=3000],axis=0)
+ cut=float(np.quantile(novelty,.98))*.40
+ peaks,_=signal.find_peaks(novelty,height=cut,prominence=cut,
+                           distance=int(.085*sr/hop))
+ ts=stamps[peaks]
  beat=60/tempo
- if len(ts)<.48*(len(y)/sr)/beat:
-  raise ValueError(f'onset extraction too sparse {filename}: {len(ts)} at bpm={tempo} sec={len(y)/sr:.1f}')
+ expected=round((len(y)/sr)*tempo/60)
+ if kind=="metronome":
+  assert abs(len(ts)-expected)<=1,('metronome_audio_onset_QC_failed',filename,len(ts),expected)
+ else:
+  assert len(ts)>=1.2*expected,('drum_audio_onset_QC_failed',filename,len(ts),expected)
  # Quantize to maximum 1/64 quarter beat, use onset start as audio time origin.
  times=sorted(set(Fraction(int(round(t/beat*64)),64) for t in ts if t/beat>=0))
  times=[q for q in times if q>=0]
@@ -251,6 +252,7 @@ def main():
    'n_segments':int(df[['participant','stimulus_id']].drop_duplicates().shape[0]),
    'n_mocap_audio_windows':len(df),
    'stimulant_onsets':{str(k):len(sound[k]) for k in sound},
+   'onset_detector':'audio-only frozen high-frequency spectral flux Q98 x0.40, exact click-count QC',
    'num_features':{k:len(v) for k,v in reps.items()},'models':models,
    'seconds':time.monotonic()-tick,
    'limitations':[
