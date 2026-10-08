@@ -1,0 +1,32 @@
+name: Controlled nonredundancy and economy benchmark for TMA
+on:
+  push:
+    branches: [research-tma-online-measurement-20261008]
+    paths: ['research/tma_controlled_nonredundancy.py','.github/workflows/tma-controlled-nonredundancy.yml']
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.5,<2' 'requests>=2.32,<3' 'mido>=1.3,<2'
+      - run: PYTHONPATH=.:research python research/tma_controlled_nonredundancy.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: strict-TMA-online-nonredundancy
+          path: research/tma_online_measurement_results/controlled_nonredundancy.json
+          if-no-files-found: error
+      - name: Archive verified benchmark
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_online_measurement_results/controlled_nonredundancy.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Verify matched online TMA distinctiveness vs conventional phase'
+            git pull --rebase origin research-tma-online-measurement-20261008
+            git push origin HEAD:research-tma-online-measurement-20261008
+          fi
