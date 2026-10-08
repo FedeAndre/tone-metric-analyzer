@@ -1,0 +1,222 @@
+{
+  "counts": {
+    "motion": 16,
+    "wav": 6,
+    "tables": 40
+  },
+  "wav": {
+    "Standstill2019/sound_data/METRONOME120bpm.wav": {
+      "fs": 44100,
+      "shape": [
+        1411200,
+        2
+      ],
+      "seconds": 32.0,
+      "dtype": "int32"
+    },
+    "Standstill2019/sound_data/DRUMS140bpm.wav": {
+      "fs": 44100,
+      "shape": [
+        1367100,
+        2
+      ],
+      "seconds": 31.0,
+      "dtype": "int32"
+    },
+    "Standstill2019/sound_data/METRONOME90bpm.wav": {
+      "fs": 44100,
+      "shape": [
+        1411200,
+        2
+      ],
+      "seconds": 32.0,
+      "dtype": "int32"
+    },
+    "Standstill2019/sound_data/DRUMS120bpm.wav": {
+      "fs": 44100,
+      "shape": [
+        1411200,
+        2
+      ],
+      "seconds": 32.0,
+      "dtype": "int32"
+    },
+    "Standstill2019/sound_data/DRUMS90bpm.wav": {
+      "fs": 44100,
+      "shape": [
+        1411200,
+        2
+      ],
+      "seconds": 32.0,
+      "dtype": "int32"
+    },
+    "Standstill2019/sound_data/METRONOME140bpm.wav": {
+      "fs": 44100,
+      "shape": [
+        1367100,
+        2
+      ],
+      "seconds": 31.0,
+      "dtype": "int32"
+    }
+  },
+  "table_examples": {
+    "/sound_data/stimulus_order.tsv": {
+      "file": "Standstill2019/sound_data/stimulus_order.tsv",
+      "head": [
+        "1\t2\t3\t4\t5\t6\t7",
+        "A\t2\t6\t4\t1\t5\t3",
+        "B\t6\t4\t5\t1\t3\t2",
+        "C\t2\t4\t5\t3\t1\t6",
+        "D\t6\t3\t2\t1\t4\t5",
+        "E\t3\t6\t1\t5\t4\t2",
+        "F\t2\t4\t3\t6\t5\t1",
+        "G\t3\t4\t2\t6\t1\t5",
+        "H\t2\t4\t1\t5\t3\t6",
+        "I\t1\t3\t5\t4\t2\t6",
+        "J\t4\t5\t2\t1\t6\t3",
+        "K\t5\t3\t4\t2\t6\t1"
+      ]
+    },
+    "/demographics/participant_marker_key.tsv": {
+      "file": "Standstill2019/demographics/participant_marker_key.tsv",
+      "head": [
+        "# Participant <-> motion-capture-marker <-> questionnaire linkage (recovered).",
+        "# Rule: marker StandStill:P{n} in file {L}.tsv -> questionnaire Code '{l}{n}'",
+        "# 'matched'=True means a questionnaire row was found for this marker.",
+        "file\tmarker\tparticipant_number\tgroup\tquestionnaire_key\tmatched",
+        "A.tsv\tP1\t1\tA\ta1\tTrue",
+        "A.tsv\tP2\t2\tA\ta2\tTrue",
+        "A.tsv\tP3\t3\tA\ta3\tTrue",
+        "A.tsv\tP4\t4\tA\ta4\tTrue",
+        "A.tsv\tP5\t5\tA\ta5\tTrue",
+        "A.tsv\tP6\t6\tA\ta6\tTrue",
+        "A.tsv\tP7\t7\tA\ta7\tTrue",
+        "A.tsv\tP8\t8\tA\ta8\tTrue"
+      ]
+    },
+    "/demographics/qom.tsv": {
+      "file": "Standstill2019/demographics/qom.tsv",
+      "head": [
+        "file\tmarker\tn_samples\tduration_s\tmeasured_rate_hz\tgap_fraction\tqom_mm_s\tqom_median_mm_s\tnote",
+        "A.tsv\tP1\t50401\t420.01\t120.0\t0.0\t5.064\t4.444\t",
+        "A.tsv\tP2\t50401\t420.01\t120.0\t0.0\t4.809\t4.349\t",
+        "A.tsv\tP3\t50401\t420.01\t120.0\t0.0\t5.121\t4.563\t",
+        "A.tsv\tP4\t50401\t420.01\t120.0\t0.0\t5.43\t4.807\t",
+        "A.tsv\tP5\t50401\t420.01\t120.0\t0.0\t6.684\t5.971\t",
+        "A.tsv\tP6\t50401\t420.01\t120.0\t0.0\t4.895\t4.269\t",
+        "A.tsv\tP7\t50401\t420.01\t120.0\t0.0\t5.417\t4.87\t",
+        "A.tsv\tP8\t50401\t420.01\t120.0\t0.0\t5.891\t5.235\t",
+        "B.tsv\tP1\t50401\t420.01\t120.0\t0.0\t8.699\t7.555\t",
+        "B.tsv\tP2\t50401\t420.01\t120.0\t0.0\t5.127\t4.456\t",
+        "B.tsv\tP3\t50401\t420.01\t120.0\t0.0\t5.079\t4.486\t"
+      ]
+    },
+    "mocap_example": {
+      "file": "Standstill2019/mocap_data/K.tsv",
+      "head": [
+        "NO_OF_FRAMES\t50401",
+        "NO_OF_CAMERAS\t0",
+        "NO_OF_MARKERS\t8",
+        "FREQUENCY\t120",
+        "NO_OF_ANALOG\t0",
+        "ANALOG_FREQUENCY\t0",
+        "DESCRIPTION\t--",
+        "TIME_STAMP\t--",
+        "DATA_INCLUDED\t3D",
+        "MARKER_NAMES\tP1\tP2\tP3\tP4\tP5\tP6\tP7\tTripod",
+        "P1 X\tP1 Y\tP1 Z\tP2 X\tP2 Y\tP2 Z\tP3 X\tP3 Y\tP3 Z\tP4 X\tP4 Y\tP4 Z\tP5 X\tP5 Y\tP5 Z\tP6 X\tP6 Y\tP6 Z\tP7 X\tP7 Y\tP7 Z\tTripod X\tTripod Y\tTripod Z",
+        "-1370.541\t297.532\t1737.799\t-201.552\t327.894\t1750.581\t976.057\t350.704\t1806.479\t2065.363\t327.858\t1824.734\t-1471.889\t-1074.942\t1632.742\t-219.104\t-973.598\t1701.421\t881.760\t-1033.664\t1662.633\t268.512\t-202.494\t1690.971",
+        "-1370.532\t297.508\t1737.827\t-201.550\t327.911\t1750.582\t976.042\t350.698\t1806.479\t2065.372\t327.877\t1824.723\t-1471.847\t-1074.874\t1632.725\t-219.153\t-973.538\t1701.402\t881.758\t-1033.762\t1662.639\t268.527\t-202.488\t1690.974",
+        "-1370.498\t297.501\t1737.856\t-201.539\t327.889\t1750.560\t976.034\t350.675\t1806.481\t2065.383\t327.868\t1824.722\t-1471.781\t-1074.795\t1632.734\t-219.195\t-973.452\t1701.383\t881.748\t-1033.871\t1662.629\t268.513\t-202.495\t1690.968",
+        "-1370.478\t297.467\t1737.879\t-201.537\t327.928\t1750.587\t976.021\t350.651\t1806.480\t2065.400\t327.848\t1824.734\t-1471.737\t-1074.721\t1632.752\t-219.247\t-973.373\t1701.371\t881.739\t-1033.973\t1662.631\t268.524\t-202.497\t1690.974",
+        "-1370.493\t297.414\t1737.901\t-201.530\t327.904\t1750.579\t976.008\t350.642\t1806.487\t2065.377\t327.843\t1824.717\t-1471.703\t-1074.622\t1632.757\t-219.290\t-973.313\t1701.357\t881.729\t-1034.072\t1662.626\t268.524\t-202.483\t1690.970",
+        "-1370.483\t297.343\t1737.912\t-201.544\t327.918\t1750.586\t975.993\t350.635\t1806.488\t2065.372\t327.812\t1824.719\t-1471.615\t-1074.563\t1632.748\t-219.334\t-973.233\t1701.330\t881.703\t-1034.171\t1662.629\t268.514\t-202.489\t1690.977",
+        "-1370.535\t297.227\t1737.939\t-201.544\t327.938\t1750.578\t975.964\t350.620\t1806.497\t2065.359\t327.768\t1824.701\t-1471.585\t-1074.453\t1632.762\t-219.383\t-973.144\t1701.312\t881.715\t-1034.267\t1662.640\t268.516\t-202.494\t1690.967"
+      ]
+    }
+  },
+  "all_paths": [
+    "Standstill2019/",
+    "Standstill2019/.zenodo.json",
+    "Standstill2019/demographics/",
+    "Standstill2019/demographics/self_report_question_keys.tsv",
+    "Standstill2019/demographics/participants.tsv",
+    "Standstill2019/demographics/participant_marker_key.tsv",
+    "Standstill2019/demographics/qom.tsv",
+    "Standstill2019/demographics/participants_dictionary.tsv",
+    "Standstill2019/demographics/self_report.tsv",
+    "Standstill2019/sound_data/",
+    "Standstill2019/sound_data/sound-playback.maxpat",
+    "Standstill2019/sound_data/METRONOME120bpm.wav",
+    "Standstill2019/sound_data/segments.tsv",
+    "Standstill2019/sound_data/DRUMS140bpm.wav",
+    "Standstill2019/sound_data/METRONOME90bpm.wav",
+    "Standstill2019/sound_data/DRUMS120bpm.wav",
+    "Standstill2019/sound_data/stimulus_map.tsv",
+    "Standstill2019/sound_data/DRUMS90bpm.wav",
+    "Standstill2019/sound_data/stimulus_order.tsv",
+    "Standstill2019/sound_data/audio_features/",
+    "Standstill2019/sound_data/audio_features/spectrograms/",
+    "Standstill2019/sound_data/audio_features/spectrograms/DRUMS120bpm.png",
+    "Standstill2019/sound_data/audio_features/spectrograms/METRONOME140bpm.png",
+    "Standstill2019/sound_data/audio_features/spectrograms/METRONOME90bpm.png",
+    "Standstill2019/sound_data/audio_features/spectrograms/DRUMS90bpm.png",
+    "Standstill2019/sound_data/audio_features/spectrograms/DRUMS140bpm.png",
+    "Standstill2019/sound_data/audio_features/spectrograms/METRONOME120bpm.png",
+    "Standstill2019/sound_data/audio_features/feature_series.tsv",
+    "Standstill2019/sound_data/audio_features/acoustic_features.tsv",
+    "Standstill2019/sound_data/audio_features/README.md",
+    "Standstill2019/sound_data/METRONOME140bpm.wav",
+    "Standstill2019/code/",
+    "Standstill2019/code/Python/",
+    "Standstill2019/code/Python/NM19.ipynb",
+    "Standstill2019/code/self_check.py",
+    "Standstill2019/code/README.md",
+    "Standstill2019/code/LICENSE",
+    "Standstill2019/code/qom.py",
+    "Standstill2019/SHA256SUMS.txt",
+    "Standstill2019/README.md",
+    "Standstill2019/CITATION.cff",
+    "Standstill2019/LICENSE.txt",
+    "Standstill2019/mocap_data/",
+    "Standstill2019/mocap_data/K.tsv",
+    "Standstill2019/mocap_data/E.tsv",
+    "Standstill2019/mocap_data/J.tsv",
+    "Standstill2019/mocap_data/P.tsv",
+    "Standstill2019/mocap_data/B.tsv",
+    "Standstill2019/mocap_data/M.tsv",
+    "Standstill2019/mocap_data/L.tsv",
+    "Standstill2019/mocap_data/C.tsv",
+    "Standstill2019/mocap_data/D.tsv",
+    "Standstill2019/mocap_data/O.tsv",
+    "Standstill2019/mocap_data/H.tsv",
+    "Standstill2019/mocap_data/A.tsv",
+    "Standstill2019/mocap_data/F.tsv",
+    "Standstill2019/mocap_data/I.tsv",
+    "Standstill2019/mocap_data/N.tsv",
+    "Standstill2019/mocap_data/G.tsv",
+    "Standstill2019/metadata/",
+    "Standstill2019/metadata/segments_dictionary.tsv",
+    "Standstill2019/metadata/demographics_dictionary.tsv",
+    "Standstill2019/metadata/mocap_data_dictionary.tsv",
+    "Standstill2019/metadata/analysis_windows_dictionary.tsv",
+    "Standstill2019/metadata/mocap_data_columns_dictionary.tsv",
+    "Standstill2019/metadata/sensor_provenance.tsv",
+    "Standstill2019/metadata/stimulus_map_dictionary.tsv",
+    "Standstill2019/metadata/qom_dictionary.tsv",
+    "Standstill2019/metadata/marker_quality.tsv",
+    "Standstill2019/metadata/marker_quality_dictionary.tsv",
+    "Standstill2019/metadata/analysis_windows.tsv",
+    "Standstill2019/metadata/sensor_provenance_dictionary.tsv",
+    "Standstill2019/metadata/mocap_file_groups.tsv",
+    "Standstill2019/study_documents/",
+    "Standstill2019/study_documents/questionnaire_2019.pdf",
+    "Standstill2019/study_documents/general_information_2019.pdf",
+    "Standstill2019/study_documents/README.md",
+    "Standstill2019/study_documents/consent_2019.pdf",
+    "Standstill2019/study_documents/information_letter_2019.pdf",
+    "Standstill2019/study_documents/protocol_2019.pdf"
+  ],
+  "duration_s": 79.24630530200001
+}
