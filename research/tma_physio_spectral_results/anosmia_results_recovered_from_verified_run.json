@@ -1,0 +1,275 @@
+{
+  "n": 46,
+  "groups": {
+    "normosmic": 30,
+    "anosmic": 16
+  },
+  "excluded": [
+    {
+      "record": "Ano 15",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Ano 18",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Ano 19",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Ano 17",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Ano 21",
+      "error": "No valid 128-breath wake segment after signal QC"
+    },
+    {
+      "record": "Nor 31",
+      "error": "No valid 128-breath wake segment after signal QC"
+    }
+  ],
+  "raw": {
+    "breaths_per_minute": {
+      "difference": 0.7165953841872614,
+      "permutation_p": 0.3924
+    },
+    "minor_peak_mean": {
+      "difference": -0.016015624999999978,
+      "permutation_p": 0.8702
+    },
+    "fraction_multi": {
+      "difference": -0.06494140625,
+      "permutation_p": 0.364
+    },
+    "breath_CV": {
+      "difference": 0.02368735305328168,
+      "permutation_p": 0.2462
+    },
+    "minor_peak_sd": {
+      "difference": 0.0578457539056868,
+      "permutation_p": 0.3332
+    },
+    "amp_CV": {
+      "difference": 0.04499659573483733,
+      "permutation_p": 0.4012
+    },
+    "PSD_64to128_breath": {
+      "difference": 0.06575731361939763,
+      "permutation_p": 0.7438
+    },
+    "PSD_32to42_breath": {
+      "difference": 0.17779854549350915,
+      "permutation_p": 0.2866
+    },
+    "PSD_16to25_breath": {
+      "difference": -0.026198041048655085,
+      "permutation_p": 0.8102
+    },
+    "PSD_8to14_breath": {
+      "difference": 0.15474818742518703,
+      "permutation_p": 0.0394
+    },
+    "PSD_4to7_breath": {
+      "difference": 0.0514756411818551,
+      "permutation_p": 0.2672
+    },
+    "PSD_2to4_breath": {
+      "difference": -0.04683309625076415,
+      "permutation_p": 0.4746
+    }
+  },
+  "TMA": {
+    "H_64to128_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.16134998350702875,
+        "permutation_p": 0.4782,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": -0.14787390137642636,
+        "t": -0.499615089855378,
+        "Freedman_Lane_p": 0.6286,
+        "q_BH12": 0.75696
+      }
+    },
+    "D_64to128_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.05151002751082975,
+        "permutation_p": 0.8218,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": 0.52136163557073,
+        "t": 1.6484861205067571,
+        "Freedman_Lane_p": 0.1046,
+        "q_BH12": 0.464
+      }
+    },
+    "H_32to42_breath_cycle_resid": {
+      "simple": {
+        "difference": -0.6413087446029557,
+        "permutation_p": 0.0136,
+        "q_BH12": 0.1632
+      },
+      "adjusted": {
+        "adjusted_difference": -0.7205364638895151,
+        "t": -2.4041427946065106,
+        "Freedman_Lane_p": 0.0218,
+        "q_BH12": 0.2616
+      }
+    },
+    "D_32to42_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.04038315310328083,
+        "permutation_p": 0.852,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": 0.027177304428373582,
+        "t": 0.08944779906378446,
+        "Freedman_Lane_p": 0.928,
+        "q_BH12": 0.928
+      }
+    },
+    "H_16to25_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.05544824394108003,
+        "permutation_p": 0.6642,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": 0.05204836793491602,
+        "t": 0.3398983779747704,
+        "Freedman_Lane_p": 0.7314,
+        "q_BH12": 0.7978909090909092
+      }
+    },
+    "D_16to25_breath_cycle_resid": {
+      "simple": {
+        "difference": -0.20973438977951847,
+        "permutation_p": 0.1746,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": -0.23120471097193845,
+        "t": -1.1414678062683445,
+        "Freedman_Lane_p": 0.255,
+        "q_BH12": 0.6089142857142857
+      }
+    },
+    "H_8to14_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.06575227778068535,
+        "permutation_p": 0.545,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": 0.07165723557061408,
+        "t": 0.4636378498570337,
+        "Freedman_Lane_p": 0.6308,
+        "q_BH12": 0.75696
+      }
+    },
+    "D_8to14_breath_cycle_resid": {
+      "simple": {
+        "difference": -0.038557616963165675,
+        "permutation_p": 0.7512,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": -0.14455988769421008,
+        "t": -0.8159017074487072,
+        "Freedman_Lane_p": 0.4184,
+        "q_BH12": 0.6276
+      }
+    },
+    "H_4to7_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.01882352914934808,
+        "permutation_p": 0.7552,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": -0.06521835746826574,
+        "t": -0.9152235090973915,
+        "Freedman_Lane_p": 0.3552,
+        "q_BH12": 0.6089142857142857
+      }
+    },
+    "D_4to7_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.025043874017452533,
+        "permutation_p": 0.7086,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": -0.0829506474757871,
+        "t": -0.9584364029170005,
+        "Freedman_Lane_p": 0.3372,
+        "q_BH12": 0.6089142857142857
+      }
+    },
+    "H_2to4_breath_cycle_resid": {
+      "simple": {
+        "difference": -0.0228674947443549,
+        "permutation_p": 0.777,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": -0.10100112438026455,
+        "t": -1.2110010371093514,
+        "Freedman_Lane_p": 0.2292,
+        "q_BH12": 0.6089142857142857
+      }
+    },
+    "D_2to4_breath_cycle_resid": {
+      "simple": {
+        "difference": 0.03431892616419087,
+        "permutation_p": 0.5922,
+        "q_BH12": 0.852
+      },
+      "adjusted": {
+        "adjusted_difference": -0.1130077873997064,
+        "t": -1.5862445126235245,
+        "Freedman_Lane_p": 0.116,
+        "q_BH12": 0.464
+      }
+    }
+  },
+  "cv": {
+    "traditional_timing": {
+      "AUC": 0.8,
+      "balanced_accuracy": 0.6041666666666667,
+      "n_features": 9
+    },
+    "traditional_spectral": {
+      "AUC": 0.7729166666666667,
+      "balanced_accuracy": 0.6666666666666667,
+      "n_features": 15
+    },
+    "TMA_only": {
+      "AUC": 0.44583333333333336,
+      "balanced_accuracy": 0.46041666666666664,
+      "n_features": 12
+    },
+    "traditional_plus_TMA": {
+      "AUC": 0.7145833333333333,
+      "balanced_accuracy": 0.6354166666666667,
+      "n_features": 27
+    }
+  },
+  "incremental": {
+    "delta": -0.05833333333333335,
+    "boot95": [
+      -0.14198782961460443,
+      0.017543859649122646
+    ]
+  },
+  "provenance": {
+    "source_workflow": "https://github.com/FedeAndre/tone-metric-analyzer/actions/runs/37788291328",
+    "note": "Verified computational step succeeded; automated git commit failed; aggregates recovered from verbatim run logs",
+    "raw_signal_storage": "not included"
+  }
+}
