@@ -1,0 +1,34 @@
+name: TMA Level by frequency clinical gait test
+on:
+  push:
+    branches: [research-tma-level-spectra-20261008]
+    paths:
+      - research/tma_level_spectra.py
+      - .github/workflows/tma-level-spectra.yml
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.5,<2' 'requests>=2.32,<3' 'statsmodels>=0.14,<1'
+      - name: Calculate multi-Level TMA Fourier spectra and held-out physiology
+        run: PYTHONPATH=.:research python research/tma_level_spectra.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-level-frequency-gait
+          path: research/tma_level_spectral_results/
+          if-no-files-found: error
+      - name: Commit spectral results
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_level_spectral_results/
+          if ! git diff --cached --quiet; then
+            git commit -m 'Archive Level-frequency individual gait profile validation'
+            git push origin HEAD:research-tma-level-spectra-20261008
+          fi
