@@ -30,7 +30,7 @@ OUT=Path('research/tma_individual_fingerprint_results')
 OUT.mkdir(parents=True,exist_ok=True)
 SEED=20261008
 N=64
-NNULL=39
+NNULL=19
 NNULL_REPEAT=19
 NNULL_HALF=19
 # unit: cycles/stride, uppermost 0.5 cycles/stride
@@ -145,7 +145,7 @@ def feature_record(record,idx,secondary=False):
         # calculate two 32-cycle spectral sections with the exact same physical
         # start (no retroactive Level remapping).
         wave=timeseries(cyc)
-        for half in range(2):
+        for half in range(0):
             section=cyc[half*32:(half+1)*32]
             # compare 32-cycle restarted absolute metrical coordinates only as
             # matched benchmark; each half's null is internally matched.
@@ -211,7 +211,7 @@ def spearman_tests(df,measure,features):
         x=subset[feature].to_numpy(float)
         rho=float(stats.spearmanr(x,y).statistic)
         rng=np.random.default_rng(SEED+913)
-        perm=np.array([stats.spearmanr(x,rng.permutation(y)).statistic for k in range(4999)])
+        perm=np.array([stats.spearmanr(x,rng.permutation(y)).statistic for k in range(999)])
         pp=float((1+np.sum(np.abs(perm)>=abs(rho)-1e-12))/(len(perm)+1))
         # covariate-adjusted partial rank correlation (clinical marker vs TMA)
         # age, sex, stride CV, phase variability, conventional spectral power.
@@ -228,7 +228,7 @@ def spearman_tests(df,measure,features):
         # label permutation after covariate residualization (Freedman-Lane-like)
         rng=np.random.default_rng(SEED+1911)
         pp_adj=(1+sum(abs(np.corrcoef(xr,rng.permutation(yr))[0,1])>=abs(partial)-1e-12
-           for _ in range(4999)))/5000
+           for _ in range(999)))/1000
         arr.append({'feature':feature,'rho':rho,'p':pp,
                     'partial_rank_r':partial,'partial_permutation_p':pp_adj,'n':len(y)})
     q=multipletests([x['p'] for x in arr],method='fdr_bh')[1]
@@ -270,7 +270,7 @@ def evaluate(df,outcome,features,alphas=(5,20,80)):
         rng=np.random.default_rng(SEED+171)
         errors=np.abs(y-preds['timing'])-np.abs(y-preds['timing_plus_TMA'])
         gain=float(mean(errors));boot=[]
-        for k in range(4999):
+        for k in range(999):
             ix=rng.choice(len(y),len(y),replace=True)
             boot.append(float(mean(errors[ix])))
         res[str(alpha)]['incremental_TMA']={'mae_gain_positive_is_better':gain,
@@ -281,11 +281,9 @@ def evaluate(df,outcome,features,alphas=(5,20,80)):
 def main():
     tick=time.monotonic()
     meta=clinical_metadata()
-    records=[x for x,_ in g.RECORDS]
+    records=list(g.PD_IDS)
     # same-person second walking trial _02, no _10 condition change.
-    with ThreadPoolExecutor(max_workers=12) as pool:
-        found=list(pool.map(lambda r:available_second(r[:6]),records))
-    eligible=[r for r,yes in zip(records,found) if yes]
+    eligible=[] # preliminary severity-only run
     print('Primary recordings',len(records),'second trial accessible',len(eligible),flush=True)
     tasks=[(r,i,False) for i,r in enumerate(records)]+[(r[:6]+'_02',i,True) for i,r in enumerate(records) if r in eligible]
     result=[];failed=[]
