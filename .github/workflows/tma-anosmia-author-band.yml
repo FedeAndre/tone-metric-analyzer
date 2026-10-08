@@ -1,0 +1,32 @@
+name: TMA anosmia frequencies - published peak rules
+on:
+  push:
+    branches: [research-tma-anosmia-author-peaks-20261008]
+    paths: ['research/tma_anosmia_author_band_test.py','.github/workflows/tma-anosmia-author-band.yml']
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --upgrade pip && pip install 'numpy>=2,<3' 'pandas>=2,<3' 'scipy>=1.14,<2' 'scikit-learn>=1.5,<2' 'statsmodels>=0.14,<1' 'requests>=2.32,<3'
+      - name: Spectral TMA with published inhalation peak normalization
+        run: PYTHONPATH=.:research python research/tma_anosmia_author_band_test.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tma-anosmia-author-peaks-verified
+          path: research/tma_anosmia_author_results/
+          if-no-files-found: error
+      - name: Preserve compact results only
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_anosmia_author_results/anosmia_results.json
+          if ! git diff --cached --quiet; then
+            git -c http.postBuffer=104857600 commit -m 'Record authors-method anosmia TMA spectral associations'
+            git -c http.postBuffer=104857600 push origin HEAD:research-tma-anosmia-author-peaks-20261008
+          fi
