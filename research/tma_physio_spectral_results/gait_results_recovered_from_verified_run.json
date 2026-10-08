@@ -1,0 +1,217 @@
+{
+  "results": {
+    "H_64_stride_cycle_resid": {
+      "control_mean": -0.16091627037889417,
+      "PD_mean": -0.055361156214619366,
+      "group": {
+        "diff": 0.1055551141642748,
+        "permutation_p": 0.47633333333333333
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": -0.09842290638425968,
+        "t": -0.4212837214390006,
+        "Freedman_Lane_p": 0.6753333333333333
+      },
+      "q_BH12": 0.6164000000000001,
+      "q_adjusted_BH12": 0.8699999999999999
+    },
+    "D_64_stride_cycle_resid": {
+      "control_mean": 0.3427121619503922,
+      "PD_mean": 0.015177930921046131,
+      "group": {
+        "diff": -0.3275342310293461,
+        "permutation_p": 0.41533333333333333
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": 0.3887621543211764,
+        "t": 0.6195773484113225,
+        "Freedman_Lane_p": 0.53
+      },
+      "q_BH12": 0.6164000000000001,
+      "q_adjusted_BH12": 0.8699999999999999
+    },
+    "H_32_stride_cycle_resid": {
+      "control_mean": -0.1671644921330173,
+      "PD_mean": 0.01932274599761255,
+      "group": {
+        "diff": 0.18648723813062984,
+        "permutation_p": 0.09433333333333334
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": 0.10140878021910613,
+        "t": 0.5720165010539585,
+        "Freedman_Lane_p": 0.571
+      },
+      "q_BH12": 0.28300000000000003,
+      "q_adjusted_BH12": 0.8699999999999999
+    },
+    "D_32_stride_cycle_resid": {
+      "control_mean": -0.5615527497252526,
+      "PD_mean": 0.6626157385867228,
+      "group": {
+        "diff": 1.2241684883119754,
+        "permutation_p": 0.001
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": 1.161136870423141,
+        "t": 2.1719246037846434,
+        "Freedman_Lane_p": 0.035333333333333335
+      },
+      "q_BH12": 0.012,
+      "q_adjusted_BH12": 0.42400000000000004
+    },
+    "H_16to21_stride_cycle_resid": {
+      "control_mean": -0.05929706596746071,
+      "PD_mean": 0.0036745681320142854,
+      "group": {
+        "diff": 0.062971634099475,
+        "permutation_p": 0.6106666666666667
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": -0.06196095381316576,
+        "t": -0.35816625379921885,
+        "Freedman_Lane_p": 0.725
+      },
+      "q_BH12": 0.6661818181818182,
+      "q_adjusted_BH12": 0.8699999999999999
+    },
+    "D_16to21_stride_cycle_resid": {
+      "control_mean": 0.07510676323650295,
+      "PD_mean": 0.264130018469779,
+      "group": {
+        "diff": 0.18902325523327607,
+        "permutation_p": 0.422
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": 0.16917168058270937,
+        "t": 0.49470539742072683,
+        "Freedman_Lane_p": 0.6256666666666667
+      },
+      "q_BH12": 0.6164000000000001,
+      "q_adjusted_BH12": 0.8699999999999999
+    },
+    "H_8to13_stride_cycle_resid": {
+      "control_mean": 0.04202378104193061,
+      "PD_mean": -0.10176842265252363,
+      "group": {
+        "diff": -0.14379220369445422,
+        "permutation_p": 0.09233333333333334
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": -0.0958880207440915,
+        "t": -0.816125320052317,
+        "Freedman_Lane_p": 0.42033333333333334
+      },
+      "q_BH12": 0.28300000000000003,
+      "q_adjusted_BH12": 0.8699999999999999
+    },
+    "D_8to13_stride_cycle_resid": {
+      "control_mean": 0.4295485686297807,
+      "PD_mean": 0.09250685219492696,
+      "group": {
+        "diff": -0.3370417164348537,
+        "permutation_p": 0.045
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": -0.4509625418329178,
+        "t": -1.7650491540634337,
+        "Freedman_Lane_p": 0.07766666666666666
+      },
+      "q_BH12": 0.27,
+      "q_adjusted_BH12": 0.46599999999999997
+    },
+    "H_4to7_stride_cycle_resid": {
+      "control_mean": -0.03904461032485557,
+      "PD_mean": 0.010829492816254518,
+      "group": {
+        "diff": 0.04987410314111009,
+        "permutation_p": 0.494
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": 0.1505840715201032,
+        "t": 1.4093163110284783,
+        "Freedman_Lane_p": 0.164
+      },
+      "q_BH12": 0.6164000000000001,
+      "q_adjusted_BH12": 0.49200000000000005
+    },
+    "D_4to7_stride_cycle_resid": {
+      "control_mean": 0.09587191523854072,
+      "PD_mean": 0.038030418571962016,
+      "group": {
+        "diff": -0.0578414966665787,
+        "permutation_p": 0.5136666666666667
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": 0.20589651865990297,
+        "t": 1.598469075666009,
+        "Freedman_Lane_p": 0.117
+      },
+      "q_BH12": 0.6164000000000001,
+      "q_adjusted_BH12": 0.468
+    },
+    "H_2to4_stride_cycle_resid": {
+      "control_mean": -0.020527863928448645,
+      "PD_mean": -0.010750224244530131,
+      "group": {
+        "diff": 0.009777639683918513,
+        "permutation_p": 0.8986666666666666
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": 0.018745332038305647,
+        "t": 0.1621287400673412,
+        "Freedman_Lane_p": 0.8773333333333333
+      },
+      "q_BH12": 0.8986666666666666,
+      "q_adjusted_BH12": 0.9570909090909091
+    },
+    "D_2to4_stride_cycle_resid": {
+      "control_mean": -0.13849530570699256,
+      "PD_mean": -0.06497860909522887,
+      "group": {
+        "diff": 0.07351669661176369,
+        "permutation_p": 0.24066666666666667
+      },
+      "adjusted_for_conventional": {
+        "adjusted_PD_difference": 0.0033438807809337452,
+        "t": 0.03580067403400361,
+        "Freedman_Lane_p": 0.975
+      },
+      "q_BH12": 0.5776,
+      "q_adjusted_BH12": 0.975
+    }
+  },
+  "cv": {
+    "phase_and_stride": {
+      "AUC": 0.9061302681992337,
+      "balanced_accuracy": 0.7921455938697317,
+      "n_features": 12
+    },
+    "conventional_spectral": {
+      "AUC": 0.9195402298850576,
+      "balanced_accuracy": 0.7921455938697317,
+      "n_features": 18
+    },
+    "TMA_corrected_spectral": {
+      "AUC": 0.6628352490421456,
+      "balanced_accuracy": 0.6637931034482758,
+      "n_features": 12
+    },
+    "conventional_plus_TMA": {
+      "AUC": 0.9195402298850575,
+      "balanced_accuracy": 0.7854406130268199,
+      "n_features": 30
+    }
+  },
+  "cv_AUC_gain": {
+    "difference": -1.1102230246251565e-16,
+    "bootstrap95": [
+      -0.06905844155844153,
+      0.06513409961685823
+    ]
+  },
+  "provenance": {
+    "source_workflow": "https://github.com/FedeAndre/tone-metric-analyzer/actions/runs/37787624671",
+    "note": "Verified analysis succeeded, result committed directly after git push failure"
+  }
+}
