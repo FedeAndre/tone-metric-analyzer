@@ -1,7 +1,7 @@
 name: TMA Individual Fourier Fingerprints and PD Clinical Severity
 on:
   push:
-    branches: [research-tma-individual-fingerprints-20261008]
+    branches: [research-tma-individual-fast-20261008]
     paths:
       - research/tma_individual_fingerprint.py
       - .github/workflows/tma-individual-fingerprints.yml
@@ -33,5 +33,5 @@ jobs:
           git add research/tma_individual_fingerprint_results/
           if ! git diff --cached --quiet; then
             git commit -m 'Archive individual TMA spectral identity and severity validation'
-            git push origin HEAD:research-tma-individual-fingerprints-20261008
+            git push origin HEAD:research-tma-individual-fast-20261008
           fi
