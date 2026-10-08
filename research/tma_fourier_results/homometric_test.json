@@ -1,0 +1,96 @@
+{
+  "grid": "4/4 meter, sixteenth-note onset grid, 32 repeated bars",
+  "motif_A": [
+    0,
+    1,
+    4,
+    9
+  ],
+  "motif_B": [
+    0,
+    1,
+    5,
+    8
+  ],
+  "exact_cyclic_autocorrelation": [
+    4,
+    1,
+    0,
+    1,
+    1,
+    1,
+    0,
+    1,
+    2,
+    1,
+    0,
+    1,
+    1,
+    1,
+    0,
+    1
+  ],
+  "musical_onset_spectra_identical": true,
+  "event_count_each": 128,
+  "frozen_TMA_engine_matched": true,
+  "statistics": {
+    "onset": {
+      "maximum_absolute_power_difference": 0.0,
+      "total_variation_between_normalized_power_spectra": 0.0,
+      "same_power_to_1e-7": true,
+      "total_power_A": 40960.0,
+      "total_power_B": 40960.0
+    },
+    "H": {
+      "maximum_absolute_power_difference": 3527.3506473629436,
+      "total_variation_between_normalized_power_spectra": 0.2737046340549212,
+      "same_power_to_1e-7": false,
+      "total_power_A": 58088.0,
+      "total_power_B": 46952.0
+    },
+    "D": {
+      "maximum_absolute_power_difference": 10695.276218474328,
+      "total_variation_between_normalized_power_spectra": 0.22875535328149274,
+      "same_power_to_1e-7": false,
+      "total_power_A": 62578.500000000015,
+      "total_power_B": 62578.5
+    },
+    "singleH": {
+      "maximum_absolute_power_difference": 13056.0,
+      "total_variation_between_normalized_power_spectra": 0.351082219149778,
+      "same_power_to_1e-7": false,
+      "total_power_A": 93898.0,
+      "total_power_B": 54602.0
+    },
+    "singleD": {
+      "maximum_absolute_power_difference": 4672.0,
+      "total_variation_between_normalized_power_spectra": 0.2482006983912119,
+      "same_power_to_1e-7": false,
+      "total_power_A": 31222.499999999996,
+      "total_power_B": 32406.5
+    },
+    "contextH": {
+      "maximum_absolute_power_difference": 3712.0,
+      "total_variation_between_normalized_power_spectra": 0.3639645880867577,
+      "same_power_to_1e-7": false,
+      "total_power_A": 19434.0,
+      "total_power_B": 16810.0
+    },
+    "contextD": {
+      "maximum_absolute_power_difference": 3712.0,
+      "total_variation_between_normalized_power_spectra": 0.3639645880867577,
+      "same_power_to_1e-7": false,
+      "total_power_A": 19434.0,
+      "total_power_B": 16810.0
+    }
+  },
+  "mean_D": {
+    "A": 2.0234375,
+    "B": 2.0234375
+  },
+  "event_context_fraction": {
+    "A": 0.4453125,
+    "B": 0.1953125
+  },
+  "note": "Onset PSD matching does not imply equality of all conventional sequence descriptors. All transforms are deterministic."
+}
