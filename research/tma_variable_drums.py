@@ -49,7 +49,7 @@ BASE_FIELDS=['events_per_bar','attacks_per_bar','events_cv','ioi_mean','ioi_std'
 
 def mean(x):return float(np.mean(x)) if len(x) else 0.
 def sd(x):return float(np.std(x,ddof=1)) if len(x)>1 else 0.
-def acf(x):return float(np.corrcoef(x[:-1],x[1:])[0,1]) if len(x)>3 and np.std(x)>1e-9 else 0.
+def acf(x):return float(np.corrcoef(x[:-1],x[1:])[0,1]) if len(x)>3 and np.std(x[:-1])>1e-9 and np.std(x[1:])>1e-9 else 0.
 def entropy(q,k):
     if not len(q):return 0.
     x=np.bincount(np.minimum(k-1,(np.asarray(q)%1*k).astype(int)),minlength=k)
@@ -163,7 +163,7 @@ def wave_features(times,nbar,reset=False):
         for idx in range(0,nbar,WIN_BARS):
             local=[t-Fraction(idx*4) for t in times if idx*4<=t<(idx+WIN_BARS)*4]
             result.append(wave_one(local,WIN_BARS,0,WIN_BARS))
-        return result
+        return np.asarray(result,float)
     return wave_one(times,nbar,None,None)
 
 def wave_one(times,nbar,ignore0,ignore1):
