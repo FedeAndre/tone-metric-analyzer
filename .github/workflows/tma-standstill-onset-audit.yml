@@ -1,0 +1,31 @@
+name: Audit sound onsets for physiologically anchored TMA waves
+on:
+  push:
+    branches: [research-tma-standstill-auditory-20261008]
+    paths: ['research/tma_standstill_onset_audit.py','.github/workflows/tma-standstill-onset-audit.yml']
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install 'numpy>=2,<3' 'scipy>=1.14,<2' 'requests>=2.32,<3'
+      - run: python research/tma_standstill_onset_audit.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spectral-flux-audio-attack-QC
+          path: research/tma_standstill_auditory_results/onset_detection_audit.json
+          if-no-files-found: error
+      - name: Archive attack QC
+        run: |
+          git config user.name 'TMA research bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/tma_standstill_auditory_results/onset_detection_audit.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Audit auditory onset timing before drawing clinical conclusions'
+            git push origin HEAD:research-tma-standstill-auditory-20261008
+          fi
