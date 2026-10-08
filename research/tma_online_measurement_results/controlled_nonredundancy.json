@@ -1,0 +1,306 @@
+{
+  "population": "all non-dihedral homometric 4\u20137 attack rhythms with equal cyclic IOI histogram, subset also equal static-TMA D power",
+  "n_strongly_matched_pairs": 40,
+  "n_all_nondihedral_matched_pairs": 1696,
+  "n_distinguishable_by_each_measure": {
+    "phase_vector": {
+      "n_distinct": 40,
+      "fraction": 1.0
+    },
+    "ioi_ordered": {
+      "n_distinct": 40,
+      "fraction": 1.0
+    },
+    "ioi_hist": {
+      "n_distinct": 0,
+      "fraction": 0.0
+    },
+    "onset_acf": {
+      "n_distinct": 0,
+      "fraction": 0.0
+    },
+    "ioi_mean": {
+      "n_distinct": 0,
+      "fraction": 0.0
+    },
+    "ioi_std": {
+      "n_distinct": 0,
+      "fraction": 0.0
+    },
+    "ioi_madiff": {
+      "n_distinct": 24,
+      "fraction": 0.6
+    },
+    "beat_phase_R": {
+      "n_distinct": 0,
+      "fraction": 0.0
+    },
+    "H_mean": {
+      "n_distinct": 26,
+      "fraction": 0.65
+    },
+    "D_mean": {
+      "n_distinct": 18,
+      "fraction": 0.45
+    },
+    "H_sd": {
+      "n_distinct": 28,
+      "fraction": 0.7
+    },
+    "D_sd": {
+      "n_distinct": 18,
+      "fraction": 0.45
+    },
+    "context_D_mean": {
+      "n_distinct": 18,
+      "fraction": 0.45
+    },
+    "context_H_mean": {
+      "n_distinct": 18,
+      "fraction": 0.45
+    },
+    "context_D_sd": {
+      "n_distinct": 18,
+      "fraction": 0.45
+    },
+    "context_H_sd": {
+      "n_distinct": 18,
+      "fraction": 0.45
+    },
+    "D_hist": {
+      "n_distinct": 18,
+      "fraction": 0.45
+    },
+    "H_hist": {
+      "n_distinct": 28,
+      "fraction": 0.7
+    },
+    "context_D_hist": {
+      "n_distinct": 18,
+      "fraction": 0.45
+    }
+  },
+  "spectral_count": {
+    "full_density_power_distinct": 24,
+    "context_density_power_distinct": 24
+  },
+  "full_TMA_density_TV_quantiles": [
+    0.0,
+    0.0,
+    0.03497156236529743,
+    0.06765007296200864,
+    0.1789933416795797
+  ],
+  "context_TMA_density_TV_quantiles": [
+    0.0,
+    0.0,
+    0.06331190051670997,
+    0.1464771159988386,
+    0.3330719080535218
+  ],
+  "max_context_pair": {
+    "motifA": [
+      0,
+      1,
+      5,
+      7,
+      10,
+      13,
+      14
+    ],
+    "motifB": [
+      0,
+      2,
+      5,
+      6,
+      9,
+      13,
+      15
+    ],
+    "distinguished_by": {
+      "phase_vector": true,
+      "ioi_ordered": true,
+      "ioi_hist": false,
+      "onset_acf": false,
+      "ioi_mean": false,
+      "ioi_std": false,
+      "ioi_madiff": false,
+      "beat_phase_R": false,
+      "H_mean": true,
+      "D_mean": true,
+      "H_sd": true,
+      "D_sd": true,
+      "context_D_mean": true,
+      "context_H_mean": true,
+      "context_D_sd": true,
+      "context_H_sd": true,
+      "D_hist": true,
+      "H_hist": true,
+      "context_D_hist": true
+    },
+    "ordinary_onset_power_equal": true,
+    "static_density_power_equal": true,
+    "full_density_power_distinct": true,
+    "context_density_power_distinct": true,
+    "full_density_TV": 0.16520039704300643,
+    "context_density_TV": 0.3330719080535218,
+    "mean_H_abs_delta": 0.053571428571428825,
+    "mean_D_abs_delta": 0.05357142857142838
+  },
+  "max_context_pair_online_change_from_bar8": [
+    {
+      "bars_observed": 1,
+      "event_count": 7,
+      "onset_binned_hist_same": true,
+      "onset_exact_stream_same": true,
+      "tma_H_mean_same": true,
+      "tma_D_mean_same": true,
+      "tma_level_density_hist_same": true
+    },
+    {
+      "bars_observed": 2,
+      "event_count": 14,
+      "onset_binned_hist_same": true,
+      "onset_exact_stream_same": true,
+      "tma_H_mean_same": true,
+      "tma_D_mean_same": true,
+      "tma_level_density_hist_same": true
+    },
+    {
+      "bars_observed": 3,
+      "event_count": 21,
+      "onset_binned_hist_same": true,
+      "onset_exact_stream_same": true,
+      "tma_H_mean_same": true,
+      "tma_D_mean_same": true,
+      "tma_level_density_hist_same": true
+    },
+    {
+      "bars_observed": 4,
+      "event_count": 28,
+      "onset_binned_hist_same": true,
+      "onset_exact_stream_same": true,
+      "tma_H_mean_same": true,
+      "tma_D_mean_same": true,
+      "tma_level_density_hist_same": true
+    },
+    {
+      "bars_observed": 5,
+      "event_count": 35,
+      "onset_binned_hist_same": true,
+      "onset_exact_stream_same": true,
+      "tma_H_mean_same": true,
+      "tma_D_mean_same": true,
+      "tma_level_density_hist_same": true
+    },
+    {
+      "bars_observed": 6,
+      "event_count": 42,
+      "onset_binned_hist_same": true,
+      "onset_exact_stream_same": true,
+      "tma_H_mean_same": true,
+      "tma_D_mean_same": true,
+      "tma_level_density_hist_same": true
+    },
+    {
+      "bars_observed": 7,
+      "event_count": 49,
+      "onset_binned_hist_same": true,
+      "onset_exact_stream_same": true,
+      "tma_H_mean_same": true,
+      "tma_D_mean_same": true,
+      "tma_level_density_hist_same": true
+    },
+    {
+      "bars_observed": 8,
+      "event_count": 56,
+      "onset_binned_hist_same": false,
+      "onset_exact_stream_same": false,
+      "tma_H_mean_same": false,
+      "tma_D_mean_same": false,
+      "tma_level_density_hist_same": false
+    },
+    {
+      "bars_observed": 9,
+      "event_count": 63,
+      "onset_binned_hist_same": false,
+      "onset_exact_stream_same": false,
+      "tma_H_mean_same": true,
+      "tma_D_mean_same": true,
+      "tma_level_density_hist_same": false
+    },
+    {
+      "bars_observed": 10,
+      "event_count": 70,
+      "onset_binned_hist_same": false,
+      "onset_exact_stream_same": false,
+      "tma_H_mean_same": true,
+      "tma_D_mean_same": true,
+      "tma_level_density_hist_same": false
+    },
+    {
+      "bars_observed": 11,
+      "event_count": 77,
+      "onset_binned_hist_same": false,
+      "onset_exact_stream_same": false,
+      "tma_H_mean_same": false,
+      "tma_D_mean_same": false,
+      "tma_level_density_hist_same": false
+    },
+    {
+      "bars_observed": 12,
+      "event_count": 84,
+      "onset_binned_hist_same": false,
+      "onset_exact_stream_same": false,
+      "tma_H_mean_same": false,
+      "tma_D_mean_same": false,
+      "tma_level_density_hist_same": false
+    },
+    {
+      "bars_observed": 13,
+      "event_count": 91,
+      "onset_binned_hist_same": false,
+      "onset_exact_stream_same": false,
+      "tma_H_mean_same": false,
+      "tma_D_mean_same": false,
+      "tma_level_density_hist_same": false
+    },
+    {
+      "bars_observed": 14,
+      "event_count": 98,
+      "onset_binned_hist_same": false,
+      "onset_exact_stream_same": false,
+      "tma_H_mean_same": false,
+      "tma_D_mean_same": false,
+      "tma_level_density_hist_same": false
+    },
+    {
+      "bars_observed": 15,
+      "event_count": 105,
+      "onset_binned_hist_same": false,
+      "onset_exact_stream_same": false,
+      "tma_H_mean_same": false,
+      "tma_D_mean_same": false,
+      "tma_level_density_hist_same": false
+    },
+    {
+      "bars_observed": 16,
+      "event_count": 112,
+      "onset_binned_hist_same": false,
+      "onset_exact_stream_same": false,
+      "tma_H_mean_same": false,
+      "tma_D_mean_same": false,
+      "tma_level_density_hist_same": false
+    }
+  ],
+  "exact_engine_gates_passed": true,
+  "seconds": 2.369995535000001,
+  "limitations": [
+    "The synthetic task is a measurement-discrimination test; no hidden biology or external meaning",
+    "Exact phase vector and full complex Fourier phase are invertible alternatives and will discriminate every non-identical pair",
+    "No claim that a small set of TMA features is an injective representation of original rhythmic events",
+    "Strongly matched pairs selected by TMA static-density power (pre-committed), which benefits residual TMA comparison",
+    "Per-bar onset-phase histogram measures an ordinary beat-locked temporal feature and is explicitly compared",
+    "The onset stream is beat-anchored and contains variable within-bar attack rhythms, satisfying TMA input requirements"
+  ]
+}
