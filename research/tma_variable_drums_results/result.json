@@ -1,0 +1,287 @@
+{
+  "dataset": "Gillick et al. Groove MIDI 1.0 MIDI-only, CC BY 4.0",
+  "dataset_source": "https://storage.googleapis.com/magentadata/datasets/groove/groove-v1.0.0-midionly.zip",
+  "data_sha256": "651cbc524ffb891be1a3e46d89dc82a1cecb09a57c748c7b45b844c4841dcc1e",
+  "sample_n_tracks": 97,
+  "n_drummer_groups": 10,
+  "n_windows": 679,
+  "selected_label_counts": {
+    "variable": 50,
+    "regular": 47
+  },
+  "criterion": "changes in drum orchestration families withheld entirely from TMA and timing features",
+  "quantization": "1/64 quarter-note metronome beat; nearest snapping, simultaneous attacks merged",
+  "median_quantization_error_ms": 2.4509803921546336,
+  "median_p95_quant_error_ms": 4.2892156862747886,
+  "median_note_count_CV": 0.17363304505488647,
+  "median_hits_per_bar": 18.21875,
+  "median_unique_attacks_per_32bars": 533.0,
+  "models": {
+    "change": {
+      "conventional_timing": {
+        "MAE": 0.07965909493261426,
+        "R2": 0.051220931799241476
+      },
+      "origin_TMA_only": {
+        "MAE": 0.08486368122784149,
+        "R2": -0.011373986730689678
+      },
+      "reset_TMA_only": {
+        "MAE": 0.08349260473786939,
+        "R2": -0.005487984328642392
+      },
+      "timing_plus_origin_TMA": {
+        "MAE": 0.0810432926967878,
+        "R2": 0.02910616470756655
+      },
+      "timing_plus_reset_TMA": {
+        "MAE": 0.08035564708855594,
+        "R2": 0.027343710705565516
+      },
+      "timing_plus_core_origin": {
+        "MAE": 0.07996916576275775,
+        "R2": 0.050527617622467935
+      },
+      "timing_plus_core_reset": {
+        "MAE": 0.07964168913222097,
+        "R2": 0.04702144084287385
+      },
+      "gain_timing_plus_origin_TMA": {
+        "mean_MAE_gain": -0.0013841977641735287,
+        "drummer_bootstrap_95CI": [
+          -0.0024601119053499396,
+          0.00017965791109416317
+        ],
+        "boot_frac_gt0": 0.040680226742247416
+      },
+      "gain_timing_plus_core_origin": {
+        "mean_MAE_gain": -0.0003100708301434837,
+        "drummer_bootstrap_95CI": [
+          -0.0011736975198778326,
+          0.0009742223551445718
+        ],
+        "boot_frac_gt0": 0.29076358786262085
+      },
+      "gain_timing_plus_reset_TMA": {
+        "mean_MAE_gain": -0.000696552155941682,
+        "drummer_bootstrap_95CI": [
+          -0.0026661696971894775,
+          0.0019424269918004826
+        ],
+        "boot_frac_gt0": 0.27775925308436145
+      },
+      "gain_timing_plus_core_reset": {
+        "mean_MAE_gain": 1.7405800393292673e-05,
+        "drummer_bootstrap_95CI": [
+          -0.0015341945317546056,
+          0.0019823856153397133
+        ],
+        "boot_frac_gt0": 0.5021673891297099
+      },
+      "regular_only_metrics": {
+        "conventional_timing": {
+          "MAE": 0.06731276247462165,
+          "R2": 0.08481220051786165
+        },
+        "origin_TMA_only": {
+          "MAE": 0.0824829103971741,
+          "R2": -0.07524988193801474
+        },
+        "reset_TMA_only": {
+          "MAE": 0.08105920394527243,
+          "R2": -0.07976667170522878
+        },
+        "timing_plus_origin_TMA": {
+          "MAE": 0.06888575810444725,
+          "R2": 0.06021404592246893
+        },
+        "timing_plus_reset_TMA": {
+          "MAE": 0.06883709325059878,
+          "R2": 0.03681224820929574
+        },
+        "timing_plus_core_origin": {
+          "MAE": 0.06828430842077,
+          "R2": 0.06906144119180069
+        },
+        "timing_plus_core_reset": {
+          "MAE": 0.06809534835756548,
+          "R2": 0.05495479026439509
+        }
+      },
+      "variable_only_metrics": {
+        "conventional_timing": {
+          "MAE": 0.09126464744312736,
+          "R2": -0.05409553389317523
+        },
+        "origin_TMA_only": {
+          "MAE": 0.08710160580866881,
+          "R2": -0.055938115581751546
+        },
+        "reset_TMA_only": {
+          "MAE": 0.08578000148291051,
+          "R2": -0.04247516891060088
+        },
+        "timing_plus_origin_TMA": {
+          "MAE": 0.0924713752135879,
+          "R2": -0.07644672265072083
+        },
+        "timing_plus_reset_TMA": {
+          "MAE": 0.09118308769623569,
+          "R2": -0.06366594840079554
+        },
+        "timing_plus_core_origin": {
+          "MAE": 0.09095293166422623,
+          "R2": -0.04462278538657238
+        },
+        "timing_plus_core_reset": {
+          "MAE": 0.09049524946039715,
+          "R2": -0.041234474580658764
+        }
+      }
+    },
+    "drift": {
+      "conventional_timing": {
+        "MAE": 0.11703974940218918,
+        "R2": 0.03605978072165539
+      },
+      "origin_TMA_only": {
+        "MAE": 0.12239669888535279,
+        "R2": 0.0020404293098774673
+      },
+      "reset_TMA_only": {
+        "MAE": 0.1262646848658912,
+        "R2": -0.043677105047083886
+      },
+      "timing_plus_origin_TMA": {
+        "MAE": 0.12095446698837081,
+        "R2": -0.002301664423561167
+      },
+      "timing_plus_reset_TMA": {
+        "MAE": 0.12213263142870667,
+        "R2": -0.02670867728884896
+      },
+      "timing_plus_core_origin": {
+        "MAE": 0.11710642882435106,
+        "R2": 0.04240521451209245
+      },
+      "timing_plus_core_reset": {
+        "MAE": 0.11908478086207493,
+        "R2": 0.012591978965568185
+      },
+      "gain_timing_plus_origin_TMA": {
+        "mean_MAE_gain": -0.00391471758618163,
+        "drummer_bootstrap_95CI": [
+          -0.008418548117670163,
+          0.0004662298302587759
+        ],
+        "boot_frac_gt0": 0.04201400466822274
+      },
+      "gain_timing_plus_core_origin": {
+        "mean_MAE_gain": -6.667942216187846e-05,
+        "drummer_bootstrap_95CI": [
+          -0.0017195422697107545,
+          0.001551244050693709
+        ],
+        "boot_frac_gt0": 0.48482827609203066
+      },
+      "gain_timing_plus_reset_TMA": {
+        "mean_MAE_gain": -0.005092882026517501,
+        "drummer_bootstrap_95CI": [
+          -0.00923469331312466,
+          -0.0002468456202849531
+        ],
+        "boot_frac_gt0": 0.018672890963654553
+      },
+      "gain_timing_plus_core_reset": {
+        "mean_MAE_gain": -0.002045031459885758,
+        "drummer_bootstrap_95CI": [
+          -0.0033854611400170364,
+          0.0001662864405688207
+        ],
+        "boot_frac_gt0": 0.02867622540846949
+      },
+      "regular_only_metrics": {
+        "conventional_timing": {
+          "MAE": 0.10408999646077942,
+          "R2": 0.07999642543224639
+        },
+        "origin_TMA_only": {
+          "MAE": 0.12333027483705473,
+          "R2": -0.09433131841677467
+        },
+        "reset_TMA_only": {
+          "MAE": 0.12781525741245692,
+          "R2": -0.15758328002695832
+        },
+        "timing_plus_origin_TMA": {
+          "MAE": 0.1108177019011428,
+          "R2": -0.0012562593134439748
+        },
+        "timing_plus_reset_TMA": {
+          "MAE": 0.11376374078455885,
+          "R2": -0.05767470004429498
+        },
+        "timing_plus_core_origin": {
+          "MAE": 0.10692794434230236,
+          "R2": 0.05092697682012748
+        },
+        "timing_plus_core_reset": {
+          "MAE": 0.10995898452180458,
+          "R2": -0.0009460664914915373
+        }
+      },
+      "variable_only_metrics": {
+        "conventional_timing": {
+          "MAE": 0.12921251716711438,
+          "R2": -0.053487956938109926
+        },
+        "origin_TMA_only": {
+          "MAE": 0.121519137490753,
+          "R2": 0.017274955023463656
+        },
+        "reset_TMA_only": {
+          "MAE": 0.12480714667211945,
+          "R2": -0.017761821243048814
+        },
+        "timing_plus_origin_TMA": {
+          "MAE": 0.1304830261703651,
+          "R2": -0.06144604237160034
+        },
+        "timing_plus_reset_TMA": {
+          "MAE": 0.12999938863420563,
+          "R2": -0.0629159463776876
+        },
+        "timing_plus_core_origin": {
+          "MAE": 0.12667420423747683,
+          "R2": -0.019825424903983757
+        },
+        "timing_plus_core_reset": {
+          "MAE": 0.12766302942192906,
+          "R2": -0.03458860695742039
+        }
+      }
+    }
+  },
+  "narrative_order_surrogate": {
+    "regular": {
+      "n": 47,
+      "n_p_le_0p05": 8,
+      "n_p_le_0p10": 17,
+      "median_p": 0.23333333333333334
+    },
+    "variable": {
+      "n": 50,
+      "n_p_le_0p05": 8,
+      "n_p_le_0p10": 20,
+      "median_p": 0.18333333333333335
+    }
+  },
+  "limitations": [
+    "Labels of high/low variability selected from note-count CV on full recordings (not causal); descriptors themselves strictly fixed-origin",
+    "Only selected long 4/4 grooves, no within-track human-annotated transition labels",
+    "Independent orchestration metric uses withheld instrument pitches, but events originate in same MIDI recording",
+    "1/64-beat dyadic snap loses exact non-dyadic tuplets and some human microtiming",
+    "Statistical comparison descriptive and exploratory; no clinical data"
+  ],
+  "elapsed_seconds": 155.52456396799997
+}
