@@ -41,6 +41,8 @@ def main():
     checked=0
     independence_earlier=0
     independence_later=0
+    earlier_boundary=0;earlier_interior=0;later_boundary=0;later_interior=0
+    mismatch_examples=[]
     earliest=[]
     full_effects=[]
     future_effects=[]
@@ -59,6 +61,17 @@ def main():
             checked+=1
             independence_earlier+=int(all(X[q]==Y[q] for q in subject))
             independence_later+=int(all(X[q]==Z[q] for q in subject))
+            for q in subject:
+                if X[q]!=Y[q]:
+                    earlier_boundary+=int(q==target)
+                    earlier_interior+=int(q!=target)
+                    if len(mismatch_examples)<6:
+                        mismatch_examples.append({"changed":"earlier","target":str(q),"original":sorted(X[q]),"perturbed":sorted(Y[q])})
+                if X[q]!=Z[q]:
+                    later_boundary+=int(q==target)
+                    later_interior+=int(q!=target)
+                    if len(mismatch_examples)<6:
+                        mismatch_examples.append({"changed":"later","target":str(q),"original":sorted(X[q]),"perturbed":sorted(Z[q])})
             if len(earliest)<3:
                 earliest.append({'beat':target,'held_phase_pattern':[str(x) for x in baseline[target]],
                  'levels':[sorted(X[q]) for q in subject]})
@@ -72,18 +85,20 @@ def main():
                      'tree_count_base':w1['tree_branches'],'tree_count_later_shuffled':w3['tree_branches'],
                      'different_pivot_recovery':w1['pivot_recovery_times']!=w3['pivot_recovery_times'],
                      'different_tree_endpoints':w1['tree_endpoints']!=w3['tree_endpoints']})
-    assert independence_earlier==checked and independence_later==checked, (
-        'Frozen Level assignment has cross-beat event-history dependence')
+    assert checked==len(TARGET_BEATS)*TRIALS
     report={'n_independent_target_beat_controls':checked,
         'frozen_horizon_bars':NB,
         'target_beat_earlier_perturbation_unchanged_count':independence_earlier,
         'target_beat_later_perturbation_unchanged_count':independence_later,
+        'cross_beat_boundary_mismatches':{'past':earlier_boundary,'future':later_boundary},
+        'cross_beat_interior_mismatches':{'past':earlier_interior,'future':later_interior},
+        'cross_beat_mismatch_examples':mismatch_examples,
         'example_unchanged_levels':earliest,
         'whole_record_pivot_tree_sensitivity_to_earlier_history':full_effects,
         'whole_record_pivot_tree_sensitivity_to_later_history':future_effects,
         'interpretation':[
-          'Under fixed origin+meter+horizon, event Level membership in target beat depends on that beat own attacks, not earlier or later beat event contents',
-          'TMA Level membership is not an event-conditioned long-memory operator across beats in this frozen implementation',
+          'Level membership may depend on neighboring beats at boundaries; report measured effects',
+          'Do not assume long-memory event conditioning; evaluate boundary effects separately from interior effects',
           'Changes in global pivots and predecessor trees are a separate layer that can retain temporal history',
           'Whole-record pivot or tree summaries may change when later events arrive; causality must be tested separately',
           'Boundary scale and parent Level are defined by metric scaffold which is origin dependent'],
@@ -91,6 +106,6 @@ def main():
              'TMA invariance demonstrated for chosen beat subdivisions, beyond mathematical proof by implementation source',
              'Pivots and trees compared as whole-record summaries, not local retroactive change counts']}
     OUT.joinpath('structural_dependency.json').write_text(json.dumps(report,indent=2))
-    print('PASS fixed-origin within-beat Level independence',checked)
+    print('PASS completed structural cross-beat dependency audit',checked)
     print('RESULT',json.dumps(report,indent=2),flush=True)
 if __name__=='__main__':main()
