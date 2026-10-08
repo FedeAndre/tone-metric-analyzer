@@ -1,0 +1,259 @@
+{
+  "pairs": {
+    "first_order_exact_staticD": [
+      [
+        0,
+        2,
+        3,
+        6,
+        9,
+        11,
+        15
+      ],
+      [
+        0,
+        2,
+        5,
+        6,
+        9,
+        13,
+        15
+      ]
+    ],
+    "second_order_matched": [
+      [
+        0,
+        1,
+        3,
+        6,
+        8,
+        12,
+        15
+      ],
+      [
+        0,
+        3,
+        5,
+        8,
+        9,
+        10,
+        12
+      ]
+    ]
+  },
+  "recording_lengths_tested_bars": [
+    8,
+    16,
+    32
+  ],
+  "results": {
+    "first_order_exact_staticD": {
+      "8": {
+        "n_events": 56,
+        "metrics": {
+          "raw": {
+            "psd_TV": 0.0,
+            "equal_to_1e_minus_7": true
+          },
+          "H": {
+            "psd_TV": 0.052513765684503715,
+            "equal_to_1e_minus_7": false
+          },
+          "D": {
+            "psd_TV": 0.14310494381156313,
+            "equal_to_1e_minus_7": false
+          },
+          "sH": {
+            "psd_TV": 0.03432197177079793,
+            "equal_to_1e_minus_7": false
+          },
+          "sD": {
+            "psd_TV": 0.0,
+            "equal_to_1e_minus_7": true
+          },
+          "cH": {
+            "psd_TV": 0.2866649112918435,
+            "equal_to_1e_minus_7": false
+          },
+          "cD": {
+            "psd_TV": 0.2866649112918435,
+            "equal_to_1e_minus_7": false
+          }
+        }
+      },
+      "16": {
+        "n_events": 112,
+        "metrics": {
+          "raw": {
+            "psd_TV": 0.0,
+            "equal_to_1e_minus_7": true
+          },
+          "H": {
+            "psd_TV": 0.049417555368243146,
+            "equal_to_1e_minus_7": false
+          },
+          "D": {
+            "psd_TV": 0.13728402932611167,
+            "equal_to_1e_minus_7": false
+          },
+          "sH": {
+            "psd_TV": 0.034419631684497645,
+            "equal_to_1e_minus_7": false
+          },
+          "sD": {
+            "psd_TV": 0.0,
+            "equal_to_1e_minus_7": true
+          },
+          "cH": {
+            "psd_TV": 0.28467935346471396,
+            "equal_to_1e_minus_7": false
+          },
+          "cD": {
+            "psd_TV": 0.28467935346471396,
+            "equal_to_1e_minus_7": false
+          }
+        }
+      },
+      "32": {
+        "n_events": 224,
+        "metrics": {
+          "raw": {
+            "psd_TV": 0.0,
+            "equal_to_1e_minus_7": true
+          },
+          "H": {
+            "psd_TV": 0.04551100553533801,
+            "equal_to_1e_minus_7": false
+          },
+          "D": {
+            "psd_TV": 0.13335016220887752,
+            "equal_to_1e_minus_7": false
+          },
+          "sH": {
+            "psd_TV": 0.03282186704186521,
+            "equal_to_1e_minus_7": false
+          },
+          "sD": {
+            "psd_TV": 0.0,
+            "equal_to_1e_minus_7": true
+          },
+          "cH": {
+            "psd_TV": 0.2837434854442834,
+            "equal_to_1e_minus_7": false
+          },
+          "cD": {
+            "psd_TV": 0.2837434854442834,
+            "equal_to_1e_minus_7": false
+          }
+        }
+      }
+    },
+    "second_order_matched": {
+      "8": {
+        "n_events": 56,
+        "metrics": {
+          "raw": {
+            "psd_TV": 9.71445146547012e-17,
+            "equal_to_1e_minus_7": true
+          },
+          "H": {
+            "psd_TV": 0.1131737165191728,
+            "equal_to_1e_minus_7": false
+          },
+          "D": {
+            "psd_TV": 0.24163083212211217,
+            "equal_to_1e_minus_7": false
+          },
+          "sH": {
+            "psd_TV": 0.16349034890040426,
+            "equal_to_1e_minus_7": false
+          },
+          "sD": {
+            "psd_TV": 0.10916087335851807,
+            "equal_to_1e_minus_7": false
+          },
+          "cH": {
+            "psd_TV": 0.32491772492966414,
+            "equal_to_1e_minus_7": false
+          },
+          "cD": {
+            "psd_TV": 0.32491772492966414,
+            "equal_to_1e_minus_7": false
+          }
+        }
+      },
+      "16": {
+        "n_events": 112,
+        "metrics": {
+          "raw": {
+            "psd_TV": 1.3530843112619095e-16,
+            "equal_to_1e_minus_7": true
+          },
+          "H": {
+            "psd_TV": 0.10556398496826587,
+            "equal_to_1e_minus_7": false
+          },
+          "D": {
+            "psd_TV": 0.24467099083867208,
+            "equal_to_1e_minus_7": false
+          },
+          "sH": {
+            "psd_TV": 0.14115160418318007,
+            "equal_to_1e_minus_7": false
+          },
+          "sD": {
+            "psd_TV": 0.12228595480905424,
+            "equal_to_1e_minus_7": false
+          },
+          "cH": {
+            "psd_TV": 0.3263347117441683,
+            "equal_to_1e_minus_7": false
+          },
+          "cD": {
+            "psd_TV": 0.3263347117441683,
+            "equal_to_1e_minus_7": false
+          }
+        }
+      },
+      "32": {
+        "n_events": 224,
+        "metrics": {
+          "raw": {
+            "psd_TV": 6.938893903907228e-17,
+            "equal_to_1e_minus_7": true
+          },
+          "H": {
+            "psd_TV": 0.09977091278682529,
+            "equal_to_1e_minus_7": false
+          },
+          "D": {
+            "psd_TV": 0.24461367106169907,
+            "equal_to_1e_minus_7": false
+          },
+          "sH": {
+            "psd_TV": 0.1257996584694971,
+            "equal_to_1e_minus_7": false
+          },
+          "sD": {
+            "psd_TV": 0.1275484092864032,
+            "equal_to_1e_minus_7": false
+          },
+          "cH": {
+            "psd_TV": 0.326885163190759,
+            "equal_to_1e_minus_7": false
+          },
+          "cD": {
+            "psd_TV": 0.326885163190759,
+            "equal_to_1e_minus_7": false
+          }
+        }
+      }
+    }
+  },
+  "limits": [
+    "Each bar repeats the identical motif; this tests nested origin scale robustness, not slowly changing real-world physiology",
+    "Binary 4/4 exact quantized sixteenth grid; no other time division inferred",
+    "A rhythm pair may cease to match singleton-template D power at different global recording lengths",
+    "No new information over complete event sequence; no biological response measured"
+  ]
+}
